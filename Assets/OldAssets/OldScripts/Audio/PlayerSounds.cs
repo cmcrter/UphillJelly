@@ -163,16 +163,6 @@ public class PlayerSounds : MonoBehaviour
 
     //These are both remnants from previous code but they are referenced in other scripts so I didn't want to risk deleting them
 
-    public void accelerate()
-    {
-
-    }
-
-
-    public void decelerate()
-    {
-
-    }
 
 
 
