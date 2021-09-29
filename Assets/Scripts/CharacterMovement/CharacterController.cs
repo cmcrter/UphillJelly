@@ -32,7 +32,10 @@ namespace SleepyCat.Movement
         private bool isGrounded = false;
 
         [SerializeField]
-        float forwardWheelTorque = 1.25f;            
+        float forwardWheelTorque = 1.25f;
+
+        [SerializeField]
+        Rigidbody rb;
 
         #endregion
 
@@ -44,7 +47,10 @@ namespace SleepyCat.Movement
 
         private void Start()
         {
-
+            backWheelLeft.motorTorque = 0.00001f;
+            backWheelRight.motorTorque = 0.00001f;
+            frontWheelRight.motorTorque = 0.00001f;
+            frontWheelRight.motorTorque = 0.00001f;
         }
 
         private void Update() 
@@ -70,11 +76,7 @@ namespace SleepyCat.Movement
             {
                 Debug.Log("Forward Key Pressed");
 
-                backWheelRight.motorTorque += forwardWheelTorque;
-                frontWheelRight.motorTorque += forwardWheelTorque;
-
-                backWheelLeft.motorTorque += forwardWheelTorque;
-                frontWheelLeft.motorTorque += forwardWheelTorque;
+                rb.AddRelativeForce(goPlayerModel.transform.forward * 5000 * Time.deltaTime, ForceMode.Impulse);
             }
 
             if (Keyboard.current.aKey.isPressed && isGrounded)
