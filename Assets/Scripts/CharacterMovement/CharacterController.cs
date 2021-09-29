@@ -76,6 +76,11 @@ namespace SleepyCat.Movement
                 backWheelLeft.motorTorque += forwardWheelTorque;
                 frontWheelLeft.motorTorque += forwardWheelTorque;
             }
+
+            if (Keyboard.current.aKey.isPressed && isGrounded)
+            {
+                //Turn Left
+            }
         }
 
         #endregion
