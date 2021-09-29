@@ -21,9 +21,13 @@ namespace SleepyCat.Movement
         GameObject goPlayerModel;
         //This is the sphere we'll use to keep track of momentum, speed and weight
         [SerializeField]
-        private WheelCollider backWheel;
+        private WheelCollider backWheelRight;
         [SerializeField]
-        private WheelCollider frontWheel;
+        private WheelCollider frontWheelRight;
+        [SerializeField]
+        private WheelCollider backWheelLeft;
+        [SerializeField]
+        private WheelCollider frontWheelLeft;     
 
         private bool isGrounded = false;
 
@@ -66,12 +70,12 @@ namespace SleepyCat.Movement
             {
                 Debug.Log("Forward Key Pressed");
 
-                backWheel.motorTorque += forwardWheelTorque;
-                frontWheel.motorTorque += forwardWheelTorque;
-            }
+                backWheelRight.motorTorque += forwardWheelTorque;
+                frontWheelRight.motorTorque += forwardWheelTorque;
 
-            goPlayerModel.transform.position = frontWheel.transform.position + ((backWheel.transform.position - frontWheel.transform.position) / 2);
-            goPlayerModel.transform.position = new Vector3(goPlayerModel.transform.position.x, goPlayerModel.transform.position.y + backWheel.radius, goPlayerModel.transform.position.z);
+                backWheelLeft.motorTorque += forwardWheelTorque;
+                frontWheelLeft.motorTorque += forwardWheelTorque;
+            }
         }
 
         #endregion
