@@ -236,13 +236,13 @@ public class HoverboardController : MonoBehaviour
                     {
                         thrust = acceleration * forwardAcceleration;
 
-                        playerSounds.accelerate();// Reference for acceleration             
+                        //playerSounds.accelerate();// Reference for acceleration             
                     }
                     else if (acceleration < -deadZone)
                     {
                         thrust = acceleration * reverseAcceleration;
 
-                        playerSounds.decelerate();// Reference for deceleration
+                        //playerSounds.decelerate();// Reference for deceleration
                     }
 
                     else thrust = 50f;

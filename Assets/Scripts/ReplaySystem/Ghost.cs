@@ -6,6 +6,8 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 // Create asset menu in the inspector for this class
 [CreateAssetMenu]
