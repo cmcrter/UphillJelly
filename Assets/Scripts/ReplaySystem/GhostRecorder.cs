@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////
-// File:            GhostReplay.cs
+// File:            GhostRecorder.cs
 // Author:          Jack Peedle
 // Date Created:    29/09/21 
 // Brief:           Ghost replay script which controls the temporary movement of a test character as well as recording and replaying 
@@ -8,21 +8,25 @@
 
 using UnityEngine;
 
-public class GhostReplay : MonoBehaviour 
+public class GhostRecorder : MonoBehaviour
 {
     #region Public Fields
+
+    //
+    public Ghost ghost;
 
     #endregion
 
     #region Unity Methods
 
 void Start() {
-
+     
 }
 
 void Update() {
 
 }
+
     #endregion
  
     #region Private Methods
