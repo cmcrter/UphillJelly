@@ -33,6 +33,7 @@ public class Ghost : ScriptableObject
 
     #region Unity Methods
 
+    // On command reset the ghosts data
     public void ResetGhostData() {
 
         // Reset the saved ghost data for a new ghost to be recorded
