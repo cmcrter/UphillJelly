@@ -102,7 +102,7 @@ namespace SleepyCat.Movement
                 return;
             }
 
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            if (Keyboard.current.spaceKey.isPressed)
             {
                 PushBoard();
             }
