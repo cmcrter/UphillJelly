@@ -1,11 +1,17 @@
+////////////////////////////////////////////////////////////
+// File: TimerTests.cs
+// Author: Charles Carter
+// Date Created: 30/09/21
+// Last Edited By: Charles Carter
+// Date Last Edited: 30/09/21
+// Brief: A quick script to show examples of unit tests using the timer scripts 
+//////////////////////////////////////////////////////////// 
+
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
-//This script uses these namespaces
-using SleepyCat;
-
-namespace Tests
+namespace SleepyCat.Tests
 {
     public class TimerTests
     {
