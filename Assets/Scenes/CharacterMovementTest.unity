@@ -959,10 +959,14 @@ MonoBehaviour:
   backWheelLeft: {fileID: 2118941804}
   frontWheelLeft: {fileID: 886556512}
   rb: {fileID: 35022090}
-  fPushWaitAmount: 1
+  fPushWaitAmount: 0.5
   pushForce: 10000
   fMaxSkateboardSpeed: 25000
   fTurnSpeed: 10
+  isGrounded: 0
+  pushTimer:
+    isLocked: 0
+    isActive: 0
 --- !u!1 &1154528266
 GameObject:
   m_ObjectHideFlags: 0

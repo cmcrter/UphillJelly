@@ -37,18 +37,20 @@ namespace SleepyCat.Movement
 
         [Header("Customization Values")]
         [SerializeField]
-        private float fPushWaitAmount = 2f;
+        private float fPushWaitAmount = 0.5f;
         [SerializeField]
-        private float pushForce = 3000f;
+        private float pushForce = 10000f;
         [SerializeField]
-        private float fMaxSkateboardSpeed = 10000f;
+        private float fMaxSkateboardSpeed = 50000f;
         [SerializeField]
-        private float fTurnSpeed = 10f;
+        private float fTurnSpeed = 100f;
 
         [Header("Debug Inspector Values")]
         [SerializeField]
         private bool isGrounded = false;
-        private Coroutine pushCoroutine;        
+
+        //This is public in case other systems need to know if the player is pushing.
+        public Coroutine pushCoroutine { get; private set; }        
 
         [SerializeField]
         private Timer pushTimer;
@@ -100,7 +102,7 @@ namespace SleepyCat.Movement
                 return;
             }
 
-            if (Keyboard.current.spaceKey.isPressed)
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
                 PushBoard();
             }
