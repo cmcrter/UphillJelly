@@ -137,7 +137,7 @@ namespace SleepyCat.Movement
             {
                 if (rb.velocity.magnitude < 2)
                 {
-
+                    goPlayerModel.transform.Rotate(new Vector3(0, -2, 0));
                 }
                 else
                 {
@@ -150,7 +150,7 @@ namespace SleepyCat.Movement
             {
                 if (rb.velocity.magnitude < 2)
                 {
-
+                    goPlayerModel.transform.Rotate(new Vector3(0, 2, 0));
                 }
                 else
                 {
