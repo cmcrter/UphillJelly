@@ -1,13 +1,16 @@
 ////////////////////////////////////////////////////////////
-// File:            Ghost.cs
-// Author:          Jack Peedle
-// Date Created:    30/09/21 
-// Brief:           Scriptable object to handle the visible ghost which will be shown on the screen
+// File: Ghost.cs
+// Author: Jack Peedle
+// Date Created: 30/09/21
+// Last Edited By: Jack Peedle
+// Date Last Edited: 01/10/21
+// Brief: Scriptable object to handle the visible ghost which will be shown on the screen
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 // Create asset menu in the inspector for this class
 [CreateAssetMenu]
@@ -42,6 +45,7 @@ public class Ghost : ScriptableObject
         rotation.Clear();
 
     }
+
 
     #endregion
 

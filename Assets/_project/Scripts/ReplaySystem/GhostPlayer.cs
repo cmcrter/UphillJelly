@@ -1,11 +1,14 @@
 ////////////////////////////////////////////////////////////
-// File:            GhostPlayer.cs
-// Author:          Jack Peedle
-// Date Created:    30/09/21 
-// Brief:           Script in charge of controlling the ghost of the player with the movement and positioning
+// File: GhostPlayer.cs
+// Author: Jack Peedle
+// Date Created: 30/09/21
+// Last Edited By: Jack Peedle
+// Date Last Edited: 01/10/21
+// Brief: Script in charge of controlling the ghost of the player with the movement and positioning
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GhostPlayer : MonoBehaviour
 {
@@ -42,6 +45,38 @@ public class GhostPlayer : MonoBehaviour
 
             // set the ghosts transform position
             SetGhostTransform();
+
+        }
+
+        //
+        if (Keyboard.current.kKey.isPressed) {
+
+            //
+            ghost.isRecording = true;
+            ghost.isReplaying = false;
+
+            if (Debug.isDebugBuild) {
+
+                Debug.Log("Recording");
+
+            }
+
+
+        }
+
+        //
+        if (Keyboard.current.lKey.isPressed) {
+
+            //
+            ghost.isRecording = false;
+            ghost.isReplaying = true;
+
+            if (Debug.isDebugBuild) {
+
+                Debug.Log("Replaying");
+
+            }
+
 
         }
 
@@ -84,7 +119,7 @@ public class GhostPlayer : MonoBehaviour
 
         }
 
-        // increment the index of timestamps?
+        // increment the index of timestamps
         index1 = ghost.timeStamp.Count - 1;
         index2 = ghost.timeStamp.Count - 1;
 

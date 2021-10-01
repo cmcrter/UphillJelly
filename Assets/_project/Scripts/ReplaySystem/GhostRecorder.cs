@@ -1,9 +1,11 @@
 ////////////////////////////////////////////////////////////
-// File:            GhostRecorder.cs
-// Author:          Jack Peedle
-// Date Created:    29/09/21 
-// Brief:           Ghost replay script which controls the temporary movement of a test character as well as recording and replaying 
-//                  the characters movement and rotation to act as a "Ghost"
+// File: GhostRecorder.cs
+// Author: Jack Peedle
+// Date Created: 29/09/21
+// Last Edited By: Jack Peedle
+// Date Last Edited: 01/10/21
+// Brief:   Ghost replay script which controls the temporary movement of a test character as well as recording and replaying 
+//          the characters movement and rotation to act as a "Ghost"
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
@@ -14,8 +16,6 @@ public class GhostRecorder : MonoBehaviour
 
     // public reference to the ghost scriptable object
     public Ghost ghost;
-
-
 
     // timer for the ghost to correlate with the timer of the player for frequency and data
     private float timer;
