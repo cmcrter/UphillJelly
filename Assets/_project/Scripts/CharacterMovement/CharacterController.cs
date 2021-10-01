@@ -53,10 +53,13 @@ namespace SleepyCat.Movement
         private bool isGrounded = false;
 
         //This is public in case other systems need to know if the player is pushing.
-        public Coroutine pushCoroutine { get; private set; }        
+        public Coroutine pushWaitCoroutine { get; private set; }
+        public Coroutine pushDuringCoroutine { get; private set; }
 
         [SerializeField]
         private Timer pushTimer;
+        [SerializeField]
+        private Timer pushDuringTimer;
 
         #endregion
 
@@ -175,28 +178,46 @@ namespace SleepyCat.Movement
             //Pushing forward and down (so it's a diagonal direction)
 
             rb.AddForceAtPosition(goForcePoint.transform.forward * pushForce * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Acceleration);
+
             StartPushTimerCoroutine();
+            StartPushDuringTimerCoroutine();
         }
 
 
         private void StartPushTimerCoroutine()
         {
             StopPushTimerCoroutine();
-            pushCoroutine = StartCoroutine(Co_BoardPush());
+            pushWaitCoroutine = StartCoroutine(Co_BoardAfterPush());
         }
 
         private void StopPushTimerCoroutine()
         {
-            if (pushCoroutine != null)
+            if (pushWaitCoroutine != null)
             {
-                StopCoroutine(pushCoroutine);
+                StopCoroutine(pushWaitCoroutine);
             }
 
-            pushCoroutine = null;
+            pushWaitCoroutine = null;
+        }
+
+        private void StartPushDuringTimerCoroutine()
+        {
+            StopPushDuringTimerCoroutine();
+            pushDuringCoroutine = StartCoroutine(Co_BoardDuringPush());
+        }
+
+        private void StopPushDuringTimerCoroutine()
+        {
+            if (pushDuringCoroutine != null)
+            {
+                StopCoroutine(pushDuringCoroutine);
+            }
+
+            pushDuringCoroutine = null;
         }
 
         //Running the timer
-        private IEnumerator Co_BoardPush()
+        private IEnumerator Co_BoardAfterPush()
         {
             //It's technically a new timer on top of the class in use
             pushTimer = new Timer(fPushWaitAmount);
@@ -209,7 +230,27 @@ namespace SleepyCat.Movement
                 yield return null;
             }
 
-            pushCoroutine = null;
+            pushWaitCoroutine = null;
+        }
+
+        //Running the during timer
+        private IEnumerator Co_BoardDuringPush()
+        {
+            fTurnSpeed *= 0.25f;
+
+            //It's technically a new timer on top of the class in use
+            pushDuringTimer = new Timer(0.25f);
+
+            //Whilst it has time left
+            while (pushDuringTimer.isActive)
+            {
+                //Tick each frame
+                pushDuringTimer.Tick(Time.deltaTime);
+                yield return null;
+            }
+
+            pushDuringCoroutine = null;
+            fTurnSpeed *= 4;
         }
 
 

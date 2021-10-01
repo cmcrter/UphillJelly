@@ -939,7 +939,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 289500818}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -2104,7 +2104,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878606465}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -2931,12 +2931,15 @@ MonoBehaviour:
   backWheelLeft: {fileID: 2118941804}
   frontWheelLeft: {fileID: 886556512}
   rb: {fileID: 35022090}
-  fPushWaitAmount: 1.25
-  pushForce: 19000
+  fPushWaitAmount: 1.75
+  pushForce: 15000
   fMaxSkateboardSpeed: 25000
-  fTurnSpeed: 8000
+  fTurnSpeed: 6000
   isGrounded: 0
   pushTimer:
+    isLocked: 0
+    isActive: 0
+  pushDuringTimer:
     isLocked: 0
     isActive: 0
 --- !u!114 &1124344454
@@ -3123,7 +3126,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251127974}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -20990,7 +20993,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1741822669}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -21568,7 +21571,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898668861}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -21883,7 +21886,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1956405175}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -22161,7 +22164,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1964784281}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
