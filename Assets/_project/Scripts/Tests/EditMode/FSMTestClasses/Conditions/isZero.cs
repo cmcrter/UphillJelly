@@ -9,25 +9,28 @@
 
 using SleepyCat.Utility.StateMachine;
 
-public class isZero : Condition
+namespace SleepyCat.Tests
 {
-    #region Public Fields
-
-    public float floatToTestAgainst = 0;
-
-    #endregion
-
-    #region Public Methods
-
-    public override bool isConditionTrue()
+    public class isZero : Condition
     {
-        if (floatToTestAgainst == 0)
+        #region Public Fields
+
+        public float floatToTestAgainst = 0;
+
+        #endregion
+
+        #region Public Methods
+
+        public override bool isConditionTrue()
         {
-            return true;
+            if (floatToTestAgainst == 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        return false;
+        #endregion
     }
-
-    #endregion
 }

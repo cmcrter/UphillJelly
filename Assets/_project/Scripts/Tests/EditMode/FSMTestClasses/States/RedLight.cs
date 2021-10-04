@@ -9,37 +9,40 @@
 
 using SleepyCat.Utility.StateMachine;
 
-public class RedLight : State
+namespace SleepyCat.Tests
 {
-    #region Public Fields
-
-    public float valueGiven = 0;
-    public isGreaterThanZero condition = new isGreaterThanZero();
-
-    #endregion
-
-    public override State returnCurrentState()
+    public class RedLight : State
     {
-        condition.floatToTestAgainst = valueGiven;
+        #region Public Fields
 
-        if (condition.isConditionTrue())
+        public float valueGiven = 0;
+        public isGreaterThanZero condition = new isGreaterThanZero();
+
+        #endregion
+
+        public override State returnCurrentState()
         {
-            return new YellowLight();
+            condition.floatToTestAgainst = valueGiven;
+
+            if (condition.isConditionTrue())
+            {
+                return new YellowLight();
+            }
+
+            return this;
         }
 
-        return this;
-    }
+        public override void Tick(float dT)
+        {
+            valueGiven = dT;
+        }
 
-    public override void Tick(float dT)
-    {
-        valueGiven = dT;
-    }
+        public override void OnStateExit()
+        {
+            valueGiven = 0;
+        }
 
-    public override void OnStateExit()
-    {
-        valueGiven = 0;
+        #region Private Methods
+        #endregion
     }
-
-    #region Private Methods
-    #endregion
 }
