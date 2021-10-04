@@ -31,7 +31,7 @@ namespace SleepyCat.DevScripts
             //Setting it's state
             //characterController.SetState();
             //Making sure it doesn't fall
-            CharacterRB.isKinematic = true;
+            CharacterRB.useGravity = false;
         }
 
         [ContextMenu("Change Test Player To Grounded")]
@@ -42,7 +42,7 @@ namespace SleepyCat.DevScripts
             //Setting it's state
             //characterController.SetState();
             //Making sure it can fall
-            CharacterRB.isKinematic = false;
+            CharacterRB.useGravity = true;
         }
 
         [ContextMenu("Change Test Player To Grinding")]
@@ -50,6 +50,8 @@ namespace SleepyCat.DevScripts
         {
             //Moving the character to the grind rail point
             //Setting it's state explicitly
+
+            CharacterRB.useGravity = false;
         }
 
         /// <summary>

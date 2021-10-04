@@ -21,6 +21,8 @@ namespace SleepyCat.Movement
 		public float followDist = 2.5f;
 		private Vector3 offset;
 
+		public bool FollowRotation = true;
+
         #endregion
 
         #region Unity Methods
@@ -33,7 +35,10 @@ namespace SleepyCat.Movement
 
 		private void FixedUpdate()
 		{
-			offset = ( -target.forward * followDist ) + new Vector3(0, 1f, 0);
+			if (FollowRotation)
+			{
+				offset = ( -target.forward * followDist ) + new Vector3(0, 1f, 0);
+			}
 
 			Vector3 speed = Vector3.zero;
 			Vector3 desiredPosition = target.position + offset;
