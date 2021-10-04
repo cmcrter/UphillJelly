@@ -10,6 +10,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SleepyCat.Utility.StateMachine;
 
 namespace SleepyCat.Movement
 {
@@ -24,8 +25,7 @@ namespace SleepyCat.Movement
         [SerializeField]
         private GameObject goForcePoint;
 
-        //This is the sphere we'll use to keep track of momentum, speed and weight
-
+        //This is the wheel collider we'll use to keep track of momentum, speed and weight
         [SerializeField]
         private WheelCollider backWheelRight;
         [SerializeField]
@@ -52,6 +52,12 @@ namespace SleepyCat.Movement
         [SerializeField]
         private bool isGrounded = false;
 
+        //The state machine that determines what the player can do and is doing in the current frame
+        [SerializeField]
+        FiniteStateMachine CharacterStateMachine;
+        [SerializeField]
+        PlayerCamera playerCamera;
+
         //This is public in case other systems need to know if the player is pushing.
         public Coroutine pushWaitCoroutine { get; private set; }
         public Coroutine pushDuringCoroutine { get; private set; }
@@ -63,16 +69,30 @@ namespace SleepyCat.Movement
 
         #endregion
 
-        #region Public Fields
+        #region Public Methods
+
+        //Debugging Options
+        public void ResetBoard()
+        {
+            rb.angularVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
+
+            goPlayerModel.transform.rotation = Quaternion.identity;
+            goPlayerModel.transform.position = new Vector3(0, 0.2f, 0);
+        }
 
         #endregion
 
         #region Unity Methods
 
+        private void Awake()
+        {
+            CharacterStateMachine = new FiniteStateMachine();
+        }
+
         private void Start()
         {
-            rb.centerOfMass += new Vector3(0, -0.035f, 0);
-            goForcePoint.transform.position = rb.position + rb.centerOfMass;
+            rb.centerOfMass = goForcePoint.transform.position;
 
             //GameObject goCOM = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             //goCOM.transform.parent = goPlayerModel.transform;
@@ -91,8 +111,9 @@ namespace SleepyCat.Movement
             //Any debugging stuff needed
             if (Debug.isDebugBuild)
             {
-                Debug.DrawRay(goPlayerModel.transform.position, -goPlayerModel.transform.up, Color.blue, 0.05f);
-                Debug.DrawRay(rb.position + rb.centerOfMass, goForcePoint.transform.forward, Color.cyan, 0.05f);
+                Debug.DrawRay(goPlayerModel.transform.position, -goPlayerModel.transform.up, Color.blue);
+                Debug.DrawRay(rb.position + rb.centerOfMass, goForcePoint.transform.forward, Color.cyan);
+                Debug.DrawRay(goForcePoint.transform.position, goPlayerModel.transform.forward, Color.green);
 
                 if (Keyboard.current.escapeKey.isPressed)
                 {
@@ -101,7 +122,7 @@ namespace SleepyCat.Movement
             }
 
             //Checking if anything is below it
-            if (Physics.Raycast(goPlayerModel.transform.position, -goPlayerModel.transform.up, 1.0f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goPlayerModel.transform.position, -goPlayerModel.transform.up, out RaycastHit hit, 1.0f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
             }
@@ -128,6 +149,17 @@ namespace SleepyCat.Movement
                 return;
             }
 
+            if (playerCamera)
+            {
+                playerCamera.FollowRotation = true;
+            }
+
+            RaycastHit hit;
+            if (Physics.Raycast(goForcePoint.transform.position, goPlayerModel.transform.forward, out hit, 0.2f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
+            {
+                goPlayerModel.transform.rotation = Quaternion.RotateTowards(goPlayerModel.transform.rotation, Quaternion.LookRotation((hit.point - goForcePoint.transform.position).normalized, hit.normal), 0.5f);
+            }
+
             if (Keyboard.current.spaceKey.isPressed)
             {
                 PushBoard();
@@ -142,7 +174,7 @@ namespace SleepyCat.Movement
                 else
                 {
                     //Turn Left based on speed
-                    rb.AddRelativeTorque(Vector3.up * -fTurnSpeed * ( rb.velocity.magnitude / 100f ) * Time.deltaTime, ForceMode.Acceleration);
+                    rb.AddRelativeTorque(Vector3.up * -fTurnSpeed * /*( rb.velocity.magnitude / fMaxSkateboardSpeed ) * */ Time.deltaTime, ForceMode.Acceleration);
                 }
             }
 
@@ -155,7 +187,7 @@ namespace SleepyCat.Movement
                 else
                 {
                     //Turn Right based on speed
-                    rb.AddRelativeTorque(Vector3.up * fTurnSpeed * ( rb.velocity.magnitude / 100f ) * Time.deltaTime, ForceMode.Acceleration);
+                    rb.AddRelativeTorque(Vector3.up * fTurnSpeed * /*( rb.velocity.magnitude / fMaxSkateboardSpeed ) * */ Time.deltaTime, ForceMode.Acceleration);
                 }
             }
         }
@@ -166,6 +198,34 @@ namespace SleepyCat.Movement
             {
                 return;
             }
+
+            if (playerCamera)
+            {
+                playerCamera.FollowRotation = false;
+            }
+
+            if (Keyboard.current.leftArrowKey.isPressed)
+            {
+                //if (Debug.isDebugBuild)
+                //{
+                //    Debug.Log("Player spinning left");
+                //}
+
+                //Turn Left based on speed
+                goPlayerModel.transform.Rotate(new Vector3(0, 4f, 0));
+            }
+
+            if (Keyboard.current.rightArrowKey.isPressed)
+            {
+                //if (Debug.isDebugBuild)
+                //{
+                //    Debug.Log("Player spinning right");
+                //}
+
+                //Turn Right based on speed
+                //rb.AddRelativeTorque(Vector3.up * (fTurnSpeed * 0.005f) * Time.deltaTime, ForceMode.Impulse);
+                goPlayerModel.transform.Rotate(new Vector3(0, -4f, 0));
+            }
         }
 
         private void PushBoard()
@@ -175,8 +235,7 @@ namespace SleepyCat.Movement
                 return;
             }
 
-            //Pushing forward and down (so it's a diagonal direction)
-
+            //Pushing forward
             rb.AddForceAtPosition(goForcePoint.transform.forward * pushForce * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Acceleration);
 
             StartPushTimerCoroutine();
@@ -251,17 +310,6 @@ namespace SleepyCat.Movement
 
             pushDuringCoroutine = null;
             fTurnSpeed *= 4;
-        }
-
-
-        //Debugging Options
-        private void ResetBoard()
-        {
-            rb.angularVelocity = Vector3.zero;
-            rb.velocity = Vector3.zero;
-            
-            goPlayerModel.transform.rotation = Quaternion.identity;
-            goPlayerModel.transform.position = new Vector3(0, 0.2f, 0);
         }
 
         #endregion
