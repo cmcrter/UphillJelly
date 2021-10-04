@@ -63,7 +63,17 @@ namespace SleepyCat.Movement
 
         #endregion
 
-        #region Public Fields
+        #region Public Methods
+
+        //Debugging Options
+        public void ResetBoard()
+        {
+            rb.angularVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
+
+            goPlayerModel.transform.rotation = Quaternion.identity;
+            goPlayerModel.transform.position = new Vector3(0, 0.2f, 0);
+        }
 
         #endregion
 
@@ -142,7 +152,7 @@ namespace SleepyCat.Movement
                 else
                 {
                     //Turn Left based on speed
-                    rb.AddRelativeTorque(Vector3.up * -fTurnSpeed * ( rb.velocity.magnitude / 100f ) * Time.deltaTime, ForceMode.Acceleration);
+                    rb.AddRelativeTorque(Vector3.up * -fTurnSpeed * ( rb.velocity.magnitude / fMaxSkateboardSpeed ) * Time.deltaTime, ForceMode.Acceleration);
                 }
             }
 
@@ -155,7 +165,7 @@ namespace SleepyCat.Movement
                 else
                 {
                     //Turn Right based on speed
-                    rb.AddRelativeTorque(Vector3.up * fTurnSpeed * ( rb.velocity.magnitude / 100f ) * Time.deltaTime, ForceMode.Acceleration);
+                    rb.AddRelativeTorque(Vector3.up * fTurnSpeed * ( rb.velocity.magnitude / fMaxSkateboardSpeed ) * Time.deltaTime, ForceMode.Acceleration);
                 }
             }
         }
@@ -165,6 +175,18 @@ namespace SleepyCat.Movement
             if (isGrounded)
             {
                 return;
+            }
+
+            if (Keyboard.current.leftArrowKey.isPressed)
+            {
+                //Turn Left based on speed
+                rb.AddRelativeTorque(Vector3.forward * -fTurnSpeed * Time.deltaTime, ForceMode.Acceleration);
+            }
+
+            if (Keyboard.current.rightArrowKey.isPressed)
+            {
+                //Turn Right based on speed
+                rb.AddRelativeTorque(Vector3.forward * fTurnSpeed * Time.deltaTime, ForceMode.Acceleration);          
             }
         }
 
@@ -251,17 +273,6 @@ namespace SleepyCat.Movement
 
             pushDuringCoroutine = null;
             fTurnSpeed *= 4;
-        }
-
-
-        //Debugging Options
-        private void ResetBoard()
-        {
-            rb.angularVelocity = Vector3.zero;
-            rb.velocity = Vector3.zero;
-            
-            goPlayerModel.transform.rotation = Quaternion.identity;
-            goPlayerModel.transform.position = new Vector3(0, 0.2f, 0);
         }
 
         #endregion
