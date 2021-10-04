@@ -52,6 +52,12 @@ namespace SleepyCat.Utility.StateMachine
             }
         }
 
+        //In-case a state needs to be forced to be on
+        public void ForceSwitchToState(State newState)
+        {
+            currentState = newState;
+        }
+
         #endregion
     }
 }

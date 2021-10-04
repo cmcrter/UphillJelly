@@ -14,6 +14,7 @@ namespace SleepyCat.Tests
 {
     public class FSMTests
     {
+        //This test goes through a state machine in a loop through the states
         [Test]
         public void FSMTestsFullLoop()
         {

@@ -26,7 +26,6 @@ namespace SleepyCat.Movement
         private GameObject goForcePoint;
 
         //This is the wheel collider we'll use to keep track of momentum, speed and weight
-
         [SerializeField]
         private WheelCollider backWheelRight;
         [SerializeField]
@@ -53,6 +52,7 @@ namespace SleepyCat.Movement
         [SerializeField]
         private bool isGrounded = false;
 
+        //The state machine that determines what the player can do and is doing in the current frame
         [SerializeField]
         FiniteStateMachine CharacterStateMachine;
 
