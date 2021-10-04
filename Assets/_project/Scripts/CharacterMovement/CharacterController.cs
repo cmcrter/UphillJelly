@@ -10,6 +10,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SleepyCat.Utility.StateMachine;
 
 namespace SleepyCat.Movement
 {
@@ -24,7 +25,7 @@ namespace SleepyCat.Movement
         [SerializeField]
         private GameObject goForcePoint;
 
-        //This is the sphere we'll use to keep track of momentum, speed and weight
+        //This is the wheel collider we'll use to keep track of momentum, speed and weight
 
         [SerializeField]
         private WheelCollider backWheelRight;
@@ -52,6 +53,9 @@ namespace SleepyCat.Movement
         [SerializeField]
         private bool isGrounded = false;
 
+        [SerializeField]
+        FiniteStateMachine CharacterStateMachine;
+
         //This is public in case other systems need to know if the player is pushing.
         public Coroutine pushWaitCoroutine { get; private set; }
         public Coroutine pushDuringCoroutine { get; private set; }
@@ -78,6 +82,11 @@ namespace SleepyCat.Movement
         #endregion
 
         #region Unity Methods
+
+        private void Awake()
+        {
+            CharacterStateMachine = new FiniteStateMachine();
+        }
 
         private void Start()
         {
