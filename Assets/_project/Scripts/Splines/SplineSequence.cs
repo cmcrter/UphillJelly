@@ -9,11 +9,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SleepyCat.Utility.Splines;
 
-/// <summary>
-/// A component for getting a sequence of splines and lerping through them
-/// </summary>
-public class SplineSequence : MonoBehaviour
+    /// <summary>
+    /// A component for getting a sequence of splines and lerping through them
+    /// </summary>
+    public class SplineSequence : MonoBehaviour
 {
     #region Serialized Private Fields
     /// <summary>
@@ -33,7 +34,7 @@ public class SplineSequence : MonoBehaviour
     /// </summary>
     [SerializeField]
     [Tooltip("The different splines contained within the sequence")]
-    private List<Spline> containedSplines = new List<Spline>();
+    private List<SplineWrapper> containedSplines = new List<SplineWrapper>();
     #endregion
 
     #region Publicly Retrievable Variables
@@ -62,7 +63,7 @@ public class SplineSequence : MonoBehaviour
     /// </summary>
     /// <param name="index">The index to get the spline at</param>
     /// <returns>A spline at the given index, will be null if it is out of range</returns>
-    public Spline GetSpline(int index)
+    public SplineWrapper GetSpline(int index)
     {
         if (containedSplines.Count > index && index > 0)
         {
@@ -135,7 +136,7 @@ public class SplineSequence : MonoBehaviour
         // Return the end point of the last spline if the target length was not within any of the splines
         if (containedSplines.Count > 0)
         {
-            return containedSplines[containedSplines.Count - 1].EndPoint;
+            return containedSplines[containedSplines.Count - 1].GetWorldEndPoint();
         }
         else
         {
@@ -149,7 +150,7 @@ public class SplineSequence : MonoBehaviour
     /// 
     /// </summary>
     /// <param name="spline">The spline to add to the sequence, it will have its start point corrected to fit the sequence</param>
-    public void AddSpline(Spline spline)
+    public void AddSpline(SplineWrapper spline)
     {
         containedSplines.Add(spline);
         UpdateSplines();
@@ -170,7 +171,7 @@ public class SplineSequence : MonoBehaviour
                 {
                     if (containedSplines[i] != null && containedSplines[i + 1] != null)
                     {
-                        containedSplines[i].WorldEndPoint = containedSplines[i + 1].WorldStartPoint;
+                        containedSplines[i].SetWorldEndPoint(containedSplines[i + 1].GetWorldStartPoint());
                     }
 
                 }
@@ -182,7 +183,7 @@ public class SplineSequence : MonoBehaviour
             {
                 if (containedSplines[containedSplines.Count - 1] != null && containedSplines[0] != null)
                 {
-                    containedSplines[containedSplines.Count - 1].WorldEndPoint = containedSplines[0].WorldStartPoint;
+                    containedSplines[containedSplines.Count - 1].SetWorldEndPoint(containedSplines[0].GetWorldStartPoint());
                 }
             }
         }

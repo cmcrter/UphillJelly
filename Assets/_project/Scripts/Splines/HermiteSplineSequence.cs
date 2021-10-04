@@ -15,26 +15,66 @@ using UnityEngine;
 /// </summary>
 public class HermiteSplineSequence : Spline
 {
-    /// <summary>
-    /// All of the splines included in the sequence 
-    /// </summary>
-    [SerializeField]
-    private HermiteSpline[] hermiteSplines;
+    public float distancePrecisionPerHermiteSpline;
 
-    /// <summary>
-    /// If the end of the last spline links to the start of the first spline
-    /// </summary>
-    [SerializeField]
-    private bool isCircuit;
+    private float totalLength;
+
+    public List<KeyValuePair<Vector3, Vector3>> pointsAndTangents;
+    private List<float> lengths;
+
+    public static Vector3 GetLengthBasedPointAtTime(List<KeyValuePair<Vector3, Vector3>> pointsAndTangents, List<float> lengths, float t)
+    {
+        // Ensuring t is a unit interval
+        t = Mathf.Clamp01(t);
+
+        float totalLength = 0f;
+        if (lengths != null)
+        {
+            for (int i = 0; i < lengths.Count; ++i)
+            {
+                totalLength += lengths[i];
+            }
+        }
+
+        // Using t to find the length along the spline sequence to aim for
+        float targetLength = totalLength * t;
+
+        for (int index = 0; index < lengths.Count; ++index)
+        {
+            float sectionDistance = lengths[index];
+            // Checking if the target length shorter than this spline
+            if (targetLength - sectionDistance < 0f)
+            {
+                return HermiteSpline.GetPointAtTime(pointsAndTangents[index].Key,
+                    pointsAndTangents[index].Value, pointsAndTangents[index + 1].Key,
+                    pointsAndTangents[index + 1].Value, targetLength / sectionDistance);
+            }
+            // Otherwise remove of the length of the section from the target length
+            else
+            {
+                targetLength -= sectionDistance;
+            }
+        }
+        // Return the end point of the last spline if the target length was not within any of the splines
+        if (pointsAndTangents.Count > 1)
+        {
+            return pointsAndTangents[pointsAndTangents.Count - 1].Key;
+        }
+        else
+        {
+            Debug.LogError("SplineSequence contained no points when GetLengthBasedPoint was called");
+            return Vector3.zero;
+        }
+    }
 
     public override float GetTotalLength()
     {
         float totalLength = 0f;
-        if (hermiteSplines != null)
+        if (lengths != null)
         {
-            for (int i = 0; i < hermiteSplines.Length; ++i)
+            for (int i = 0; i < lengths.Count; ++i)
             {
-                totalLength += hermiteSplines[i].GetTotalLength();
+                totalLength += lengths[i];
             }
         }
         return totalLength;
@@ -42,74 +82,74 @@ public class HermiteSplineSequence : Spline
 
     public override Vector3 GetPointAtTime(float t)
     {
-        return GetLengthBasedPoint(t);
+        return HermiteSplineSequence.GetLengthBasedPointAtTime(pointsAndTangents, lengths, t);
     }
 
-    /// <summary>
-    /// Returns a point at the given unit interval along the set of splines, weighting all the splines based on their total length
-    /// </summary>
-    /// <param name="t">The unit interval for how far along the point is in the sequence</param>
-    /// <returns>The point at the given unit interval along the set of splines assume, weighting all the splines based on their total length</returns>
-    public Vector3 GetLengthBasedPoint(float t)
+    private float GetLengthOfSingleSpline(int startPointIndex)
     {
-        // Ensuring t is a unit interval
-        t = Mathf.Clamp01(t);
-
-        // Using t to find the length along the spline sequence to aim for
-        float targetLength = GetTotalLength() * t;
-
-        for (int index = 0; index < hermiteSplines.Length; ++index)
-        {
-            if (hermiteSplines[index] != null)
-            {
-                float sectionDistance = hermiteSplines[index].GetTotalLength();
-                // Checking if the target length shorter than this spline
-                if (targetLength - sectionDistance < 0f)
-                {
-                    return hermiteSplines[index].GetPointAtTime(targetLength / sectionDistance);
-                }
-                // Otherwise remove of the length of the section from the target length
-                else
-                {
-                    targetLength -= sectionDistance;
-                }
-            }
-            else
-            {
-                Debug.LogWarning("A spline was null when getting length based point", gameObject);
-            }
-        }
-        // Return the end point of the last spline if the target length was not within any of the splines
-        if (hermiteSplines.Length > 0)
-        {
-            return hermiteSplines[hermiteSplines.Length - 1].EndPoint;
-        }
-        else
-        {
-            Debug.LogError("SplineSequence contained no splines when GetLengthBasedPoint was called", gameObject);
-            return Vector3.zero;
-        }
+        return HermiteSpline.GetTotalLength(pointsAndTangents[startPointIndex].Key, 
+            pointsAndTangents[startPointIndex + 1].Key, pointsAndTangents[startPointIndex].Value, 
+            pointsAndTangents[startPointIndex + 1].Value, distancePrecisionPerHermiteSpline);
     }
 
-    private void OnDrawGizmos()
+    private void UpdateLengths()
     {
-        if (hermiteSplines != null)
+        lengths = new List<float>(pointsAndTangents.Count - 1);
+        for (int i = 0; i < pointsAndTangents.Count - 1; ++i)
         {
-            for (int i = 0; i < hermiteSplines.Length - 1; ++i)
-            {
-                if (hermiteSplines.Length > 1)
-                {
-                    if (hermiteSplines[i] != null)
-                    {
-                        if (hermiteSplines[i + 1] != null)
-                        {
-                            hermiteSplines[i].ConnectToStartOfHermiteSpline(hermiteSplines[i + 1].WorldStartPoint, hermiteSplines[i + 1].StartTangent);
-                        }
-                    }
-                }
-            }
+            lengths.Add(GetLengthOfSingleSpline(i));
         }
     }
 
-    // TODO: MAKE A CUSTOM INSPECTOR FOR THIS
+    public override Vector3 GetStartPoint()
+    {
+        if (pointsAndTangents.Count < 2) // a count of 2 should mean that it has a start and endpoint
+        {
+            pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2) 
+            { 
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero), 
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero) 
+            };
+        }
+        return pointsAndTangents[0].Key;
+    }
+
+    public override Vector3 GetEndPoint()
+    {
+        if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
+        {
+            pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
+            {
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
+            };
+        }
+        return pointsAndTangents[1].Key;
+    }
+
+    public override void SetStartPoint(Vector3 startPoint)
+    {
+        if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
+        {
+            pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
+            {
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
+            };
+        }
+        pointsAndTangents[0] = new KeyValuePair<Vector3, Vector3>(startPoint, pointsAndTangents[0].Value);
+    }
+
+    public override void SetEndPoint(Vector3 endPoint)
+    {
+        if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
+        {
+            pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
+            {
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
+                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
+            };
+        }
+        pointsAndTangents[1] = new KeyValuePair<Vector3, Vector3>(endPoint, pointsAndTangents[0].Value);
+    }
 }

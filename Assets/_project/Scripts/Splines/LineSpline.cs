@@ -14,25 +14,41 @@ using UnityEngine;
 /// <summary>
 /// A child of the spline component that is actually a line between 2 points
 /// </summary>
+[System.Serializable]
 public class LineSpline : Spline
 {
+    [SerializeField]
+    private Vector3 startPoint;
+    [SerializeField]
+    private Vector3 endPoint;
+
+    public override Vector3 GetEndPoint()
+    {
+        return endPoint;
+    }
+
     public override Vector3 GetPointAtTime(float t)
     {
-        return Vector3.Lerp(WorldStartPoint, WorldEndPoint, t);
+        return Vector3.Lerp(startPoint, endPoint, t);
+    }
+
+    public override Vector3 GetStartPoint()
+    {
+        return startPoint;
     }
 
     public override float GetTotalLength()
     {
-        return Vector3.Distance(WorldStartPoint, WorldEndPoint);
+        return Vector3.Distance(startPoint, endPoint);
     }
 
-    public void OnDrawGizmos()
+    public override void SetEndPoint(Vector3 endPoint)
     {
-        // Drawing the 2 points and a line between them
-        UpdateWorldPositions();
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(WorldStartPoint, 0.1f);
-        Gizmos.DrawSphere(WorldEndPoint, 0.1f);
-        Gizmos.DrawLine(WorldStartPoint, WorldEndPoint);
+        this.endPoint = endPoint;
+    }
+
+    public override void SetStartPoint(Vector3 startPoint)
+    {
+        this.startPoint = startPoint;
     }
 }
