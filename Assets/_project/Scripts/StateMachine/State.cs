@@ -21,13 +21,27 @@ namespace SleepyCat.Utility.StateMachine
 
         //Just a base condition for generic states
         public Condition conditionToMeet;
+        public State nextState;
 
         #endregion
 
         #region Public Methods
 
+        /// <summary>
+        /// Constructors for the state
+        /// </summary>
+        public State()
+        {
+
+        }
+
         public virtual State returnCurrentState()
         {
+            if (conditionToMeet.isConditionTrue())
+            {
+                return nextState;
+            }
+
             return this;
         }
 

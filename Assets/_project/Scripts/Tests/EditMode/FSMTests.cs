@@ -17,20 +17,24 @@ namespace SleepyCat.Tests
         [Test]
         public void FSMTestsFullLoop()
         {
+            //Setting up the states as a simple triangle loop
             RedLight red = new RedLight();
+            GreenLight green = new GreenLight(red);
+            YellowLight yellow = new YellowLight(green);
+            red.nextState = yellow;
+
+            //Creating the state machine
             FiniteStateMachine FSM = new FiniteStateMachine(red);
 
+            //Going through the loop a single time making sure each state is correct along the way
             FSM.RunMachine(0.1f);
-
-            Assert.IsTrue(FSM.currentState.GetType() == typeof(YellowLight));
+            Assert.IsTrue(FSM.currentState == yellow);
 
             FSM.RunMachine(-0.1f);
-
-            Assert.IsTrue(FSM.currentState.GetType() == typeof(GreenLight));
+            Assert.IsTrue(FSM.currentState == green);
 
             FSM.RunMachine(0f);
-
-            Assert.IsTrue(FSM.currentState.GetType() == typeof(RedLight));
+            Assert.IsTrue(FSM.currentState == red);
         }
     }
 }

@@ -17,19 +17,24 @@ namespace SleepyCat.Tests
 
         public float valueGiven = 0;
         public isLessThanZero condition = new isLessThanZero();
-
         #endregion
+
+        public YellowLight()
+        {
+
+        }
+
+        public YellowLight(State stateToGoTo)
+        {
+            nextState = stateToGoTo;
+        }
 
         public override State returnCurrentState()
         {
             condition.floatToTestAgainst = valueGiven;
 
-            if (condition.isConditionTrue())
-            {
-                return new GreenLight();
-            }
-
-            return this;
+            conditionToMeet = condition;
+            return base.returnCurrentState();
         }
 
         public override void Tick(float dT)
