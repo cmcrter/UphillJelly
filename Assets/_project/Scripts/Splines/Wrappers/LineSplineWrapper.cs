@@ -1,7 +1,7 @@
 //===========================================================================================================================================================================================================================================================================
 // Name:                LineSplineWrapper.cs
 // Author:              Matthew Mason
-// Date Created:        04-10-2021
+// Date Created:        05-10-2021
 // Brief:               SplineWrapper that controls and contains a line spline
 //============================================================================================================================================================================================================================================================================
 
@@ -17,40 +17,23 @@ namespace SleepyCat.Utility.Splines
     public class LineSplineWrapper : SplineWrapper
     {
         #region Private Serialized Fields 
-        [SerializeField] [Tooltip("The line spline that is script is containing")]
+        [SerializeField] 
+        [Tooltip("The line spline that this script is containing")]
         private LineSpline spline;
         #endregion
 
-        /// <summary>
-        /// The start point for the spline relative to the world
-        /// </summary>
-        private Vector3 worldStartPoint;
-
+        #region Private Variables
         /// <summary>
         /// The end point for the spline relative to the world
         /// </summary>
         private Vector3 worldEndPoint;
+        /// <summary>
+        /// The start point for the spline relative to the world
+        /// </summary>
+        private Vector3 worldStartPoint;
+        #endregion
 
-        public override Vector3 GetPointAtTime(float t)
-        {
-            return Vector3.Lerp(worldStartPoint, worldEndPoint, t);
-        }
-
-        public override float GetTotalLength()
-        {
-            return Vector3.Distance(worldStartPoint, worldEndPoint);
-        }
-
-        public override Vector3 GetWorldEndPoint()
-        {
-            return worldEndPoint;
-        }
-
-        public override Vector3 GetWorldStartPoint()
-        {
-            return worldStartPoint;
-        }
-
+        #region Unity Methods
         public void OnDrawGizmos()
         {
             // Drawing the 2 points and a line between them
@@ -60,23 +43,50 @@ namespace SleepyCat.Utility.Splines
             Gizmos.DrawSphere(worldEndPoint, 0.1f);
             Gizmos.DrawLine(worldStartPoint, worldEndPoint);
         }
+        #endregion
 
-        public override void SetWorldEndPoint(Vector3 endPoint)
+        #region Public Methods
+        #region Overrides
+        public override float GetTotalLength()
+        {
+            return Vector3.Distance(worldStartPoint, worldEndPoint);
+        }
+
+        public override Vector3 GetWorldEndPoint()
+        {
+            return worldEndPoint;
+        }
+        public override Vector3 GetPointAtTime(float t)
+        {
+            return Vector3.Lerp(worldStartPoint, worldEndPoint, t);
+        }
+        public override Vector3 GetWorldStartPoint()
+        {
+            return worldStartPoint;
+        }
+
+        public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
         {
             worldEndPoint = endPoint;
-            spline.SetEndPoint(transform.InverseTransformPoint(endPoint));
+            if (updateLocalPosition)
+            {
+                spline.SetEndPoint(transform.InverseTransformPoint(endPoint));
+            }
         }
-
-        public override void SetWorldStartPoint(Vector3 startPoint)
+        public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
         {
             worldStartPoint = startPoint;
-            spline.SetStartPoint(transform.InverseTransformPoint(startPoint));
+            if (updateLocalPosition)
+            {
+                spline.SetStartPoint(transform.InverseTransformPoint(startPoint));
+            }
         }
-
         public override void UpdateWorldPositions()
         {
-            SetWorldStartPoint(transform.TransformPoint(spline.GetStartPoint()));
-            SetWorldEndPoint(transform.TransformPoint(spline.GetEndPoint()));
+            SetWorldStartPoint(transform.TransformPoint(spline.GetStartPoint()), false);
+            SetWorldEndPoint(transform.TransformPoint(spline.GetEndPoint()), false);
         }
+        #endregion
+        #endregion
     }
 }

@@ -171,7 +171,7 @@ using SleepyCat.Utility.Splines;
                 {
                     if (containedSplines[i] != null && containedSplines[i + 1] != null)
                     {
-                        containedSplines[i].SetWorldEndPoint(containedSplines[i + 1].GetWorldStartPoint());
+                        containedSplines[i].SetWorldEndPoint(containedSplines[i + 1].GetWorldStartPoint(), true);
                     }
 
                 }
@@ -183,7 +183,7 @@ using SleepyCat.Utility.Splines;
             {
                 if (containedSplines[containedSplines.Count - 1] != null && containedSplines[0] != null)
                 {
-                    containedSplines[containedSplines.Count - 1].SetWorldEndPoint(containedSplines[0].GetWorldStartPoint());
+                    containedSplines[containedSplines.Count - 1].SetWorldEndPoint(containedSplines[0].GetWorldStartPoint(),true);
                 }
             }
         }

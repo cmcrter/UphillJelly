@@ -117,28 +117,36 @@ namespace SleepyCat.Utility.Splines
             return worldPoints[worldPoints.Count - 1];
         }
 
-        public override void SetWorldStartPoint(Vector3 startPoint)
+        public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
         {
             if (worldPoints.Count < 2) // a count of 2 should mean that it has a start and endpoint
             {
                 worldPoints = new List<Vector3>(2) { Vector3.zero, Vector3.zero };
             }
             worldPoints[0] = startPoint;
+            if (updateLocalPosition)
+            {
+                spline.SetStartPoint(startPoint);
+            }
         }
 
-        public override void SetWorldEndPoint(Vector3 endPoint)
+        public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
         {
             if (worldPoints.Count < 2) // a count of 2 should mean that it has a start and endpoint
             {
                 worldPoints = new List<Vector3>(2) { Vector3.zero, Vector3.zero };
             }
             worldPoints[worldPoints.Count - 1] = endPoint;
+            if (updateLocalPosition)
+            {
+                spline.SetEndPoint(endPoint);
+            }
         }
 
         public override void UpdateWorldPositions()
         {
-            SetWorldStartPoint(transform.TransformPoint(spline.GetStartPoint()));
-            SetWorldEndPoint(transform.TransformPoint(spline.GetEndPoint()));
+            SetWorldStartPoint(transform.TransformPoint(spline.GetStartPoint()), false);
+            SetWorldEndPoint(transform.TransformPoint(spline.GetEndPoint()), false);
         }
     }
 }
