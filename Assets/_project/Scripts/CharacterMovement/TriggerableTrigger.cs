@@ -17,7 +17,7 @@ namespace SleepyCat.Triggerables
 
         private void OnTriggerEnter(Collider other)
         {
-            if (TryGetComponent(out ITriggerable triggerable))
+            if (other.TryGetComponent(out ITriggerable triggerable))
             {
                 if (triggerable.ReturnGameObject().activeSelf)
                 {
@@ -28,7 +28,7 @@ namespace SleepyCat.Triggerables
 
         private void OnTriggerExit(Collider other)
         {
-            if (TryGetComponent(out ITriggerable triggerable))
+            if (other.TryGetComponent(out ITriggerable triggerable))
             {
                 if (triggerable.ReturnGameObject().activeSelf)
                 {

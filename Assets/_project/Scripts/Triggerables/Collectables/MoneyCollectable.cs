@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace SleepyCat.Triggerables.Collectables
 {
-    public class MoneyCollectable : Collectables
+    public class MoneyCollectable : Collectables, ITriggerable
     {
         #region Public Fields
 
@@ -24,6 +24,8 @@ namespace SleepyCat.Triggerables.Collectables
 
         public override void PickupCollectable(/*Player player*/)
         {
+            Debug.Log("Money Picked Up");
+
             //Add score onto player
             //player.AddMoney(fCollectableScore);
 
