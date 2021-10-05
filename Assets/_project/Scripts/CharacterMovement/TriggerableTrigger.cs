@@ -15,12 +15,16 @@ namespace SleepyCat.Triggerables
     {
         #region Unity Methods
 
+        //When something enters or leaves the player's zone
         private void OnTriggerEnter(Collider other)
         {
+            //If it can be triggerable
             if (other.TryGetComponent(out ITriggerable triggerable))
             {
+                //And the object is on
                 if (triggerable.ReturnGameObject().activeSelf)
                 {
+                    //Trigger it
                     triggerable.Trigger();
                 }
             }

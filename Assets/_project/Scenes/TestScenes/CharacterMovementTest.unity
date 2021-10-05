@@ -247,7 +247,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 35022085}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.011, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2032, y: 0.01, z: 0.762}
   m_Children:
   - {fileID: 2097899596}
@@ -3585,6 +3585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1124344452}
   - component: {fileID: 1124344453}
+  - component: {fileID: 1124344455}
   - component: {fileID: 1124344454}
   m_Layer: 6
   m_Name: Character
@@ -3622,6 +3623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goPlayerModel: {fileID: 35022085}
   goForcePoint: {fileID: 2097899595}
+  goFrontAxis: {fileID: 20901127}
   backWheelRight: {fileID: 1982014700}
   frontWheelRight: {fileID: 668841021}
   backWheelLeft: {fileID: 2118941804}
@@ -3629,8 +3631,9 @@ MonoBehaviour:
   rb: {fileID: 35022090}
   fPushWaitAmount: 1.75
   pushForce: 10000
+  brakeForce: 1000
   fMaxSkateboardSpeed: 500
-  fTurnSpeed: 2500
+  fTurnSpeed: 3000
   isGrounded: 0
   playerCamera: {fileID: 1677140361}
   pushTimer:
@@ -3663,12 +3666,68 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 268597c3-a8ae-4bbd-9870-f67264ccd085
+    m_ActionName: Grounded/Turn Left[/Keyboard/a]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 719be385-385a-4aca-831d-d56ddf62b1c7
+    m_ActionName: Aerial/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 383ed3d7-28a7-44cf-b868-fb4b2cf4895d
+    m_ActionName: Grinding/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2e821f34-b059-4ccb-b491-bf0768156d08
+    m_ActionName: WallRiding/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 69d4e3ec-d394-43ca-b8b7-c31a42a9cd49
+    m_ActionName: Grounded/TurnRight[/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d5631a60-a821-4580-8d64-a30f7fe7eac1
+    m_ActionName: Grounded/Push[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2e3de2b0-c6d8-4062-9e3b-1c13ee2e6141
+    m_ActionName: Grounded/PressDown[/Keyboard/downArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f830f5d1-67f6-4855-be93-b409767a8874
+    m_ActionName: Grounded/JumpUp[/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7f1602e8-3d2a-4e27-868e-4232353ad342
+    m_ActionName: Grounded/BalanceDown[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b931f260-c82f-4b7b-a474-5c4bfccc3faa
+    m_ActionName: Grounded/BalanceUp[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cf4ffeb6-64f3-4c43-bf55-d33e3ea010c5
+    m_ActionName: Grounded/Brake[/Keyboard/s]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 
+  m_DefaultActionMap: Grounded
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 1677140357}
+--- !u!114 &1124344455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124344451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593b5afb87d4b904ab26718f0ca6f8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1154528266
 GameObject:
   m_ObjectHideFlags: 0
