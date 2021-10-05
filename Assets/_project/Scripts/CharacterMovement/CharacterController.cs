@@ -170,26 +170,20 @@ namespace SleepyCat.Movement
                 //    goPlayerModel.transform.rotation = Quaternion.Lerp(goPlayerModel.transform.rotation, rot, Time.deltaTime * 10f);
                 //}
 
-                if (Mathf.Abs(Vector3.Angle(hit.normal, goPlayerModel.transform.up)) < 40)
-                {
-                    if (Debug.isDebugBuild)
-                    {
-                        Debug.Log("Adjusting for Ramp");
-                    }
+                //if (Mathf.Abs(Vector3.Angle(hit.normal, goPlayerModel.transform.up)) < 40)
+                //{
+                //    if (Debug.isDebugBuild)
+                //    {
+                //        Debug.Log("Adjusting for Ramp");
+                //    }
 
-                    Quaternion fromRotation = goPlayerModel.transform.rotation;
-                    Quaternion toRotation = Quaternion.FromToRotation(goPlayerModel.transform.up, hit.normal) * goPlayerModel.transform.rotation;
-                    float weight = 0;
+                Quaternion fromRotation = goPlayerModel.transform.rotation;
+                Quaternion toRotation = Quaternion.FromToRotation(goPlayerModel.transform.up, hit.normal) * goPlayerModel.transform.rotation;
+                goPlayerModel.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, Time.deltaTime * 5f);
 
-                    if (weight <= 1)
-                    {
-                        weight += Time.deltaTime * 1f;
-                        goPlayerModel.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, weight);
-                    }
-
-                    //Applying a bit extra of a force for the player
-                    //rb.AddForceAtPosition(goForcePoint.transform.forward * ( pushForce * 0.1f ) * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Impulse);
-                }
+                //    //Applying a bit extra of a force for the player
+                //    //rb.AddForceAtPosition(goForcePoint.transform.forward * ( pushForce * 0.1f ) * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Impulse);
+                //}
             }
 
             if (Keyboard.current.spaceKey.isPressed && !Keyboard.current.sKey.isPressed)
@@ -226,8 +220,6 @@ namespace SleepyCat.Movement
                     rb.AddRelativeTorque(Vector3.up * fTurnSpeed * /*( rb.velocity.magnitude / fMaxSkateboardSpeed ) * */ Time.deltaTime, ForceMode.Acceleration);
                 }
             }
-
-            goPlayerModel.transform.eulerAngles.Set(goPlayerModel.transform.eulerAngles.x, goPlayerModel.transform.eulerAngles.y, Mathf.Clamp(goPlayerModel.transform.eulerAngles.z, -5, 5));
         }
 
         private void AirMovement()
