@@ -20,6 +20,8 @@ namespace SleepyCat.GhostPlayer
         // public reference to the ghost
         public Ghost ghost;
 
+        
+
         // linear interpolation to account for timestamps that are not stored e.g. 0.49, 0.27, 0.82,
         // timestamps that are stored e.g. 0.5, 1, 1.5
         // for example 1 and 1.5 are known timestamps, interpolation is used to find out the position and rotation of the object
