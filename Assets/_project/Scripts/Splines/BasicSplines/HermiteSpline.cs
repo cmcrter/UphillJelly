@@ -16,6 +16,7 @@ namespace SleepyCat.Utility.Splines
     /// <summary>
     /// A spline containing additional tangents for the start and end point that dictate the curve of the spline
     /// </summary>
+    [System.Serializable]
     public class HermiteSpline : Spline
     {
         #region Private Serialized Fields

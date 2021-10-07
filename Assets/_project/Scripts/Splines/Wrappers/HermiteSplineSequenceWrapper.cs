@@ -6,7 +6,7 @@ namespace SleepyCat.Utility.Splines
 {
     public class HermiteSplineSequenceWrapper : SplineWrapper
     {
-        HermiteSplineSequence spline;
+        public HermiteSplineSequence spline;
 
         private List<Vector3> worldPoints;
         private List<float> worldLengths;
@@ -24,8 +24,8 @@ namespace SleepyCat.Utility.Splines
             for (int i = 0; i < worldPoints.Count; ++i)
             {
                 Gizmos.DrawSphere(worldPoints[i], 0.1f);
-                Gizmos.DrawCube(worldPoints[i] + spline.pointsAndTangents[i].Value, Vector3.one * 0.1f);
-                Gizmos.DrawLine(worldPoints[i], worldPoints[i] + spline.pointsAndTangents[i].Value);
+                Gizmos.DrawCube(worldPoints[i] + spline.GetTangentAtIndex(i), Vector3.one * 0.1f);
+                Gizmos.DrawLine(worldPoints[i], worldPoints[i] + spline.GetTangentAtIndex(i));
             }
 
             for (int i = 0; i < worldLengths.Count; ++i)
@@ -35,10 +35,10 @@ namespace SleepyCat.Utility.Splines
                 for (float f = 0.0f; f < 1f;)
                 {
                     Vector3 lineStart = HermiteSpline.GetPointAtTime(worldPoints[i], worldPoints[i + 1], 
-                        spline.pointsAndTangents[i].Value, spline.pointsAndTangents[i + 1].Value, f);
+                        spline.GetTangentAtIndex(i), spline.GetTangentAtIndex(i + 1), f);
 
-                    Vector3 lineEnd = HermiteSpline.GetPointAtTime(worldPoints[i], worldPoints[i + 1], 
-                        spline.pointsAndTangents[i].Value, spline.pointsAndTangents[i + 1].Value, f += tIncrement);
+                    Vector3 lineEnd = HermiteSpline.GetPointAtTime(worldPoints[i], worldPoints[i + 1],
+                        spline.GetTangentAtIndex(i), spline.GetTangentAtIndex(i + 1), f += tIncrement);
 
                     Gizmos.color = Color.Lerp(Color.blue, Color.red, f);
                     Gizmos.DrawLine(lineStart, lineEnd);
@@ -48,12 +48,12 @@ namespace SleepyCat.Utility.Splines
 
         public override Vector3 GetPointAtTime(float t)
         {
-            List<KeyValuePair<Vector3, Vector3>> worldPointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(worldPoints.Count);
-            for (int i = 0; i < worldPoints.Count; ++i)
+            List<Vector3> tangents =new List<Vector3>(spline.NumberOfPositionsAndTangents);
+            for (int i = 0; i < spline.NumberOfPositionsAndTangents; ++i)
             {
-                worldPointsAndTangents.Add(new KeyValuePair<Vector3, Vector3>(worldPoints[i], spline.pointsAndTangents[i].Value));
+                tangents.Add(spline.GetTangentAtIndex(i));
             }
-            return HermiteSplineSequence.GetLengthBasedPointAtTime(worldPointsAndTangents, worldLengths, t);
+            return HermiteSplineSequence.GetLengthBasedPointAtTime(worldPoints, tangents, worldLengths, t);
         }
 
 
@@ -82,15 +82,15 @@ namespace SleepyCat.Utility.Splines
         private float GetLengthOfSingleSpline(int startPointIndex)
         {
             return HermiteSpline.GetTotalLength(worldPoints[startPointIndex],
-                worldPoints[startPointIndex + 1], spline.pointsAndTangents[startPointIndex].Value,
-                spline.pointsAndTangents[startPointIndex + 1].Value, spline.distancePrecisionPerHermiteSpline);
+                worldPoints[startPointIndex + 1], spline.GetTangentAtIndex(startPointIndex),
+                spline.GetTangentAtIndex(startPointIndex + 1), spline.distancePrecisionPerHermiteSpline);
         }
 
         private Vector3 GetPositionAtTimeBetweenPoints(int startPointIndex, float t)
         {
             return HermiteSpline.GetPointAtTime(worldPoints[startPointIndex],
-                spline.pointsAndTangents[startPointIndex].Value, worldPoints[startPointIndex + 1],
-                spline.pointsAndTangents[startPointIndex + 1].Value, t);
+                spline.GetTangentAtIndex(startPointIndex), worldPoints[startPointIndex + 1],
+                spline.GetTangentAtIndex(startPointIndex + 1), t);
         }
 
         protected override void OnValidate()
@@ -126,8 +126,9 @@ namespace SleepyCat.Utility.Splines
             worldPoints[0] = startPoint;
             if (updateLocalPosition)
             {
-                spline.SetStartPoint(startPoint);
+                spline.StartPosition = startPoint;
             }
+            UpdateLengths();
         }
 
         public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
@@ -139,14 +140,19 @@ namespace SleepyCat.Utility.Splines
             worldPoints[worldPoints.Count - 1] = endPoint;
             if (updateLocalPosition)
             {
-                spline.SetEndPoint(endPoint);
+                spline.EndPosition = endPoint;
             }
+            UpdateLengths();
         }
 
         public override void UpdateWorldPositions()
         {
-            SetWorldStartPoint(transform.TransformPoint(spline.GetStartPoint()), false);
-            SetWorldEndPoint(transform.TransformPoint(spline.GetEndPoint()), false);
+            worldPoints = new List<Vector3>(spline.NumberOfPositionsAndTangents);
+            for (int i = 0; i < spline.NumberOfPositionsAndTangents; ++i)
+            {
+                worldPoints.Add(transform.TransformPoint(spline.GetPositionAtIndex(i)));
+            }
+            UpdateLengths();
         }
     }
 }

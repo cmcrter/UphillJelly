@@ -74,6 +74,42 @@ namespace SleepyCat.Utility.Splines
 
         #region Public Methods
         #region Overrides
+        public override float GetTotalLength()
+        {
+            if (spline.GetIsTwoControlPoint())
+            {
+                return BezierCurve.GetTotalLengthTwoControlPoints(worldStartPoint, worldEndPoint,
+                worldControlPoints[BezierCurve.firstAddtionalPointIndex],
+                worldControlPoints[BezierCurve.secondAddtionalPointIndex], spline.distancePrecision);
+            }
+            else
+            {
+                return BezierCurve.GetTotalLengthSingleControlPoint(worldStartPoint, worldEndPoint,
+                    worldControlPoints[BezierCurve.firstAddtionalPointIndex], spline.distancePrecision);
+            }
+        }
+
+        public override Vector3 GetPointAtTime(float t)
+        {
+            if (spline.GetIsTwoControlPoint())
+            {
+                return GetFourPointPositionAtTime(t);
+            }
+            else
+            {
+                return GetThreePointPositionAtTime(t);
+            }
+        }
+        public override Vector3 GetWorldStartPoint()
+        {
+            return worldStartPoint;
+        }
+
+        public override Vector3 GetWorldEndPoint()
+        {
+            return worldEndPoint;
+        }
+
         public override void UpdateWorldPositions()
         {
             worldStartPoint = transform.TransformPoint(spline.StartPosition);
@@ -104,6 +140,22 @@ namespace SleepyCat.Utility.Splines
             for (int i = 0; i < worldControlPoints.Length; ++i)
             {
                 worldControlPoints[i] = transform.TransformPoint(spline.controlPoints[i]);
+            }
+        }
+        public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
+        {
+            worldEndPoint = endPoint;
+            if (updateLocalPosition)
+            {
+                spline.EndPosition = transform.InverseTransformPoint(endPoint);
+            }
+        }
+        public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
+        {
+            worldStartPoint = startPoint;
+            if (updateLocalPosition)
+            {
+                spline.StartPosition = transform.InverseTransformPoint(startPoint);
             }
         }
         #endregion
@@ -143,8 +195,18 @@ namespace SleepyCat.Utility.Splines
         }
         #endregion
 
-
-
+        #region Private Methods
+        /// <summary>
+        /// Returns the a point along the spline at a given unit interval assuming it has is working with 4 different points
+        /// </summary>
+        /// <param name="t">The unit interval</param>
+        /// <returns>A point along the spline at a given unit interval</returns>
+        private Vector3 GetFourPointPositionAtTime(float t)
+        {
+            return BezierCurve.GetPositionAtTimeTwoControlPoints(worldStartPoint, worldEndPoint,
+                worldControlPoints[BezierCurve.firstAddtionalPointIndex],
+                worldControlPoints[BezierCurve.secondAddtionalPointIndex], t);
+        }
         /// <summary>
         /// Returns the a point along the spline at a given unit interval assuming it has is working with 3 different points
         /// </summary>
@@ -154,73 +216,7 @@ namespace SleepyCat.Utility.Splines
         {
             return BezierCurve.GetPositionAtTimeSingleControlPoint(worldStartPoint, worldEndPoint, worldControlPoints[BezierCurve.firstAddtionalPointIndex], t);
         }
-
-        /// <summary>
-        /// Returns the a point along the spline at a given unit interval assuming it has is working with 4 different points
-        /// </summary>
-        /// <param name="t">The unit interval</param>
-        /// <returns>A point along the spline at a given unit interval</returns>
-        private Vector3 GetFourPointPositionAtTime(float t)
-        {
-            return BezierCurve.GetPositionAtTimeTwoControlPoints(worldStartPoint, worldEndPoint, 
-                worldControlPoints[BezierCurve.firstAddtionalPointIndex], 
-                worldControlPoints[BezierCurve.secondAddtionalPointIndex], t);
-        }
-
-        public override Vector3 GetPointAtTime(float t)
-        {
-            if (spline.GetIsTwoControlPoint())
-            {
-                return GetFourPointPositionAtTime(t);
-            }
-            else
-            {
-                return GetThreePointPositionAtTime(t);
-            }
-        }
-
-        public override float GetTotalLength()
-        {
-            if (spline.GetIsTwoControlPoint())
-            {
-                return BezierCurve.GetTotalLengthTwoControlPoints(worldStartPoint, worldEndPoint,
-                worldControlPoints[BezierCurve.firstAddtionalPointIndex],
-                worldControlPoints[BezierCurve.secondAddtionalPointIndex], spline.distancePrecision);
-            }
-            else
-            {
-                return BezierCurve.GetTotalLengthSingleControlPoint(worldStartPoint, worldEndPoint, 
-                    worldControlPoints[BezierCurve.firstAddtionalPointIndex], spline.distancePrecision);
-            }
-        }
-
-        public override Vector3 GetWorldStartPoint()
-        {
-            return worldStartPoint;
-        }
-
-        public override Vector3 GetWorldEndPoint()
-        {
-            return worldEndPoint;
-        }
-
-        public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
-        {
-            worldStartPoint = startPoint;
-            if (updateLocalPosition)
-            {
-                spline.StartPosition = transform.InverseTransformPoint(startPoint);
-            }
-        }
-
-        public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
-        {
-            worldEndPoint = endPoint;
-            if (updateLocalPosition)
-            {
-                spline.EndPosition = transform.InverseTransformPoint(endPoint);
-            }
-        }
+        #endregion
     }
 }
 
