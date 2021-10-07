@@ -24,6 +24,65 @@ namespace SleepyCat.Utility.Splines
         public List<KeyValuePair<Vector3, Vector3>> pointsAndTangents;
         private List<float> lengths;
 
+        #region Public Properties
+        #region Overrides
+        public override Vector3 EndPosition
+        {
+            get
+            {
+                if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
+                {
+                    pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
+                    {
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
+                    };
+                }
+                return pointsAndTangents[1].Key;
+            }
+            set
+            {
+                if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
+                {
+                    pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
+                    {
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
+                    };
+                }
+                pointsAndTangents[1] = new KeyValuePair<Vector3, Vector3>(value, pointsAndTangents[0].Value);
+            }
+        }
+        public override Vector3 StartPosition
+        {
+            get
+            {
+                if (pointsAndTangents.Count < 2) // a count of 2 should mean that it has a start and endpoint
+                {
+                    pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
+                    {   
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
+                    };
+                }
+                return pointsAndTangents[0].Key;
+            }
+            set
+            {
+                if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
+                {
+                    pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
+                    {
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
+                        new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
+                    };
+                }
+                pointsAndTangents[0] = new KeyValuePair<Vector3, Vector3>(value, pointsAndTangents[0].Value);
+            }
+        }
+        #endregion
+        #endregion
+
         public static Vector3 GetLengthBasedPointAtTime(List<KeyValuePair<Vector3, Vector3>> pointsAndTangents, List<float> lengths, float t)
         {
             // Ensuring t is a unit interval
@@ -101,58 +160,6 @@ namespace SleepyCat.Utility.Splines
             {
                 lengths.Add(GetLengthOfSingleSpline(i));
             }
-        }
-
-        public override Vector3 GetStartPoint()
-        {
-            if (pointsAndTangents.Count < 2) // a count of 2 should mean that it has a start and endpoint
-            {
-                pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
-            {
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
-            };
-            }
-            return pointsAndTangents[0].Key;
-        }
-
-        public override Vector3 GetEndPoint()
-        {
-            if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
-            {
-                pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
-            {
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
-            };
-            }
-            return pointsAndTangents[1].Key;
-        }
-
-        public override void SetStartPoint(Vector3 startPoint)
-        {
-            if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
-            {
-                pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
-            {
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
-            };
-            }
-            pointsAndTangents[0] = new KeyValuePair<Vector3, Vector3>(startPoint, pointsAndTangents[0].Value);
-        }
-
-        public override void SetEndPoint(Vector3 endPoint)
-        {
-            if (pointsAndTangents.Count < 2) // A count of 2 should mean that it has a start and endpoint
-            {
-                pointsAndTangents = new List<KeyValuePair<Vector3, Vector3>>(2)
-            {
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero),
-                new KeyValuePair<Vector3, Vector3>(Vector3.zero, Vector3.zero)
-            };
-            }
-            pointsAndTangents[1] = new KeyValuePair<Vector3, Vector3>(endPoint, pointsAndTangents[0].Value);
         }
     }
 }

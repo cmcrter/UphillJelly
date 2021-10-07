@@ -18,11 +18,41 @@ namespace SleepyCat.Utility.Splines
     [System.Serializable]
     public class LineSpline : Spline
     {
-        #region Public Variables
+        #region Private Serialized Fields
+        [SerializeField]
         [Tooltip("The point at which at which the line spline ends, would be the position at t 1")]
-        public Vector3 endPoint;
+        private Vector3 endPoint;
+
+        [SerializeField]
         [Tooltip("The Point at which the line spline starts, would be the position at t 0")]
-        public Vector3 startPoint;
+        private Vector3 startPoint;
+        #endregion
+
+        #region Public Properties
+        #region Overrides
+        public override Vector3 EndPosition
+        {
+            get
+            {
+                return endPoint;
+            }
+            set
+            {
+                this.endPoint = value;
+            }
+        }
+        public override Vector3 StartPosition
+        {
+            get
+            {
+                return startPoint;
+            }
+            set
+            {
+                this.startPoint = value;
+            }
+        }
+        #endregion
         #endregion
 
         #region Public Methods
@@ -32,26 +62,9 @@ namespace SleepyCat.Utility.Splines
             return Vector3.Distance(startPoint, endPoint);
         }
 
-        public override Vector3 GetEndPoint()
-        {
-            return endPoint;
-        }
         public override Vector3 GetPointAtTime(float t)
         {
             return Vector3.Lerp(startPoint, endPoint, t);
-        }
-        public override Vector3 GetStartPoint()
-        {
-            return startPoint;
-        }
-
-        public override void SetEndPoint(Vector3 endPoint)
-        {
-            this.endPoint = endPoint;
-        }
-        public override void SetStartPoint(Vector3 startPoint)
-        {
-            this.startPoint = startPoint;
         }
         #endregion
         #endregion

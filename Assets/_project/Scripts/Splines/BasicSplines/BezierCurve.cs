@@ -56,6 +56,33 @@ namespace SleepyCat.Utility.Splines
         private Vector3 startPoint;
         #endregion
 
+        #region Public Properties
+        #region Overrides
+        public override Vector3 EndPosition
+        {
+            get
+            {
+                return endPoint;
+            }
+            set
+            {
+                this.endPoint = value;
+            }
+        }
+        public override Vector3 StartPosition
+        {
+            get
+            {
+                return startPoint;
+            }
+            set
+            {
+                this.startPoint = value;
+            }
+        }
+        #endregion
+        #endregion
+
         #region Public Static Methods
         /// <summary>
         /// Gets the length of a defined Bezier curve spline with a single control point
@@ -158,10 +185,6 @@ namespace SleepyCat.Utility.Splines
             }
         }
 
-        public override Vector3 GetEndPoint()
-        {
-            return endPoint;
-        }
         public override Vector3 GetPointAtTime(float t)
         {
             if (isTwoControlPoint)
@@ -172,19 +195,6 @@ namespace SleepyCat.Utility.Splines
             {
                 return GetPositionAtTimeSingleControlPoint(t);
             }
-        }
-        public override Vector3 GetStartPoint()
-        {
-            return startPoint;
-        }
-
-        public override void SetEndPoint(Vector3 endPoint)
-        {
-            this.endPoint = endPoint;
-        }
-        public override void SetStartPoint(Vector3 startPoint)
-        {
-            this.startPoint = startPoint;
         }
         #endregion
 

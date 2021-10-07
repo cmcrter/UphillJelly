@@ -70,7 +70,7 @@ namespace SleepyCat.Utility.Splines
             worldEndPoint = endPoint;
             if (updateLocalPosition)
             {
-                spline.SetEndPoint(transform.InverseTransformPoint(endPoint));
+                spline.EndPosition = transform.InverseTransformPoint(endPoint);
             }
         }
         public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
@@ -78,13 +78,13 @@ namespace SleepyCat.Utility.Splines
             worldStartPoint = startPoint;
             if (updateLocalPosition)
             {
-                spline.SetStartPoint(transform.InverseTransformPoint(startPoint));
+                spline.StartPosition = transform.InverseTransformPoint(startPoint);
             }
         }
         public override void UpdateWorldPositions()
         {
-            SetWorldStartPoint(transform.TransformPoint(spline.GetStartPoint()), false);
-            SetWorldEndPoint(transform.TransformPoint(spline.GetEndPoint()), false);
+            SetWorldStartPoint(transform.TransformPoint(spline.StartPosition), false);
+            SetWorldEndPoint(transform.TransformPoint(spline.EndPosition), false);
         }
         #endregion
         #endregion

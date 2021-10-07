@@ -2,7 +2,7 @@
 // Name:                HermiteSpline.cs
 // Author:              Matthew Mason
 // Date Created:        25-Mar-2020
-// Date Last Modified:  25-Mar-2020
+// Date Last Modified:  07-10-2021
 // Brief:               A spline containing additional tangents for the start and end point that dictate the curve of the spline
 //============================================================================================================================================================================================================================================================================
 
@@ -18,30 +18,24 @@ namespace SleepyCat.Utility.Splines
     /// </summary>
     public class HermiteSpline : Spline
     {
-        #region Public Variables
-        public Vector3 startPoint;
-
-        public Vector3 endPoint;
-
-        /// <summary>
-        /// The tangent connected to the start point
-        /// </summary>
-        public Vector3 startTangent;
-
-        /// <summary>
-        /// The tangent connected to the end point
-        /// </summary>
-        public Vector3 endTangent;
-        #endregion
-
-        #region Serialized Private Fields
-        /// <summary>
-        /// The name of positions that are sampled along the length of the spline to calculate its distance
-        /// </summary>
+        #region Private Serialized Fields
         [SerializeField]
         [Min(float.Epsilon)]
         [Tooltip("The name of positions that are sampled along the length of the spline to calculate its distance, Cannot be less that 0")]
-        public float distancePrecision = 100f;
+        private float distancePrecision = 100f;
+
+        [SerializeField]
+        [Tooltip("The point at which at which the line spline ends, would be the position at t 1")]
+        private Vector3 endPoint;
+        [SerializeField]
+        [Tooltip("The tangent attached to the end of the spline")]
+        public Vector3 endTangent;
+        [SerializeField]
+        [Tooltip("The point at which at which the line spline start, would be the position at t 0")]
+        private Vector3 startPoint;
+        [SerializeField]
+        [Tooltip("The tangent attached to the start of the spline")]
+        private Vector3 startTangent;
         #endregion
 
         #region Private Variables
@@ -51,6 +45,90 @@ namespace SleepyCat.Utility.Splines
         private float totalLength;
         #endregion
 
+        #region Public Properties
+        #region Overrides
+        public override Vector3 EndPosition
+        {
+            get
+            {
+                return endPoint;
+            }
+            set
+            {
+                this.endPoint = value;
+                UpdateLength();
+            }
+        }
+        public override Vector3 StartPosition
+        {
+            get
+            {
+                return startPoint;
+            }
+            set
+            {
+                this.startPoint = value;
+                UpdateLength();
+            }
+        }
+        #endregion
+        /// <summary>
+        /// The name of positions that are sampled along the length of the spline to calculate its distance, Cannot be less that 0
+        /// </summary>
+        public float DistancePrecision
+        {
+            get
+            {
+                return distancePrecision;
+            }
+            set
+            {
+                this.distancePrecision = value;
+            }
+        }
+
+        /// <summary>
+        /// The tangent attached to the end of the spline
+        /// </summary>
+        public Vector3 EndTangent
+        {
+            get
+            {
+                return startTangent;
+            }
+            set
+            {
+                endTangent = value;
+                UpdateLength();
+            }
+        }
+        /// <summary>
+        /// The tangent attached to the start of the spline
+        /// </summary>
+        public Vector3 StartTangent
+        {
+            get
+            {
+                return startTangent;
+            }
+            set
+            {
+                startTangent = value;
+                UpdateLength();
+            }
+        }
+        #endregion
+
+        #region Public Static Methods
+        /// <summary>
+        /// Returns a given a point on a defined hermite spline at given unit interval t
+        /// </summary>
+        /// <param name="startPoint">The point at which the hermite spline starts</param>
+        /// <param name="endPoint">The point at which the hermite spline ends</param>
+        /// <param name="startTangent">The tangent for the start of the hermite spline</param>
+        /// <param name="endTangent">The tangent for the end of the hermite<</param>
+        /// <param name="t"></param>
+        /// <returns>A given a point on a defined hermite spline at given unit interval t</returns>
         public static Vector3 GetPointAtTime(Vector3 startPoint, Vector3 endPoint, Vector3 startTangent, Vector3 endTangent, float t)
         {
             // Making sure t is within parameters
@@ -68,6 +146,15 @@ namespace SleepyCat.Utility.Splines
             return h00 * startPoint + h10 * startTangent + h01 * endPoint + h11 * endTangent;
         }
 
+        /// <summary>
+        /// Returns the approximate length of the defined spline
+        /// </summary>
+        /// <param name="startPoint">The point that the spline starts at</param>
+        /// <param name="endPoint">The point that the spline ends at</param>
+        /// <param name="startTangent">The tangent for the start spline</param>
+        /// <param name="endTangent">The tangent for the end of the spline</param>
+        /// <param name="distancePrecision">The number of points that will be </param>
+        /// <returns>Approximate length of the defined spline</returns>
         public static float GetTotalLength(Vector3 startPoint, Vector3 endPoint, Vector3 startTangent, Vector3 endTangent, float distancePrecision)
         {
             float distance = 0.0f;
@@ -83,8 +170,14 @@ namespace SleepyCat.Utility.Splines
             }
             return distance;
         }
+        #endregion
 
         #region Public Methods
+        #region Overrides
+        /// <summary>
+        /// Returns the approximate length of the spline
+        /// </summary>
+        /// <returns>The approximate length of the spline</returns>
         public override float GetTotalLength()
         {
             return totalLength;
@@ -94,12 +187,7 @@ namespace SleepyCat.Utility.Splines
         {
             return GetPointAtTime(startPoint, endPoint, startTangent, endTangent, t);
         }
-
-        public void ConnectToStartOfHermiteSpline(Vector3 startPoint, Vector3 startTangent)
-        {
-            endPoint = startPoint;
-            endTangent = startTangent;
-        }
+        #endregion
         #endregion
 
         #region Private Methods
@@ -110,28 +198,6 @@ namespace SleepyCat.Utility.Splines
         {
             totalLength = GetTotalLength(startPoint, endPoint, startTangent, endTangent, distancePrecision);
         }
-
-        public override Vector3 GetStartPoint()
-        {
-            return startPoint;
-        }
-
-        public override Vector3 GetEndPoint()
-        {
-            return endPoint;
-        }
-
-        public override void SetStartPoint(Vector3 startPoint)
-        {
-            this.startPoint = startPoint;
-        }
-
-        public override void SetEndPoint(Vector3 endPoint)
-        {
-            this.endPoint = endPoint;
-        }
         #endregion
-
-
     }
 }
