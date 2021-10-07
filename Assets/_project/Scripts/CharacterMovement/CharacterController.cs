@@ -22,8 +22,11 @@ namespace SleepyCat.Movement
         //This is the rig
         [SerializeField]
         private GameObject goPlayerModel;
+        //This is the center of mass
         [SerializeField]
         private GameObject goForcePoint;
+        [SerializeField]
+        private GameObject goFrontAxis;
 
         //This is the wheel collider we'll use to keep track of momentum, speed and weight
         [SerializeField]
@@ -43,6 +46,8 @@ namespace SleepyCat.Movement
         private float fPushWaitAmount = 0.5f;
         [SerializeField]
         private float pushForce = 10000f;
+        [SerializeField]
+        private float brakeForce = 1000f;
         [SerializeField]
         private float fMaxSkateboardSpeed = 500f;
         [SerializeField]
@@ -113,7 +118,7 @@ namespace SleepyCat.Movement
             {
                 Debug.DrawRay(goPlayerModel.transform.position, -goPlayerModel.transform.up, Color.blue);
                 Debug.DrawRay(rb.position + rb.centerOfMass, goForcePoint.transform.forward, Color.cyan);
-                Debug.DrawRay(goForcePoint.transform.position, goPlayerModel.transform.forward, Color.green);
+                Debug.DrawLine(goFrontAxis.transform.position, goFrontAxis.transform.position + ( goFrontAxis.transform.forward.normalized * 0.1f), Color.green);
 
                 if (Keyboard.current.escapeKey.isPressed)
                 {
@@ -155,14 +160,45 @@ namespace SleepyCat.Movement
             }
 
             RaycastHit hit;
-            if (Physics.Raycast(goForcePoint.transform.position, goPlayerModel.transform.forward, out hit, 0.2f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goFrontAxis.transform.position, goFrontAxis.transform.forward, out hit, 0.1f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
             {
-                goPlayerModel.transform.rotation = Quaternion.RotateTowards(goPlayerModel.transform.rotation, Quaternion.LookRotation((hit.point - goForcePoint.transform.position).normalized, hit.normal), 0.5f);
+
+                //Angling for ramp to be smoother
+                //if (Vector3.Angle(hit.normal, Vector3.up) > 5 && Vector3.Angle(hit.normal, Vector3.up) < 50)
+                //{
+                //    Quaternion rot = Quaternion.FromToRotation(goPlayerModel.transform.up, hit.normal) * Quaternion.Euler(goPlayerModel.transform.rotation.x, goPlayerModel.transform.rotation.y, goPlayerModel.transform.rotation.z);
+                //    goPlayerModel.transform.rotation = Quaternion.Lerp(goPlayerModel.transform.rotation, rot, Time.deltaTime * 10f);
+                //}
+
+                if (Mathf.Abs(Vector3.Angle(hit.normal, goPlayerModel.transform.up)) < 40)
+                {
+                    if (Debug.isDebugBuild)
+                    {
+                        Debug.Log("Adjusting for Ramp");
+                    }
+
+                    Quaternion fromRotation = goPlayerModel.transform.rotation;
+                    Quaternion toRotation = Quaternion.FromToRotation(goPlayerModel.transform.up, hit.normal) * goPlayerModel.transform.rotation;
+                    float weight = 0;
+
+                    if (weight <= 1)
+                    {
+                        weight += Time.deltaTime * 1f;
+                        goPlayerModel.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, weight);
+                    }
+
+                    //Applying a bit extra of a force for the player
+                    //rb.AddForceAtPosition(goForcePoint.transform.forward * ( pushForce * 0.1f ) * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Impulse);
+                }
             }
 
-            if (Keyboard.current.spaceKey.isPressed)
+            if (Keyboard.current.spaceKey.isPressed && !Keyboard.current.sKey.isPressed)
             {
                 PushBoard();
+            }
+            else if (Keyboard.current.sKey.isPressed)
+            {
+                ApplyBrakeForce();
             }
 
             if (Keyboard.current.aKey.isPressed)
@@ -190,6 +226,8 @@ namespace SleepyCat.Movement
                     rb.AddRelativeTorque(Vector3.up * fTurnSpeed * /*( rb.velocity.magnitude / fMaxSkateboardSpeed ) * */ Time.deltaTime, ForceMode.Acceleration);
                 }
             }
+
+            goPlayerModel.transform.eulerAngles.Set(goPlayerModel.transform.eulerAngles.x, goPlayerModel.transform.eulerAngles.y, Mathf.Clamp(goPlayerModel.transform.eulerAngles.z, -5, 5));
         }
 
         private void AirMovement()
@@ -199,10 +237,14 @@ namespace SleepyCat.Movement
                 return;
             }
 
+            rb.angularVelocity = Vector3.zero;
+            
             if (playerCamera)
             {
                 playerCamera.FollowRotation = false;
             }
+
+            //Need some way of making the skateboard feel more stable in the air and just generally nicer
 
             if (Keyboard.current.leftArrowKey.isPressed)
             {
@@ -228,6 +270,12 @@ namespace SleepyCat.Movement
             }
         }
 
+        private void ApplyBrakeForce()
+        {
+            //Pushing backward as a constant force
+            rb.AddForceAtPosition(-goForcePoint.transform.forward * brakeForce * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
+        }
+
         private void PushBoard()
         {
             if (pushTimer != null && pushTimer.isActive)
@@ -241,7 +289,6 @@ namespace SleepyCat.Movement
             StartPushTimerCoroutine();
             StartPushDuringTimerCoroutine();
         }
-
 
         private void StartPushTimerCoroutine()
         {
