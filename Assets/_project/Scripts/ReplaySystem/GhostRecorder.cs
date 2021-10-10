@@ -23,7 +23,7 @@ public class GhostRecorder : MonoBehaviour
     // store actual time value
     private float timeValue;
 
-    //
+    // gameobject for if this gameobjects position has changed
     public GameObject HasChangedGO;
 
     #endregion
@@ -78,7 +78,7 @@ public class GhostRecorder : MonoBehaviour
             if (Debug.isDebugBuild) {
 
                 // transform hasnt changed
-                Debug.Log("Transform hasnt changed");
+                //Debug.Log("Transform hasnt changed");
 
             }
 
