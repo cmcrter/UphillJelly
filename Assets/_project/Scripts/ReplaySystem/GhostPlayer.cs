@@ -53,6 +53,7 @@ namespace SleepyCat.GhostPlayer
 
             }
 
+            
             //
             if (Keyboard.current.kKey.isPressed) {
 

@@ -46,6 +46,11 @@ public class GhostRecorder : MonoBehaviour
 
     }
 
+
+    // after the ghost has been recorded and the player is finished then stop the recording and save the file
+    // then clear the recorded data so when the game records again it starts on 0
+
+
     public void Update() {
 
 
