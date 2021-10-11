@@ -14,7 +14,8 @@ using UnityEngine;
 public class Replay_Collectable : MonoBehaviour
 {
 
-
+    //
+    public TempScoreSystem tempScoreSystem;
 
     #region Variables
 
@@ -35,6 +36,9 @@ public class Replay_Collectable : MonoBehaviour
             // get the render component in this gameobject and set it to cyan
             this.gameObject.GetComponent<Renderer>().material.color = Color.cyan;
 
+            //
+            tempScoreSystem.IncreasePlayerScore();
+
             // debug
             if (Debug.isDebugBuild) {
 
@@ -50,6 +54,9 @@ public class Replay_Collectable : MonoBehaviour
 
             // set the child object to active
             childCollectableObject.SetActive(true);
+
+            //
+            tempScoreSystem.IncreaseGhostScore();
 
             // debug
             if (Debug.isDebugBuild) {
@@ -71,12 +78,14 @@ public class Replay_Collectable : MonoBehaviour
         // on start set the child object to false
         childCollectableObject.SetActive(false);
 
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+
 
     }
 
