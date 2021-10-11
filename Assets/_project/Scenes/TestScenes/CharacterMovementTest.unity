@@ -2078,8 +2078,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886365760}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1691898792}
   m_RootOrder: 1
@@ -2091,11 +2091,11 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886365760}
-  m_Material: {fileID: 13400000, guid: d79575773de0b91418f5f179061505d0, type: 2}
+  m_Material: {fileID: 13400000, guid: f3ec3ae093b074448b3ed563d9bb0700, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &886365763
 MeshRenderer:
@@ -2157,7 +2157,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 70
   m_Drag: 1
-  m_AngularDrag: 500
+  m_AngularDrag: 4
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -4036,8 +4036,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1691898792}
   smoothSpeed: 0.05
-  followDist: 3
+  followDist: 5
   FollowRotation: 1
+  FollowY: 1
+  FollowZ: 1
 --- !u!1 &1691898791
 GameObject:
   m_ObjectHideFlags: 0
@@ -4085,16 +4087,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goPlayerModel: {fileID: 608008857}
+  Wheels: []
   goRaycastPoint: {fileID: 103326596}
   rb: {fileID: 886365765}
   fPushWaitAmount: 0.75
-  forwardSpeed: 35
-  turnSpeed: 0.15
-  backwardSpeed: 10
+  forwardSpeed: 40
+  turnSpeed: 0.17
+  backwardSpeed: 12.5
   currentTurnInput: 0
-  additionalGravity: 7
+  additionalGravity: 6
   isGrounded: 0
   playerCamera: {fileID: 1677140361}
+  ballMovement: {fileID: 886365762}
   pushTimer:
     isLocked: 0
     isActive: 0

@@ -9,6 +9,7 @@
 
 using SleepyCat.Utility.StateMachine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +21,14 @@ namespace SleepyCat.Movement.Prototypes
 
         [SerializeField]
         private GameObject goPlayerModel;
+
+        // 0 - Right
+        // 1 - Left
+        // 2 - Back Right
+        // 3 - Back Left
+        [SerializeField]
+        private List<GameObject> Wheels = new List<GameObject>();
+
         [SerializeField]
         private GameObject goRaycastPoint;
         [SerializeField]
@@ -46,6 +55,8 @@ namespace SleepyCat.Movement.Prototypes
         FiniteStateMachine CharacterStateMachine;
         [SerializeField]
         PlayerCamera playerCamera;
+        [SerializeField]
+        SphereCollider ballMovement;
 
         //This is public in case other systems need to know if the player is pushing.
         public Coroutine pushWaitCoroutine { get; private set; }
@@ -69,7 +80,7 @@ namespace SleepyCat.Movement.Prototypes
             rb.transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.identity;
 
-            rb.transform.position = new Vector3(0, 0.2f, 0);
+            rb.transform.position = new Vector3(0, ballMovement.radius + 0.1f, 0);          
         }
 
         #endregion
@@ -78,24 +89,25 @@ namespace SleepyCat.Movement.Prototypes
 
         void Start()
         {
+            goPlayerModel.transform.position = new Vector3(0, rb.transform.position.y - ballMovement.radius - 0.05f, 0);
             rb.transform.parent = null;
         }
 
         private void Update()
         {
             //Checking if anything is below it
-            if (Physics.Raycast(goRaycastPoint.transform.position, Vector3.down, out RaycastHit hit, 0.25f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.25f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
 
                 //Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
+                    Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
-                    Debug.DrawLine(transform.position, transform.position + ( -transform.up * 1f ), Color.blue);
+                    Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
                     Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
-
             }
             else
             {
@@ -107,34 +119,47 @@ namespace SleepyCat.Movement.Prototypes
                 ResetBoard();
             }
 
-            //GameObject's heading
-            float headingDeltaAngle = turnSpeed * 1000 * currentTurnInput * Time.deltaTime;
-            Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
-            //align with surface normal
-            if (hit.transform != null)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, (Quaternion.FromToRotation(transform.up, hit.normal.normalized) * transform.rotation), Time.deltaTime * 10f);
-            }
-
-            //apply heading rotation
-            transform.rotation = transform.rotation * headingDelta;
-            transform.position = rb.transform.position;
+            UpdatePositionAndRotation(hit.normal);
         }
 
         void FixedUpdate()
         {
+            rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
+
             if (isGrounded)
             {
-                rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
                 GroundedMovement();
             }
-
         }
 
         #endregion
 
         #region Private Methods
 
+        private void UpdatePositionAndRotation(Vector3 GroundRotation)
+        {
+            //GameObject's heading
+            float headingDeltaAngle = turnSpeed * 1000 * currentTurnInput * Time.deltaTime;
+            Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
+            Quaternion groundQuat = transform.rotation;
+
+            ////apply heading rotation
+            if (GroundRotation != Vector3.zero)
+            {
+                groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, GroundRotation) * transform.rotation, Time.deltaTime * 100f);
+            }
+
+            transform.rotation = groundQuat;
+            transform.rotation = transform.rotation * headingDelta;
+            transform.position = rb.transform.position;
+
+            float driftAmount = Vector3.Dot(rb.velocity.normalized, transform.rotation.eulerAngles.normalized);
+            if (driftAmount < 0.5f)
+            {
+                //Debug.Log("Drift King: " + rb.velocity.normalized + "Model wants to go: " + transform.rotation.eulerAngles.normalized + " creating a difference of: " + driftAmount);
+                rb.AddForceAtPosition(-rb.velocity.normalized * forwardSpeed * 1000 * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
+            }
+        }
 
 
         private void GroundedMovement()
