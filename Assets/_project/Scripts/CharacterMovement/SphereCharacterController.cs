@@ -21,13 +21,10 @@ namespace SleepyCat.Movement.Prototypes
 
         [SerializeField]
         private GameObject goPlayerModel;
-
-        // 0 - Right
-        // 1 - Left
-        // 2 - Back Right
-        // 3 - Back Left
         [SerializeField]
-        private List<GameObject> Wheels = new List<GameObject>();
+        private GameObject goForwardAxis;
+        [SerializeField]
+        private GameObject goBackwardAxis;
 
         [SerializeField]
         private GameObject goRaycastPoint;
@@ -57,6 +54,9 @@ namespace SleepyCat.Movement.Prototypes
         PlayerCamera playerCamera;
         [SerializeField]
         SphereCollider ballMovement;
+
+        [SerializeField]
+        LayerMask mask;
 
         //This is public in case other systems need to know if the player is pushing.
         public Coroutine pushWaitCoroutine { get; private set; }
@@ -89,14 +89,14 @@ namespace SleepyCat.Movement.Prototypes
 
         void Start()
         {
-            goPlayerModel.transform.position = new Vector3(0, rb.transform.position.y - ballMovement.radius - 0.05f, 0);
+            goPlayerModel.transform.position = new Vector3(0, ballMovement.transform.position.y - ballMovement.radius, 0);
             rb.transform.parent = null;
         }
 
         private void Update()
         {
             //Checking if anything is below it
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.25f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.25f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
 
@@ -143,21 +143,27 @@ namespace SleepyCat.Movement.Prototypes
             Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
             Quaternion groundQuat = transform.rotation;
 
-            ////apply heading rotation
+            //apply heading rotation
             if (GroundRotation != Vector3.zero)
             {
-                groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, GroundRotation) * transform.rotation, Time.deltaTime * 100f);
+                groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, GroundRotation) * transform.rotation, Time.deltaTime * 12f);
             }
 
             transform.rotation = groundQuat;
             transform.rotation = transform.rotation * headingDelta;
             transform.position = rb.transform.position;
 
-            float driftAmount = Vector3.Dot(rb.velocity.normalized, transform.rotation.eulerAngles.normalized);
-            if (driftAmount < 0.5f)
+            Vector3 rbVel = new Vector3(0, rb.velocity.y, 0);
+            Vector3 TiltAndRoll =  new Vector3(0, transform.rotation.eulerAngles.y, 0);
+
+            float driftAmount = Vector3.Angle(rbVel, TiltAndRoll);
+            float initialDrag = rb.drag;
+            if (driftAmount > 5f && currentTurnInput == 0 && (180 - driftAmount) > 2f || currentTurnInput != 0 && driftAmount > 90f && (180 - driftAmount) > 2f)
             {
-                //Debug.Log("Drift King: " + rb.velocity.normalized + "Model wants to go: " + transform.rotation.eulerAngles.normalized + " creating a difference of: " + driftAmount);
-                rb.AddForceAtPosition(-rb.velocity.normalized * forwardSpeed * 1000 * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
+                Debug.Log("Drift King: " + rb.velocity.normalized + "Model wants to go: " + transform.rotation.eulerAngles.normalized + " creating a difference of: " + driftAmount);
+                rb.drag = 10f;
+                rb.AddForceAtPosition(-rb.velocity.normalized * backwardSpeed * 1000 * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
+                rb.drag = initialDrag;
             }
         }
 
@@ -174,7 +180,7 @@ namespace SleepyCat.Movement.Prototypes
                 }
                 else
                 {
-                    currentTurnInput = -0.5f;
+                    currentTurnInput -= 0.25f * rb.velocity.magnitude * 0.25f;
                 }
             }
 
@@ -186,9 +192,11 @@ namespace SleepyCat.Movement.Prototypes
                 }
                 else
                 {
-                    currentTurnInput = 0.5f;
+                    currentTurnInput += 0.25f * rb.velocity.magnitude * 0.25f;
                 }
             }
+
+            Mathf.Clamp(currentTurnInput, -1, 1);
 
             if (Keyboard.current.spaceKey.isPressed && !Keyboard.current.sKey.isPressed)
             {

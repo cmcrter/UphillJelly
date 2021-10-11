@@ -1335,7 +1335,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608008857}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.35, z: 0}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
   m_LocalScale: {x: 0.2032, y: 0.01, z: 0.762}
   m_Children:
   - {fileID: 103326597}
@@ -2078,7 +2078,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886365760}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.048, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1691898792}
@@ -2095,7 +2095,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &886365763
 MeshRenderer:
@@ -4066,7 +4066,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691898791}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 608008858}
@@ -4087,18 +4087,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goPlayerModel: {fileID: 608008857}
-  Wheels: []
+  goForwardAxis: {fileID: 36821867}
+  goBackwardAxis: {fileID: 987590635}
   goRaycastPoint: {fileID: 103326596}
   rb: {fileID: 886365765}
   fPushWaitAmount: 0.75
   forwardSpeed: 40
-  turnSpeed: 0.17
+  turnSpeed: 0.15
   backwardSpeed: 12.5
   currentTurnInput: 0
   additionalGravity: 6
   isGrounded: 0
   playerCamera: {fileID: 1677140361}
   ballMovement: {fileID: 886365762}
+  mask:
+    serializedVersion: 2
+    m_Bits: 64
   pushTimer:
     isLocked: 0
     isActive: 0
