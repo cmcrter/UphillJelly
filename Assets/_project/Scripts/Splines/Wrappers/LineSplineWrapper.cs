@@ -33,6 +33,33 @@ namespace SleepyCat.Utility.Splines
         private Vector3 worldStartPoint;
         #endregion
 
+        #region Public Properties
+        #region Overrides
+        public override Vector3 WorldEndPosition
+        {
+            get
+            {
+                return worldEndPoint;
+            }
+            set
+            {
+                worldEndPoint = value;
+            }
+        }
+        public override Vector3 WorldStartPosition
+        {
+            get
+            {
+                return worldStartPoint;
+            }
+            set
+            {
+                worldStartPoint = value;
+            }
+        }
+        #endregion
+        #endregion
+
         #region Unity Methods
         public void OnDrawGizmos()
         {
@@ -52,39 +79,25 @@ namespace SleepyCat.Utility.Splines
             return Vector3.Distance(worldStartPoint, worldEndPoint);
         }
 
-        public override Vector3 GetWorldEndPoint()
-        {
-            return worldEndPoint;
-        }
         public override Vector3 GetPointAtTime(float t)
         {
             return Vector3.Lerp(worldStartPoint, worldEndPoint, t);
         }
-        public override Vector3 GetWorldStartPoint()
-        {
-            return worldStartPoint;
-        }
 
-        public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
+        public override void SetWorldEndPointAndUpdateLocal(Vector3 endPoint)
         {
             worldEndPoint = endPoint;
-            if (updateLocalPosition)
-            {
-                spline.EndPosition = transform.InverseTransformPoint(endPoint);
-            }
+            spline.EndPosition = transform.InverseTransformPoint(endPoint);
         }
-        public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
+        public override void SetWorldStartPointAndUpdateLocal(Vector3 startPoint)
         {
             worldStartPoint = startPoint;
-            if (updateLocalPosition)
-            {
-                spline.StartPosition = transform.InverseTransformPoint(startPoint);
-            }
+            spline.StartPosition = transform.InverseTransformPoint(startPoint);
         }
         public override void UpdateWorldPositions()
         {
-            SetWorldStartPoint(transform.TransformPoint(spline.StartPosition), false);
-            SetWorldEndPoint(transform.TransformPoint(spline.EndPosition), false);
+            worldStartPoint = transform.TransformPoint(spline.StartPosition);
+            worldEndPoint = transform.TransformPoint(spline.EndPosition);
         }
         #endregion
         #endregion

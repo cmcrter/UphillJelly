@@ -315,20 +315,28 @@ namespace SleepyCat.Utility.Splines
             }
             if (indexToRemoveAt < NumberOfPositionsAndTangents)
             {
-                if (indexToRemoveAt > 2)
+                if (indexToRemoveAt > -1)
                 {
                     positions.RemoveAt(indexToRemoveAt);
                     tangents.RemoveAt(indexToRemoveAt);
                 }
+                else
+                {
+                    Debug.LogError("Index given to RemovePositionAndTangentAtIndex method of HermiteSplineSequnce was a negative value");
+                    return;
+                }
+
                 if (NumberOfPositionsAndTangents < 2)
                 {
                     // Make sure there is always a start and end point
                     AddNewPositionAndTangent(Vector3.zero, Vector3.zero);
+                    UpdateLengths();
+                    return;
                 }
-                Debug.LogError("Index given to RemovePositionAndTangentAtIndex method of HermiteSplineSequnce was a negative value");
+                UpdateLengths();
+                return;
             }
             Debug.LogError("Index given to RemovePositionAndTangentAtIndex method of HermiteSplineSequnce was greater than points and tangent count value");
-            UpdateLengths();
         }
         /// <summary>
         /// Sets the value of a given Hermite Spline position
@@ -347,16 +355,23 @@ namespace SleepyCat.Utility.Splines
                 {
                     positions[index] = newPosition;
                 }
-                Debug.LogError("Index given to SetPositionAtIndex method of HermiteSplineSequnce was a negative value");
+                else
+                {
+                    Debug.LogError("Index given to SetPositionAtIndex method of HermiteSplineSequnce was a negative value");
+                }
             }
-            Debug.LogError("Index given to SetPositionAtIndex method of HermiteSplineSequnce was greater than points count value");
+            else
+            {
+                Debug.LogError("Index given to SetPositionAtIndex method of HermiteSplineSequnce was greater than points count value");
+            }
+
             UpdateLengths();
         }
         /// <summary>
         /// Sets the value of a given Hermite Spline tangent
         /// </summary>
         /// <param name="index">The index to change the tangent of</param>
-        /// <param name="newPosition">The value of the new tangent</param>
+        /// <param name="newTangent">The value of the new tangent</param>
         public void SetTanagentAtIndex(int index, Vector3 newTangent)
         {
             if (tangents == null)
@@ -369,9 +384,16 @@ namespace SleepyCat.Utility.Splines
                 {
                     tangents[index] = newTangent;
                 }
-                Debug.LogError("Index given to SetTanagentAtIndex method of HermiteSplineSequnce was a negative value");
+                else
+                {
+                    Debug.LogError("Index given to SetTanagentAtIndex method of HermiteSplineSequnce was a negative value");
+                }
             }
-            Debug.LogError("Index given to SetTanagentAtIndex method of HermiteSplineSequnce was greater than points count value");
+            else
+            {
+                Debug.LogError("Index given to SetTanagentAtIndex method of HermiteSplineSequnce was greater than points count value");
+            }
+            
             UpdateLengths();
         }
         #endregion
@@ -388,7 +410,7 @@ namespace SleepyCat.Utility.Splines
             {
                 lengths.Add(HermiteSpline.GetTotalLength(positions[i], positions[i + 1], tangents[i],
                 tangents[i + 1], distancePrecisionPerHermiteSpline));
-                totalLength += lengths[lengths.Count];
+                totalLength += lengths[lengths.Count - 1];
             }
         }
         #endregion

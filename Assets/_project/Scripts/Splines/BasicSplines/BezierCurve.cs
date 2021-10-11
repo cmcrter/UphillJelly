@@ -47,7 +47,7 @@ namespace SleepyCat.Utility.Splines
 
         [SerializeField]
         [Tooltip("The additional points needed on top of the start and end point")]
-        public Vector3[] controlPoints = new Vector3[2];
+        public Vector3[] controlPoints;
         [SerializeField]
         [Tooltip("The point at which the spline ends")]
         private Vector3 endPoint;
@@ -211,7 +211,7 @@ namespace SleepyCat.Utility.Splines
         /// Set weather this Bezier Curve should be using two control points or one
         /// </summary>
         /// <param name="isTwoControlPoint">Weather this Bezier Curve should be using two control points or one</param>
-        public void SetIsFourPoint(bool isTwoControlPoint)
+        public void SetIsTwoControlPoint(bool isTwoControlPoint)
         {
             // Adjust control point array size accordingly then set the boolean
             if (isTwoControlPoint)
@@ -221,6 +221,7 @@ namespace SleepyCat.Utility.Splines
                 {
                     newControlPointsArray[i] = controlPoints[i];
                 }
+                controlPoints = newControlPointsArray;
                 this.isTwoControlPoint = isTwoControlPoint;
             }
             else

@@ -136,7 +136,7 @@ using SleepyCat.Utility.Splines;
         // Return the end point of the last spline if the target length was not within any of the splines
         if (containedSplines.Count > 0)
         {
-            return containedSplines[containedSplines.Count - 1].GetWorldEndPoint();
+            return containedSplines[containedSplines.Count - 1].WorldStartPosition;
         }
         else
         {
@@ -171,7 +171,7 @@ using SleepyCat.Utility.Splines;
                 {
                     if (containedSplines[i] != null && containedSplines[i + 1] != null)
                     {
-                        containedSplines[i].SetWorldEndPoint(containedSplines[i + 1].GetWorldStartPoint(), true);
+                        containedSplines[i].SetWorldEndPointAndUpdateLocal(containedSplines[i + 1].WorldStartPosition);
                     }
 
                 }
@@ -183,7 +183,7 @@ using SleepyCat.Utility.Splines;
             {
                 if (containedSplines[containedSplines.Count - 1] != null && containedSplines[0] != null)
                 {
-                    containedSplines[containedSplines.Count - 1].SetWorldEndPoint(containedSplines[0].GetWorldStartPoint(),true);
+                    containedSplines[containedSplines.Count - 1].SetWorldEndPointAndUpdateLocal(containedSplines[0].WorldStartPosition);
                 }
             }
         }

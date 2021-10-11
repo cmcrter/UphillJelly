@@ -40,17 +40,15 @@ namespace SleepyCat.Utility.Splines
             }
 
             // Check if the new position handles have moved then update the world positions of lines
-            Vector3 newStartPosition = Handles.PositionHandle(lineSplineWrapper.GetWorldStartPoint(), lineSplineWrapper.transform.rotation);
-            Vector3 startHandleDelta = newStartPosition - lineSplineWrapper.GetWorldStartPoint();
-            if (startHandleDelta.magnitude > 0)
+            if (HandlesHelperFunctions.ChangeSenstivePositionHandle(lineSplineWrapper.WorldStartPosition,
+                lineSplineWrapper.transform.rotation, target, "Start Position", out Vector3 newWorldStartPosition))
             {
-                lineSplineWrapper.SetWorldStartPoint(newStartPosition, true);
+                lineSplineWrapper.SetWorldStartPointAndUpdateLocal(newWorldStartPosition);
             }
-            Vector3 newEndPosition = Handles.PositionHandle(lineSplineWrapper.GetWorldEndPoint(), lineSplineWrapper.transform.rotation);
-            Vector3 endHandleDelta = newEndPosition - lineSplineWrapper.GetWorldEndPoint();
-            if (endHandleDelta.magnitude > 0)
+            if (HandlesHelperFunctions.ChangeSenstivePositionHandle(lineSplineWrapper.WorldEndPosition,
+                lineSplineWrapper.transform.rotation, target, "End Position", out Vector3 newWorldEndPosition))
             {
-                lineSplineWrapper.SetWorldEndPoint(newEndPosition, true);
+                lineSplineWrapper.SetWorldEndPointAndUpdateLocal(newWorldEndPosition);
             }
         }
         #endregion

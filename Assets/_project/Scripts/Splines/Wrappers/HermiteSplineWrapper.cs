@@ -1,24 +1,112 @@
+//===========================================================================================================================================================================================================================================================================
+// Name:                HermiteSplineWrapper.cs
+// Author:              Matthew Mason
+// Date Created:        11-Oct-2021
+// Brief:               A spline wrapper used to control a Hermite spline
+//============================================================================================================================================================================================================================================================================
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SleepyCat.Utility.Splines
 {
+    /// <summary>
+    /// A spline wrapper used to control a Hermite spline
+    /// </summary>
     public class HermiteSplineWrapper : SplineWrapper
     {
+        #region Private Serialized Fields
         [SerializeField]
+        [Tooltip("The spline that this is containing")]
         private HermiteSpline spline;
+        #endregion
 
-        private Vector3 worldStartPoint;
-
-        private Vector3 worldEndPoint;
-
+        #region Private Variables
         /// <summary>
         /// The total length the spline covers
         /// </summary>
         private float totalWorldLength;
 
+        /// <summary>
+        /// The end point for the spline relative to the world
+        /// </summary>
+        private Vector3 worldEndPoint;
+
+        /// <summary>
+        /// The start point for the spline relative to the world
+        /// </summary>
+        private Vector3 worldStartPoint;
+        #endregion
+
+        #region Public Properties
+        #region Overrides
+        public override Vector3 WorldEndPosition
+        {
+            get
+            {
+                return worldEndPoint;
+            }
+            set
+            {
+                worldEndPoint = value;
+            }
+        }
+        public override Vector3 WorldStartPosition
+        {
+            get
+            {
+                return worldStartPoint;
+            }
+            set
+            {
+                worldStartPoint = value;
+            }
+        }
+        #endregion
+
+        public Vector3 EndTangent
+        {
+            get
+            {
+                return spline.EndTangent;
+            }
+            set
+            {
+                spline.EndTangent = value;
+                UpdateWorldPositions();
+            }
+        }
+
+        public Vector3 StartTangent
+        {
+            get
+            {
+                return spline.StartTangent;
+            }
+            set
+            {
+                spline.StartTangent = value;
+                UpdateWorldPositions();
+            }
+        }
+        #endregion
+
         #region Unity Methods
+        #region Overrides
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            UpdateLength();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            UpdateLength();
+        }
+        #endregion
         private void OnDrawGizmos()
         {
             UpdateWorldPositions();
@@ -32,8 +120,8 @@ namespace SleepyCat.Utility.Splines
             // Drawing end Point and tangent
             Gizmos.color = Color.black;
             Gizmos.DrawSphere(worldEndPoint, 0.1f);
-            Gizmos.DrawCube(worldEndPoint + spline.endTangent, Vector3.one * 0.1f);
-            Gizmos.DrawLine(worldEndPoint, worldEndPoint + spline.endTangent);
+            Gizmos.DrawCube(worldEndPoint + spline.EndTangent, Vector3.one * 0.1f);
+            Gizmos.DrawLine(worldEndPoint, worldEndPoint + spline.EndTangent);
 
             // Drawing line between all the sampled points to represent the spline
             float tIncrement = 1.0f / spline.DistancePrecision;
@@ -43,20 +131,10 @@ namespace SleepyCat.Utility.Splines
                 Gizmos.DrawLine(GetPointAtTime(f), GetPointAtTime(f += tIncrement));
             }
         }
-
-        protected override void OnValidate()
-        {
-            base.OnValidate();
-            UpdateLength();
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            UpdateLength();
-        }
         #endregion
 
+        #region Public Methods
+        #region Overrides
         public override float GetTotalLength()
         {
             return totalWorldLength;
@@ -64,50 +142,36 @@ namespace SleepyCat.Utility.Splines
 
         public override Vector3 GetPointAtTime(float t)
         {
-            return HermiteSpline.GetPointAtTime(worldStartPoint, worldEndPoint, spline.StartTangent, spline.endTangent, t);
+            return HermiteSpline.GetPointAtTime(worldStartPoint, worldEndPoint, spline.StartTangent, spline.EndTangent, t);
         }
 
+        public override void SetWorldEndPointAndUpdateLocal(Vector3 endPoint)
+        {
+            worldEndPoint = endPoint;
+            spline.EndPosition = transform.InverseTransformPoint(endPoint);
+        }
+        public override void SetWorldStartPointAndUpdateLocal(Vector3 startPoint)
+        {
+            worldStartPoint = startPoint;
+            spline.StartPosition = transform.InverseTransformPoint(startPoint);
+        }
+        public override void UpdateWorldPositions()
+        {
+            worldStartPoint = transform.TransformPoint(spline.StartPosition);
+            worldEndPoint = transform.TransformPoint(spline.EndPosition);
+        }
+        #endregion
+        #endregion
+
+        #region Private Methods
         /// <summary>
         /// Updates the total length to be correct based on the current spline
         /// </summary>
         private void UpdateLength()
         {
-            totalWorldLength = HermiteSpline.GetTotalLength(worldStartPoint, worldEndPoint, spline.StartTangent, 
-                spline.endTangent, spline.DistancePrecision);
+            totalWorldLength = HermiteSpline.GetTotalLength(worldStartPoint, worldEndPoint, spline.StartTangent,
+                spline.EndTangent, spline.DistancePrecision);
         }
-
-        public override Vector3 GetWorldStartPoint()
-        {
-            return worldStartPoint;
-        }
-
-        public override Vector3 GetWorldEndPoint()
-        {
-            return worldEndPoint;
-        }
-
-        public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
-        {
-            worldStartPoint = startPoint;
-            if (updateLocalPosition)
-            {
-                spline.StartPosition = transform.InverseTransformPoint(startPoint);
-            }
-        }
-
-        public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
-        {
-            worldEndPoint = endPoint;
-            if (updateLocalPosition)
-            {
-                spline.EndPosition = transform.InverseTransformPoint(endPoint);
-            }
-        }
-
-        public override void UpdateWorldPositions()
-        {
-            SetWorldStartPoint(transform.TransformPoint(spline.StartPosition), false);
-            SetWorldEndPoint(transform.TransformPoint(spline.EndPosition), false);
-        }
+        #endregion
     }
 }

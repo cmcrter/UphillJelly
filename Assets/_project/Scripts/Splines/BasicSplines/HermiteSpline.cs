@@ -30,7 +30,7 @@ namespace SleepyCat.Utility.Splines
         private Vector3 endPoint;
         [SerializeField]
         [Tooltip("The tangent attached to the end of the spline")]
-        public Vector3 endTangent;
+        private Vector3 endTangent;
         [SerializeField]
         [Tooltip("The point at which at which the line spline start, would be the position at t 0")]
         private Vector3 startPoint;
@@ -95,7 +95,7 @@ namespace SleepyCat.Utility.Splines
         {
             get
             {
-                return startTangent;
+                return endTangent;
             }
             set
             {

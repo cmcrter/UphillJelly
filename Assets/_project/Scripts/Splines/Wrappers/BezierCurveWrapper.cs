@@ -38,6 +38,47 @@ namespace SleepyCat.Utility.Splines
         private Vector3[] worldControlPoints;
         #endregion
 
+        #region Public Properties
+        #region Overrides
+        public override Vector3 WorldEndPosition
+        {
+            get
+            {
+                return worldEndPoint;
+            }
+            set
+            {
+                worldEndPoint = value;
+            }
+        }
+        public override Vector3 WorldStartPosition
+        {
+            get
+            {
+                return worldStartPoint;
+            }
+            set
+            {
+                worldStartPoint = value;
+            }
+        }
+        #endregion
+
+        public bool IsUsingTwoControlPoints
+        {
+            get
+            {
+                return spline.GetIsTwoControlPoint();
+            }
+            set
+            {
+                spline.SetIsTwoControlPoint(value);
+            }
+        }
+
+
+        #endregion
+
         #region Unity Methods
         private void OnDrawGizmos()
         {
@@ -100,14 +141,17 @@ namespace SleepyCat.Utility.Splines
                 return GetThreePointPositionAtTime(t);
             }
         }
-        public override Vector3 GetWorldStartPoint()
+
+        public override void SetWorldEndPointAndUpdateLocal(Vector3 endPoint)
         {
-            return worldStartPoint;
+            worldEndPoint = endPoint;
+            spline.EndPosition = transform.InverseTransformPoint(endPoint);
         }
 
-        public override Vector3 GetWorldEndPoint()
+        public override void SetWorldStartPointAndUpdateLocal(Vector3 startPoint)
         {
-            return worldEndPoint;
+            worldStartPoint = startPoint;
+            spline.StartPosition = transform.InverseTransformPoint(startPoint);
         }
 
         public override void UpdateWorldPositions()
@@ -115,51 +159,24 @@ namespace SleepyCat.Utility.Splines
             worldStartPoint = transform.TransformPoint(spline.StartPosition);
             worldEndPoint = transform.TransformPoint(spline.EndPosition);
 
-            if (spline.GetIsTwoControlPoint())
-            {
-                Vector3[] newControlPointsArray = new Vector3[2];
-                if (worldControlPoints != null)
-                {
-                    for (int i = 0; i < worldControlPoints.Length; ++i)
-                    {
-                        newControlPointsArray[i] = worldControlPoints[i];
-                    }
-                }
-            }
-            else
-            {
-                if (worldControlPoints != null)
-                {
-                    Vector3[] newControlPointsArray = new Vector3[1];
-                    newControlPointsArray[0] = worldControlPoints[0];
-                    worldControlPoints = newControlPointsArray;
-                }
-            }
-
             worldControlPoints = new Vector3[spline.controlPoints.Length];
             for (int i = 0; i < worldControlPoints.Length; ++i)
             {
                 worldControlPoints[i] = transform.TransformPoint(spline.controlPoints[i]);
             }
         }
-        public override void SetWorldEndPoint(Vector3 endPoint, bool updateLocalPosition)
-        {
-            worldEndPoint = endPoint;
-            if (updateLocalPosition)
-            {
-                spline.EndPosition = transform.InverseTransformPoint(endPoint);
-            }
-        }
-        public override void SetWorldStartPoint(Vector3 startPoint, bool updateLocalPosition)
-        {
-            worldStartPoint = startPoint;
-            if (updateLocalPosition)
-            {
-                spline.StartPosition = transform.InverseTransformPoint(startPoint);
-            }
-        }
         #endregion
 
+        public bool SetLocalControlPointValues(int index, Vector3 newValue)
+        {
+            if (index < spline.controlPoints.Length)
+            {
+                spline.controlPoints[index] = newValue;
+                UpdateWorldPositions();
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// Sets a world control position at given index
         /// </summary>
@@ -182,6 +199,21 @@ namespace SleepyCat.Utility.Splines
         /// </summary>
         /// <param name="index">The index to get the control point at (should be 0 if its is a single control point and 0-1 if it is two control point</param>
         /// <returns>True if a control point at the index was found, false if not</returns>
+        public bool TryGetLocalControlPoint(int index, out Vector3 controlPoint)
+        {
+            if (index < spline.controlPoints.Length)
+            {
+                controlPoint = spline.controlPoints[index];
+                return true;
+            }
+            controlPoint = Vector3.zero;
+            return false;
+        }
+        /// <summary>
+        /// Attempts to output a control point at a given index
+        /// </summary>
+        /// <param name="index">The index to get the control point at (should be 0 if its is a single control point and 0-1 if it is two control point</param>
+        /// <returns>True if a control point at the index was found, false if not</returns>
         public bool TryGetWorldControlPoint(int index, out Vector3 controlPoint)
         {
             UpdateWorldPositions();
@@ -193,6 +225,8 @@ namespace SleepyCat.Utility.Splines
             controlPoint = Vector3.zero;
             return false;
         }
+
+
         #endregion
 
         #region Private Methods
