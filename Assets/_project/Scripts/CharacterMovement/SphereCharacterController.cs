@@ -191,13 +191,13 @@ namespace SleepyCat.Movement.Prototypes
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if (dotAngle < 1f)
                 {
-                    rb.AddForce(-rb.velocity * (1.2f + (1f - dotAngle)), ForceMode.Impulse);
+                    rb.AddForce(-rb.velocity * (1f + (1f - dotAngle)), ForceMode.Impulse);
 
-                    if (dotAngle > 0.35f && currentTurnInput != 0)
+                    if (dotAngle > 0.35f)
                     {
                         rb.AddForce(initialSpeed * (1f + turnSpeed) * transform.forward, ForceMode.Impulse);
                     }
-                    else if (currentTurnInput == 0)
+                    else
                     {
                         rb.velocity = Vector3.zero;
                         rb.Sleep();
