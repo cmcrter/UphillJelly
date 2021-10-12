@@ -121,8 +121,28 @@ public class SplineMover : MonoBehaviour
     void Update()
     {
         UpdateTIncrement();
-        // Clamping it at the max value and min values of a unit interval
-        currentTValue = Mathf.Clamp01(currentTValue + Time.deltaTime * tIncrementPerSecond);
+        if (currentTValue + Time.deltaTime * tIncrementPerSecond < 1)
+        {
+            // Clamping it at the max value and min values of a unit interval
+
+            // Check the length of the next increment
+            Vector3 nextPoint = splineSequence.GetLengthBasedPoint(currentTValue + Time.deltaTime * tIncrementPerSecond);
+            Vector3 currentPoint = splineSequence.GetLengthBasedPoint(currentTValue);
+            Vector3 velocity = nextPoint - currentPoint;
+
+
+            // Ideally the distance change should be speed * time.deltaTime
+            float desiredDistance = speed * Time.deltaTime;
+            float currentDistanceChange = velocity.magnitude;
+
+            float desiredChange = desiredDistance / currentDistanceChange;
+            currentTValue = Mathf.Clamp01(currentTValue + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
+        }
+        else
+        {
+            currentTValue = Mathf.Clamp01(currentTValue + Time.deltaTime * tIncrementPerSecond); // add length to this calculation
+        }
+        
         if (loop)
         {
             if (tIncrementPerSecond > 0f)
