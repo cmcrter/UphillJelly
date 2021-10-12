@@ -1347,7 +1347,6 @@ MonoBehaviour:
   goBackwardAxis: {fileID: 90036777}
   goRaycastPoint: {fileID: 1328381805}
   rb: {fileID: 1076387030}
-  fPushWaitAmount: 0.75
   forwardSpeed: 40
   turnSpeed: 0.15
   backwardSpeed: 12.5
@@ -1360,9 +1359,11 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 64
+  pushCooldownTimerDuration: 0.65
   pushTimer:
     isLocked: 0
     isActive: 0
+  pushDuringTimerDuration: 0.35
   pushDuringTimer:
     isLocked: 0
     isActive: 0
@@ -6589,6 +6590,10 @@ PrefabInstance:
     - target: {fileID: 8489781829627952752, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489781829627952753, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
+      propertyPath: forwardSpeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8489781829627952753, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: playerCamera
