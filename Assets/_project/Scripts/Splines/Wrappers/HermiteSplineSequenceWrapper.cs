@@ -184,6 +184,15 @@ namespace SleepyCat.Utility.Splines
 
         #endregion
         /// <summary>
+        /// Returns a position of spline sequence at the given index local to the game object
+        /// </summary>
+        /// <param name="index">The index to get the position from</param>
+        /// <returns>A position of spline sequence at the given index local to the game object</returns>
+        public Vector3 GetLocalPositionAtIndex(int index)
+        {
+            return spline.GetPositionAtIndex(index);
+        }
+        /// <summary>
         /// Return the position at a given index
         /// </summary>
         /// <param name="index">The index to get the position from</param>
@@ -236,6 +245,16 @@ namespace SleepyCat.Utility.Splines
             spline.AddNewPositionAndTangent(transform.InverseTransformPoint(worldPosition), tangent);
 
             UpdateLengths();
+        }
+        /// <summary>
+        /// Sets the value of a given Hermite Spline position locally to the gameObject
+        /// </summary>
+        /// <param name="index">The index to change the position of</param>
+        /// <param name="newPosition">The value of the new position</param>
+        public void SetLocalPositionAtIndex(int index, Vector3 newPosition)
+        {
+            spline.SetPositionAtIndex(index, newPosition);
+            UpdateWorldPositions();
         }
         /// <summary>
         /// Sets the value of a given Hermite Spline position
@@ -301,8 +320,6 @@ namespace SleepyCat.Utility.Splines
         {
             spline.SetTanagentAtIndex(index, newTangent);
         }
-
-
         /// <summary>
         /// Removes a position and tangent
         /// </summary>

@@ -17,7 +17,17 @@ namespace SleepyCat.Utility.Splines
         /// The line spline wrapper this is inspecting
         /// </summary>
         private HermiteSplineSequenceWrapper hermiteSplineSequence;
+
+        private bool showPositionsAndTangents;
+
+        private List<bool> activeFoldouts;
+
+        /// <summary>
+        /// The SerializedProperty for distance precision the inspected BezierCurveWrapper is using
+        /// </summary>
+        private SerializedProperty distancePrecision;
         #endregion
+
 
         public override void OnInspectorGUI()
         {
@@ -27,7 +37,25 @@ namespace SleepyCat.Utility.Splines
                 hermiteSplineSequence = (HermiteSplineSequenceWrapper)target;
             }
 
-            EditorGUILayout.LabelField("Positions And Tangents", EditorStyles.boldLabel);
+            if (activeFoldouts == null)
+            {
+                activeFoldouts = new List<bool>(hermiteSplineSequence.NumberOfPositionsAndTangents);
+                for (int i = 0; i < hermiteSplineSequence.NumberOfPositionsAndTangents; ++i)
+                {
+                    activeFoldouts.Add(false);
+                }
+            }
+            else if (activeFoldouts.Count != hermiteSplineSequence.NumberOfPositionsAndTangents)
+            {
+                activeFoldouts = new List<bool>(hermiteSplineSequence.NumberOfPositionsAndTangents);
+                for (int i = 0; i < hermiteSplineSequence.NumberOfPositionsAndTangents; ++i)
+                {
+                    activeFoldouts.Add(false);
+                }
+            }
+
+            distancePrecision = serializedObject.FindProperty("spline").FindPropertyRelative("distancePrecisionPerHermiteSpline");
+
             int startingListSize = hermiteSplineSequence.NumberOfPositionsAndTangents;
             int newListSize = EditorGUILayout.IntField("Number Of Positions And Tangents", hermiteSplineSequence.NumberOfPositionsAndTangents);
             if (newListSize < 2)
@@ -39,6 +67,7 @@ namespace SleepyCat.Utility.Splines
                 while (hermiteSplineSequence.NumberOfPositionsAndTangents < newListSize)
                 {
                     hermiteSplineSequence.AddNewPositionAndTangent(Vector3.zero, Vector3.zero);
+                    activeFoldouts.Add(false);
                 }
             }
             else if (newListSize < startingListSize)
@@ -46,17 +75,43 @@ namespace SleepyCat.Utility.Splines
                 while (hermiteSplineSequence.NumberOfPositionsAndTangents > newListSize)
                 {
                     hermiteSplineSequence.RemovePositionAndTangentAtIndex(hermiteSplineSequence.NumberOfPositionsAndTangents - 1);
+                    activeFoldouts.RemoveAt(hermiteSplineSequence.NumberOfPositionsAndTangents - 1);
                 }
             }
-
-            for (int i = 0; i < hermiteSplineSequence.NumberOfPositionsAndTangents; ++i)
+            if (showPositionsAndTangents = EditorGUILayout.Foldout(showPositionsAndTangents, "Positions And Tangents"))
             {
-                EditorGUILayout.LabelField("Position And Tangent " + i.ToString());
-                hermiteSplineSequence.SetPositionAtIndex(i, EditorGUILayout.Vector3Field("Position", hermiteSplineSequence.GetPositionAtIndex(i)));
-                hermiteSplineSequence.SetTanagentAtIndex(i, EditorGUILayout.Vector3Field("Tangent", hermiteSplineSequence.GetTangentAtIndex(i)));
+                ++EditorGUI.indentLevel;
+
+                for (int i = 0; i < hermiteSplineSequence.NumberOfPositionsAndTangents; ++i)
+                {
+                    if (activeFoldouts[i] = EditorGUILayout.Foldout(activeFoldouts[i], "Position And Tangent " + i.ToString()))
+                    {
+                        ++EditorGUI.indentLevel;
+                        hermiteSplineSequence.SetLocalPositionAtIndex(i, EditorGUILayout.Vector3Field("Position", hermiteSplineSequence.GetLocalPositionAtIndex(i)));
+                        hermiteSplineSequence.SetTanagentAtIndex(i, EditorGUILayout.Vector3Field("Tangent", hermiteSplineSequence.GetTangentAtIndex(i)));
+                        --EditorGUI.indentLevel;
+                    }
+                }
+                --EditorGUI.indentLevel;
             }
 
-            //base.OnInspectorGUI();
+            EditorGUILayout.Space();
+
+            // Everything else section
+            EditorGUILayout.PropertyField(distancePrecision);
+
+
+
+            serializedObject.ApplyModifiedProperties();
+            hermiteSplineSequence.UpdateWorldPositions();
+            SceneView.RepaintAll();
+        }
+
+        private void OnEnable()
+        {
+            // Getting the object and its properties from the editor
+            hermiteSplineSequence = (HermiteSplineSequenceWrapper)target;
+            distancePrecision = serializedObject.FindProperty("spline").FindPropertyRelative("distancePrecision");
         }
 
         private void OnSceneGUI()
