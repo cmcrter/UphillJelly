@@ -12,30 +12,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class ProfileController : MonoBehaviour
 {
 
     #region Variables
 
-    //
-    public Text nameInput;
-
     #endregion
 
     #region Methods
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     #endregion
 
