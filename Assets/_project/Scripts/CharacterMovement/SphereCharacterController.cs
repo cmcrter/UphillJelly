@@ -21,9 +21,15 @@ namespace SleepyCat.Movement.Prototypes
         [SerializeField]
         private GameObject goPlayerModel;
         [SerializeField]
+        private GameObject goForwardAxis;
+        [SerializeField]
+        private GameObject goBackwardAxis;
+
+        [SerializeField]
         private GameObject goRaycastPoint;
         [SerializeField]
         private Rigidbody rb;
+        float initialDrag;
 
         [SerializeField]
         private float fPushWaitAmount = 0.5f;
@@ -46,6 +52,11 @@ namespace SleepyCat.Movement.Prototypes
         FiniteStateMachine CharacterStateMachine;
         [SerializeField]
         PlayerCamera playerCamera;
+        [SerializeField]
+        SphereCollider ballMovement;
+
+        [SerializeField]
+        LayerMask mask;
 
         //This is public in case other systems need to know if the player is pushing.
         public Coroutine pushWaitCoroutine { get; private set; }
@@ -65,11 +76,12 @@ namespace SleepyCat.Movement.Prototypes
         {
             rb.angularVelocity = Vector3.zero;
             rb.velocity = Vector3.zero;
+            rb.drag = initialDrag;
 
             rb.transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.identity;
 
-            rb.transform.position = new Vector3(0, 0.2f, 0);
+            rb.transform.position = new Vector3(0, ballMovement.radius + 0.1f, 0);          
         }
 
         #endregion
@@ -78,24 +90,26 @@ namespace SleepyCat.Movement.Prototypes
 
         void Start()
         {
+            goPlayerModel.transform.position = new Vector3(0, ballMovement.transform.position.y - ballMovement.radius, 0);
             rb.transform.parent = null;
+            initialDrag = rb.drag;
         }
 
         private void Update()
         {
             //Checking if anything is below it
-            if (Physics.Raycast(goRaycastPoint.transform.position, Vector3.down, out RaycastHit hit, 0.25f, ~gameObject.layer, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.1f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
 
                 //Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
+                    Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
-                    Debug.DrawLine(transform.position, transform.position + ( -transform.up * 1f ), Color.blue);
+                    Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
                     Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
-
             }
             else
             {
@@ -107,35 +121,75 @@ namespace SleepyCat.Movement.Prototypes
                 ResetBoard();
             }
 
-            //GameObject's heading
-            float headingDeltaAngle = turnSpeed * 1000 * currentTurnInput * Time.deltaTime;
-            Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
-            //align with surface normal
-            if (hit.transform != null)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, (Quaternion.FromToRotation(transform.up, hit.normal.normalized) * transform.rotation), Time.deltaTime * 10f);
-            }
-
-            //apply heading rotation
-            transform.rotation = transform.rotation * headingDelta;
-            transform.position = rb.transform.position;
+            UpdatePositionAndRotation();
         }
 
         void FixedUpdate()
         {
+            rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
+
             if (isGrounded)
             {
-                rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
                 GroundedMovement();
             }
-
         }
 
         #endregion
 
         #region Private Methods
 
+        private void UpdatePositionAndRotation()
+        {
+            //GameObject's heading
+            float headingDeltaAngle = turnSpeed * 1000 * currentTurnInput * Time.deltaTime;
+            Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
+            Quaternion groundQuat = transform.rotation;
 
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 0.75f, ~mask, QueryTriggerInteraction.UseGlobal))
+            {
+                float smoothness = 12f;
+
+                //apply heading rotation
+                if (floorHit.normal != Vector3.zero)
+                {
+                    if (floorHit.distance > 0.25)
+                    {
+                        smoothness = 2f;
+                    }
+                    groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, floorHit.normal) * transform.rotation, Time.deltaTime * smoothness);
+                }
+            }
+
+            transform.rotation = groundQuat;
+            transform.rotation = transform.rotation * headingDelta;
+            transform.position = rb.transform.position;
+
+            //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)
+            float initialSpeed = rb.velocity.magnitude;
+            float dotAngle = Vector3.Dot(rb.velocity.normalized, transform.forward.normalized);
+            dotAngle = Mathf.Abs(dotAngle);
+            Debug.Log(dotAngle);
+
+            if (isGrounded)
+            {
+                // 0 means it is perpendicular, 1 means it's perfectly parallel
+                if (dotAngle < 0.99f)
+                {
+                    Debug.Log(dotAngle);
+
+                    rb.AddForce(-rb.velocity, ForceMode.Impulse);
+
+                    if (dotAngle > 0.45f)
+                    {
+                        rb.AddForce(initialSpeed * transform.forward, ForceMode.Impulse);
+                    }
+                    else
+                    {
+                        rb.velocity = Vector3.zero;
+                    }
+                }
+            }
+        }
 
         private void GroundedMovement()
         {
@@ -149,7 +203,7 @@ namespace SleepyCat.Movement.Prototypes
                 }
                 else
                 {
-                    currentTurnInput = -0.5f;
+                    currentTurnInput -= 0.25f * rb.velocity.magnitude * 0.25f;
                 }
             }
 
@@ -161,9 +215,11 @@ namespace SleepyCat.Movement.Prototypes
                 }
                 else
                 {
-                    currentTurnInput = 0.5f;
+                    currentTurnInput += 0.25f * rb.velocity.magnitude * 0.25f;
                 }
             }
+
+            Mathf.Clamp(currentTurnInput, -1, 1);
 
             if (Keyboard.current.spaceKey.isPressed && !Keyboard.current.sKey.isPressed)
             {

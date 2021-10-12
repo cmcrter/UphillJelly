@@ -22,6 +22,8 @@ namespace SleepyCat.Movement
 		private Vector3 offset;
 
 		public bool FollowRotation = true;
+		public bool FollowY = true;
+		public bool FollowZ = true;
 
         #endregion
 
@@ -37,7 +39,7 @@ namespace SleepyCat.Movement
 		{
 			if (FollowRotation)
 			{
-				offset = ( -target.forward * followDist ) + new Vector3(0, 1f, 0);
+				offset = ( -target.forward.normalized * followDist ) + new Vector3(0, 1f, 0);
 			}
 
 			Vector3 speed = Vector3.zero;
