@@ -44,6 +44,8 @@ namespace SleepyCat.Movement.Prototypes
         private float currentTurnInput = 0f;
         [SerializeField]
         private float additionalGravity = 10f;
+        [SerializeField]
+        private bool bAddAdditionalGravity = true;        
 
         [SerializeField]
         private bool isGrounded = false;
@@ -126,7 +128,10 @@ namespace SleepyCat.Movement.Prototypes
 
         void FixedUpdate()
         {
-            rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
+            if (bAddAdditionalGravity)
+            {
+                rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
+            }
 
             if (isGrounded)
             {
@@ -145,17 +150,19 @@ namespace SleepyCat.Movement.Prototypes
             Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
             Quaternion groundQuat = transform.rotation;
 
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 0.75f, ~mask, QueryTriggerInteraction.UseGlobal))
+            //Getting the hit of the floor
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 1f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 float smoothness = 12f;
 
                 //apply heading rotation
                 if (floorHit.normal != Vector3.zero)
                 {
-                    if (floorHit.distance > 0.25)
+                    if (floorHit.distance > 0.25f)
                     {
-                        smoothness = 2f;
+                        smoothness = 4f;
                     }
+
                     groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, floorHit.normal) * transform.rotation, Time.deltaTime * smoothness);
                 }
             }
@@ -186,6 +193,7 @@ namespace SleepyCat.Movement.Prototypes
                     else
                     {
                         rb.velocity = Vector3.zero;
+                        rb.Sleep();
                     }
                 }
             }
