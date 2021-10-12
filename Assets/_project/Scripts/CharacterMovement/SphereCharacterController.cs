@@ -32,8 +32,6 @@ namespace SleepyCat.Movement.Prototypes
         float initialDrag;
 
         [SerializeField]
-        private float fPushWaitAmount = 0.5f;
-        [SerializeField]
         private float forwardSpeed = 8;
         [SerializeField]
         private float turnSpeed = 4;
@@ -65,9 +63,16 @@ namespace SleepyCat.Movement.Prototypes
         public Coroutine pushDuringCoroutine { get; private set; }
 
         [SerializeField]
+        private float pushCooldownTimerDuration = 0.65f;
+        [SerializeField]
         private Timer pushTimer;
         [SerializeField]
+        private float pushDuringTimerDuration = 0.35f;
+        [SerializeField]
         private Timer pushDuringTimer;
+
+        [SerializeField]
+        private bool bShowDriftVal = false;
 
         #endregion
 
@@ -83,7 +88,7 @@ namespace SleepyCat.Movement.Prototypes
             rb.transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.identity;
 
-            rb.transform.position = new Vector3(0, ballMovement.radius + 0.1f, 0);          
+            rb.transform.position = new Vector3(0, ballMovement.radius + 0.01f, 0);          
         }
 
         #endregion
@@ -92,7 +97,7 @@ namespace SleepyCat.Movement.Prototypes
 
         void Start()
         {
-            goPlayerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius, ballMovement.transform.position.z);
+            goPlayerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius + 0.01f, ballMovement.transform.position.z);
             rb.transform.parent = null;
             initialDrag = rb.drag;
         }
@@ -100,14 +105,14 @@ namespace SleepyCat.Movement.Prototypes
         private void Update()
         {
             //Checking if anything is below it
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.1f, ~mask, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.05f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
 
                 //Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.Log("Hit: " + hit.transform.name);
+                    //Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
                     Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
                     Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
@@ -151,7 +156,7 @@ namespace SleepyCat.Movement.Prototypes
             Quaternion groundQuat = transform.rotation;
 
             //Getting the hit of the floor
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 1f, ~mask, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 5f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 float smoothness = 12f;
 
@@ -160,7 +165,7 @@ namespace SleepyCat.Movement.Prototypes
                 {
                     if (floorHit.distance > 0.25f)
                     {
-                        smoothness = 4f;
+                        smoothness = 2f;
                     }
 
                     groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, floorHit.normal) * transform.rotation, Time.deltaTime * smoothness);
@@ -175,20 +180,22 @@ namespace SleepyCat.Movement.Prototypes
             float initialSpeed = rb.velocity.magnitude;
             float dotAngle = Vector3.Dot(rb.velocity.normalized, transform.forward.normalized);
             dotAngle = Mathf.Abs(dotAngle);
-            Debug.Log(dotAngle);
+
+            if (bShowDriftVal)
+            {
+                Debug.Log(dotAngle);
+            }
 
             if (isGrounded)
             {
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if (dotAngle < 0.99f)
+                if (dotAngle < 1f)
                 {
-                    Debug.Log(dotAngle);
+                    rb.AddForce(-rb.velocity * (1f + (1f - dotAngle)), ForceMode.Impulse);
 
-                    rb.AddForce(-rb.velocity, ForceMode.Impulse);
-
-                    if (dotAngle > 0.45f)
+                    if (dotAngle > 0.35f)
                     {
-                        rb.AddForce(initialSpeed * transform.forward, ForceMode.Impulse);
+                        rb.AddForce(initialSpeed * (1f + turnSpeed) * transform.forward, ForceMode.Impulse);
                     }
                     else
                     {
@@ -252,9 +259,6 @@ namespace SleepyCat.Movement.Prototypes
                 return;
             }
 
-            //Pushing forward
-            rb.AddForce(transform.forward * forwardSpeed * 1000 * Time.deltaTime, ForceMode.Acceleration);
-
             StartPushTimerCoroutine();
             StartPushDuringTimerCoroutine();
         }
@@ -295,7 +299,7 @@ namespace SleepyCat.Movement.Prototypes
         private IEnumerator Co_BoardAfterPush()
         {
             //It's technically a new timer on top of the class in use
-            pushTimer = new Timer(fPushWaitAmount);
+            pushTimer = new Timer(pushCooldownTimerDuration);
 
             //Whilst it has time left
             while (pushTimer.isActive)
@@ -314,11 +318,14 @@ namespace SleepyCat.Movement.Prototypes
             turnSpeed *= 0.25f;
 
             //It's technically a new timer on top of the class in use
-            pushDuringTimer = new Timer(0.25f);
+            pushDuringTimer = new Timer(pushDuringTimerDuration);
 
             //Whilst it has time left
             while (pushDuringTimer.isActive)
             {
+                //Pushing forward
+                rb.AddForce(transform.forward * forwardSpeed * 1000 * Time.deltaTime, ForceMode.Acceleration);
+
                 //Tick each frame
                 pushDuringTimer.Tick(Time.deltaTime);
                 yield return null;
