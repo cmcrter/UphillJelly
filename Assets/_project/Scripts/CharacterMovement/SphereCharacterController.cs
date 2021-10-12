@@ -88,7 +88,7 @@ namespace SleepyCat.Movement.Prototypes
             rb.transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.identity;
 
-            rb.transform.position = new Vector3(0, ballMovement.radius + 0.1f, 0);          
+            rb.transform.position = new Vector3(0, ballMovement.radius + 0.01f, 0);          
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace SleepyCat.Movement.Prototypes
 
         void Start()
         {
-            goPlayerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius, ballMovement.transform.position.z);
+            goPlayerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius + 0.01f, ballMovement.transform.position.z);
             rb.transform.parent = null;
             initialDrag = rb.drag;
         }
@@ -105,14 +105,14 @@ namespace SleepyCat.Movement.Prototypes
         private void Update()
         {
             //Checking if anything is below it
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.1f, ~mask, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.05f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
 
                 //Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.Log("Hit: " + hit.transform.name);
+                    //Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
                     Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
                     Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
@@ -156,7 +156,7 @@ namespace SleepyCat.Movement.Prototypes
             Quaternion groundQuat = transform.rotation;
 
             //Getting the hit of the floor
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 1f, ~mask, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 5f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 float smoothness = 12f;
 
@@ -165,7 +165,7 @@ namespace SleepyCat.Movement.Prototypes
                 {
                     if (floorHit.distance > 0.25f)
                     {
-                        smoothness = 4f;
+                        smoothness = 2f;
                     }
 
                     groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, floorHit.normal) * transform.rotation, Time.deltaTime * smoothness);
@@ -189,15 +189,15 @@ namespace SleepyCat.Movement.Prototypes
             if (isGrounded)
             {
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if (dotAngle < 0.99f)
+                if (dotAngle < 1f)
                 {
-                    rb.AddForce(-rb.velocity * 1.05f, ForceMode.Impulse);
+                    rb.AddForce(-rb.velocity * (1.2f + (1f - dotAngle)), ForceMode.Impulse);
 
-                    if (dotAngle > 0.45f)
+                    if (dotAngle > 0.35f && currentTurnInput != 0)
                     {
-                        rb.AddForce(initialSpeed * transform.forward, ForceMode.Impulse);
+                        rb.AddForce(initialSpeed * (1f + turnSpeed) * transform.forward, ForceMode.Impulse);
                     }
-                    else
+                    else if (currentTurnInput == 0)
                     {
                         rb.velocity = Vector3.zero;
                         rb.Sleep();
