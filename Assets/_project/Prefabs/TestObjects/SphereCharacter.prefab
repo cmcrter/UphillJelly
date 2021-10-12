@@ -235,7 +235,7 @@ Rigidbody:
   m_GameObject: {fileID: 8489781828285543320}
   serializedVersion: 2
   m_Mass: 70
-  m_Drag: 1
+  m_Drag: 0.25
   m_AngularDrag: 4
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -551,7 +551,7 @@ MonoBehaviour:
   goRaycastPoint: {fileID: 8489781829056515676}
   rb: {fileID: 8489781828285543325}
   fPushWaitAmount: 0.75
-  forwardSpeed: 40
+  forwardSpeed: 10
   turnSpeed: 0.15
   backwardSpeed: 12.5
   currentTurnInput: 0
@@ -569,6 +569,7 @@ MonoBehaviour:
   pushDuringTimer:
     isLocked: 0
     isActive: 0
+  bShowDriftVal: 0
 --- !u!114 &8489781829627952754
 MonoBehaviour:
   m_ObjectHideFlags: 0

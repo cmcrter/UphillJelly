@@ -69,6 +69,9 @@ namespace SleepyCat.Movement.Prototypes
         [SerializeField]
         private Timer pushDuringTimer;
 
+        [SerializeField]
+        private bool bShowDriftVal = false;
+
         #endregion
 
         #region Public Methods
@@ -175,7 +178,11 @@ namespace SleepyCat.Movement.Prototypes
             float initialSpeed = rb.velocity.magnitude;
             float dotAngle = Vector3.Dot(rb.velocity.normalized, transform.forward.normalized);
             dotAngle = Mathf.Abs(dotAngle);
-            Debug.Log(dotAngle);
+
+            if (bShowDriftVal)
+            {
+                Debug.Log(dotAngle);
+            }
 
             if (isGrounded)
             {
