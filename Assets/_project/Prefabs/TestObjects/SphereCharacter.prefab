@@ -235,7 +235,7 @@ Rigidbody:
   m_GameObject: {fileID: 8489781828285543320}
   serializedVersion: 2
   m_Mass: 70
-  m_Drag: 0.25
+  m_Drag: 0.6
   m_AngularDrag: 2
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -553,6 +553,7 @@ MonoBehaviour:
   forwardSpeed: 1
   turnSpeed: 0.15
   backwardSpeed: 12.5
+  SomeMaximumVelocity: 10
   currentTurnInput: 0
   additionalGravity: 6
   bAddAdditionalGravity: 1
@@ -562,7 +563,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 64
-  pushCooldownTimerDuration: 0.65
+  pushCooldownTimerDuration: 0.75
   pushTimer:
     isLocked: 0
     isActive: 0

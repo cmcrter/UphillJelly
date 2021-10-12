@@ -328,11 +328,7 @@ namespace SleepyCat.Movement.Prototypes
                 //Pushing forward
                 Vector3 force = transform.forward * forwardSpeed * 1000 * Time.deltaTime;
 
-                rb.AddForce(force, ForceMode.Acceleration);
-
-                rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -SomeMaximumVelocity, SomeMaximumVelocity),
-                                          rb.velocity.y,
-                                          Mathf.Clamp(rb.velocity.z, -SomeMaximumVelocity, SomeMaximumVelocity));
+                rb.AddForce(force, ForceMode.Impulse);
 
                 //Tick each frame
                 pushDuringTimer.Tick(Time.deltaTime);
