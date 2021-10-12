@@ -189,8 +189,6 @@ namespace SleepyCat.Movement.Prototypes
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if (dotAngle < 0.99f)
                 {
-                    Debug.Log(dotAngle);
-
                     rb.AddForce(-rb.velocity, ForceMode.Impulse);
 
                     if (dotAngle > 0.45f)
