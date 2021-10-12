@@ -32,8 +32,6 @@ namespace SleepyCat.Movement.Prototypes
         float initialDrag;
 
         [SerializeField]
-        private float fPushWaitAmount = 0.5f;
-        [SerializeField]
         private float forwardSpeed = 8;
         [SerializeField]
         private float turnSpeed = 4;
@@ -65,7 +63,11 @@ namespace SleepyCat.Movement.Prototypes
         public Coroutine pushDuringCoroutine { get; private set; }
 
         [SerializeField]
+        private float pushCooldownTimerDuration = 0.65f;
+        [SerializeField]
         private Timer pushTimer;
+        [SerializeField]
+        private float pushDuringTimerDuration = 0.35f;
         [SerializeField]
         private Timer pushDuringTimer;
 
@@ -189,7 +191,7 @@ namespace SleepyCat.Movement.Prototypes
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if (dotAngle < 0.99f)
                 {
-                    rb.AddForce(-rb.velocity, ForceMode.Impulse);
+                    rb.AddForce(-rb.velocity * 1.05f, ForceMode.Impulse);
 
                     if (dotAngle > 0.45f)
                     {
@@ -257,9 +259,6 @@ namespace SleepyCat.Movement.Prototypes
                 return;
             }
 
-            //Pushing forward
-            rb.AddForce(transform.forward * forwardSpeed * 1000 * Time.deltaTime, ForceMode.Acceleration);
-
             StartPushTimerCoroutine();
             StartPushDuringTimerCoroutine();
         }
@@ -300,7 +299,7 @@ namespace SleepyCat.Movement.Prototypes
         private IEnumerator Co_BoardAfterPush()
         {
             //It's technically a new timer on top of the class in use
-            pushTimer = new Timer(fPushWaitAmount);
+            pushTimer = new Timer(pushCooldownTimerDuration);
 
             //Whilst it has time left
             while (pushTimer.isActive)
@@ -319,11 +318,14 @@ namespace SleepyCat.Movement.Prototypes
             turnSpeed *= 0.25f;
 
             //It's technically a new timer on top of the class in use
-            pushDuringTimer = new Timer(0.25f);
+            pushDuringTimer = new Timer(pushDuringTimerDuration);
 
             //Whilst it has time left
             while (pushDuringTimer.isActive)
             {
+                //Pushing forward
+                rb.AddForce(transform.forward * forwardSpeed * 1000 * Time.deltaTime, ForceMode.Acceleration);
+
                 //Tick each frame
                 pushDuringTimer.Tick(Time.deltaTime);
                 yield return null;
