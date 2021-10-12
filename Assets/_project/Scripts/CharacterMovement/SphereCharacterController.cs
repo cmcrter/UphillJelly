@@ -92,7 +92,7 @@ namespace SleepyCat.Movement.Prototypes
 
         void Start()
         {
-            goPlayerModel.transform.position = new Vector3(0, ballMovement.transform.position.y - ballMovement.radius, 0);
+            goPlayerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius, ballMovement.transform.position.z);
             rb.transform.parent = null;
             initialDrag = rb.drag;
         }
