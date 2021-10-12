@@ -37,6 +37,8 @@ namespace SleepyCat.Movement.Prototypes
         private float turnSpeed = 4;
         [SerializeField]
         private float backwardSpeed = 3;
+        [SerializeField]
+        private float SomeMaximumVelocity = 10f;
 
         [SerializeField]
         private float currentTurnInput = 0f;
@@ -324,7 +326,13 @@ namespace SleepyCat.Movement.Prototypes
             while (pushDuringTimer.isActive)
             {
                 //Pushing forward
-                rb.AddForce(transform.forward * forwardSpeed * 1000 * Time.deltaTime, ForceMode.Acceleration);
+                Vector3 force = transform.forward * forwardSpeed * 1000 * Time.deltaTime;
+
+                rb.AddForce(force, ForceMode.Acceleration);
+
+                rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -SomeMaximumVelocity, SomeMaximumVelocity),
+                                          rb.velocity.y,
+                                          Mathf.Clamp(rb.velocity.z, -SomeMaximumVelocity, SomeMaximumVelocity));
 
                 //Tick each frame
                 pushDuringTimer.Tick(Time.deltaTime);

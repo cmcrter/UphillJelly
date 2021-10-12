@@ -1350,6 +1350,7 @@ MonoBehaviour:
   forwardSpeed: 40
   turnSpeed: 0.15
   backwardSpeed: 12.5
+  SomeMaximumVelocity: 10
   currentTurnInput: 0
   additionalGravity: 6
   bAddAdditionalGravity: 1
@@ -5969,7 +5970,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh114216
+  m_Name: pb_Mesh123786
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6551,6 +6552,14 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 8489781828285543325, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
+      propertyPath: m_Drag
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489781828285543325, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
+      propertyPath: m_Mass
+      value: 70
+      objectReference: {fileID: 0}
     - target: {fileID: 8489781829627952752, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -6596,9 +6605,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8489781829627952753, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
+      propertyPath: forwardSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489781829627952753, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1677140361}
+    - target: {fileID: 8489781829627952753, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
+      propertyPath: pushCooldownTimerDuration
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 8489781829627952754, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: m_Camera
       value: 
