@@ -9,7 +9,6 @@
 
 using SleepyCat.Utility.StateMachine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,6 +29,7 @@ namespace SleepyCat.Movement.Prototypes
         private GameObject goRaycastPoint;
         [SerializeField]
         private Rigidbody rb;
+        float initialDrag;
 
         [SerializeField]
         private float fPushWaitAmount = 0.5f;
@@ -76,6 +76,7 @@ namespace SleepyCat.Movement.Prototypes
         {
             rb.angularVelocity = Vector3.zero;
             rb.velocity = Vector3.zero;
+            rb.drag = initialDrag;
 
             rb.transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.identity;
@@ -91,12 +92,13 @@ namespace SleepyCat.Movement.Prototypes
         {
             goPlayerModel.transform.position = new Vector3(0, ballMovement.transform.position.y - ballMovement.radius, 0);
             rb.transform.parent = null;
+            initialDrag = rb.drag;
         }
 
         private void Update()
         {
             //Checking if anything is below it
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.25f, ~mask, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.1f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
 
@@ -119,7 +121,7 @@ namespace SleepyCat.Movement.Prototypes
                 ResetBoard();
             }
 
-            UpdatePositionAndRotation(hit.normal);
+            UpdatePositionAndRotation();
         }
 
         void FixedUpdate()
@@ -136,37 +138,58 @@ namespace SleepyCat.Movement.Prototypes
 
         #region Private Methods
 
-        private void UpdatePositionAndRotation(Vector3 GroundRotation)
+        private void UpdatePositionAndRotation()
         {
             //GameObject's heading
             float headingDeltaAngle = turnSpeed * 1000 * currentTurnInput * Time.deltaTime;
             Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
             Quaternion groundQuat = transform.rotation;
 
-            //apply heading rotation
-            if (GroundRotation != Vector3.zero)
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit floorHit, 0.75f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
-                groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, GroundRotation) * transform.rotation, Time.deltaTime * 12f);
+                float smoothness = 12f;
+
+                //apply heading rotation
+                if (floorHit.normal != Vector3.zero)
+                {
+                    if (floorHit.distance > 0.25)
+                    {
+                        smoothness = 2f;
+                    }
+                    groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, floorHit.normal) * transform.rotation, Time.deltaTime * smoothness);
+                }
             }
 
             transform.rotation = groundQuat;
             transform.rotation = transform.rotation * headingDelta;
             transform.position = rb.transform.position;
 
-            Vector3 rbVel = new Vector3(0, rb.velocity.y, 0);
-            Vector3 TiltAndRoll =  new Vector3(0, transform.rotation.eulerAngles.y, 0);
+            //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)
+            float initialSpeed = rb.velocity.magnitude;
+            float dotAngle = Vector3.Dot(rb.velocity.normalized, transform.forward.normalized);
+            dotAngle = Mathf.Abs(dotAngle);
+            Debug.Log(dotAngle);
 
-            float driftAmount = Vector3.Angle(rbVel, TiltAndRoll);
-            float initialDrag = rb.drag;
-            if (driftAmount > 5f && currentTurnInput == 0 && (180 - driftAmount) > 2f || currentTurnInput != 0 && driftAmount > 90f && (180 - driftAmount) > 2f)
+            if (isGrounded)
             {
-                Debug.Log("Drift King: " + rb.velocity.normalized + "Model wants to go: " + transform.rotation.eulerAngles.normalized + " creating a difference of: " + driftAmount);
-                rb.drag = 10f;
-                rb.AddForceAtPosition(-rb.velocity.normalized * backwardSpeed * 1000 * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
-                rb.drag = initialDrag;
+                // 0 means it is perpendicular, 1 means it's perfectly parallel
+                if (dotAngle < 0.99f)
+                {
+                    Debug.Log(dotAngle);
+
+                    rb.AddForce(-rb.velocity, ForceMode.Impulse);
+
+                    if (dotAngle > 0.45f)
+                    {
+                        rb.AddForce(initialSpeed * transform.forward, ForceMode.Impulse);
+                    }
+                    else
+                    {
+                        rb.velocity = Vector3.zero;
+                    }
+                }
             }
         }
-
 
         private void GroundedMovement()
         {
