@@ -49,6 +49,17 @@ namespace SleepyCat.Utility.Splines
         /// <param name="t">The unit interval for how far along the spline the point should</param>
         /// <returns>Get calculated point at the t value</returns>
         public abstract Vector3 GetPointAtTime(float t);
+
+        /// <summary>
+        /// Returns a direction of the spline at the given t value
+        /// </summary>
+        /// <param name="t">The t value to check which direction the spline is going at</param>
+        /// <param name="stepDistance">Distance to check the next step at, to calculate the direction</param>
+        /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
+        public Vector3 GetDirection(float t, float stepDistance)
+        {
+            return (GetPointAtTime(t + stepDistance) - GetPointAtTime(t)).normalized;
+        }
         #endregion
     }
 }

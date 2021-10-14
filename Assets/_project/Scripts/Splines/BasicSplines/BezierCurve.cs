@@ -171,6 +171,21 @@ namespace SleepyCat.Utility.Splines
         #endregion
 
         #region Public Methods
+        public BezierCurve()
+        {
+            if (controlPoints == null)
+            {
+                if (isTwoControlPoint)
+                {
+                    controlPoints = new Vector3[2];
+                }
+                else
+                {
+                    controlPoints = new Vector3[1];
+                }
+            }
+        }
+
         #region Overrides
         public override float GetTotalLength()
         {

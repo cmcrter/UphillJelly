@@ -75,11 +75,24 @@ namespace SleepyCat.Utility.Splines
                 spline.SetIsTwoControlPoint(value);
             }
         }
-
-
         #endregion
 
         #region Unity Methods
+        private void Awake()
+        {
+            if (worldControlPoints == null)
+            {
+                if (IsUsingTwoControlPoints)
+                {
+                    worldControlPoints = new Vector3[2];
+                }
+                else
+                {
+                    worldControlPoints = new Vector3[1];
+                }
+            }
+        }
+
         private void OnDrawGizmos()
         {
             UpdateWorldPositions();
@@ -156,6 +169,10 @@ namespace SleepyCat.Utility.Splines
 
         public override void UpdateWorldPositions()
         {
+            if (spline == null)
+            {
+                spline = new BezierCurve();
+            }
             worldStartPoint = transform.TransformPoint(spline.StartPosition);
             worldEndPoint = transform.TransformPoint(spline.EndPosition);
 

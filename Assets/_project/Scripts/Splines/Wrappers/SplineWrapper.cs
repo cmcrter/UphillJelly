@@ -75,6 +75,17 @@ namespace SleepyCat.Utility.Splines
         /// Updates the world positions based on the local ones of the contained spline
         /// </summary>
         public abstract void UpdateWorldPositions();
+
+        /// <summary>
+        /// Returns a direction of the spline at the given t value
+        /// </summary>
+        /// <param name="t">The t value to check which direction the spline is going at</param>
+        /// <param name="stepDistance">Distance to check the next step at, to calculate the direction</param>
+        /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
+        public Vector3 GetDirection(float t, float stepDistance)
+        {
+            return (GetPointAtTime(t + stepDistance) - GetPointAtTime(t)).normalized;
+        }
         #endregion
     }
 }
