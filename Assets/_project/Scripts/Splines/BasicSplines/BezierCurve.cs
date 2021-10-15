@@ -168,6 +168,19 @@ namespace SleepyCat.Utility.Splines
             return Vector3.Lerp(Vector3.Lerp(lerpsBetweenPointsInSequence[0], lerpsBetweenPointsInSequence[1], t),
                 Vector3.Lerp(lerpsBetweenPointsInSequence[1], lerpsBetweenPointsInSequence[2], t), t);
         }
+
+        public static Vector3 GetFirstDerivative(Vector3 p0, Vector3 p1, Vector3 p2, float t)
+        {
+            return
+                2f * (1f - t) * (p1 - p0) +
+                2f * t * (p2 - p1);
+        }
+
+        //public Vector3 GetVelocity(float t)
+        //{
+        //    return GetFirstDerivative(Vector3 p0, points[1], points[2], t)) -
+        //        transform.position;
+        //}
         #endregion
 
         #region Public Methods

@@ -42,6 +42,30 @@ namespace SleepyCat.Utility.Splines
 
         #region Public Properties
         #region Overrides
+        public override Vector3 LocalEndPosition
+        {
+            get
+            {
+                return spline.EndPosition;
+            }
+            set
+            {
+                spline.EndPosition = value;
+                UpdateWorldPositions();
+            }
+        }
+        public override Vector3 LocalStartPosition
+        {
+            get
+            {
+                return spline.StartPosition;
+            }
+            set
+            {
+                spline.StartPosition = value;
+                UpdateWorldPositions();
+            }
+        }
         public override Vector3 WorldEndPosition
         {
             get
@@ -140,6 +164,10 @@ namespace SleepyCat.Utility.Splines
             return totalWorldLength;
         }
 
+        public override Vector3 GetLocalPointAtTime(float t)
+        {
+            return spline.GetPointAtTime(t);
+        }
         public override Vector3 GetPointAtTime(float t)
         {
             return HermiteSpline.GetPointAtTime(worldStartPoint, worldEndPoint, spline.StartTangent, spline.EndTangent, t);
@@ -157,6 +185,10 @@ namespace SleepyCat.Utility.Splines
         }
         public override void UpdateWorldPositions()
         {
+            if (spline == null)
+            {
+                spline = new HermiteSpline();
+            }
             worldStartPoint = transform.TransformPoint(spline.StartPosition);
             worldEndPoint = transform.TransformPoint(spline.EndPosition);
         }

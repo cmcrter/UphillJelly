@@ -40,6 +40,30 @@ namespace SleepyCat.Utility.Splines
 
         #region Public Properties
         #region Overrides
+        public override Vector3 LocalEndPosition
+        {
+            get
+            {
+                return spline.EndPosition;
+            }
+            set
+            {
+                spline.EndPosition = value;
+                UpdateWorldPositions();
+            }
+        }
+        public override Vector3 LocalStartPosition
+        {
+            get
+            {
+                return spline.StartPosition;
+            }
+            set
+            {
+                spline.StartPosition = value;
+                UpdateWorldPositions();
+            }
+        }
         public override Vector3 WorldEndPosition
         {
             get
@@ -143,6 +167,10 @@ namespace SleepyCat.Utility.Splines
             }
         }
 
+        public override Vector3 GetLocalPointAtTime(float t)
+        {
+            return spline.GetPointAtTime(t);
+        }
         public override Vector3 GetPointAtTime(float t)
         {
             if (spline.GetIsTwoControlPoint())

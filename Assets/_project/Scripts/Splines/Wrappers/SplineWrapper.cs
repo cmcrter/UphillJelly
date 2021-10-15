@@ -30,7 +30,24 @@ namespace SleepyCat.Utility.Splines
 
         #region Public Properties
         /// <summary>
-        /// The point at which at which the line spline ends, would be the position at t 1
+        /// The point at which at which the local spline ends, would be the position at t 1
+        /// </summary>
+        public abstract Vector3 LocalEndPosition
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// The Point at which the spline starts, would be the position at t 0
+        /// </summary>
+        public abstract Vector3 LocalStartPosition
+        {
+            get;
+            set;
+        }
+        /// 
+        /// <summary>
+        /// The point at which at which the spline ends, would be the position at t 1
         /// </summary>
         public abstract Vector3 WorldEndPosition
         {
@@ -38,7 +55,7 @@ namespace SleepyCat.Utility.Splines
             set;
         }
         /// <summary>
-        /// The Point at which the line spline starts, would be the position at t 0
+        /// The Point at which the spline starts, would be the position at t 0
         /// </summary>
         public abstract Vector3 WorldStartPosition
         {
@@ -54,6 +71,12 @@ namespace SleepyCat.Utility.Splines
         /// <returns>The total length of the spline</returns>
         public abstract float GetTotalLength();
 
+        /// <summary>
+        /// Returns a point along the spline at t local to the attached GameObject's transform
+        /// </summary>
+        /// <param name="t">The unit interval for how far along the spline the point should</param>
+        /// <returns>A point along the spline at t local to the attached GameObject's transform</returns>
+        public abstract Vector3 GetLocalPointAtTime(float t);
         /// <summary>
         /// Returns a point along the spline at the given unit interval value
         /// </summary>
@@ -82,8 +105,14 @@ namespace SleepyCat.Utility.Splines
         /// <param name="t">The t value to check which direction the spline is going at</param>
         /// <param name="stepDistance">Distance to check the next step at, to calculate the direction</param>
         /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
-        public Vector3 GetDirection(float t, float stepDistance)
+        public virtual Vector3 GetDirection(float t, float stepDistance)
         {
+            //// Since there is no more spline 
+            //if (t == 1.0f)
+            //{
+            //    t -= float.Epsilon;
+            //    stepDistance +=
+            //}
             return (GetPointAtTime(t + stepDistance) - GetPointAtTime(t)).normalized;
         }
         #endregion
