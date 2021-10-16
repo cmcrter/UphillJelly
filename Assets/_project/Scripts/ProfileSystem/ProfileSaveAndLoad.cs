@@ -24,6 +24,12 @@ public class ProfileSaveAndLoad : MonoBehaviour
     // Reference to the TextMeshPro input field
     public TMP_InputField TMPProfileTextInput;
 
+    //
+    public MeshRenderer playerCurrentMesh;
+
+    //
+    public ProfileController profileController;
+
     #endregion
 
     #region Methods

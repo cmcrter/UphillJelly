@@ -1124,6 +1124,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TMPProfileTextInput: {fileID: 751181437}
+  playerCurrentMesh: {fileID: 0}
+  profileController: {fileID: 0}
 --- !u!1 &966308919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,7 +1457,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1057843923}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1631593483}
+        m_TargetAssemblyTypeName: ProfileController, Scripts
+        m_MethodName: ChangeHatLeft
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1057843923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2396,7 +2410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   go_hats:
-  - {fileID: 5906638480496150246, guid: 3440292fe55442d4b9600f607d5e9265, type: 3}
+  - {fileID: 4911165576452713187, guid: e1419985bb770fa4db9c9293fe674c94, type: 3}
   - {fileID: 6769333989894529841, guid: da555e3c349d5654e875a33bbe602179, type: 3}
   - {fileID: 6449225800232774674, guid: b4ee8563328623d4d8a492e413442e2e, type: 3}
   - {fileID: 2253980022164838619, guid: f1edf596416de8d4e96598677117a019, type: 3}
@@ -2406,7 +2420,7 @@ MonoBehaviour:
   - {fileID: 4520810092622270273, guid: 9f8ad2b6e7065b34cb3b1d9b0ecd16aa, type: 3}
   - {fileID: 5453762924241940251, guid: 4a437cf158a060242b4502ebc05a90ff, type: 3}
   - {fileID: 4008918839847259187, guid: 2cc7580ce68f463418cf8874196e11f5, type: 3}
-  - {fileID: 4911165576452713187, guid: e1419985bb770fa4db9c9293fe674c94, type: 3}
+  - {fileID: 5906638480496150246, guid: 3440292fe55442d4b9600f607d5e9265, type: 3}
   go_skateboards:
   - {fileID: 520746736768058116, guid: 2b113a23fa1b21f40a45b7fcd9df542a, type: 3}
   - {fileID: 9033932192733751094, guid: af36c854e9a1dfd4f9eea6604558fd7c, type: 3}
@@ -2745,7 +2759,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079351181}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.506}
+  m_LocalPosition: {x: 0, y: 0, z: 0.678}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 319467885}
@@ -3074,3 +3088,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TMPProfileTextInput: {fileID: 751181437}
+  playerCurrentMesh: {fileID: 0}
+  profileController: {fileID: 0}

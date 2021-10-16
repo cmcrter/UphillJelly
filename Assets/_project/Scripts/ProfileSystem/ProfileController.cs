@@ -168,18 +168,17 @@ public class ProfileController : MonoBehaviour
 
         // if the current outfit is less than or = to the length of meshes
         // Show the first material / outfit
-        if (iCurrentHat >= 10) {
+        if (iCurrentHat >= 11) {
 
 
             // set the current outfit to 0
-            iCurrentHat = -1;
+            iCurrentHat = 0;
 
             // change the material to the current integer of the outfit
             go_HatSpawnPoint = go_hats[iCurrentHat];
 
         }
 
-        Debug.Log(go_hats.Length);
 
         if (go_previousHat == null) {
 
@@ -198,6 +197,8 @@ public class ProfileController : MonoBehaviour
         // instantiate the current hat at the spawn point with the position and rotation
         GameObject currentHatInstantiated = Instantiate(go_hats[iCurrentHat], go_HatSpawnPoint.transform.position, go_HatSpawnPoint.transform.rotation);
 
+
+        //
         go_previousHat = currentHatInstantiated;
 
         // for each character materials in the list
@@ -214,6 +215,62 @@ public class ProfileController : MonoBehaviour
         }
 
         
+        //go_hats.Length
+    }
+
+
+    // Change the hat to the right
+    public void ChangeHatLeft() {
+
+        // if the current outfit is less than or = to the length of meshes
+        // Show the first material / outfit
+        if (iCurrentHat <= 0) {
+
+
+            // set the current outfit to 0
+            iCurrentHat = 11;
+
+            // change the material to the current integer of the outfit
+            go_HatSpawnPoint = go_hats[iCurrentHat];
+
+        }
+
+
+        if (go_previousHat == null) {
+
+            // do nothing
+
+        } else {
+
+            //
+            Destroy(go_previousHat);
+
+        }
+
+        // current outfit + (move to the next one)
+        iCurrentHat--;
+
+        // instantiate the current hat at the spawn point with the position and rotation
+        GameObject currentHatInstantiated = Instantiate(go_hats[iCurrentHat], go_HatSpawnPoint.transform.position, go_HatSpawnPoint.transform.rotation);
+
+
+        //
+        go_previousHat = currentHatInstantiated;
+
+        // for each character materials in the list
+        for (int i = 0; i < go_hats.Length; i++) {
+
+            // if current outfit is = 1, show mat 1 etc
+            if (iCurrentHat == i) {
+
+                // change the material to the current integer of the outfit
+                go_HatSpawnPoint = go_hats[iCurrentHat];
+
+            }
+
+        }
+
+
         //go_hats.Length
     }
 
