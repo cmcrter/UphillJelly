@@ -30,6 +30,8 @@ namespace SleepyCat.Movement.Prototypes
         [SerializeField]
         private Rigidbody rb;
         float initialDrag;
+        Vector3 initalPos;
+        Quaternion initialRot;
 
         [SerializeField]
         private float forwardSpeed = 8;
@@ -95,10 +97,10 @@ namespace SleepyCat.Movement.Prototypes
             rb.velocity = Vector3.zero;
             rb.drag = initialDrag;
 
-            rb.transform.rotation = Quaternion.identity;
-            transform.rotation = Quaternion.identity;
+            rb.transform.rotation = initialRot;
+            transform.rotation = initialRot;
 
-            rb.transform.position = new Vector3(0, ballMovement.radius + 0.01f, 0);          
+            rb.transform.position = initalPos;    
         }
 
         #endregion
@@ -117,6 +119,9 @@ namespace SleepyCat.Movement.Prototypes
             initialDrag = rb.drag;
 
             Jump();
+
+            initalPos = transform.position;
+            initialRot = transform.rotation;
         }
 
         private void Update()
@@ -278,7 +283,7 @@ namespace SleepyCat.Movement.Prototypes
                 ApplyBrakeForce();
             }
 
-            if (Keyboard.current.shiftKey.isPressed)
+            if (Keyboard.current.ctrlKey.isPressed)
             {
                 Jump();
             }
@@ -300,13 +305,13 @@ namespace SleepyCat.Movement.Prototypes
             if(Keyboard.current.leftArrowKey.isPressed)
             {
                 //Turn Left
-                goPlayerModel.transform.Rotate(new Vector3(0, 8f, 0));
+                goPlayerModel.transform.Rotate(new Vector3(0, 4f, 0));
             }
 
             if(Keyboard.current.rightArrowKey.isPressed)
             {
                 //Turn Right
-                goPlayerModel.transform.Rotate(new Vector3(0, -8f, 0));
+                goPlayerModel.transform.Rotate(new Vector3(0, -4, 0));
             }
         }
 
@@ -397,7 +402,7 @@ namespace SleepyCat.Movement.Prototypes
             if (isGrounded)
             {
                 //rb.transform.up = Vector3.up;
-                rb.AddForce(transform.up * jumpSpeed * 1000f * Time.deltaTime);
+                rb.AddForce(transform.up.normalized * jumpSpeed * 1000f * Time.deltaTime);
             }
 
             //Whilst it has time left
