@@ -16,10 +16,23 @@ using TMPro;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+[SerializeField]
 public class ProfileController : MonoBehaviour
 {
 
     #region Variables
+
+    //
+    public GameObject[] go_hats;
+
+    //
+    public GameObject[] go_skateboards;
+
+    //
+    public Material[] mat_CharacterMeshes;
+
+    //
+    public int Currency;
 
     #endregion
 
