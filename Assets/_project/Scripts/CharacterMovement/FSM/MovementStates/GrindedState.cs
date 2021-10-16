@@ -8,24 +8,16 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using SleepyCat.Utility.StateMachine;
 
-public class AerialState : MonoBehaviour
+namespace SleepyCat.Movement 
 {
-    #region Public Fields
-    #endregion
- 
-    #region Unity Methods
-    void Start()
+    public class GrindedState : State
     {
-	
+        #region Public Fields
+        #endregion
+
+        #region Private Methods
+        #endregion
     }
- 
-    void Update()
-    {
-	
-    }
-    #endregion
- 
-    #region Private Methods
-    #endregion
 }

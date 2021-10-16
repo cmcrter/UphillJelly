@@ -8,8 +8,9 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using SleepyCat.Movement;
 
-public class GroundedState : MonoBehaviour
+public class PlayerMovementFSM
 {
     #region Public Fields
     #endregion

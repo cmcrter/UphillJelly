@@ -110,6 +110,8 @@ namespace SleepyCat.Movement.Prototypes
             goPlayerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius + 0.01f, ballMovement.transform.position.z);
             rb.transform.parent = null;
             initialDrag = rb.drag;
+
+            Jump();
         }
 
         private void Update()
@@ -345,7 +347,12 @@ namespace SleepyCat.Movement.Prototypes
         {
             //It's technically a new timer on top of the class in use
             jumpTimer = new Timer(jumpTimerDuration);
-            rb.AddForce(transform.up * jumpSpeed * 1000f * Time.deltaTime);
+
+            if (isGrounded)
+            {
+                rb.transform.up = Vector3.up;
+                rb.AddForce(transform.up * jumpSpeed * 1000f * Time.deltaTime);
+            }
 
             //Whilst it has time left
             while(jumpTimer.isActive)
