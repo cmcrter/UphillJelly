@@ -450,7 +450,7 @@ namespace SleepyCat.Movement.Prototypes
                         float max = 10f / rb.velocity.magnitude;
                         Mathf.Clamp(max, 0.05f, 1);
 
-                        Debug.Log(rb.velocity.magnitude + " " + max + " " + (1 - max).ToString());
+                        //Debug.Log(rb.velocity.magnitude + " " + max + " " + (1 - max).ToString());
 
                         // if the force is above 12, pushing shouldn't add anything
                         force *= max;
