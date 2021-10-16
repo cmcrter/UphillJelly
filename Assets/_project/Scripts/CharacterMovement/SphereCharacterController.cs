@@ -242,9 +242,9 @@ namespace SleepyCat.Movement.Prototypes
             if (isGrounded && jumpCoroutine == null)
             {
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if (dotAngle < 1f)
+                if (dotAngle < 0.99f)
                 {
-                    rb.AddForce(-rb.velocity * (1f + (1f - dotAngle)), ForceMode.Impulse);
+                    rb.AddForce(-rb.velocity * (1f + (1.01f - dotAngle)), ForceMode.Impulse);
 
                     if (dotAngle > 0.35f)
                     {
@@ -280,7 +280,7 @@ namespace SleepyCat.Movement.Prototypes
                 ApplyBrakeForce();
             }
 
-            if (Keyboard.current.ctrlKey.isPressed)
+            if (Keyboard.current.ctrlKey.isPressed && jumpCoroutine == null)
             {
                 Jump();
             }
@@ -317,7 +317,7 @@ namespace SleepyCat.Movement.Prototypes
         private void ApplyBrakeForce()
         {
             //Pushing backward as a constant force
-            rb.AddForceAtPosition(-transform.forward * backwardSpeed * 1000 * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
+            rb.AddForceAtPosition(-transform.forward * backwardSpeed, rb.position + rb.centerOfMass, ForceMode.Force);
         }
 
         private void Jump()
@@ -399,7 +399,8 @@ namespace SleepyCat.Movement.Prototypes
             if (isGrounded)
             {
                 //rb.transform.up = Vector3.up;
-                rb.AddForce(transform.up.normalized * jumpSpeed * 1000f);
+                rb.AddForce(transform.up.normalized * jumpSpeed * 1000);
+                Mathf.Clamp(rb.velocity.y, -99999, 5f);
             }
 
             //Whilst it has time left
