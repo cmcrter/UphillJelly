@@ -553,6 +553,7 @@ MonoBehaviour:
   forwardSpeed: 1
   turnSpeed: 0.15
   backwardSpeed: 15
+  jumpSpeed: 1000
   SomeMaximumVelocity: 10
   currentTurnInput: 0
   additionalGravity: 6
@@ -569,6 +570,10 @@ MonoBehaviour:
     isActive: 0
   pushDuringTimerDuration: 0.35
   pushDuringTimer:
+    isLocked: 0
+    isActive: 0
+  jumpTimerDuration: 0.35
+  jumpTimer:
     isLocked: 0
     isActive: 0
   bShowDriftVal: 0

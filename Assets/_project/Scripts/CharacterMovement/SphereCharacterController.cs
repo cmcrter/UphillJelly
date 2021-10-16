@@ -38,6 +38,8 @@ namespace SleepyCat.Movement.Prototypes
         [SerializeField]
         private float backwardSpeed = 3;
         [SerializeField]
+        private float jumpSpeed = 50;
+        [SerializeField]
         private float SomeMaximumVelocity = 10f;
 
         [SerializeField]
@@ -45,24 +47,25 @@ namespace SleepyCat.Movement.Prototypes
         [SerializeField]
         private float additionalGravity = 10f;
         [SerializeField]
-        private bool bAddAdditionalGravity = true;        
+        private bool bAddAdditionalGravity = true;
 
         [SerializeField]
         private bool isGrounded = false;
         //The state machine that determines what the player can do and is doing in the current frame
         [SerializeField]
-        FiniteStateMachine CharacterStateMachine;
+        private FiniteStateMachine CharacterStateMachine;
         [SerializeField]
-        PlayerCamera playerCamera;
+        private PlayerCamera playerCamera;
         [SerializeField]
-        SphereCollider ballMovement;
+        private SphereCollider ballMovement;
 
         [SerializeField]
-        LayerMask mask;
+        private LayerMask mask;
 
         //This is public in case other systems need to know if the player is pushing.
         public Coroutine pushWaitCoroutine { get; private set; }
         public Coroutine pushDuringCoroutine { get; private set; }
+        public Coroutine jumpCoroutine { get; private set; }
 
         [SerializeField]
         private float pushCooldownTimerDuration = 0.65f;
@@ -72,6 +75,11 @@ namespace SleepyCat.Movement.Prototypes
         private float pushDuringTimerDuration = 0.35f;
         [SerializeField]
         private Timer pushDuringTimer;
+
+        [SerializeField]
+        private float jumpTimerDuration = 0.35f;
+        [SerializeField]
+        private Timer jumpTimer;
 
         [SerializeField]
         private bool bShowDriftVal = false;
@@ -107,7 +115,7 @@ namespace SleepyCat.Movement.Prototypes
         private void Update()
         {
             //Checking if anything is below it
-            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.05f, ~mask, QueryTriggerInteraction.UseGlobal))
+            if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.07f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
                 isGrounded = true;
 
@@ -116,8 +124,9 @@ namespace SleepyCat.Movement.Prototypes
                 {
                     //Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
-                    Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
-                    Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
+                    Debug.DrawLine(goRaycastPoint.transform.position, goRaycastPoint.transform.position + (-transform.up * 0.07f), Color.magenta);
+                    //Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
+                    //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
             }
             else
@@ -135,12 +144,12 @@ namespace SleepyCat.Movement.Prototypes
 
         void FixedUpdate()
         {
-            if (bAddAdditionalGravity)
+            if(bAddAdditionalGravity)
             {
                 rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
             }
 
-            if (isGrounded)
+            if(isGrounded)
             {
                 GroundedMovement();
             }
@@ -188,7 +197,7 @@ namespace SleepyCat.Movement.Prototypes
                 Debug.Log(dotAngle);
             }
 
-            if (isGrounded)
+            if (isGrounded && jumpCoroutine == null)
             {
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if (dotAngle < 1f)
@@ -246,12 +255,25 @@ namespace SleepyCat.Movement.Prototypes
             {
                 ApplyBrakeForce();
             }
+
+            if (Keyboard.current.shiftKey.isPressed)
+            {
+                Jump();
+            }
         }
+
+        #region Controls Functions
 
         private void ApplyBrakeForce()
         {
             //Pushing backward as a constant force
             rb.AddForceAtPosition(-transform.forward * backwardSpeed * 1000 * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
+        }
+
+        private void Jump()
+        {
+            Debug.Log("Jumping");
+            StartJumpTimer();
         }
 
         private void PushBoard()
@@ -265,6 +287,11 @@ namespace SleepyCat.Movement.Prototypes
             StartPushDuringTimerCoroutine();
         }
 
+        #endregion
+
+        /// <summary>
+        /// Push Coroutine Management
+        /// </summary>
         private void StartPushTimerCoroutine()
         {
             StopPushTimerCoroutine();
@@ -297,6 +324,40 @@ namespace SleepyCat.Movement.Prototypes
             pushDuringCoroutine = null;
         }
 
+        private void StartJumpTimer()
+        {
+            StopJumpTimerCoroutine();
+            jumpCoroutine = StartCoroutine(Co_JumpTimer());
+        }
+
+        private void StopJumpTimerCoroutine()
+        {
+            if(jumpCoroutine != null)
+            {
+                StopCoroutine(jumpCoroutine);
+            }
+
+            jumpCoroutine = null;
+        }
+
+
+        private IEnumerator Co_JumpTimer()
+        {
+            //It's technically a new timer on top of the class in use
+            jumpTimer = new Timer(jumpTimerDuration);
+            rb.AddForce(transform.up * jumpSpeed * 1000f * Time.deltaTime);
+
+            //Whilst it has time left
+            while(jumpTimer.isActive)
+            {
+                //Tick each frame
+                jumpTimer.Tick(Time.deltaTime);
+                yield return null;
+            }
+
+            jumpCoroutine = null;
+        }
+
         //Running the timer
         private IEnumerator Co_BoardAfterPush()
         {
@@ -325,10 +386,13 @@ namespace SleepyCat.Movement.Prototypes
             //Whilst it has time left
             while (pushDuringTimer.isActive)
             {
-                //Pushing forward
-                Vector3 force = transform.forward * forwardSpeed * 1000 * Time.deltaTime;
+                if (isGrounded)
+                {
+                    //Pushing forward
+                    Vector3 force = transform.forward * forwardSpeed * 1000 * Time.deltaTime;
 
-                rb.AddForce(force, ForceMode.Impulse);
+                    rb.AddForce(force, ForceMode.Impulse);
+                }
 
                 //Tick each frame
                 pushDuringTimer.Tick(Time.deltaTime);
