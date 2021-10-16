@@ -105,7 +105,12 @@ namespace SleepyCat.Movement.Prototypes
 
         #region Unity Methods
 
-        void Start()
+        private void Awake()
+        {
+            CharacterStateMachine = new FiniteStateMachine();
+        }
+
+        private void Start()
         {
             goPlayerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius + 0.01f, ballMovement.transform.position.z);
             rb.transform.parent = null;
@@ -116,6 +121,8 @@ namespace SleepyCat.Movement.Prototypes
 
         private void Update()
         {
+            //CharacterStateMachine.RunMachine(Time.deltaTime);
+
             //Checking if anything is below it
             if (Physics.Raycast(goRaycastPoint.transform.position, -transform.up, out RaycastHit hit, 0.07f, ~mask, QueryTriggerInteraction.UseGlobal))
             {
@@ -146,15 +153,15 @@ namespace SleepyCat.Movement.Prototypes
 
         void FixedUpdate()
         {
+            //CharacterStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+
             if(bAddAdditionalGravity)
             {
                 rb.AddForce(Vector3.down * additionalGravity, ForceMode.Acceleration);
             }
 
-            if(isGrounded)
-            {
-                GroundedMovement();
-            }
+            GroundedMovement();
+            AirMovement();
         }
 
         #endregion
@@ -221,31 +228,44 @@ namespace SleepyCat.Movement.Prototypes
 
         private void GroundedMovement()
         {
+            if(!isGrounded)
+            {
+                return;
+            }
+
+            if(playerCamera)
+            {
+                playerCamera.FollowRotation = true;
+            }
+
             currentTurnInput = 0;
 
-            if (Keyboard.current.aKey.isPressed)
-            {
-                if (rb.velocity.magnitude < 2)
+            //if (pushDuringCoroutine == null && !pushDuringTimer.isActive)
+            //{
+                if(Keyboard.current.aKey.isPressed)
                 {
-                    currentTurnInput = -1f;
+                    if(rb.velocity.magnitude < 2)
+                    {
+                        currentTurnInput = -1f;
+                    }
+                    else
+                    {
+                        currentTurnInput -= 0.25f * rb.velocity.magnitude * 0.3f;
+                    }
                 }
-                else
-                {
-                    currentTurnInput -= 0.25f * rb.velocity.magnitude * 0.25f;
-                }
-            }
 
-            if (Keyboard.current.dKey.isPressed)
-            {
-                if (rb.velocity.magnitude < 2)
+                if(Keyboard.current.dKey.isPressed)
                 {
-                    currentTurnInput = 1f;
+                    if(rb.velocity.magnitude < 2)
+                    {
+                        currentTurnInput = 1f;
+                    }
+                    else
+                    {
+                        currentTurnInput += 0.25f * rb.velocity.magnitude * 0.3f;
+                    }
                 }
-                else
-                {
-                    currentTurnInput += 0.25f * rb.velocity.magnitude * 0.25f;
-                }
-            }
+            //}
 
             Mathf.Clamp(currentTurnInput, -1, 1);
 
@@ -261,6 +281,32 @@ namespace SleepyCat.Movement.Prototypes
             if (Keyboard.current.shiftKey.isPressed)
             {
                 Jump();
+            }
+        }
+
+        private void AirMovement()
+        {
+            if (isGrounded)
+            {
+                return;
+            }
+
+            if(playerCamera)
+            {
+                playerCamera.FollowRotation = false;
+            }
+
+            //Need some way of making the skateboard feel more stable in the air and just generally nicer
+            if(Keyboard.current.leftArrowKey.isPressed)
+            {
+                //Turn Left
+                goPlayerModel.transform.Rotate(new Vector3(0, 8f, 0));
+            }
+
+            if(Keyboard.current.rightArrowKey.isPressed)
+            {
+                //Turn Right
+                goPlayerModel.transform.Rotate(new Vector3(0, -8f, 0));
             }
         }
 
@@ -350,7 +396,7 @@ namespace SleepyCat.Movement.Prototypes
 
             if (isGrounded)
             {
-                rb.transform.up = Vector3.up;
+                //rb.transform.up = Vector3.up;
                 rb.AddForce(transform.up * jumpSpeed * 1000f * Time.deltaTime);
             }
 
@@ -385,8 +431,6 @@ namespace SleepyCat.Movement.Prototypes
         //Running the during timer
         private IEnumerator Co_BoardDuringPush()
         {
-            turnSpeed *= 0.25f;
-
             //It's technically a new timer on top of the class in use
             pushDuringTimer = new Timer(pushDuringTimerDuration);
 
@@ -407,7 +451,6 @@ namespace SleepyCat.Movement.Prototypes
             }
 
             pushDuringCoroutine = null;
-            turnSpeed *= 4;
         }
 
         #endregion

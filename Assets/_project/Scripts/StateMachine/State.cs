@@ -51,6 +51,11 @@ namespace SleepyCat.Utility.StateMachine
             //To be overridden
         }
 
+        public virtual void PhysicsTick(float dT)
+        {
+            //To be overridden
+        }
+
         public virtual void OnStateEnter()
         {
             //To be overridden

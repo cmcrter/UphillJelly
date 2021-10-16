@@ -1355,7 +1355,6 @@ MonoBehaviour:
   currentTurnInput: 0
   additionalGravity: 6
   bAddAdditionalGravity: 1
-  isJumping: 0
   isGrounded: 0
   playerCamera: {fileID: 1677140361}
   ballMovement: {fileID: 0}
@@ -1368,6 +1367,10 @@ MonoBehaviour:
     isActive: 0
   pushDuringTimerDuration: 0.35
   pushDuringTimer:
+    isLocked: 0
+    isActive: 0
+  jumpTimerDuration: 0.35
+  jumpTimer:
     isLocked: 0
     isActive: 0
   bShowDriftVal: 0
@@ -6550,6 +6553,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8489781828285543323, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489781828285543323, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6f1fe8da4fb32fc4ba0337185405c98f, type: 2}
     - target: {fileID: 8489781829627952752, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: m_RootOrder
       value: 6
