@@ -68,7 +68,7 @@ public class ProfileController : MonoBehaviour
         iCurrentOutfit = 0;
 
         //
-        iCurrentHat = 5;
+        iCurrentHat = 4;
 
         //
         go_hats[iCurrentHat].SetActive(true);
