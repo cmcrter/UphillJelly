@@ -34,24 +34,25 @@ public class ProfileController : MonoBehaviour
     // public text to show the currency
     public Text CurrencyText;
 
-
     // Mesh rendered for the player
     public MeshRenderer playerMeshRenderer;
 
-    // CHANGE TO PRIVATE
-    public GameObject go_HatSpawnPoint;
-
+    // Gameobject for the previous hat
     public GameObject go_previousHat;
 
 
+    //
+    public GameObject currentActiveHat;
+
     // int for the current outfit
-    public int iCurrentOutfit;
+    private int iCurrentOutfit;
 
-    //
-    public int iCurrentHat;
+    [SerializeField]
+    // int for the current hat
+    private int iCurrentHat;
 
-    //
-    public int iCurrentSkateboard;
+    // int for the current skateboard
+    private int iCurrentSkateboard;
 
     #endregion
 
@@ -67,14 +68,19 @@ public class ProfileController : MonoBehaviour
         iCurrentOutfit = 0;
 
         //
-        iCurrentHat = -1;
+        iCurrentHat = 5;
 
+        //
+        go_hats[iCurrentHat].SetActive(true);
+
+        //
+        go_previousHat = go_hats[4];
 
         // set the players mesh renderer material to the character meshes current outfit
         playerMeshRenderer.material = mat_CharacterMeshes[iCurrentOutfit];
 
         //
-        go_previousHat = go_hats[iCurrentHat];
+        //go_previousHat = go_hats[iCurrentHat];
 
     }
 
@@ -83,6 +89,13 @@ public class ProfileController : MonoBehaviour
 
         // set the currency to the text to visualize the current currency to the player
         CurrencyText.text = "£" + Currency.ToString();
+
+        go_previousHat.SetActive(false);
+
+
+        currentActiveHat = go_hats[iCurrentHat];
+
+        
 
     }
 
@@ -163,43 +176,29 @@ public class ProfileController : MonoBehaviour
 
 
 
+
+
+
+
+
+
     // Change the hat to the right
     public void ChangeHatRight() {
 
         // if the current outfit is less than or = to the length of meshes
         // Show the first material / outfit
-        if (iCurrentHat >= 11) {
-
+        if (iCurrentHat > 10) {
 
             // set the current outfit to 0
             iCurrentHat = 0;
-
-            // change the material to the current integer of the outfit
-            go_HatSpawnPoint = go_hats[iCurrentHat];
-
-        }
-
-
-        if (go_previousHat == null) {
-
-            // do nothing
-            
-        } else {
-
-            //
-            Destroy(go_previousHat);
 
         }
 
         // current outfit + (move to the next one)
         iCurrentHat++;
 
-        // instantiate the current hat at the spawn point with the position and rotation
-        GameObject currentHatInstantiated = Instantiate(go_hats[iCurrentHat], go_HatSpawnPoint.transform.position, go_HatSpawnPoint.transform.rotation);
-
-
         //
-        go_previousHat = currentHatInstantiated;
+        go_previousHat = go_hats[iCurrentHat - 1];
 
         // for each character materials in the list
         for (int i = 0; i < go_hats.Length; i++) {
@@ -208,14 +207,13 @@ public class ProfileController : MonoBehaviour
             if (iCurrentHat == i) {
 
                 // change the material to the current integer of the outfit
-                go_HatSpawnPoint = go_hats[iCurrentHat];
+                //go_HatSpawnPoint = go_hats[iCurrentHat];
+                go_hats[iCurrentHat].SetActive(true);
 
-            }
+            } 
 
         }
 
-        
-        //go_hats.Length
     }
 
 
@@ -224,38 +222,21 @@ public class ProfileController : MonoBehaviour
 
         // if the current outfit is less than or = to the length of meshes
         // Show the first material / outfit
-        if (iCurrentHat <= 0) {
-
+        if (iCurrentHat < 2) {
 
             // set the current outfit to 0
-            iCurrentHat = 11;
-
-            // change the material to the current integer of the outfit
-            go_HatSpawnPoint = go_hats[iCurrentHat];
-
-        }
-
-
-        if (go_previousHat == null) {
-
-            // do nothing
-
-        } else {
+            iCurrentHat = 12;
 
             //
-            Destroy(go_previousHat);
+            go_previousHat = go_hats[1];
 
         }
 
         // current outfit + (move to the next one)
         iCurrentHat--;
 
-        // instantiate the current hat at the spawn point with the position and rotation
-        GameObject currentHatInstantiated = Instantiate(go_hats[iCurrentHat], go_HatSpawnPoint.transform.position, go_HatSpawnPoint.transform.rotation);
-
-
         //
-        go_previousHat = currentHatInstantiated;
+        go_previousHat = go_hats[iCurrentHat + 1];
 
         // for each character materials in the list
         for (int i = 0; i < go_hats.Length; i++) {
@@ -264,14 +245,116 @@ public class ProfileController : MonoBehaviour
             if (iCurrentHat == i) {
 
                 // change the material to the current integer of the outfit
-                go_HatSpawnPoint = go_hats[iCurrentHat];
+                //go_HatSpawnPoint = go_hats[iCurrentHat];
+                go_hats[iCurrentHat].SetActive(true);
 
             }
 
         }
 
+    }
 
-        //go_hats.Length
+
+
+
+
+
+
+
+    /*
+    // Change the hat to the right
+    public void ChangeHatLeft() {
+
+        // if the current outfit is less than or = to the length of meshes
+        // Show the first material / outfit
+        if (iCurrentHat < 2) {
+
+            // set the current outfit to 0
+            iCurrentHat = 12;
+
+            //
+            go_hats[iCurrentHat].SetActive(true);
+
+            
+
+        }
+
+        if (go_hats[iCurrentHat = 12]) {
+
+            //
+            go_previousHat = go_hats[1];
+        } else {
+
+            //
+            go_previousHat = go_hats[iCurrentHat + 1];
+
+        }
+
+        // current outfit + (move to the next one)
+        iCurrentHat--;
+
+        
+
+
+        // for each character materials in the list
+        for (int i = 0; i < go_hats.Length; i++) {
+
+            // if current outfit is = 1, show mat 1 etc
+            if (iCurrentHat == i) {
+
+                // change the material to the current integer of the outfit
+                //go_HatSpawnPoint = go_hats[iCurrentHat];
+                go_hats[iCurrentHat].SetActive(true);
+
+            }
+
+        }
+
+    }
+    */
+
+
+
+
+
+
+
+
+
+
+
+    // Change the hat to the right
+    public void ChangeSkateboardRight() {
+
+        // if the current outfit is less than or = to the length of meshes
+        // Show the first material / outfit
+        if (iCurrentSkateboard >= 11) {
+
+            // set the current outfit to 0
+            iCurrentSkateboard = 0;
+
+        }
+
+        // current outfit + (move to the next one)
+        iCurrentHat++;
+
+        //
+        go_previousHat = go_hats[iCurrentHat - 1];
+
+        // for each character materials in the list
+        for (int i = 0; i < go_hats.Length; i++) {
+
+            // if current outfit is = 1, show mat 1 etc
+            if (iCurrentHat == i) {
+
+                // change the material to the current integer of the outfit
+                //go_HatSpawnPoint = go_hats[iCurrentHat];
+                go_hats[iCurrentHat].SetActive(true);
+
+            }
+
+        }
+
     }
 
 
