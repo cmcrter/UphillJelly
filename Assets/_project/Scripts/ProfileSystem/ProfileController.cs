@@ -174,69 +174,32 @@ public class ProfileController : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
     // Change the hat to the right
     public void ChangeHatRight() {
+
+
 
         // if the current outfit is less than or = to the length of meshes
         // Show the first material / outfit
         if (iCurrentHat > 10) {
 
             // set the current outfit to 0
-            iCurrentHat = 0;
+            iCurrentHat = 1;
 
-        }
-
-        // current outfit + (move to the next one)
-        iCurrentHat++;
-
-        //
-        go_previousHat = go_hats[iCurrentHat - 1];
-
-        // for each character materials in the list
-        for (int i = 0; i < go_hats.Length; i++) {
-
-            // if current outfit is = 1, show mat 1 etc
-            if (iCurrentHat == i) {
-
-                // change the material to the current integer of the outfit
-                //go_HatSpawnPoint = go_hats[iCurrentHat];
-                go_hats[iCurrentHat].SetActive(true);
-
-            } 
-
-        }
-
-    }
-
-
-    // Change the hat to the right
-    public void ChangeHatLeft() {
-
-        // if the current outfit is less than or = to the length of meshes
-        // Show the first material / outfit
-        if (iCurrentHat < 2) {
-
-            // set the current outfit to 0
-            iCurrentHat = 12;
 
             //
-            go_previousHat = go_hats[1];
+            go_previousHat = go_hats[11];
+
+        } else {
+
+            // current outfit + (move to the next one)
+            iCurrentHat++;
+
+            //
+            go_previousHat = go_hats[iCurrentHat - 1];
 
         }
 
-        // current outfit + (move to the next one)
-        iCurrentHat--;
-
-        //
-        go_previousHat = go_hats[iCurrentHat + 1];
 
         // for each character materials in the list
         for (int i = 0; i < go_hats.Length; i++) {
@@ -261,40 +224,34 @@ public class ProfileController : MonoBehaviour
 
 
 
-    /*
+
+
     // Change the hat to the right
     public void ChangeHatLeft() {
+
+        
 
         // if the current outfit is less than or = to the length of meshes
         // Show the first material / outfit
         if (iCurrentHat < 2) {
 
             // set the current outfit to 0
-            iCurrentHat = 12;
+            iCurrentHat = 11;
 
-            //
-            go_hats[iCurrentHat].SetActive(true);
-
-            
-
-        }
-
-        if (go_hats[iCurrentHat = 12]) {
 
             //
             go_previousHat = go_hats[1];
+
         } else {
+
+            // current outfit + (move to the next one)
+            iCurrentHat--;
 
             //
             go_previousHat = go_hats[iCurrentHat + 1];
 
         }
 
-        // current outfit + (move to the next one)
-        iCurrentHat--;
-
-        
-
 
         // for each character materials in the list
         for (int i = 0; i < go_hats.Length; i++) {
@@ -311,7 +268,6 @@ public class ProfileController : MonoBehaviour
         }
 
     }
-    */
 
 
 
