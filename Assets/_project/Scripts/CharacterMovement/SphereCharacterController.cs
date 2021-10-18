@@ -30,6 +30,8 @@ namespace SleepyCat.Movement.Prototypes
         [SerializeField]
         private Rigidbody rb;
         float initialDrag;
+        Vector3 initalPos;
+        Quaternion initialRot;
 
         [SerializeField]
         private float forwardSpeed = 8;
@@ -95,10 +97,10 @@ namespace SleepyCat.Movement.Prototypes
             rb.velocity = Vector3.zero;
             rb.drag = initialDrag;
 
-            rb.transform.rotation = Quaternion.identity;
-            transform.rotation = Quaternion.identity;
+            rb.transform.rotation = initialRot;
+            transform.rotation = initialRot;
 
-            rb.transform.position = new Vector3(0, ballMovement.radius + 0.01f, 0);          
+            rb.transform.position = initalPos;    
         }
 
         #endregion
@@ -117,6 +119,9 @@ namespace SleepyCat.Movement.Prototypes
             initialDrag = rb.drag;
 
             Jump();
+
+            initalPos = transform.position;
+            initialRot = transform.rotation;
         }
 
         private void Update()
@@ -143,7 +148,35 @@ namespace SleepyCat.Movement.Prototypes
                 isGrounded = false;
             }
 
-            if (Keyboard.current.escapeKey.isPressed)
+            currentTurnInput = 0;
+
+            if(Keyboard.current.aKey.isPressed)
+            {
+                if(rb.velocity.magnitude < 2)
+                {
+                    currentTurnInput = -1f;
+                }
+                else
+                {
+                    currentTurnInput -= 0.25f * rb.velocity.magnitude * 0.3f;
+                }
+            }
+
+            if(Keyboard.current.dKey.isPressed)
+            {
+                if(rb.velocity.magnitude < 2)
+                {
+                    currentTurnInput = 1f;
+                }
+                else
+                {
+                    currentTurnInput += 0.25f * rb.velocity.magnitude * 0.3f;
+                }
+            }
+
+            Mathf.Clamp(currentTurnInput, -1, 1);
+
+            if(Keyboard.current.escapeKey.isPressed)
             {
                 ResetBoard();
             }
@@ -209,9 +242,9 @@ namespace SleepyCat.Movement.Prototypes
             if (isGrounded && jumpCoroutine == null)
             {
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if (dotAngle < 1f)
+                if (dotAngle < 0.99f)
                 {
-                    rb.AddForce(-rb.velocity * (1f + (1f - dotAngle)), ForceMode.Impulse);
+                    rb.AddForce(-rb.velocity * (1f + (1.01f - dotAngle)), ForceMode.Impulse);
 
                     if (dotAngle > 0.35f)
                     {
@@ -238,37 +271,6 @@ namespace SleepyCat.Movement.Prototypes
                 playerCamera.FollowRotation = true;
             }
 
-            currentTurnInput = 0;
-
-            //if (pushDuringCoroutine == null && !pushDuringTimer.isActive)
-            //{
-                if(Keyboard.current.aKey.isPressed)
-                {
-                    if(rb.velocity.magnitude < 2)
-                    {
-                        currentTurnInput = -1f;
-                    }
-                    else
-                    {
-                        currentTurnInput -= 0.25f * rb.velocity.magnitude * 0.3f;
-                    }
-                }
-
-                if(Keyboard.current.dKey.isPressed)
-                {
-                    if(rb.velocity.magnitude < 2)
-                    {
-                        currentTurnInput = 1f;
-                    }
-                    else
-                    {
-                        currentTurnInput += 0.25f * rb.velocity.magnitude * 0.3f;
-                    }
-                }
-            //}
-
-            Mathf.Clamp(currentTurnInput, -1, 1);
-
             if (Keyboard.current.spaceKey.isPressed && !Keyboard.current.sKey.isPressed)
             {
                 PushBoard();
@@ -278,7 +280,7 @@ namespace SleepyCat.Movement.Prototypes
                 ApplyBrakeForce();
             }
 
-            if (Keyboard.current.shiftKey.isPressed)
+            if (Keyboard.current.ctrlKey.isPressed && jumpCoroutine == null)
             {
                 Jump();
             }
@@ -300,13 +302,13 @@ namespace SleepyCat.Movement.Prototypes
             if(Keyboard.current.leftArrowKey.isPressed)
             {
                 //Turn Left
-                goPlayerModel.transform.Rotate(new Vector3(0, 8f, 0));
+                rb.transform.Rotate(new Vector3(0, 4f, 0));
             }
 
             if(Keyboard.current.rightArrowKey.isPressed)
             {
                 //Turn Right
-                goPlayerModel.transform.Rotate(new Vector3(0, -8f, 0));
+                rb.transform.Rotate(new Vector3(0, -4, 0));
             }
         }
 
@@ -315,7 +317,7 @@ namespace SleepyCat.Movement.Prototypes
         private void ApplyBrakeForce()
         {
             //Pushing backward as a constant force
-            rb.AddForceAtPosition(-transform.forward * backwardSpeed * 1000 * Time.deltaTime, rb.position + rb.centerOfMass, ForceMode.Force);
+            rb.AddForceAtPosition(-transform.forward * backwardSpeed, rb.position + rb.centerOfMass, ForceMode.Force);
         }
 
         private void Jump()
@@ -397,7 +399,8 @@ namespace SleepyCat.Movement.Prototypes
             if (isGrounded)
             {
                 //rb.transform.up = Vector3.up;
-                rb.AddForce(transform.up * jumpSpeed * 1000f * Time.deltaTime);
+                rb.AddForce(transform.up.normalized * jumpSpeed * 1000);
+                Mathf.Clamp(rb.velocity.y, -99999, 5f);
             }
 
             //Whilst it has time left
@@ -441,6 +444,22 @@ namespace SleepyCat.Movement.Prototypes
                 {
                     //Pushing forward
                     Vector3 force = transform.forward * forwardSpeed * 1000 * Time.deltaTime;
+
+                    if (rb.velocity.magnitude > 1)
+                    {
+                        //adjust the force depending on the current speed (15 being the amount that it can maximum be at if it's just pushing)
+                        float max = 10f / rb.velocity.magnitude;
+                        Mathf.Clamp(max, 0.05f, 1);
+
+                        //Debug.Log(rb.velocity.magnitude + " " + max + " " + (1 - max).ToString());
+
+                        // if the force is above 12, pushing shouldn't add anything
+                        force *= max;
+                    }
+                    else
+                    {
+                        force *= 2f;
+                    }
 
                     rb.AddForce(force, ForceMode.Impulse);
                 }

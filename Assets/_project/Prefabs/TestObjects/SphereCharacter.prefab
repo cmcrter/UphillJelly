@@ -178,7 +178,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8489781828285543320}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -191,7 +191,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 6f1fe8da4fb32fc4ba0337185405c98f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -234,9 +234,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8489781828285543320}
   serializedVersion: 2
-  m_Mass: 70
-  m_Drag: 0.6
-  m_AngularDrag: 2
+  m_Mass: 75
+  m_Drag: 0.45
+  m_AngularDrag: 1.85
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -550,13 +550,13 @@ MonoBehaviour:
   goBackwardAxis: {fileID: 8489781828051206707}
   goRaycastPoint: {fileID: 8489781829056515676}
   rb: {fileID: 8489781828285543325}
-  forwardSpeed: 1
-  turnSpeed: 0.15
+  forwardSpeed: 0.5
+  turnSpeed: 0.175
   backwardSpeed: 15
-  jumpSpeed: 1000
-  SomeMaximumVelocity: 10
+  jumpSpeed: 25
+  SomeMaximumVelocity: 25
   currentTurnInput: 0
-  additionalGravity: 6
+  additionalGravity: 8
   bAddAdditionalGravity: 1
   isGrounded: 0
   playerCamera: {fileID: 0}
