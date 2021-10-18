@@ -27,17 +27,25 @@ public class SplinePlaneMeshGenWindow : EditorWindow
     }
     #endregion
 
+    #region Private Enumerations
+    #endregion
+
     #region Private Variables
     /// <summary>
     /// The animation curve that defines the width of the mesh along the spline
     /// </summary>
     private AnimationCurve widthCurve;
 
+
     /// <summary>
     /// The amount the width curve is multiplied by across it length
     /// </summary>
     private float widthMultiplier;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    private int circleSegmentsCount;
     /// <summary>
     /// The number of segments the mesh should be made up of
     /// </summary>
@@ -48,6 +56,7 @@ public class SplinePlaneMeshGenWindow : EditorWindow
     /// </summary>
     private SplineWrapper splineGeneratedFrom;
 
+    private Vector3 previousDriection;
     /// <summary>
     /// The right point in the segment devision made
     /// </summary>
@@ -56,6 +65,8 @@ public class SplinePlaneMeshGenWindow : EditorWindow
     /// The left point in the segment devision made
     /// </summary>
     private Vector3 previousLeftPoint;
+
+    private float segmenetRequireAngleChange;
     #endregion
 
     #region Unity Methods
@@ -86,6 +97,7 @@ public class SplinePlaneMeshGenWindow : EditorWindow
             segmentCount = 1;
         }
         widthMultiplier = EditorGUILayout.FloatField("Width Multiplier", widthMultiplier);
+        segmenetRequireAngleChange = EditorGUILayout.FloatField("segmenetRequireAngleChange", segmenetRequireAngleChange);
         widthCurve = EditorGUILayout.CurveField("WidthCurve", widthCurve);
         EditorGUILayout.Space();
 
@@ -134,15 +146,19 @@ public class SplinePlaneMeshGenWindow : EditorWindow
         SegmentDevisionLine newSegment;
 
         Vector3 direction = splineGeneratedFrom.GetDirection(0.0f, 0.01f);
+        previousDriection = direction;
         Vector3 pointOnLine = splineGeneratedFrom.GetLocalPointAtTime(0.0f);
 
         // Set up the previous right and left points so each segment can be drawn
         direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
-        direction = GetRightFromVector(direction);
+
+        direction = GetRightFromForwardVector(direction);
         previousRightPoint = pointOnLine + direction * widthCurve.Evaluate(0.0f) * widthMultiplier;
         previousLeftPoint = pointOnLine + direction * widthCurve.Evaluate(0.0f) * -widthMultiplier;
         verts.Add(previousRightPoint);
         verts.Add(previousLeftPoint);
+
+
 
         // Iterate over the spline and create the vertices and triangles for each point in the spline
         float stepIncrement = 1f / segmentCount;
@@ -150,9 +166,15 @@ public class SplinePlaneMeshGenWindow : EditorWindow
         for (; f < 1.0f; f += stepIncrement)
         {
             direction = splineGeneratedFrom.GetDirection(f, 0.01f);
-            pointOnLine = splineGeneratedFrom.GetLocalPointAtTime(f);
-            newSegment = CreateSegmentDevision(pointOnLine, direction, f);
-            AddSegmentVertsAndTrianglesFromSegmentToLists(verts, triangles, newSegment, currentIndiceIndex, out currentIndiceIndex);
+            if (Vector3.Angle(direction, previousDriection) > segmenetRequireAngleChange)
+            {
+                previousDriection = direction;
+                pointOnLine = splineGeneratedFrom.GetLocalPointAtTime(f);
+                newSegment = CreateSegmentDevision(pointOnLine, direction, f);
+                AddSegmentVertsAndTrianglesFromSegmentToLists(verts, triangles, newSegment, currentIndiceIndex, out currentIndiceIndex);
+            }
+
+
         }
 
         // Connect up the last made point to the end of the spline
@@ -165,6 +187,22 @@ public class SplinePlaneMeshGenWindow : EditorWindow
         mesh.SetTriangles(triangles.ToArray(), 0);
         return mesh;
     }
+
+    //private Mesh GenerateTubeMesh()
+    //{
+    //    Mesh mesh = new Mesh();
+    //    // number of segment * number of circle segments * triangles per quad + number of circle segments * triangles per quad = number of triangles
+    //    List<int> triangles = new List<int>(segmentCount * circleSegmentsCount * 2 + circleSegmentsCount * 2);
+    //    // number of circle segments * (number of segments + One extra for start) + the front and back middle segments
+    //    List<Vector3> verts = new List<Vector3>(circleSegmentsCount * (segmentCount + 1) + 2);
+
+    //    Vector3 direction = splineGeneratedFrom.GetDirection(0.0f, 0.01f);
+    //    Vector3 pointOnLine = splineGeneratedFrom.GetLocalPointAtTime(0.0f);
+
+    //    // Set up the first segment circle
+    //    verts.Add(splineGeneratedFrom.LocalStartPosition);
+    //    foreach (Vector3 point in GetCircleOfPointsAroundPoint())
+    //}
 
     /// <summary>
     /// Builds a segment devision line based on a point on the spline and the direction of the spline as of that point
@@ -179,7 +217,7 @@ public class SplinePlaneMeshGenWindow : EditorWindow
 
         direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
 
-        direction = GetRightFromVector(direction);
+        direction = GetRightFromForwardVector(direction);
 
         Vector3 rightPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * widthMultiplier;
         Vector3 leftPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * -widthMultiplier;
@@ -193,21 +231,63 @@ public class SplinePlaneMeshGenWindow : EditorWindow
         return newSegment;
     }
 
+    private Vector2 RotateVector2(Vector2 vectorToRotate, float angle)
+    {
+        // rotate vector(x1, y1) counterclockwise by the given angle
+        float rads = angle * Mathf.Deg2Rad;
+
+        float newX = vectorToRotate.x * Mathf.Cos(rads) - vectorToRotate.y * Mathf.Sin(rads);
+        float newY = vectorToRotate.x * Mathf.Sin(rads) + vectorToRotate.y * Mathf.Cos(rads);
+
+        return new Vector3(newX, newY);
+    }
+
     /// <summary>
     /// Returns a vector 90 degrees clockwise along the X and Z axis to a given vector
     /// </summary>
     /// <param name="forwardVector">The vector to find a vector to the right of</param>
     /// <returns>a vector 90 degrees clockwise along the X and Z axis to a given vector</returns>
-    private Vector3 GetRightFromVector(Vector3 forwardVector)
+    private Vector3 GetRightFromForwardVector(Vector3 forwardVector)
+    {
+        //// rotate vector(x1, y1) counterclockwise by the given angle
+        //Vector2 newAngle = RotateVector2(new Vector2(forwardVector.x, forwardVector.z), 90f);
+
+        //return new Vector3(newAngle.x, forwardVector.y, newAngle.y);
+        // transformed vectors right and left:
+        return new Vector3(forwardVector.z, forwardVector.y, -forwardVector.x);
+    }
+
+    private Vector3 GetUpFromForwardVector(Vector3 forwardVector)
     {
         // rotate vector(x1, y1) counterclockwise by the given angle
-        float angle = 90f * Mathf.Deg2Rad;
+        Vector2 newAngle = RotateVector2(new Vector2(forwardVector.y, forwardVector.z), 90f);
 
-        float newX = forwardVector.x * Mathf.Cos(angle) - forwardVector.z * Mathf.Sin(angle);
-        float newZ = forwardVector.x * Mathf.Sin(angle) + forwardVector.z * Mathf.Cos(angle);
-
-        return new Vector3(newX, forwardVector.y, newZ);
+        return new Vector3(forwardVector.x, newAngle.x , newAngle.y);
     }
+
+    private Vector3[] GetCircleOfPointsAroundPoint(GameObject guideObject, Vector3 pointOnSpline, Vector3 direction, float t)
+    {
+        circleSegmentsCount = 12;
+        Vector3 rightDirection = guideObject.transform.right;
+
+        int index = 0;
+
+        float rotationAnglePerSegment = 360f / circleSegmentsCount;
+        Vector3[] newPoints = new Vector3[circleSegmentsCount];
+
+
+         
+        for (float currentAngle = 0f; currentAngle < 360f; currentAngle += rotationAnglePerSegment)
+        {
+            // Get direction of rotation to next point
+            Vector3 newDirection = Quaternion.AngleAxis(currentAngle, direction) * rightDirection;
+            newPoints[index++] = pointOnSpline + newDirection * widthCurve.Evaluate(t) * widthMultiplier;
+        }
+
+        return newPoints;
+    }
+
+    
 
     /// <summary>
     /// Adds vertices and triangles to provided lists based on a new segment division, the current indice index for the triangles that has been reached, updating and outing the indice index for the triangles afterwards
@@ -256,7 +336,7 @@ public class SplinePlaneMeshGenWindow : EditorWindow
         direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
 
         // Get the left and right directions and draw them
-        direction = GetRightFromVector(direction);
+        direction = GetRightFromForwardVector(direction);
         Vector3 rightPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * widthMultiplier;
         Vector3 leftPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * -widthMultiplier;
         Handles.color = Color.white;
@@ -275,29 +355,101 @@ public class SplinePlaneMeshGenWindow : EditorWindow
 
         HandleUtility.Repaint();
     }
+
+    private void DrawTubeCircleEnd(Vector3[] points, Vector3 splinePoint)
+    {
+        Handles.DrawLine(splinePoint, points[0]);
+        for (int i = 1; i < points.Length; ++i)
+        {
+            Handles.color = Color.white;
+            Handles.DrawLine(points[i-1], points[i]);
+            Handles.DrawLine(splinePoint, points[i]);
+        }
+        Handles.DrawLine(points[points.Length - 1], points[0]);
+    }
+
+    private void DrawTubeCircleMiddle(Vector3[] points)
+    {
+        for (int i = 1; i < points.Length; ++i)
+        {
+            Handles.color = Color.white;
+            Handles.DrawLine(points[i - 1], points[i]);
+        }
+        Handles.DrawLine(points[points.Length - 1], points[0]);
+    }
     /// <summary>
     /// Called during the scene view to draw the spline mesh outline onto the view
     /// </summary>
     /// <param name="sceneView">The scene view that is being called during</param>
     private void OnSceneGUI(SceneView sceneView)
     {
-        // Set up previous left and right view to a junk value so the they do not get used until they are properly assigned
-        previousRightPoint = Vector3.negativeInfinity;
-        previousLeftPoint = Vector3.negativeInfinity;
-
         // Draw the mesh wire-frame that would be generated
         if (splineGeneratedFrom != null)
         {
-            float stepIncrement = 1f / segmentCount; 
+            //// Set up previous left and right view to a junk value so the they do not get used until they are properly assigned
+            //previousRightPoint = Vector3.negativeInfinity;
+            //previousLeftPoint = Vector3.negativeInfinity;
+            //float stepIncrement = 1f / segmentCount;
+            //previousDriection = -splineGeneratedFrom.GetDirection(0.0f, stepIncrement);
+            //float f;
+            //for (f = 0.0f; f < 1.0f; f += stepIncrement)
+            //{
+            //    Vector3 direction = splineGeneratedFrom.GetDirection(f, stepIncrement);
+            //    Debug.Log(Vector3.Angle(direction, previousDriection));
+            //    if (Vector3.Angle(direction, previousDriection) > segmenetRequireAngleChange)
+            //    {
+            //        previousDriection = direction;
+            //        DrawLineSegmentsHandles(splineGeneratedFrom.GetPointAtTime(f), splineGeneratedFrom.GetDirection(f, stepIncrement), f);
+            //    }
+            //}
+
+            //f = f - stepIncrement;
+            //Vector3 linePoint = splineGeneratedFrom.GetPointAtTime(f);
+            //DrawLineSegmentsHandles(splineGeneratedFrom.WorldEndPosition, (splineGeneratedFrom.WorldEndPosition - linePoint).normalized, 1.0f);
+
+            GameObject go_gameObject = new GameObject();
+
+            float stepIncrement = 1f / segmentCount;
             float f;
+            Vector3[] previousCirclePoints = null;
+            Vector3[] points;
+
             for (f = 0.0f; f < 1.0f; f += stepIncrement)
             {
-                DrawLineSegmentsHandles(splineGeneratedFrom.GetPointAtTime(f), splineGeneratedFrom.GetDirection(f, stepIncrement), f);
+                Vector3 direction = splineGeneratedFrom.GetDirection(f, stepIncrement);
+                go_gameObject.transform.position = splineGeneratedFrom.GetPointAtTime(f);
+                go_gameObject.transform.LookAt(go_gameObject.transform.position + direction);
+                
+                points = GetCircleOfPointsAroundPoint(go_gameObject, splineGeneratedFrom.GetPointAtTime(f), direction, f);
+                DrawTubeCircleMiddle(points);
+                if (previousCirclePoints != null)
+                {
+                    for (int i = 0; i < points.Length; ++i)
+                    {
+                        Handles.DrawLine(previousCirclePoints[i], points[i]);
+                    }
+                }
+                previousCirclePoints = points;
+                Handles.color = Color.blue;
+                Handles.DrawLine(splineGeneratedFrom.GetPointAtTime(f), splineGeneratedFrom.GetPointAtTime(f) + direction);
+                Handles.color = Color.red;
+                Handles.DrawLine(splineGeneratedFrom.GetPointAtTime(f), splineGeneratedFrom.GetPointAtTime(f) + GetRightFromForwardVector(direction));
+                Handles.color = Color.green;
+                Handles.DrawLine(splineGeneratedFrom.GetPointAtTime(f), splineGeneratedFrom.GetPointAtTime(f) + GetUpFromForwardVector(direction));
             }
 
             f = f - stepIncrement;
             Vector3 linePoint = splineGeneratedFrom.GetPointAtTime(f);
-            DrawLineSegmentsHandles(splineGeneratedFrom.WorldEndPosition, (splineGeneratedFrom.WorldEndPosition - linePoint).normalized, 1.0f);
+            go_gameObject.transform.position = splineGeneratedFrom.GetPointAtTime(f);
+            go_gameObject.transform.LookAt(go_gameObject.transform.position + (splineGeneratedFrom.WorldEndPosition - linePoint).normalized);
+            points = GetCircleOfPointsAroundPoint(go_gameObject, splineGeneratedFrom.GetPointAtTime(f), (splineGeneratedFrom.WorldEndPosition - linePoint).normalized, f);
+            DrawTubeCircleEnd(points, splineGeneratedFrom.GetPointAtTime(f));
+            for (int i = 0; i < points.Length; ++i)
+            {
+                Handles.DrawLine(previousCirclePoints[i], points[i]);
+            }
+            DestroyImmediate(go_gameObject);
+
         }
     }
     #endregion
