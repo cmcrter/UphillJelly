@@ -19,7 +19,10 @@ public class SaveSystem : MonoBehaviour
     #region Variables
 
     //
-    [SerializeField] CustomizationData theCurrentActiveHat;
+    [SerializeField] CustomizationData ActiveHat; //go_currentActiveHat;
+
+    //
+    ProfileController profileController;
 
     // public static reference to the list and not to the save system, for the hats
     public static List<ProfileController> Hats = new List<ProfileController>();
@@ -196,10 +199,10 @@ public class SaveSystem : MonoBehaviour
                 Vector3 hatSpawnPosition = new Vector3(custData.hatSpawningPosition[0], custData.hatSpawningPosition[1], custData.hatSpawningPosition[2]);
 
                 // instantiate the current active hat at the hats spawn position and no rotation
-                CustomizationData customizationData = Instantiate(theCurrentActiveHat, hatSpawnPosition, Quaternion.identity);
+                CustomizationData customizationData = Instantiate(ActiveHat, hatSpawnPosition, Quaternion.identity);
 
                 //
-                customizationData.name = customizationData.TMPProfileTextInput.name;
+                //customizationData.name = customizationData.TMPProfileTextInput.name;
 
 
             } else {

@@ -1706,6 +1706,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cc7580ce68f463418cf8874196e11f5, type: 3}
+--- !u!1 &952085395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 952085397}
+  - component: {fileID: 952085396}
+  m_Layer: 0
+  m_Name: CustomizationData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &952085396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952085395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bbce0361626e0e468caf189d7d1f8dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TMPProfileTextInput: {fileID: 0}
+  playerCurrentMaterial: {fileID: 0}
+  theCurrentActiveHat: {fileID: 0}
+  Currency: 0
+  hatSpawningPosition: []
+--- !u!4 &952085397
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952085395}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &966308919
 GameObject:
   m_ObjectHideFlags: 0
@@ -3198,7 +3246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f9a23cb41ab3a42a2f40bce3ed80e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theCurrentActiveHat: {fileID: 0}
+  ActiveHat: {fileID: 0}
 --- !u!4 &1560632718
 Transform:
   m_ObjectHideFlags: 0
@@ -3267,7 +3315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Player
-  TMPProfileTextInput: {fileID: 0}
+  TMPProfileTextInput: {fileID: 751181437}
   go_hats:
   - {fileID: 781472473}
   - {fileID: 1835283753}
@@ -3294,10 +3342,10 @@ MonoBehaviour:
   Currency: 0
   CurrencyText: {fileID: 1292585860}
   playerMeshRenderer: {fileID: 319467883}
-  go_previousHat: {fileID: 0}
+  go_previousHat: {fileID: 106030650}
   CurrentActivePlayerMaterial: {fileID: 0}
-  currentActiveHat: {fileID: 0}
-  hatSpawnPosition: {fileID: 0}
+  currentActiveHat: {fileID: 404282757}
+  hatSpawnPosition: {fileID: 2079351181}
   iCurrentHat: 0
 --- !u!1001 &1638692221
 PrefabInstance:
