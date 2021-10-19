@@ -248,12 +248,13 @@ namespace SleepyCat.Movement.Prototypes
 
                     if (dotAngle > 0.35f)
                     {
-                        rb.AddForce(initialSpeed * (1f + turnSpeed) * transform.forward, ForceMode.Impulse);
+                        rb.AddForce(initialSpeed * (1f + 0.01f) * transform.forward, ForceMode.Impulse);
                     }
                     else
                     {
                         rb.velocity = Vector3.zero;
                         rb.Sleep();
+                        rb.AddForce(transform.forward.normalized, ForceMode.Impulse);
                     }
                 }
             }
