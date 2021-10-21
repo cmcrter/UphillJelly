@@ -124,6 +124,10 @@ namespace SleepyCat.Utility.Splines
         }
         public override void UpdateWorldPositions()
         {
+            if (spline == null)
+            {
+                spline = new LineSpline();
+            }
             worldStartPoint = transform.TransformPoint(spline.StartPosition);
             worldEndPoint = transform.TransformPoint(spline.EndPosition);
         }
