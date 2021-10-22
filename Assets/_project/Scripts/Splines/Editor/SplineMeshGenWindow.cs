@@ -351,8 +351,8 @@ public class SplineMeshGenWindow : EditorWindow
         }
 
         // Add end cap
-        Vector3 linePoint = splineGeneratedFrom.GetPointAtTime(lastFValue);
-        direction = (splineGeneratedFrom.WorldEndPosition - linePoint).normalized;
+        Vector3 linePoint = splineGeneratedFrom.GetLocalPointAtTime(lastFValue);
+        //direction = (splineGeneratedFrom.WorldEndPosition - linePoint).normalized;
         direction = (splineGeneratedFrom.LocalEndPosition - linePoint).normalized;
         Vector3.OrthoNormalize(ref direction, ref rightDirection, ref upDirection);
         verts.AddRange(GetCircleOfPointsAroundPoint(splineGeneratedFrom.LocalEndPosition, direction, rightDirection, 1f));
