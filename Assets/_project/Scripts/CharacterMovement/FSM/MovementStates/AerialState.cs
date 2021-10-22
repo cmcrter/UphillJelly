@@ -67,13 +67,13 @@ namespace SleepyCat.Movement
             if(Keyboard.current.leftArrowKey.isPressed)
             {
                 //Turn Left
-                movementRB.transform.Rotate(new Vector3(0, 4f, 0));
+                movementRB.transform.Rotate(new Vector3(0, 5f, 0));
             }
 
             if(Keyboard.current.rightArrowKey.isPressed)
             {
                 //Turn Right
-                movementRB.transform.Rotate(new Vector3(0, -4, 0));
+                movementRB.transform.Rotate(new Vector3(0, -5, 0));
             }
         }
 
@@ -87,6 +87,8 @@ namespace SleepyCat.Movement
 
         public override void OnStateExit()
         {
+            movementRB.angularVelocity = Vector3.zero;
+
             hasRan = false;
         }
     }

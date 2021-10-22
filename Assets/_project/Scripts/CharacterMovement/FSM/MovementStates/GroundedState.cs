@@ -177,7 +177,7 @@ namespace SleepyCat.Movement
             movementRB.AddForceAtPosition(-playerTransform.forward * backwardSpeed, movementRB.position + movementRB.centerOfMass, ForceMode.Force);
         }
 
-        public void Jump()
+        private void Jump()
         {
             Debug.Log("Jumping");
             StartJumpTimer();
