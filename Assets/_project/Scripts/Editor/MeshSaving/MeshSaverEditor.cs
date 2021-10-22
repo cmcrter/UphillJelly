@@ -40,4 +40,18 @@ public static class MeshSaverEditor
 		AssetDatabase.SaveAssets();
 	}
 
+	public static void SaveMeshAtPath(Mesh mesh, string path, bool makeNewInstance, bool optimizeMesh)
+	{
+		if (string.IsNullOrEmpty(path)) return;
+
+		path = FileUtil.GetProjectRelativePath(path);
+
+		Mesh meshToSave = (makeNewInstance) ? Object.Instantiate(mesh) as Mesh : mesh;
+
+		if (optimizeMesh)
+			MeshUtility.Optimize(meshToSave);
+
+		AssetDatabase.CreateAsset(meshToSave, path);
+		AssetDatabase.SaveAssets();
+	}
 }

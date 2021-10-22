@@ -107,12 +107,10 @@ namespace SleepyCat.Utility.Splines
         /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
         public virtual Vector3 GetDirection(float t, float stepDistance)
         {
-            //// Since there is no more spline 
-            //if (t == 1.0f)
-            //{
-            //    t -= float.Epsilon;
-            //    stepDistance +=
-            //}
+            if (t + stepDistance > 1.0f)
+            {
+                stepDistance = 1.0f - t;
+            }
             return (GetPointAtTime(t + stepDistance) - GetPointAtTime(t)).normalized;
         }
         #endregion
