@@ -19,7 +19,7 @@ public class SaveSystem : MonoBehaviour
     #region Variables
 
     //
-    [SerializeField] CustomizationData ActiveHat; //go_currentActiveHat;
+    [SerializeField] CustomizationData prefabHat; //go_currentActiveHat;
 
     //
     ProfileController profileController;
@@ -47,7 +47,7 @@ public class SaveSystem : MonoBehaviour
     #region Methods
 
     //
-    void Awake() {
+    public void LoadGame() {
 
         //
         LoadPlayerData();
@@ -55,7 +55,7 @@ public class SaveSystem : MonoBehaviour
     }
 
     //
-    private void OnApplicationQuit() {
+    public void SaveGame() {
 
         //
         SavePlayerData();
@@ -199,7 +199,7 @@ public class SaveSystem : MonoBehaviour
                 Vector3 hatSpawnPosition = new Vector3(custData.hatSpawningPosition[0], custData.hatSpawningPosition[1], custData.hatSpawningPosition[2]);
 
                 // instantiate the current active hat at the hats spawn position and no rotation
-                CustomizationData customizationData = Instantiate(ActiveHat, hatSpawnPosition, Quaternion.identity);
+                //CustomizationData customizationData = Instantiate(prefabHat, hatSpawnPosition, Quaternion.identity);
 
                 //
                 //customizationData.name = customizationData.TMPProfileTextInput.name;

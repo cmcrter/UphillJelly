@@ -12,7 +12,7 @@ using TMPro;
 using System.IO;
 
 [System.Serializable]
-public class CustomizationData : MonoBehaviour
+public class CustomizationData
 {
 
     // Reference to the TextMeshPro input field
