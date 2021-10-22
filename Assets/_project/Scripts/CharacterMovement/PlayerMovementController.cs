@@ -120,6 +120,11 @@ namespace SleepyCat.Movement
         {
             playerStateMachine.RunMachine(Time.deltaTime);
 
+            if(Keyboard.current.escapeKey.isPressed) 
+            {
+                ResetBoard();
+            }
+
             //Multiple states need to know the current turning of the user
             currentTurnInput = 0;
 
