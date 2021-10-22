@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 480716464920920456}
   - component: {fileID: 3531950785388875309}
   - component: {fileID: 1648587734590487271}
-  - component: {fileID: 81452296247338620}
-  - component: {fileID: 81452296247338621}
+  - component: {fileID: 7697344010497967031}
   m_Layer: 0
   m_Name: BrickShop_01
   m_TagString: Untagged
@@ -84,8 +83,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &81452296247338620
-BoxCollider:
+--- !u!64 &7697344010497967031
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,19 +93,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 18.172623, y: 12.0038805, z: 24}
-  m_Center: {x: -0.20280266, y: -0.659389, z: 4.1368073e-16}
---- !u!65 &81452296247338621
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 999809835031288626}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 14.990754, y: 1.3275881, z: 16.786293}
-  m_Center: {x: -0.1632533, y: 5.997535, z: 0.0019226074}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2880276764060650863, guid: c7d8e0418e4a8ce489252d54634722ee, type: 3}
