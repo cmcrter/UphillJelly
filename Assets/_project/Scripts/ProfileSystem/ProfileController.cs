@@ -53,7 +53,7 @@ public class ProfileController : MonoBehaviour
     public Material CurrentActivePlayerMaterial;
 
     //
-    public GameObject currentActiveHat;
+    public int currentActiveHat;
 
     //
     public GameObject hatSpawnPosition;
@@ -71,12 +71,35 @@ public class ProfileController : MonoBehaviour
     // int for the current skateboard
     private int iCurrentSkateboard;
 
+    //
+    //public bool hasLoaded = false;
+
     #endregion
 
     #region Methods
 
     // On Awake
     void Awake() {
+
+        /*
+        if (hasLoaded) {
+
+            //
+            currentActiveHat = iCurrentHat;
+
+            //
+            hasLoaded = false;
+
+        } else if (!hasLoaded) {
+
+            //
+            //iCurrentHat = currentActiveHat;
+
+            //
+            hasLoaded = false;
+
+        }
+        */
 
         // save the hats to the list of save data
         SaveSystem.Hats.Add(this);
@@ -119,11 +142,12 @@ public class ProfileController : MonoBehaviour
         go_previousHat.SetActive(false);
 
         // set the current active hat to the current hat in the hats array
-        currentActiveHat = go_hats[iCurrentHat];
+        //currentActiveHat = iCurrentHat;
 
         // set the current active hat to the current hat in the hats array
         CurrentActivePlayerMaterial = playerMeshRenderer.material;
 
+        //currentActiveHat = iCurrentHat;
 
     }
 
@@ -334,7 +358,65 @@ public class ProfileController : MonoBehaviour
 
     }
 
+    //
+    // Make a change skateboard left
+    //
 
+
+
+
+
+    //
+    public void SavePlayer() {
+
+        //
+        ProfileSaveSystem.SaveProfile(this);
+
+        //
+        currentActiveHat = iCurrentHat;
+
+        Debug.Log("Saved hat " + currentActiveHat);
+
+    }
+
+    //
+    public void LoadPlayer() {
+
+        //
+        PlayerData data = ProfileSaveSystem.LoadProfile();
+
+        //
+        //TMPProfileTextInput = data.TMPProfileTextInput;
+
+        //
+        Currency = data.Currency;
+
+        //
+        //CurrentActivePlayerMaterial = data.CurrentActivePlayerMaterial;
+
+        //
+        currentActiveHat = data.currentActiveHat;
+
+        //
+        iCurrentHat = currentActiveHat;
+
+        Debug.Log("Loaded Hat " + currentActiveHat);
+
+        //LoadCustomizables();
+
+        //
+        //hatSpawnPosition = data.hatSpawnPosition;
+
+    }
+
+    /*
+    public void LoadCustomizables() {
+
+        hasLoaded = true;
+
+    }
+
+    */
 
     #endregion
 

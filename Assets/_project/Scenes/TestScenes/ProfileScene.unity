@@ -271,7 +271,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1631593483}
+      - m_Target: {fileID: 54719689}
         m_TargetAssemblyTypeName: ProfileController, Scripts
         m_MethodName: ChangeCharacterMeshRight
         m_Mode: 1
@@ -1629,9 +1629,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1560632717}
-        m_TargetAssemblyTypeName: SaveSystem, Scripts
-        m_MethodName: LoadGame
+      - m_Target: {fileID: 54719689}
+        m_TargetAssemblyTypeName: ProfileController, Scripts
+        m_MethodName: LoadPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1740,54 +1740,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cc7580ce68f463418cf8874196e11f5, type: 3}
---- !u!1 &952085395
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 952085397}
-  - component: {fileID: 952085396}
-  m_Layer: 0
-  m_Name: CustomizationData
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &952085396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 952085395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bbce0361626e0e468caf189d7d1f8dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TMPProfileTextInput: {fileID: 0}
-  playerCurrentMaterial: {fileID: 0}
-  theCurrentActiveHat: {fileID: 0}
-  Currency: 0
-  hatSpawningPosition: []
---- !u!4 &952085397
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 952085395}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &966308919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1871,7 +1823,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1631593483}
+      - m_Target: {fileID: 54719689}
         m_TargetAssemblyTypeName: ProfileController, Scripts
         m_MethodName: ChangeCharacterMeshLeft
         m_Mode: 1
@@ -3087,7 +3039,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1525230811
 PrefabInstance:
@@ -3249,57 +3201,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &1560632716
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1560632718}
-  - component: {fileID: 1560632717}
-  m_Layer: 0
-  m_Name: SaveSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1560632717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560632716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11f9a23cb41ab3a42a2f40bce3ed80e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabHat:
-    TMPProfileTextInput: {fileID: 0}
-    playerCurrentMaterial: {fileID: 0}
-    theCurrentActiveHat: {fileID: 0}
-    Currency: 0
-    hatSpawningPosition: []
---- !u!4 &1560632718
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560632716}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1624730881 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 975457501681983569, guid: 2c8a40d4c3aec1a47807de043e8ca8a7, type: 3}
@@ -3310,82 +3213,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 487045998796798699, guid: 2c8a40d4c3aec1a47807de043e8ca8a7, type: 3}
   m_PrefabInstance: {fileID: 2005129576}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1631593481
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1631593482}
-  - component: {fileID: 1631593483}
-  m_Layer: 0
-  m_Name: ProfileController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1631593482
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1631593481}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1631593483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1631593481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02db90c63d06b894498b306f34ccc4ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: Player
-  TMPProfileTextInput: {fileID: 751181437}
-  go_hats:
-  - {fileID: 781472473}
-  - {fileID: 1835283753}
-  - {fileID: 1670116145}
-  - {fileID: 505169581}
-  - {fileID: 106030650}
-  - {fileID: 404282757}
-  - {fileID: 1624730881}
-  - {fileID: 446173013}
-  - {fileID: 973376863}
-  - {fileID: 391165410}
-  - {fileID: 970023252}
-  - {fileID: 2145663161}
-  - {fileID: 1730168202}
-  go_skateboards:
-  - {fileID: 520746736768058116, guid: 2b113a23fa1b21f40a45b7fcd9df542a, type: 3}
-  - {fileID: 9033932192733751094, guid: af36c854e9a1dfd4f9eea6604558fd7c, type: 3}
-  mat_CharacterMeshes:
-  - {fileID: 2100000, guid: 5f4a34a00588bfb469b1d6241e59c63e, type: 2}
-  - {fileID: 2100000, guid: 14a3f95e8640c8349b93c6cf395a6f12, type: 2}
-  - {fileID: 2100000, guid: 06407ea7e87d46d4693b2120724064f3, type: 2}
-  - {fileID: 2100000, guid: 13ddd62d0f47ed84c93574f950bbb8f9, type: 2}
-  - {fileID: 2100000, guid: c163869dc01d24c4fb341dd44e378aab, type: 2}
-  Currency: 0
-  CurrencyText: {fileID: 1292585860}
-  playerMeshRenderer: {fileID: 319467883}
-  go_previousHat: {fileID: 106030650}
-  CurrentActivePlayerMaterial: {fileID: 0}
-  currentActiveHat: {fileID: 404282757}
-  hatSpawnPosition: {fileID: 2079351181}
-  iCurrentHat: 0
 --- !u!1001 &1638692221
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3975,7 +3802,7 @@ RectTransform:
   m_Children:
   - {fileID: 1268138645}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4141,9 +3968,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1560632717}
-        m_TargetAssemblyTypeName: SaveSystem, Scripts
-        m_MethodName: SaveGame
+      - m_Target: {fileID: 54719689}
+        m_TargetAssemblyTypeName: ProfileController, Scripts
+        m_MethodName: SavePlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

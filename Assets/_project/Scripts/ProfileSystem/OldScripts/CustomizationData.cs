@@ -43,7 +43,7 @@ public class CustomizationData
         playerCurrentMaterial = profileController.CurrentActivePlayerMaterial;
 
         //
-        theCurrentActiveHat = profileController.currentActiveHat;
+        //theCurrentActiveHat = profileController.currentActiveHat;
 
         // Add current active skateboard
         // In this space
