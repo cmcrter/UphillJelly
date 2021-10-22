@@ -516,7 +516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8489781829627952752
 Transform:
   m_ObjectHideFlags: 0
@@ -551,7 +551,7 @@ MonoBehaviour:
   goBackwardAxis: {fileID: 8489781828051206707}
   goRaycastPoint: {fileID: 8489781829056515676}
   rb: {fileID: 8489781828285543325}
-  forwardSpeed: 0.75
+  forwardSpeed: 1
   turnSpeed: 0.175
   backwardSpeed: 15
   jumpSpeed: 25
@@ -559,6 +559,8 @@ MonoBehaviour:
   currentTurnInput: 0
   additionalGravity: 7
   bAddAdditionalGravity: 1
+  groundedDrag: 0.4
+  aerialDrag: 0.05
   isGrounded: 0
   playerCamera: {fileID: 0}
   ballMovement: {fileID: 8489781828285543322}

@@ -1,31 +1,27 @@
 ////////////////////////////////////////////////////////////
-// File: 
-// Author: 
-// Date Created: 
-// Last Edited By:
-// Date Last Edited:
-// Brief: 
+// File: isNextToWallRun.cs
+// Author: Charles Carter
+// Date Created: 22/10/21
+// Last Edited By: Charles Carter
+// Date Last Edited: 22/10/21
+// Brief: The condition to meet for the player to start wall running
 //////////////////////////////////////////////////////////// 
 
-using UnityEngine;
+using System;
+using SleepyCat.Utility.StateMachine;
 
-public class isNextToWallRun : MonoBehaviour
+namespace SleepyCat.Movement
 {
-    #region Public Fields
-    #endregion
- 
-    #region Unity Methods
-    void Start()
+    [Serializable]
+    public class isNextToWallRun : Condition
     {
-	
+        #region Public Methods
+
+        public override bool isConditionTrue()
+        {
+            return false;
+        }
+
+        #endregion
     }
- 
-    void Update()
-    {
-	
-    }
-    #endregion
- 
-    #region Private Methods
-    #endregion
 }
