@@ -7,25 +7,21 @@
 // Brief: 
 //////////////////////////////////////////////////////////// 
 
-using UnityEngine;
+using System;
+using SleepyCat.Utility.StateMachine;
 
-public class isOnGrind : MonoBehaviour
+namespace SleepyCat.Movement
 {
-    #region Public Fields
-    #endregion
- 
-    #region Unity Methods
-    void Start()
+    [Serializable]
+    public class isOnGrind : Condition
     {
-	
+        #region Public Methods
+
+        public override bool isConditionTrue()
+        {
+            return false;
+        }
+
+        #endregion
     }
- 
-    void Update()
-    {
-	
-    }
-    #endregion
- 
-    #region Private Methods
-    #endregion
 }

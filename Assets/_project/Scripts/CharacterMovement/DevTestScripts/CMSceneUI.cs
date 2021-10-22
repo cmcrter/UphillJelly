@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 04/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 04/10/21
+// Date Last Edited: 22/10/21
 // Brief: A script for using UI and inspector to test out the character controller in the Character Movement test scene
 //////////////////////////////////////////////////////////// 
 
@@ -13,7 +13,8 @@ namespace SleepyCat.DevScripts
 {
     public class CMSceneUI : MonoBehaviour
     {
-        public Movement.CharacterController characterController;
+        public Movement.PlayerController characterController;
+
         public Rigidbody CharacterRB;
 
         public GameObject goControlUI;
@@ -38,7 +39,7 @@ namespace SleepyCat.DevScripts
         public void SetModeToGrounded()
         {
             //Moving the character to the start point
-            characterController.ResetBoard();
+            characterController.transform.position = new Vector3(0, 0.5f, 0);
             //Setting it's state
             //characterController.SetState();
             //Making sure it can fall
