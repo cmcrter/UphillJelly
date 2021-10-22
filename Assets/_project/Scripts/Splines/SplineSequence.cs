@@ -14,8 +14,8 @@ using SleepyCat.Utility.Splines;
     /// <summary>
     /// A component for getting a sequence of splines and lerping through them
     /// </summary>
-    public class SplineSequence : MonoBehaviour
-{
+    public class SplineSequence : SplineWrapper
+    {
     #region Serialized Private Fields
     /// <summary>
     /// If checked it will make sure that the ends of each spline connect to the start of the next one
@@ -37,7 +37,105 @@ using SleepyCat.Utility.Splines;
     private List<SplineWrapper> containedSplines = new List<SplineWrapper>();
     #endregion
 
-    #region Publicly Retrievable Variables
+    #region Properties
+    #region Overrides
+    public override Vector3 LocalEndPosition
+    {
+        get
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[containedSplines.Count - 1] != null)
+                {
+                    return transform.InverseTransformPoint(containedSplines[containedSplines.Count - 1].WorldEndPosition);
+                }
+            }
+            return Vector3.zero;
+        }
+        set
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[containedSplines.Count - 1] != null)
+                {
+                    containedSplines[containedSplines.Count - 1].WorldEndPosition = transform.TransformPoint(value);
+                }
+            }
+        }
+    }
+    public override Vector3 LocalStartPosition
+    {
+        get
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[0] != null)
+                {
+                    return transform.InverseTransformPoint(containedSplines[0].WorldStartPosition);
+                }
+            }
+            return Vector3.zero;
+        }
+        set
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[0] != null)
+                {
+                    containedSplines[0].WorldStartPosition = transform.TransformPoint(value);
+                }
+            }
+        }
+    }
+    public override Vector3 WorldEndPosition
+    {
+        get
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[containedSplines.Count - 1] != null)
+                {
+                    return containedSplines[containedSplines.Count - 1].WorldEndPosition;
+                }
+            }
+            return transform.position;
+        }
+        set
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[containedSplines.Count - 1] != null)
+                {
+                    containedSplines[containedSplines.Count - 1].WorldEndPosition = value;
+                }
+            }
+        }
+    }
+    public override Vector3 WorldStartPosition
+    {
+        get
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[0] != null)
+                {
+                    return containedSplines[0].WorldStartPosition;
+                }
+            }
+            return transform.position;
+        }
+        set
+        {
+            if (containedSplines.Count > 0)
+            {
+                if (containedSplines[0] != null)
+                {
+                    containedSplines[0].WorldStartPosition = value;
+                }
+            }
+        }
+    }
+    #endregion
     /// <summary>
     /// The total length of all the splines combined
     /// </summary>
@@ -49,6 +147,44 @@ using SleepyCat.Utility.Splines;
     #endregion
 
     #region Public Methods
+    #region Overrides
+    public override float GetTotalLength()
+    {
+        return totalLength;
+    }
+
+    public override Vector3 GetLocalPointAtTime(float t)
+    {
+        return transform.InverseTransformPoint(GetLengthBasedPoint(t));
+    }
+
+    public override Vector3 GetPointAtTime(float t)
+    {
+        return GetLengthBasedPoint(t);
+    }
+
+    public override void SetWorldEndPointAndUpdateLocal(Vector3 endPoint)
+    {
+        if (containedSplines.Count > 0)
+        {
+            containedSplines[containedSplines.Count - 1].SetWorldEndPointAndUpdateLocal(endPoint);
+        }
+    }
+
+    public override void SetWorldStartPointAndUpdateLocal(Vector3 startPoint)
+    {
+        if (containedSplines.Count > 0)
+        {
+            containedSplines[0].SetWorldStartPointAndUpdateLocal(startPoint);
+        }
+    }
+
+    public override void UpdateWorldPositions()
+    {
+        UpdateSplines();
+    }
+    #endregion
+
     /// <summary>
     /// Returns how many spline are within the this sequence
     /// </summary>
@@ -143,17 +279,6 @@ using SleepyCat.Utility.Splines;
             Debug.LogError("SplineSequence contained no splines when GetLengthBasedPoint was called", gameObject);
             return Vector3.zero;
         }
-
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="spline">The spline to add to the sequence, it will have its start point corrected to fit the sequence</param>
-    public void AddSpline(SplineWrapper spline)
-    {
-        containedSplines.Add(spline);
-        UpdateSplines();
     }
     #endregion
 
@@ -211,10 +336,6 @@ using SleepyCat.Utility.Splines;
     #endregion
 
     #region Unity Methods
-    private void Start()
-    {
-        UpdateSplines();
-    }
     private void OnDrawGizmos()
     {
         UpdateSplines();
