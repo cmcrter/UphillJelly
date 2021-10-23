@@ -7,6 +7,8 @@
 // Brief: A script to save and load the players profiles and information
 //////////////////////////////////////////////////////////// 
 
+/*
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -128,3 +130,5 @@ public class ProfileSaveAndLoad : MonoBehaviour
     #endregion
 
 }
+
+*/

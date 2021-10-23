@@ -7,6 +7,8 @@
 // Brief: A script to control the profile system
 //////////////////////////////////////////////////////////// 
 
+/*
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -81,7 +83,10 @@ public class ProfileController : MonoBehaviour
     // On Awake
     void Awake() {
 
-        /*
+        //
+        //
+        //
+        //
         if (hasLoaded) {
 
             //
@@ -99,7 +104,10 @@ public class ProfileController : MonoBehaviour
             hasLoaded = false;
 
         }
-        */
+        //
+        //
+        //
+
 
         // save the hats to the list of save data
         SaveSystem.Hats.Add(this);
@@ -409,15 +417,21 @@ public class ProfileController : MonoBehaviour
 
     }
 
-    /*
+    //
+    //
+    //
     public void LoadCustomizables() {
 
         hasLoaded = true;
 
     }
 
-    */
+    // 
+    //
+    //
 
     #endregion
 
 }
+
+*/

@@ -13,9 +13,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class ProfileSaveSystem
 {
-    
+
     //
-    public static void SaveProfile(ProfileController profile) {
+    public static void SaveProfile(PlayerData profile) {
 
         //
         BinaryFormatter formatter = new BinaryFormatter();
@@ -37,6 +37,7 @@ public static class ProfileSaveSystem
         //
         stream.Close();
 
+        Debug.Log("Saved Profile11");
 
     }
 
@@ -62,8 +63,12 @@ public static class ProfileSaveSystem
             //
             stream.Close();
 
+            Debug.Log("Loaded Profile22");
+
             //
             return data;
+
+            
 
         } else {
 

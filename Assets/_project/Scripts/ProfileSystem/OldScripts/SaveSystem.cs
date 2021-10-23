@@ -7,6 +7,8 @@
 // Brief: A script to save and load the players customization gameobjects and other data like currency
 //////////////////////////////////////////////////////////// 
 
+/*
+
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -255,3 +257,5 @@ public class SaveSystem : MonoBehaviour
     #endregion
 
 }
+
+*/
