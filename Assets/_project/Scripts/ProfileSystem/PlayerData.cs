@@ -41,7 +41,7 @@ public class PlayerData
 
 
     //
-    public Material saveHatColour;
+    //public Material saveHatColour;
     //saveHatColour material
 
     //
@@ -70,10 +70,10 @@ public class PlayerData
     public PlayerData (PlayerData profile) {
 
         //
-        saveHatColour = outfitChanger.hatColour;
+        //saveHatColour = outfitChanger.hatColour;
 
         //
-        saveHatObject = outfitChanger.hatObject;
+        //saveHatObject = outfitChanger.hatObject;
 
         // Take data from profile controller and assign it in this one
         //

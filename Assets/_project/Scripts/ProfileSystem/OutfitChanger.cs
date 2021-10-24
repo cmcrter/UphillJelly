@@ -14,91 +14,215 @@ using UnityEngine;
 public class OutfitChanger : MonoBehaviour
 {
 
+    public GameObject hatSelector;
+
+    public Material hatSelectorMaterial;
 
 
-    [Header("Hat Colour To Change")]
+
+    [Header("Hat displayer")]
     //
-    public Material hatColour;
+    public GameObject hatDisplayGameObject;
 
-    [Header("Hat Object To Change")]
+    [Header("Gameobject Options")]
     //
-    public Mesh hatObject;
+    public List<GameObject> gameObjectOptions = new List<GameObject>();
 
+    [Header("Material Options")]
     //
-    public GameObject go_ToChange;
-
-    //
-    public List<Material> hatColourOptions = new List<Material>();
+    public List<Material> gameObjectMaterialOptions = new List<Material>();
 
     //
-    public List<Mesh> hatObjectOptions = new List<Mesh>();
+    public int currentGOint = 0;
+
+    //
+    public int currentGOMaterialint = 0;
+
+    //
+    //public MeshRenderer thisMeshRenderer;
+
+    //
+    //public MeshFilter thisMeshFilter;
+
+    public void LoadedHats() {
+
+        //
+        //
+        hatDisplayGameObject = gameObjectOptions[currentGOint];
+
+
+        //
+        GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        //
+        hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
+
+    }
+
+    //
+    public void NextGameObjectOption() {
+
+        //
+        currentGOint++;
+
+        currentGOMaterialint++;
+
+        if (currentGOint >= gameObjectOptions.Count) {
+
+            //
+            currentGOint = 0;
+
+        }
+
+        if (currentGOMaterialint >= gameObjectMaterialOptions.Count) {
+
+            //
+            currentGOMaterialint = 0;
+
+        }
+
+        //
+        hatDisplayGameObject = gameObjectOptions[currentGOint];
+
+
+        //
+        GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+
+
+
+        //////////
+        //hatSelectorMaterial = gameObjectMaterialOptions[currentGOMaterialint];
+
+        //
+        hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
+
+        //
+        //thisMeshFilter = hatDisplayGameObject.GetComponent<MeshFilter>();
+
+        //hatSelectorMaterial = hatDisplayGameObject.GetComponent<MeshRenderer>();
+
+    }
+
+
+    //
+    public void PreviousGameObjectOption() {
+
+        //
+        currentGOint--;
+
+        //
+        currentGOMaterialint--;
+
+        if (currentGOint <= 0) {
+
+            //
+            currentGOint = gameObjectOptions.Count - 1;
+
+        }
+
+        if (currentGOMaterialint <= 0) {
+
+            //
+            currentGOMaterialint = gameObjectMaterialOptions.Count - 1;
+
+        }
+
+
+        //
+        hatDisplayGameObject = gameObjectOptions[currentGOint];
+
+
+
+        //
+        GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+
+
+        //////////
+        //hatSelectorMaterial = gameObjectMaterialOptions[currentGOMaterialint];
+
+        //
+        //thisMeshRenderer = hatDisplayGameObject.GetComponent<MeshRenderer>();
+
+        //
+        //thisMeshFilter = hatDisplayGameObject.GetComponent<MeshFilter>();
+
+        //
+        hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
+
+        //hatSelectorMaterial = hatDisplayGameObject.GetComponent<MeshRenderer>();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+
+    //
+    public GameObject[] hatGameObjectOptions;
+
+    //
+    public int currentHatNumber;
+
+    //
+    //public List<GameObject> hatGameObjectOptions = new List<GameObject>();
 
     //
     private int currentHatOption = 0;
 
-    //
-    private int currentHatColourOption = 0;
 
 
 
     //
     void start() {
 
-        //
-        //GetComponent<MeshFilter>().mesh = hatObjectOptions;
 
     }
 
     //
     public void Update() {
 
+        
         //
-        go_ToChange.GetComponent<MeshRenderer>().material = hatColour;
+        for (int i = 0; i < hatGameObjectOptions.Length; i++) {
 
-        //
-        go_ToChange.GetComponent<MeshFilter>().mesh = hatObject;
+            //
+            currentHatNumber = i;
 
-        //
-        go_ToChange.transform.position = new Vector3(0, 0, 0);
+        }
+        
 
-        //
-        //hatObject = go_ToChange.GetComponent<Mesh>().mesh;
+        currentHatOption = currentHatNumber;
 
     }
 
-    //
-
-    //
     public void NextHatOption() {
 
         //
         currentHatOption++;
 
         //
-        currentHatColourOption++;
-        //
-        //
-        //
-        //
-        if (currentHatColourOption >= hatColourOptions.Count) {
-
-            //
-            currentHatColourOption = 0;
-
-        }
-
-        //
-        hatColour = hatColourOptions[currentHatColourOption];
-
-        //
-        //
-        //
-        //
-        //
-        //
-
-        //
-        if (currentHatOption >= hatObjectOptions.Count) {
+        if (currentHatOption >= hatGameObjectOptions.Length) {
 
             //
             currentHatOption = 0;
@@ -106,7 +230,7 @@ public class OutfitChanger : MonoBehaviour
         }
 
         //
-        hatObject = hatObjectOptions[currentHatOption];
+        hatDisplayGameObject = hatGameObjectOptions[currentHatOption];
 
     }
 
@@ -116,41 +240,21 @@ public class OutfitChanger : MonoBehaviour
     public void PreviousHatOption() {
 
         //
-        currentHatColourOption--;
-
-        //
         currentHatOption--;
 
-        //
-        if (currentHatColourOption <= 0) {
-
-            //
-            currentHatColourOption = hatColourOptions.Count - 1;
-
-        }
-
-        //
-        hatColour = hatColourOptions[currentHatColourOption];
-
-        //
-        //
-        //
-        //
-        //
-        //
 
         //
         if (currentHatOption <= 0) {
 
             //
-            currentHatOption = hatObjectOptions.Count - 1;
+            currentHatOption = hatGameObjectOptions.Length - 1;
 
         }
 
         // Public mesh    List Mesh        Int
-        hatObject = hatObjectOptions[currentHatOption];
+        hatDisplayGameObject = hatGameObjectOptions[currentHatOption];
 
     }
 
-
+    */
 }
