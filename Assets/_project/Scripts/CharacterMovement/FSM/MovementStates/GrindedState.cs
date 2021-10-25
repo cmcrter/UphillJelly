@@ -23,6 +23,8 @@ namespace SleepyCat.Movement
         private isOnGrind onGrind;
 
         [SerializeField]
+        Transform grindVisualiser;
+        [SerializeField]
         private float grindSpeed = 1;
         [SerializeField]
         private float grindExitForce = 10f;
@@ -43,6 +45,7 @@ namespace SleepyCat.Movement
 
             grindSpeed = state.grindSpeed;
             grindExitForce = state.grindExitForce;
+            grindVisualiser = state.grindVisualiser;
         }
 
         public override void OnStateEnter()
@@ -80,10 +83,12 @@ namespace SleepyCat.Movement
             if (onGrind.splineCurrentlyGrindingOn)
             {
                 Vector3 dir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.1f);
+                Vector3 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
 
                 if (timeAlongGrind < 0.99f)
                 {
-                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.4f, 0), timeAlongGrind));
+                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos + new Vector3(0, 0.4f, 0), timeAlongGrind));
+                    grindVisualiser.position = pos;
                 }
                 else 
                 {
