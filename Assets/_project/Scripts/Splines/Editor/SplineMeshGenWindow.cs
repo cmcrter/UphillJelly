@@ -53,6 +53,10 @@ public class SplineMeshGenWindow : EditorWindow
     /// If the mesh draw should be a tube, otherwise it is a plane
     /// </summary>
     private bool drawingTube;
+    /// <summary>
+    /// If the plane should have the direction it face normals point towards flipped
+    /// </summary>
+    private bool filpPlaneFaceNormals;
 
     /// <summary>
     /// How much of an angle change is needed before a new segment of the mesh can be made
@@ -152,6 +156,10 @@ public class SplineMeshGenWindow : EditorWindow
             {
                 tubeSidesPerSegment = minimumTubeSidesPerSegment;
             }
+        }
+        else
+        {
+            filpPlaneFaceNormals = EditorGUILayout.Toggle("Flip Face Normals", filpPlaneFaceNormals);
         }
 
         // Width Settings
@@ -449,13 +457,33 @@ public class SplineMeshGenWindow : EditorWindow
         // 0--2
         // (Right side from this perspective is the top of the segment)
         // 0-1-3 triangle
-        trianglesListToAddTo.Add(currentIndiceIndex + 3);
-        trianglesListToAddTo.Add(currentIndiceIndex + 1);
-        trianglesListToAddTo.Add(currentIndiceIndex);
+        if (filpPlaneFaceNormals)
+        {
+            trianglesListToAddTo.Add(currentIndiceIndex + 3);
+            trianglesListToAddTo.Add(currentIndiceIndex + 1);
+            trianglesListToAddTo.Add(currentIndiceIndex);
+        }
+        else
+        {
+            trianglesListToAddTo.Add(currentIndiceIndex);
+            trianglesListToAddTo.Add(currentIndiceIndex + 1);
+            trianglesListToAddTo.Add(currentIndiceIndex + 3);
+        }
+
         // 0-3-2 triangle
-        trianglesListToAddTo.Add(currentIndiceIndex + 2);
-        trianglesListToAddTo.Add(currentIndiceIndex + 3);
-        trianglesListToAddTo.Add(currentIndiceIndex);
+        if (filpPlaneFaceNormals)
+        {
+            trianglesListToAddTo.Add(currentIndiceIndex + 2);
+            trianglesListToAddTo.Add(currentIndiceIndex + 3);
+            trianglesListToAddTo.Add(currentIndiceIndex);
+        }
+        else
+        {
+            trianglesListToAddTo.Add(currentIndiceIndex);
+            trianglesListToAddTo.Add(currentIndiceIndex + 3);
+            trianglesListToAddTo.Add(currentIndiceIndex + 2);
+        }
+
 
         newCurrentIndiceIndex = currentIndiceIndex + 2;
     }
@@ -592,25 +620,44 @@ public class SplineMeshGenWindow : EditorWindow
     /// </summary>
     private void DrawPlaneMeshGuide()
     {
-        // Set up previous left and right view to a junk value so the they do not get used until they are properly assigned
-        previousRightPoint = Vector3.negativeInfinity;
-        previousLeftPoint = Vector3.negativeInfinity;
-        float stepIncrement = 1f / segmentCount;
-        previousDirection = -splineGeneratedFrom.GetDirection(0.0f, stepIncrement);
-        float f;
-        for (f = 0.0f; f < 1.0f; f += stepIncrement)
+        Mesh planeMesh = GeneratePlaneMesh();
+        for (int i = 0; i < planeMesh.triangles.Length; i += 3)
         {
-            Vector3 direction = splineGeneratedFrom.GetDirection(f, stepIncrement);
-            if (Vector3.Angle(direction, previousDirection) > segmentRequiredAngleChange)
-            {
-                previousDirection = direction;
-                DrawLineSegmentsHandles(splineGeneratedFrom.GetPointAtTime(f), splineGeneratedFrom.GetDirection(f, stepIncrement), f);
-            }
+            Handles.color = Color.white;
+            Vector3 p1 = splineGeneratedFrom.transform.TransformPoint(planeMesh.vertices[planeMesh.triangles[i]]);
+            Vector3 p2 = splineGeneratedFrom.transform.TransformPoint(planeMesh.vertices[planeMesh.triangles[i + 1]]);
+            Vector3 p3 = splineGeneratedFrom.transform.TransformPoint(planeMesh.vertices[planeMesh.triangles[i + 2]]);
+            Handles.DrawLine(p1, p2);
+            Handles.DrawLine(p2, p3);
+            Handles.DrawLine(p3, p1);
+
+            Vector3 normalDirection = Vector3.Cross((p2 - p1).normalized, (p3 - p1).normalized).normalized;
+            Vector3 centerPoint = (p1 + p2 + p3) / 3;
+            Handles.color = Color.green;
+            Handles.DrawLine(centerPoint, centerPoint + normalDirection);
         }
 
-        f = f - stepIncrement;
-        Vector3 linePoint = splineGeneratedFrom.GetPointAtTime(f);
-        DrawLineSegmentsHandles(splineGeneratedFrom.WorldEndPosition, (splineGeneratedFrom.WorldEndPosition - linePoint).normalized, 1.0f);
+        //// Set up previous left and right view to a junk value so the they do not get used until they are properly assigned
+        //previousRightPoint = Vector3.negativeInfinity;
+        //previousLeftPoint = Vector3.negativeInfinity;
+        //float stepIncrement = 1f / segmentCount;
+        //previousDirection = -splineGeneratedFrom.GetDirection(0.0f, stepIncrement);
+        //float f;
+        //for (f = 0.0f; f < 1.0f; f += stepIncrement)
+        //{
+        //    Vector3 direction = splineGeneratedFrom.GetDirection(f, stepIncrement);
+        //    if (Vector3.Angle(direction, previousDirection) > segmentRequiredAngleChange)
+        //    {
+        //        previousDirection = direction;
+        //        DrawLineSegmentsHandles(splineGeneratedFrom.GetPointAtTime(f), splineGeneratedFrom.GetDirection(f, stepIncrement), f);
+        //    }
+        //}
+
+        //f = f - stepIncrement;
+        //Vector3 linePoint = splineGeneratedFrom.GetPointAtTime(f);
+        //DrawLineSegmentsHandles(splineGeneratedFrom.WorldEndPosition, (splineGeneratedFrom.WorldEndPosition - linePoint).normalized, 1.0f);
+
+
     }
     /// <summary>
     /// Use the handles to draw the one of the ends of the guide tube mesh using the points around the end circle and the center point
