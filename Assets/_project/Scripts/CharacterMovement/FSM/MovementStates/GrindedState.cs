@@ -41,24 +41,33 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
-            movementRB.isKinematic = true;
+            movementRB.velocity = Vector3.zero;
+            movementRB.useGravity = false;
+
             hasRan = true;
         }
 
         public override void OnStateExit()
         {
-            movementRB.isKinematic = false;
+            timeAlongGrind = 0;
+            movementRB.useGravity = true;
+
             hasRan = false;
         }
 
         public override void Tick(float dT)
         {
             timeAlongGrind += dT * grindSpeed;
-            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.5f, 0);
+
+            if (timeAlongGrind >= 1)
+            {
+                JumpOff();
+            }
         }
 
         public override void PhysicsTick(float dT)
         {
+            movementRB.MovePosition(onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.5f, 0));
             parentController.transform.position = movementRB.transform.position;
         }
 
@@ -75,6 +84,12 @@ namespace SleepyCat.Movement
         #endregion
 
         #region Private Methods
+
+        private void JumpOff()
+        {
+            movementRB.AddForce((Vector3.up + parentController.transform.forward) * 100, ForceMode.Impulse);
+        }
+
         #endregion
     }
 }
