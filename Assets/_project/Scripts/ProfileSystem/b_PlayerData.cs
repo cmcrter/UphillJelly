@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////
+// File: b_PlayerData.cs
+// Author: Jack Peedle
+// Date Created: 24/10/21
+// Last Edited By: Jack Peedle
+// Date Last Edited: 25/10/21
+// Brief: A script to control the outfit system
+//////////////////////////////////////////////////////////// 
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,30 +16,22 @@ using UnityEngine;
 public class b_PlayerData
 {
 
-    //Defined Data, now needs to tell the game where to get data from player
+    #region Variables
 
-    //
-    //public GameObject TESTCUBE;
-    public float[] position;
+    #endregion
 
-    //
-    //public Material hatMaterial;
+    #region Methods
 
-    //
-    //public Mesh hatMesh;
-
-    //
+    // Player Data that takes in the b_Player
     public b_PlayerData(b_Player player) {
 
         //
-        //hatMaterial = player.playerHatMaterial;
 
-        //
-        //hatMesh = player.playerHatMesh;
-
-        //
-        //TESTCUBE = player.TESTCUBE;
 
     }
+
+    #endregion
+
+
 
 }
