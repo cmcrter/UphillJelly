@@ -47,14 +47,25 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
+            if (parentController.playerCamera)
+            {
+                parentController.playerCamera.FollowRotation = false;
+            }
+
             movementRB.isKinematic = true;
             parentController.bAddAdditionalGravity = false;
+            movementRB.position = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, 0.4f, 0);
 
             hasRan = true;
         }
 
         public override void OnStateExit()
         {
+            if (parentController.playerCamera) 
+            {
+                parentController.playerCamera.FollowRotation = true;
+            }
+
             timeAlongGrind = 0;
             movementRB.isKinematic = false;
             parentController.bAddAdditionalGravity = true;
@@ -72,7 +83,7 @@ namespace SleepyCat.Movement
 
                 if (timeAlongGrind < 0.99f)
                 {
-                    movementRB.MovePosition(onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.5f, 0));
+                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.4f, 0), timeAlongGrind));
                 }
                 else 
                 {

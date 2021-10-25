@@ -8,6 +8,7 @@
 //////////////////////////////////////////////////////////// 
 
 using System;
+using UnityEngine;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Utility.Splines;
 
@@ -18,11 +19,17 @@ namespace SleepyCat.Movement
     {
         #region Variables
 
+        private Rigidbody movementRB;
         public SplineWrapper splineCurrentlyGrindingOn;
 
         #endregion
 
         #region Public Methods
+
+        public isOnGrind(Rigidbody rb)
+        {
+            movementRB = rb;
+        }
 
         public override bool isConditionTrue()
         {
@@ -41,9 +48,12 @@ namespace SleepyCat.Movement
         //The players' grind section has left a grindable thing
         public void playerExitedGrind(SplineWrapper splineHit) 
         {
-            if (splineCurrentlyGrindingOn.Equals(splineHit))
+            if (splineCurrentlyGrindingOn)
             {
-                splineCurrentlyGrindingOn = null;
+                if (splineCurrentlyGrindingOn.Equals(splineHit))
+                {
+                    splineCurrentlyGrindingOn = null;
+                }
             }
         }
 
