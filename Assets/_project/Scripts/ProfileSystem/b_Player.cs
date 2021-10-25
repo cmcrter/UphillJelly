@@ -19,6 +19,9 @@ public class b_Player : MonoBehaviour
     // reference to the outfit changer script
     public OutfitChanger outfitChanger;
 
+    //
+    public Shop shop;
+
     // int for the current hat gameobject
     public int CurrentGameObjectInt;
 
@@ -48,8 +51,8 @@ public class b_Player : MonoBehaviour
         // set this int to the outfit changer character material int
         CharacterMaterialInt = outfitChanger.currentCharacterint;
 
-        // this currency int = outfit changer currency int
-        Currency = outfitChanger.Currency;
+        // this currency int = shop currency int
+        Currency = shop.Currency;
 
         // take this save player function and save it using the savesystem script
         b_SaveSystem.SavePlayer(this);
@@ -74,8 +77,8 @@ public class b_Player : MonoBehaviour
         // call LoadedCustomizables from the Outfitchanger script
         outfitChanger.LoadedCustomizables();
 
-        // set the outfitchanger currency to this currency
-        outfitChanger.Currency = Currency;
+        // set the shop currency to this currency
+        shop.Currency = Currency;
 
     }
 
