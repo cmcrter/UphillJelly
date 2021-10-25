@@ -16,8 +16,6 @@ using SleepyCat.Utility.Splines;
 /// </summary>
 public class SplineMeshGenWindow : EditorWindow
 {
-    // TODO: add spline sequence mesh gen support, Tubes with insides (optional)
-
     #region Private Constants
     /// <summary>
     /// The width of the folder select button in the GUI
@@ -168,6 +166,10 @@ public class SplineMeshGenWindow : EditorWindow
         fileName = EditorGUILayout.TextField("File Name", fileName);
         fileName = fileName.Replace(' ', '_'); // Spaces are bad for file paths they are replaced with underscores
         EditorGUILayout.BeginHorizontal();
+        if (assetSaveFilePath == null)
+        {
+            assetSaveFilePath = Application.dataPath;
+        }
         assetSaveFilePath = EditorGUILayout.TextField("Asset Save Path", assetSaveFilePath);
         assetSaveFilePath = assetSaveFilePath.Replace(' ', '_'); // Spaces are bad for file paths they are replaced with underscores
         // Buttons for allow the user to select a folder within assets
@@ -235,8 +237,8 @@ public class SplineMeshGenWindow : EditorWindow
     #endregion
 
     #region Private Static Methods
-    // Add menu named "My Window" to the Window menu
-    [MenuItem("Window/Spline Plane Mesh Gen Window")]
+    // Add menu named "Spline Plane Mesh Gen Window" to the Window menu
+    [MenuItem("Window/Spline Generation/Spline Plane Mesh Gen Window")]
     private static void Init()
     {
         // Get existing open window or if none, make a new one:
