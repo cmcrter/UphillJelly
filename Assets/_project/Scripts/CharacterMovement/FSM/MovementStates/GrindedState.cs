@@ -24,6 +24,11 @@ namespace SleepyCat.Movement
 
         [SerializeField]
         private float grindSpeed = 1;
+        [SerializeField]
+        private float grindExitForce = 10f;
+        [SerializeField]
+        private Vector3 currentPlayerAim = Vector3.zero;
+        [SerializeField]
         private float timeAlongGrind;
 
         #endregion
@@ -37,12 +42,13 @@ namespace SleepyCat.Movement
             onGrind = grind;
 
             grindSpeed = state.grindSpeed;
+            grindExitForce = state.grindExitForce;
         }
 
         public override void OnStateEnter()
         {
-            movementRB.velocity = Vector3.zero;
-            movementRB.useGravity = false;
+            movementRB.isKinematic = true;
+            parentController.bAddAdditionalGravity = false;
 
             hasRan = true;
         }
@@ -50,7 +56,8 @@ namespace SleepyCat.Movement
         public override void OnStateExit()
         {
             timeAlongGrind = 0;
-            movementRB.useGravity = true;
+            movementRB.isKinematic = false;
+            parentController.bAddAdditionalGravity = true;
 
             hasRan = false;
         }
@@ -59,15 +66,23 @@ namespace SleepyCat.Movement
         {
             timeAlongGrind += dT * grindSpeed;
 
-            if (timeAlongGrind >= 1)
+            if (onGrind.splineCurrentlyGrindingOn)
             {
-                JumpOff();
+                Vector3 dir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.1f);
+
+                if (timeAlongGrind < 0.99f)
+                {
+                    movementRB.MovePosition(onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.5f, 0));
+                }
+                else 
+                {
+                    JumpOff();
+                }
             }
         }
 
         public override void PhysicsTick(float dT)
         {
-            movementRB.MovePosition(onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.5f, 0));
             parentController.transform.position = movementRB.transform.position;
         }
 
@@ -87,7 +102,8 @@ namespace SleepyCat.Movement
 
         private void JumpOff()
         {
-            movementRB.AddForce((Vector3.up + parentController.transform.forward) * 100, ForceMode.Impulse);
+            movementRB.isKinematic = false;
+            movementRB.AddForce(((Vector3.up * 1.5f) + parentController.transform.forward) * grindExitForce, ForceMode.Impulse);
         }
 
         #endregion
