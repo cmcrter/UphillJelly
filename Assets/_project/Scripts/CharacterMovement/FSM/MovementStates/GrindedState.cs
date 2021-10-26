@@ -28,6 +28,7 @@ namespace SleepyCat.Movement
         private Vector3 currentPlayerAim = Vector3.zero;
         [SerializeField]
         private Vector3 currentSplineDir;
+        private float PotentialLengthOfGrind = 1f;
         [SerializeField]
         private float timeAlongGrind;
 
@@ -50,10 +51,11 @@ namespace SleepyCat.Movement
                 parentController.playerCamera.FollowRotation = false;
             }
 
-            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, 0.4f, 0);
+            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(parentController.transform.position, out timeAlongGrind) + new Vector3(0, 0.405f, 0);
             parentController.transform.position = movementRB.transform.position;
 
-            Vector3 dir = onGrind.splineCurrentlyGrindingOn.GetDirection(0, 0.1f);
+            PotentialLengthOfGrind = onGrind.splineCurrentlyGrindingOn.GetTotalLength();
+            Vector3 dir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
             dir = new Vector3(0, dir.y, dir.z);
             parentController.transform.rotation = Quaternion.FromToRotation(parentController.transform.rotation.eulerAngles, dir);
 
@@ -69,6 +71,7 @@ namespace SleepyCat.Movement
                 parentController.playerCamera.FollowRotation = true;
             }
 
+            PotentialLengthOfGrind = 1f;
             timeAlongGrind = 0;
 
             hasRan = false;
@@ -78,7 +81,7 @@ namespace SleepyCat.Movement
         {
             if(onGrind.grindDetails != null)
             {
-                timeAlongGrind += dT * onGrind.grindDetails.DuringGrindForce;
+                timeAlongGrind += (dT * onGrind.grindDetails.DuringGrindForce) / PotentialLengthOfGrind;
             }
 
             if (onGrind.splineCurrentlyGrindingOn)
@@ -88,7 +91,7 @@ namespace SleepyCat.Movement
 
                 if (timeAlongGrind < 0.99f)
                 {
-                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos + new Vector3(0, 0.4f, 0), timeAlongGrind));
+                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos + new Vector3(0, 0.405f, 0), timeAlongGrind));
                     grindVisualiser.position = pos;
                 }
                 else 
