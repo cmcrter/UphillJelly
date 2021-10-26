@@ -25,10 +25,6 @@ namespace SleepyCat.Movement
         [SerializeField]
         Transform grindVisualiser;
         [SerializeField]
-        private float grindSpeed = 1;
-        [SerializeField]
-        private float grindExitForce = 10f;
-        [SerializeField]
         private Vector3 currentPlayerAim = Vector3.zero;
         [SerializeField]
         private Vector3 currentSplineDir;
@@ -44,9 +40,6 @@ namespace SleepyCat.Movement
             parentController = controllerParent;
             movementRB = playerRB;
             onGrind = grind;
-
-            grindSpeed = state.grindSpeed;
-            grindExitForce = state.grindExitForce;
             grindVisualiser = state.grindVisualiser;
         }
 
@@ -83,7 +76,10 @@ namespace SleepyCat.Movement
 
         public override void Tick(float dT)
         {
-            timeAlongGrind += dT * grindSpeed;
+            if(onGrind.grindDetails != null)
+            {
+                timeAlongGrind += dT * onGrind.grindDetails.DuringGrindForce;
+            }
 
             if (onGrind.splineCurrentlyGrindingOn)
             {
@@ -125,7 +121,7 @@ namespace SleepyCat.Movement
         private void JumpOff()
         {
             movementRB.isKinematic = false;
-            movementRB.AddForce(((Vector3.up * 1.5f) + parentController.transform.forward) * grindExitForce, ForceMode.Impulse);
+            movementRB.AddForce(((Vector3.up * 1.5f) + parentController.transform.forward) * onGrind.grindDetails.ExitGrindForce, ForceMode.Impulse);
         }
 
         #endregion

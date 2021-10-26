@@ -21,6 +21,7 @@ namespace SleepyCat.Movement
 
         private Rigidbody movementRB;
         public SplineWrapper splineCurrentlyGrindingOn;
+        public GrindDetails grindDetails;
 
         #endregion
 
@@ -37,21 +38,23 @@ namespace SleepyCat.Movement
         }
 
         //The players' grind section has touched a grindable thing
-        public void playerEnteredGrind(SplineWrapper splineHit)
+        public void playerEnteredGrind(SplineWrapper splineHit, GrindDetails grindUsing)
         {
             if (splineCurrentlyGrindingOn == null)
             {
+                grindDetails = grindUsing;
                 splineCurrentlyGrindingOn = splineHit;
             }
         }
 
         //The players' grind section has left a grindable thing
-        public void playerExitedGrind(SplineWrapper splineHit) 
+        public void playerExitedGrind(SplineWrapper splineHit, GrindDetails grindUsing) 
         {
             if (splineCurrentlyGrindingOn)
             {
                 if (splineCurrentlyGrindingOn.Equals(splineHit))
                 {
+                    grindDetails = null;
                     splineCurrentlyGrindingOn = null;
                 }
             }

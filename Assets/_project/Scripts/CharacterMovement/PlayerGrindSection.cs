@@ -8,11 +8,11 @@ namespace SleepyCat.Movement
     public class PlayerGrindSection : MonoBehaviour
     {
         [SerializeField]
-        PlayerMovementController movementController;
+        private PlayerMovementController movementController;
 
         private void OnTriggerEnter(Collider other) 
         {
-            if (other.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController)
+            if (other.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.TryGetComponent(out GrindDetails grindCustomizable))
             {
                 if (Debug.isDebugBuild)
                 {
@@ -20,13 +20,13 @@ namespace SleepyCat.Movement
                 }
 
                 //Telling the grind condition that the player wants to start grinding
-                movementController.grindBelow.playerEnteredGrind(splineToGrindDown);
+                movementController.grindBelow.playerEnteredGrind(splineToGrindDown, grindCustomizable);
             }    
         }
 
         private void OnTriggerExit(Collider other) 
         {
-            if (other.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController) 
+            if (other.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.TryGetComponent(out GrindDetails grindCustomizable)) 
             {
                 if (Debug.isDebugBuild)
                 {
@@ -34,7 +34,7 @@ namespace SleepyCat.Movement
                 }
 
                 //Telling the grind condition that the player wants to start grinding
-                movementController.grindBelow.playerExitedGrind(splineToGrindDown);
+                movementController.grindBelow.playerExitedGrind(splineToGrindDown, grindCustomizable);
             }
         }
     }
