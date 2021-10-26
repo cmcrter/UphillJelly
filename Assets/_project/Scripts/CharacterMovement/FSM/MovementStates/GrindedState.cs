@@ -31,6 +31,8 @@ namespace SleepyCat.Movement
         [SerializeField]
         private Vector3 currentPlayerAim = Vector3.zero;
         [SerializeField]
+        private Vector3 currentSplineDir;
+        [SerializeField]
         private float timeAlongGrind;
 
         #endregion
@@ -55,9 +57,14 @@ namespace SleepyCat.Movement
                 parentController.playerCamera.FollowRotation = false;
             }
 
+            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, 0.4f, 0);
+            parentController.transform.position = movementRB.transform.position;
+
+            Vector3 dir = onGrind.splineCurrentlyGrindingOn.GetDirection(0, 0.1f);
+            dir = new Vector3(0, dir.y, dir.z);
+            parentController.transform.rotation = Quaternion.FromToRotation(parentController.transform.rotation.eulerAngles, dir);
+
             movementRB.isKinematic = true;
-            parentController.bAddAdditionalGravity = false;
-            movementRB.position = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, 0.4f, 0);
 
             hasRan = true;
         }
@@ -70,8 +77,6 @@ namespace SleepyCat.Movement
             }
 
             timeAlongGrind = 0;
-            movementRB.isKinematic = false;
-            parentController.bAddAdditionalGravity = true;
 
             hasRan = false;
         }
@@ -82,7 +87,7 @@ namespace SleepyCat.Movement
 
             if (onGrind.splineCurrentlyGrindingOn)
             {
-                Vector3 dir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.1f);
+                currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.1f);
                 Vector3 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
 
                 if (timeAlongGrind < 0.99f)
@@ -92,6 +97,7 @@ namespace SleepyCat.Movement
                 }
                 else 
                 {
+                    parentController.transform.rotation = Quaternion.Euler(0, currentSplineDir.y + 90, currentSplineDir.z);
                     JumpOff();
                 }
             }
