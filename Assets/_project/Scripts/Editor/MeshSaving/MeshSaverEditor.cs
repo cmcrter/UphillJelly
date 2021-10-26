@@ -51,6 +51,12 @@ public static class MeshSaverEditor
 		if (optimizeMesh)
 			MeshUtility.Optimize(meshToSave);
 
+		Mesh exitingMesh = AssetDatabase.LoadAssetAtPath(path, typeof(Mesh)) as Mesh;
+		if (exitingMesh != null)
+        {
+			AssetDatabase.DeleteAsset(path);
+		}
+
 		AssetDatabase.CreateAsset(meshToSave, path);
 		AssetDatabase.SaveAssets();
 	}

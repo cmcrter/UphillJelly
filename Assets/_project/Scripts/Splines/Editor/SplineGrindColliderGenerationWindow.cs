@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using SleepyCat.Utility.Splines;
+using SleepyCat.Movement;
 
-public class SplineCapsuleColliderGenerationWindow : EditorWindow
+public class SplineGrindColliderGenerationWindow : EditorWindow
 {
     #region Private Constants
     /// <summary>
@@ -69,7 +70,7 @@ public class SplineCapsuleColliderGenerationWindow : EditorWindow
     private static void Init()
     {
         // Get existing open window or if none, make a new one:
-        SplineCapsuleColliderGenerationWindow window = (SplineCapsuleColliderGenerationWindow)EditorWindow.GetWindow(typeof(SplineCapsuleColliderGenerationWindow));
+        SplineGrindColliderGenerationWindow window = (SplineGrindColliderGenerationWindow)EditorWindow.GetWindow(typeof(SplineGrindColliderGenerationWindow));
         window.Show();
     }
 
@@ -126,6 +127,10 @@ public class SplineCapsuleColliderGenerationWindow : EditorWindow
         if (GUILayout.Button(buttonText))
         {
             GenerateColliders();
+            if (!splineGeneratedFrom.gameObject.TryGetComponent<GrindDetails>(out GrindDetails grindDetails))
+            {
+                splineGeneratedFrom.gameObject.AddComponent<GrindDetails>();
+            }
         }
     }
     #endregion

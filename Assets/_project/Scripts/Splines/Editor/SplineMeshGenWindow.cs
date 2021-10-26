@@ -16,6 +16,14 @@ using SleepyCat.Utility.Splines;
 /// </summary>
 public class SplineMeshGenWindow : EditorWindow
 {
+    /* TODO:
+        Overwriting
+        End weirdness
+        Save Confirmation
+        Fix planMeshTwisiting
+        Adding new mesh to filter if it exits
+     */ 
+
     #region Private Constants
     /// <summary>
     /// The width of the folder select button in the GUI
@@ -234,6 +242,11 @@ public class SplineMeshGenWindow : EditorWindow
                 if (fileName != "")
                 {
                     MeshSaverEditor.SaveMeshAtPath(newMesh, fullPath, false, true);
+                    if (splineGeneratedFrom.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
+                    {
+                        meshFilter.mesh = newMesh;
+                    }
+                    Debug.Log("Mesh generation and save complete");
                 }
                 else
                 {
@@ -274,14 +287,24 @@ public class SplineMeshGenWindow : EditorWindow
         int currentIndiceIndex = 0;
         SegmentDevisionLine newSegment;
 
-        Vector3 direction = splineGeneratedFrom.GetDirection(0.0f, 0.01f);
-        previousDirection = direction;
-        Vector3 pointOnLine = splineGeneratedFrom.GetLocalPointAtTime(0.0f);
+        Vector3 direction = Vector3.forward;
+        Vector3 rightDirection = Vector3.right;
+        Vector3 upDirection = Vector3.up;
 
-        // Set up the previous right and left points so each segment can be drawn
+        direction = splineGeneratedFrom.GetDirection(0.0f, 0.01f);
         direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
+        previousDirection = direction;
 
-        direction = GetRightFromForwardVector(direction);
+        //// Set up the previous right and left points so each segment can be drawn
+
+        //Vector3 upDirection = Vector3.up;
+
+
+        //Vector3 rightDirection = Vector3.Cross(direction, Vector3.up);
+        //Vector3.OrthoNormalize(ref direction, ref rightDirection, ref upDirection);
+
+
+        Vector3 pointOnLine = splineGeneratedFrom.GetLocalPointAtTime(0.0f);
         previousRightPoint = pointOnLine + direction * widthCurve.Evaluate(0.0f) * widthMultiplier;
         previousLeftPoint = pointOnLine + direction * widthCurve.Evaluate(0.0f) * -widthMultiplier;
         verts.Add(previousRightPoint);
@@ -292,12 +315,20 @@ public class SplineMeshGenWindow : EditorWindow
         float f = stepIncrement;
         for (; f < 1.0f; f += stepIncrement)
         {
-            direction = splineGeneratedFrom.GetDirection(f, 0.01f);
+            direction = splineGeneratedFrom.GetDirection(f, stepIncrement);
+
+
+            //direction = splineGeneratedFrom.GetDirection(f, 0.01f);
+            //direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
             if (Vector3.Angle(direction, previousDirection) > segmentRequiredAngleChange)
             {
                 previousDirection = direction;
+                direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
+                Vector3.OrthoNormalize(ref direction, ref rightDirection, ref upDirection);
+                rightDirection = Vector3.ProjectOnPlane(rightDirection, upDirection).normalized;
+
                 pointOnLine = splineGeneratedFrom.GetLocalPointAtTime(f);
-                newSegment = CreateSegmentLineDevision(pointOnLine, direction, f);
+                newSegment = CreateSegmentLineDevision(pointOnLine, direction, rightDirection, f);
                 AddSegmentVertsAndTrianglesFromSegmentToLists(verts, triangles, newSegment, currentIndiceIndex, out currentIndiceIndex);
             }
         }
@@ -305,7 +336,7 @@ public class SplineMeshGenWindow : EditorWindow
         // Connect up the last made point to the end of the spline
         f -= stepIncrement;
         Vector3 linePoint = splineGeneratedFrom.GetLocalPointAtTime(f);
-        newSegment = CreateSegmentLineDevision(splineGeneratedFrom.LocalEndPosition, (splineGeneratedFrom.LocalEndPosition - linePoint).normalized, 1.0f);
+        newSegment = CreateSegmentLineDevision(splineGeneratedFrom.LocalEndPosition, (splineGeneratedFrom.LocalEndPosition - linePoint).normalized, rightDirection, 1.0f);
         AddSegmentVertsAndTrianglesFromSegmentToLists(verts, triangles, newSegment, currentIndiceIndex, out currentIndiceIndex);
 
         mesh.SetVertices(verts.ToArray());
@@ -382,16 +413,14 @@ public class SplineMeshGenWindow : EditorWindow
     /// <param name="direction">The direction the spline was moving as of reach the point on the spline</param>
     /// <param name="t">The time value for how far up the spline the point on the spline is</param>
     /// <returns>A segment devision line based on a point on the spline and the direction of the spline as of that point</returns>
-    private SegmentDevisionLine CreateSegmentLineDevision(Vector3 pointOnSpline, Vector3 direction, float t)
+    private SegmentDevisionLine CreateSegmentLineDevision(Vector3 pointOnSpline, Vector3 direction, Vector3 rightDirection, float t)
     {
         SegmentDevisionLine newSegment = new SegmentDevisionLine();
 
         direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
 
-        direction = GetRightFromForwardVector(direction);
-
-        Vector3 rightPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * widthMultiplier;
-        Vector3 leftPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * -widthMultiplier;
+        Vector3 rightPoint = pointOnSpline + rightDirection * widthCurve.Evaluate(t) * widthMultiplier;
+        Vector3 leftPoint = pointOnSpline + rightDirection * widthCurve.Evaluate(t) * -widthMultiplier;
 
         newSegment.right = rightPoint;
         newSegment.left = leftPoint;
@@ -402,15 +431,15 @@ public class SplineMeshGenWindow : EditorWindow
         return newSegment;
     }
 
-    /// <summary>
-    /// Returns a perpendicular vector3 to the right of a given vector3, using the assumption that up is vector3.up (0,1,0) 
-    /// </summary>
-    /// <param name="forwardVector">The vector to find a vector to the right of</param>
-    /// <returns>a vector 90 degrees clockwise along the X and Z axis to a given vector</returns>
-    private Vector3 GetRightFromForwardVector(Vector3 forwardVector)
-    {
-        return new Vector3(forwardVector.z, forwardVector.y, -forwardVector.x);
-    }
+    ///// <summary>
+    ///// Returns a perpendicular vector3 to the right of a given vector3, using the assumption that up is vector3.up (0,1,0) 
+    ///// </summary>
+    ///// <param name="forwardVector">The vector to find a vector to the right of</param>
+    ///// <returns>a vector 90 degrees clockwise along the X and Z axis to a given vector</returns>
+    //private Vector3 GetRightFromForwardVector(Vector3 forwardVector)
+    //{
+    //    return new Vector3(forwardVector.z, forwardVector.y, -forwardVector.x);
+    //}
 
     /// <summary>
     /// Returns an array of points around a given point that form a circle (precision depending on the tubeSidesPerSegment variable and with on the widthCurve and widthMultiplier)
@@ -580,41 +609,41 @@ public class SplineMeshGenWindow : EditorWindow
         // The corner of the Start circle with the highest index
         trianglesToAddTo.Add(startingIndexOfStartCircle + numberOfTubeSides - 1);
     }
-    /// <summary>
-    /// Draw the lines for a segment (connecting the new points to the previous ones) using the Handles class
-    /// </summary>
-    /// <param name="pointOnSpline">The point on the spline to end the segment at</param>
-    /// <param name="direction">The direction the spline was moving as of reach the point on the spline</param>
-    /// <param name="t">The time value for how far up the spline the point on the spline is</param>
-    private void DrawLineSegmentsHandles(Vector3 pointOnSpline, Vector3 direction, float t)
-    {
-        // Draw the directional vector
-        Handles.color = Color.green;
-        Handles.DrawLine(pointOnSpline, pointOnSpline + direction);
+    ///// <summary>
+    ///// Draw the lines for a segment (connecting the new points to the previous ones) using the Handles class
+    ///// </summary>
+    ///// <param name="pointOnSpline">The point on the spline to end the segment at</param>
+    ///// <param name="direction">The direction the spline was moving as of reach the point on the spline</param>
+    ///// <param name="t">The time value for how far up the spline the point on the spline is</param>
+    //private void DrawLineSegmentsHandles(Vector3 pointOnSpline, Vector3 direction, float t)
+    //{
+    //    // Draw the directional vector
+    //    Handles.color = Color.green;
+    //    Handles.DrawLine(pointOnSpline, pointOnSpline + direction);
 
-        // Project the direction on a level plane to eliminate roll rotation
-        direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
+    //    // Project the direction on a level plane to eliminate roll rotation
+    //    direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
 
-        // Get the left and right directions and draw them
-        direction = GetRightFromForwardVector(direction);
-        Vector3 rightPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * widthMultiplier;
-        Vector3 leftPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * -widthMultiplier;
-        Handles.color = Color.white;
-        Handles.DrawLine(pointOnSpline, rightPoint);
-        Handles.DrawLine(pointOnSpline, leftPoint);
+    //    // Get the left and right directions and draw them
+    //    direction = Vector3.Cross(direction, Vector3.up);
+    //    Vector3 rightPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * widthMultiplier;
+    //    Vector3 leftPoint = pointOnSpline + direction * widthCurve.Evaluate(t) * -widthMultiplier;
+    //    Handles.color = Color.white;
+    //    Handles.DrawLine(pointOnSpline, rightPoint);
+    //    Handles.DrawLine(pointOnSpline, leftPoint);
 
-        // Connect lines to the previousRightPoint
-        if (previousRightPoint != Vector3.negativeInfinity)
-        {
-            Handles.DrawLine(previousRightPoint, rightPoint);
-            Handles.DrawLine(previousLeftPoint, leftPoint);
-            Handles.DrawLine(previousRightPoint, leftPoint);
-        }
-        previousRightPoint = rightPoint;
-        previousLeftPoint = leftPoint;
+    //    // Connect lines to the previousRightPoint
+    //    if (previousRightPoint != Vector3.negativeInfinity)
+    //    {
+    //        Handles.DrawLine(previousRightPoint, rightPoint);
+    //        Handles.DrawLine(previousLeftPoint, leftPoint);
+    //        Handles.DrawLine(previousRightPoint, leftPoint);
+    //    }
+    //    previousRightPoint = rightPoint;
+    //    previousLeftPoint = leftPoint;
 
-        HandleUtility.Repaint();
-    }
+    //    HandleUtility.Repaint();
+    //}
     /// <summary>
     /// Uses handles to draw a guide for what the tube mesh will look like
     /// </summary>
