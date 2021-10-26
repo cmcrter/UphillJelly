@@ -18,6 +18,9 @@ namespace SleepyCat.Tests
         public float valueGiven = 0;
         public isZero condition = new isZero();
 
+        public Condition conditionToMeet;
+        public State nextState;
+
         #endregion
         public GreenLight()
         {

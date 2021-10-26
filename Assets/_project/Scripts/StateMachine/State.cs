@@ -19,10 +19,6 @@ namespace SleepyCat.Utility.StateMachine
         //Whether the state was running last frame
         public bool hasRan;
 
-        //Just a base condition for generic states
-        public Condition conditionToMeet;
-        public State nextState;
-
         #endregion
 
         #region Public Methods
@@ -37,11 +33,6 @@ namespace SleepyCat.Utility.StateMachine
 
         public virtual State returnCurrentState()
         {
-            if (conditionToMeet.isConditionTrue())
-            {
-                return nextState;
-            }
-
             return this;
         }
 

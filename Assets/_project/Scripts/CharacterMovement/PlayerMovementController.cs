@@ -20,14 +20,14 @@ namespace SleepyCat.Movement
         [Header("State Machine")]
         public FiniteStateMachine playerStateMachine;
 
-        public AerialState aerialState;
-        public GroundedState groundedState;
-        public WallRideState wallRideState;
-        public GrindedState grindingState;
+        public AerialState aerialState = new AerialState();
+        public GroundedState groundedState = new GroundedState();
+        public WallRideState wallRideState = new WallRideState();
+        public GrindedState grindingState = new GrindedState();
 
-        public isGroundBelow groundBelow;
-        public isNextToWallRun nextToWallRun;
-        public isOnGrind grindBelow;
+        public isGroundBelow groundBelow = new isGroundBelow();
+        public isNextToWallRun nextToWallRun = new isNextToWallRun();
+        public isOnGrind grindBelow = new isOnGrind();
 
         public PlayerCamera playerCamera;
         public float currentTurnInput;
@@ -94,14 +94,14 @@ namespace SleepyCat.Movement
         private void Awake()
         {
             //Setting up the state machine
-            groundBelow = new isGroundBelow(transform, groundRaycastPoint, groundBelow);
-            nextToWallRun = new isNextToWallRun();
-            grindBelow = new isOnGrind(rb);
+            groundBelow.InitialiseCondition(transform, groundRaycastPoint);
+            nextToWallRun.InitialiseCondition();
+            grindBelow.InitialiseCondition(rb);
 
-            groundedState = new GroundedState(this, rb, groundBelow, groundedState);
-            aerialState = new AerialState(this, rb, groundBelow, nextToWallRun, grindBelow, aerialState);
-            wallRideState = new WallRideState();
-            grindingState = new GrindedState(this, rb, grindBelow, grindingState);
+            groundedState.InitialiseState(this, rb, groundBelow);
+            aerialState.InitialiseState(this, rb, groundBelow, nextToWallRun, grindBelow);
+            wallRideState.InitialiseState();
+            grindingState.InitialiseState(this, rb, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(groundedState);
         }

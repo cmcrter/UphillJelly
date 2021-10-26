@@ -14,6 +14,7 @@ namespace SleepyCat.Movement
 {
     public class WallRideState : State
     {
+
         #region Public Methods
 
         public WallRideState()
@@ -21,13 +22,13 @@ namespace SleepyCat.Movement
 
         }
 
+        public void InitialiseState()
+        {
+
+        }
+
         public override State returnCurrentState()
         {
-            if(conditionToMeet.isConditionTrue())
-            {
-                return nextState;
-            }
-
             return this;
         }
 

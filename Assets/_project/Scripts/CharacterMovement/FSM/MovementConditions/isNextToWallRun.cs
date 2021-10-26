@@ -17,6 +17,11 @@ namespace SleepyCat.Movement
     {
         #region Public Methods
 
+        public void InitialiseCondition()
+        {
+
+        }
+
         public override bool isConditionTrue()
         {
             return false;

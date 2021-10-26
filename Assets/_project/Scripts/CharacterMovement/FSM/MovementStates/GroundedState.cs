@@ -18,7 +18,7 @@ namespace SleepyCat.Movement
     [Serializable]
     public class GroundedState : State
     {
-        private isGroundBelow groundedCondition;
+        [NonSerialized] private isGroundBelow groundedCondition = null;
 
         private PlayerMovementController parentController;
         private Transform playerTransform;
@@ -66,24 +66,18 @@ namespace SleepyCat.Movement
         [SerializeField]
         private Timer jumpTimer;
 
-        public GroundedState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow, GroundedState state)
+        public GroundedState()
+        {
+
+        }
+
+        public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow)
         {
             parentController = controllerParent;
             playerTransform = controllerParent.transform;
             movementRB = playerRB;
 
             groundedCondition = groundBelow;
-
-            groundAdjustSmoothness = state.groundAdjustSmoothness;
-            GroundedDrag = state.GroundedDrag;
-            forwardSpeed = state.forwardSpeed;
-            turnSpeed = state.turnSpeed;
-            backwardSpeed = state.backwardSpeed;
-            jumpSpeed = state.jumpSpeed;
-
-            pushCooldownTimerDuration = state.pushCooldownTimerDuration;
-            pushDuringTimer = state.pushDuringTimer;
-            jumpTimerDuration = state.jumpTimerDuration;
         }
 
         public override State returnCurrentState()
