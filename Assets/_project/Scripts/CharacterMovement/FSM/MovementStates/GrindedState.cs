@@ -95,6 +95,29 @@ namespace SleepyCat.Movement
         {
             if(onGrind.grindDetails != null && onGrind.splineCurrentlyGrindingOn)
             {
+                //UpdateTIncrement();
+                //if(currentTValue + Time.deltaTime * tIncrementPerSecond < 1)
+                //{
+                //    // Clamping it at the max value and min values of a unit interval
+
+                //    // Check the length of the next increment
+                //    Vector3 nextPoint = splineSequence.GetLengthBasedPoint(currentTValue + Time.deltaTime * tIncrementPerSecond);
+                //    Vector3 currentPoint = splineSequence.GetLengthBasedPoint(currentTValue);
+                //    Vector3 velocity = nextPoint - currentPoint;
+
+
+                //    // Ideally the distance change should be speed * time.deltaTime
+                //    float desiredDistance = speed * Time.deltaTime;
+                //    float currentDistanceChange = velocity.magnitude;
+
+                //    float desiredChange = desiredDistance / currentDistanceChange;
+                //    currentTValue = Mathf.Clamp01(currentTValue + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
+                //}
+                //else
+                //{
+                //    currentTValue = Mathf.Clamp01(currentTValue + Time.deltaTime * tIncrementPerSecond); // add length to this calculation
+                //}
+
                 timeAlongGrind += (dT * onGrind.grindDetails.DuringGrindForce) / PotentialLengthOfGrind;
 
                 if(timeAlongGrind < 1f)
