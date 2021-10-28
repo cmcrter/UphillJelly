@@ -30,6 +30,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Balance",
+                    "type": "Value",
+                    "id": "de49cbe0-0360-4c91-b319-af493a798193",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "BalanceDown",
                     "type": "Button",
                     "id": "7f1602e8-3d2a-4e27-868e-4232353ad342",
@@ -258,6 +266,72 @@
                     "processors": "",
                     "groups": "",
                     "action": "Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Gamepad",
+                    "id": "605a88d2-6212-4205-94a3-91cbcdd6ce53",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Balance",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "positive",
+                    "id": "bc3092d6-4837-447f-b818-182c9c406a68",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Balance",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "92ad73ce-1e81-45fe-9885-597954fd1956",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Balance",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Keyboard",
+                    "id": "378c3313-58f4-40ea-af71-04626f9f1bf2",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Balance",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "positive",
+                    "id": "5f73d8ea-2f13-4e35-b662-df7347ce90b5",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Balance",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "b148d86c-eabf-4fea-9b6c-c42695bf1c11",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Balance",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

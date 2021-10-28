@@ -27,6 +27,9 @@ namespace SleepyCat.Input
         private PlayerInput playerInput;
         #endregion
 
+        #region Public Delegates 
+        #endregion
+
         #region Public Events
         #region Press Down Action
         /// <summary>
@@ -74,12 +77,19 @@ namespace SleepyCat.Input
                 playerInput.actions["PressDown"].performed  += PressDownAction_Performed;
 
                 playerInput.actions["JumpUp"].performed     += JumpUpAction_Performed;
+
+                playerInput.actions["Balance"].performed    += BalanceAction_Performed;
             }
 
             if (pushUpdate != null)
             {
                 pushUpdate();
             }
+        }
+
+        private void BalanceAction_Performed(InputAction.CallbackContext callbackContext)
+        {
+            Debug.Log(callbackContext.ReadValue<float>()); // Todo: Test with controller
         }
 
 
