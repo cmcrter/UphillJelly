@@ -183,6 +183,8 @@ public class SplineMover : MonoBehaviour
         {
             Debug.LogError("SplineSequence not assigned when referenced in Spline Mover update function", gameObject);
         }
+
+        transform.forward = splineSequence.GetDirection(currentTValue, 0.01f);
     }
 
     private IEnumerator waitDebug(float seconds)

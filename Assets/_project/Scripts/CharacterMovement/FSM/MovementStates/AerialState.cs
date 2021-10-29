@@ -19,6 +19,7 @@ namespace SleepyCat.Movement
     {
         private isGroundBelow groundedCondition;
         private isNextToWallRun wallRideCondition;
+        private isOnGrind grindCondition;
 
         private PlayerMovementController parentController;
         private Rigidbody movementRB;
@@ -28,11 +29,12 @@ namespace SleepyCat.Movement
         [SerializeField]
         private float adjustGroundSmoothness = 2f;
 
-        public AerialState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow, isNextToWallRun wallRunning, AerialState state)
+        public AerialState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow, isNextToWallRun wallRunning, isOnGrind grinding, AerialState state)
         {
             parentController = controllerParent;
             movementRB = playerRB;
 
+            grindCondition = grinding;
             groundedCondition = groundBelow;
             wallRideCondition = wallRunning;
 
@@ -46,9 +48,13 @@ namespace SleepyCat.Movement
             {
                 return parentController.groundedState;
             }
+            else if (grindCondition.isConditionTrue()) 
+            {
+                return parentController.grindingState;
+            } 
             else if(wallRideCondition.isConditionTrue()) 
             {
-                //return parentController.WallRunState;
+                //return parentController.;
             }
 
             return this;

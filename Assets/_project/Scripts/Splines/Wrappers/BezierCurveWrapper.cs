@@ -104,6 +104,10 @@ namespace SleepyCat.Utility.Splines
         #region Unity Methods
         private void Awake()
         {
+            if (spline == null)
+            {
+                spline = new BezierCurve();
+            }
             if (worldControlPoints == null)
             {
                 if (IsUsingTwoControlPoints)

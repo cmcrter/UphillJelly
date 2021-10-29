@@ -96,12 +96,12 @@ namespace SleepyCat.Movement
             //Setting up the state machine
             groundBelow = new isGroundBelow(transform, groundRaycastPoint, groundBelow);
             nextToWallRun = new isNextToWallRun();
-            grindBelow = new isOnGrind();
+            grindBelow = new isOnGrind(rb);
 
             groundedState = new GroundedState(this, rb, groundBelow, groundedState);
-            aerialState = new AerialState(this, rb, groundBelow, nextToWallRun, aerialState);
+            aerialState = new AerialState(this, rb, groundBelow, nextToWallRun, grindBelow, aerialState);
             wallRideState = new WallRideState();
-            grindingState = new GrindedState();
+            grindingState = new GrindedState(this, rb, grindBelow, grindingState);
 
             playerStateMachine = new FiniteStateMachine(groundedState);
         }
