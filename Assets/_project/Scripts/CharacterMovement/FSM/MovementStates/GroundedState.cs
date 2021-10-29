@@ -275,7 +275,7 @@ namespace SleepyCat.Movement
             //It's technically a new timer on top of the class in use
             jumpTimer = new Timer(jumpTimerDuration);
 
-            movementRB.AddForce(Vector3.up * jumpSpeed * 1000);
+            movementRB.AddForce(parentController.transform.up * jumpSpeed * 1000);
             Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
 
 
