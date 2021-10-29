@@ -188,6 +188,7 @@ namespace SleepyCat.Movement
         //The auto jump off
         private void JumpOff()
         {
+            timeAlongGrind = 1f;
             movementRB.isKinematic = false;
             movementRB.AddForce((parentController.transform.up * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward * onGrind.grindDetails.ExitForce.z), ForceMode.Impulse);
         }
