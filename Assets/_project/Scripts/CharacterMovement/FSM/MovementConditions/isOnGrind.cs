@@ -22,14 +22,25 @@ namespace SleepyCat.Movement
         private Rigidbody movementRB;
         public SplineWrapper splineCurrentlyGrindingOn;
         public GrindDetails grindDetails;
+        [NonSerialized] private GrindedState grindedState = null;
 
         #endregion
 
         #region Public Methods
 
-        public isOnGrind(Rigidbody rb)
+        public isOnGrind()
+        {
+
+        }
+
+        public void InitialiseCondition(Rigidbody rb)
         {
             movementRB = rb;
+        }
+
+        public void SetGrindState(GrindedState state)
+        {
+            grindedState = state;
         }
 
         public override bool isConditionTrue()
@@ -50,15 +61,21 @@ namespace SleepyCat.Movement
         //The players' grind section has left a grindable thing
         public void playerExitedGrind(SplineWrapper splineHit, GrindDetails grindUsing) 
         {
-            if (splineCurrentlyGrindingOn)
+            if (splineCurrentlyGrindingOn != null && grindedState.isRailDone())
             {
-                if (splineCurrentlyGrindingOn.Equals(splineHit))
+                if (splineCurrentlyGrindingOn.Equals(splineHit) && grindDetails.Equals(grindUsing))
                 {
                     grindDetails = null;
                     splineCurrentlyGrindingOn = null;
                 }
             }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        
 
         #endregion
     }

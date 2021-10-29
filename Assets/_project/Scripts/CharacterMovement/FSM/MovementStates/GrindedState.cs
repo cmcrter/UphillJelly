@@ -10,6 +10,7 @@
 using System;
 using UnityEngine;
 using SleepyCat.Utility.StateMachine;
+using UnityEngine.InputSystem;
 
 namespace SleepyCat.Movement 
 {
@@ -20,7 +21,8 @@ namespace SleepyCat.Movement
 
         private PlayerMovementController parentController;
         private Rigidbody movementRB;
-        private isOnGrind onGrind;
+        [NonSerialized] private isOnGrind onGrind = null;
+        private PlayerInput pInput;
 
         [SerializeField]
         Transform grindVisualiser;
@@ -28,39 +30,57 @@ namespace SleepyCat.Movement
         private Vector3 currentPlayerAim = Vector3.zero;
         [SerializeField]
         private Vector3 currentSplineDir;
+        [SerializeField]
+        private Vector3 pos;
+
         private float PotentialLengthOfGrind = 1f;
         [SerializeField]
         private float timeAlongGrind;
+
+        [SerializeField]
+        float jumpCoroutineDuration;
+        Coroutine jumpCoroutine;
+        [SerializeField]
+        float autoJumpCoroutineDuration;
+        Coroutine autoJumpCoroutine;
 
         #endregion
 
         #region Public Methods
 
-        public GrindedState(PlayerMovementController controllerParent, Rigidbody playerRB, isOnGrind grind, GrindedState state)
+        public GrindedState()
+        {
+
+        }
+
+        public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isOnGrind grind)
         {
             parentController = controllerParent;
             movementRB = playerRB;
             onGrind = grind;
-            grindVisualiser = state.grindVisualiser;
+            grind.SetGrindState(this);
+
+            pInput = controllerParent.input;
         }
 
         public override void OnStateEnter()
         {
-            if (parentController.playerCamera)
+            pInput.SwitchCurrentActionMap("Grinding");
+
+            if(parentController.playerCamera)
             {
                 parentController.playerCamera.FollowRotation = false;
             }
 
-            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(parentController.transform.position, out timeAlongGrind) + new Vector3(0, 0.405f, 0);
+            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(parentController.transform.position, out timeAlongGrind) + new Vector3(0, 0.41f, 0);
             parentController.transform.position = movementRB.transform.position;
 
             PotentialLengthOfGrind = onGrind.splineCurrentlyGrindingOn.GetTotalLength();
-            Vector3 dir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
-            dir = new Vector3(0, dir.y, dir.z);
-            parentController.transform.rotation = Quaternion.FromToRotation(parentController.transform.rotation.eulerAngles, dir);
+            currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0f, 0.1f);
+
+            parentController.transform.forward = Vector3.Cross(currentSplineDir, Vector3.up);
 
             movementRB.isKinematic = true;
-
             hasRan = true;
         }
 
@@ -79,24 +99,44 @@ namespace SleepyCat.Movement
 
         public override void Tick(float dT)
         {
-            if(onGrind.grindDetails != null)
+            if(onGrind.grindDetails != null && onGrind.splineCurrentlyGrindingOn)
             {
+                //if(timeAlongGrind + dT * tIncrementPerSecond < 1)
+                //{
+                //    // Clamping it at the max value and min values of a unit interval
+
+                //    // Check the length of the next increment
+                //    Vector3 nextPoint = splineSequence.GetLengthBasedPoint(timeAlongGrind + dT * tIncrementPerSecond);
+                //    Vector3 currentPoint = splineSequence.GetLengthBasedPoint(timeAlongGrind);
+                //    Vector3 velocity = nextPoint - currentPoint;
+
+
+                //    // Ideally the distance change should be speed * time.deltaTime
+                //    float desiredDistance = speed * Time.deltaTime;
+                //    float currentDistanceChange = velocity.magnitude;
+
+                //    float desiredChange = desiredDistance / currentDistanceChange;
+                //    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond * desiredChange); // add length to this calculation
+                //}
+                //else
+                //{
+                //    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
+                //}
+
                 timeAlongGrind += (dT * onGrind.grindDetails.DuringGrindForce) / PotentialLengthOfGrind;
-            }
 
-            if (onGrind.splineCurrentlyGrindingOn)
-            {
-                currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.1f);
-                Vector3 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
-
-                if (timeAlongGrind < 0.99f)
+                if(timeAlongGrind < 1f)
                 {
-                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos + new Vector3(0, 0.405f, 0), timeAlongGrind));
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.1f);
+                    pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
                     grindVisualiser.position = pos;
+
+                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos + new Vector3(0, 0.41f, 0), timeAlongGrind));
+                    parentController.transform.forward = Vector3.Cross(currentSplineDir, Vector3.up);
                 }
-                else 
+                else
                 {
-                    parentController.transform.rotation = Quaternion.Euler(0, currentSplineDir.y + 90, currentSplineDir.z);
+                    parentController.transform.forward = currentSplineDir;
                     JumpOff();
                 }
             }
@@ -115,6 +155,11 @@ namespace SleepyCat.Movement
             }
 
             return this;
+        }
+
+        public bool isRailDone()
+        {
+            return timeAlongGrind > 1f && !movementRB.isKinematic;
         }
 
         #endregion

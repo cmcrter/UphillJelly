@@ -12,17 +12,20 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SleepyCat.Utility.StateMachine;
+using SleepyCat.Input;
 
 namespace SleepyCat.Movement
 {
     [Serializable]
     public class GroundedState : State
     {
-        private isGroundBelow groundedCondition;
+        [NonSerialized] private isGroundBelow groundedCondition = null;
 
         private PlayerMovementController parentController;
+        private InputHandler inputHandler;
         private Transform playerTransform;
         private Rigidbody movementRB;
+        private PlayerInput pInput;
 
         [SerializeField]
         public float GroundedDrag = 0.05f;
@@ -66,24 +69,32 @@ namespace SleepyCat.Movement
         [SerializeField]
         private Timer jumpTimer;
 
-        public GroundedState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow, GroundedState state)
+        public GroundedState()
         {
+        }
+
+        ~GroundedState()
+        {      
+        }
+
+        public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow)
+        {
+            //Apply variables needed
             parentController = controllerParent;
             playerTransform = controllerParent.transform;
             movementRB = playerRB;
 
             groundedCondition = groundBelow;
+            pInput = controllerParent.input;
 
-            groundAdjustSmoothness = state.groundAdjustSmoothness;
-            GroundedDrag = state.GroundedDrag;
-            forwardSpeed = state.forwardSpeed;
-            turnSpeed = state.turnSpeed;
-            backwardSpeed = state.backwardSpeed;
-            jumpSpeed = state.jumpSpeed;
+            //Register Input functions
 
-            pushCooldownTimerDuration = state.pushCooldownTimerDuration;
-            pushDuringTimer = state.pushDuringTimer;
-            jumpTimerDuration = state.jumpTimerDuration;
+        }
+
+        public void DeInitialiseState()
+        {
+            //Unregister functions
+
         }
 
         public override State returnCurrentState()
@@ -126,6 +137,8 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
+            pInput.SwitchCurrentActionMap("Grounded");
+            
             parentController.playerCamera.FollowRotation = true;
             movementRB.drag = GroundedDrag;
 

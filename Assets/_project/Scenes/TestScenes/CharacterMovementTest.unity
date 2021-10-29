@@ -406,6 +406,7 @@ GameObject:
   - component: {fileID: 73631399}
   - component: {fileID: 73631398}
   - component: {fileID: 73631397}
+  - component: {fileID: 73631402}
   m_Layer: 0
   m_Name: GrindRail (1)
   m_TagString: Untagged
@@ -507,6 +508,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &73631402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73631396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abdcd5c71d93f744e890de72040914b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DuringGrindForce: 10
+  ExitGrindForce: 5
 --- !u!1 &129829648
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +535,7 @@ GameObject:
   - component: {fileID: 129829651}
   - component: {fileID: 129829650}
   - component: {fileID: 129829649}
+  - component: {fileID: 129829654}
   m_Layer: 0
   m_Name: GrindRail (2)
   m_TagString: Untagged
@@ -621,6 +637,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &129829654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129829648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abdcd5c71d93f744e890de72040914b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DuringGrindForce: 10
+  ExitGrindForce: 5
 --- !u!1 &140129344
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,7 +796,6 @@ GameObject:
   - component: {fileID: 270872054}
   - component: {fileID: 270872057}
   - component: {fileID: 270872056}
-  - component: {fileID: 270872055}
   m_Layer: 0
   m_Name: GrindRail (1)
   m_TagString: Untagged
@@ -788,20 +817,6 @@ Transform:
   m_Father: {fileID: 129829653}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &270872055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 270872053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abdcd5c71d93f744e890de72040914b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DuringGrindForce: 10
-  ExitGrindForce: 5
 --- !u!114 &270872056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -980,7 +995,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 75.85, y: -30, z: 0}
 --- !u!114 &304807515
 MonoBehaviour:
@@ -1158,7 +1173,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &353250059
 MonoBehaviour:
@@ -1205,7 +1220,6 @@ GameObject:
   - component: {fileID: 413319282}
   - component: {fileID: 413319285}
   - component: {fileID: 413319284}
-  - component: {fileID: 413319283}
   m_Layer: 0
   m_Name: GrindRail (1)
   m_TagString: Untagged
@@ -1227,20 +1241,6 @@ Transform:
   m_Father: {fileID: 73631401}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &413319283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 413319281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abdcd5c71d93f744e890de72040914b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DuringGrindForce: 10
-  ExitGrindForce: 5
 --- !u!114 &413319284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2262,7 +2262,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4315438314040116522, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4315438314040116522, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2307,6 +2307,14 @@ PrefabInstance:
     - target: {fileID: 4315438314040116534, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
       propertyPath: m_Name
       value: CurvedGrindRail
+      objectReference: {fileID: 0}
+    - target: {fileID: 4315438314806273647, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
+      propertyPath: ExitGrindForce
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4315438314806273647, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
+      propertyPath: DuringGrindForce
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
@@ -2438,7 +2446,6 @@ GameObject:
   - component: {fileID: 1067690414}
   - component: {fileID: 1067690416}
   - component: {fileID: 1067690415}
-  - component: {fileID: 1067690417}
   m_Layer: 0
   m_Name: GrindRail (1)
   m_TagString: Untagged
@@ -2489,20 +2496,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9cef5802c51aecb47aea91ee0f97be09, type: 2}
---- !u!114 &1067690417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067690413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abdcd5c71d93f744e890de72040914b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DuringGrindForce: 30
-  ExitGrindForce: 20
 --- !u!1 &1097424514 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0bdd2fa7aa2dcf149b86a81fc573cc2c, type: 3}
@@ -2675,6 +2668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593b5afb87d4b904ab26718f0ca6f8fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 0}
 --- !u!1 &1154528266
 GameObject:
   m_ObjectHideFlags: 0
@@ -3499,7 +3493,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 0055fcfc50f396d4fbc89ceb2e6dd6dd, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0055fcfc50f396d4fbc89ceb2e6dd6dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3762,7 +3756,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1677140359
 MonoBehaviour:
@@ -4065,7 +4059,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1765298215
 GameObject:
@@ -4080,6 +4074,7 @@ GameObject:
   - component: {fileID: 1765298218}
   - component: {fileID: 1765298217}
   - component: {fileID: 1765298216}
+  - component: {fileID: 1765298221}
   m_Layer: 0
   m_Name: GrindRail
   m_TagString: Untagged
@@ -4181,6 +4176,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1765298221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765298215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abdcd5c71d93f744e890de72040914b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DuringGrindForce: 10
+  ExitGrindForce: 5
 --- !u!1 &1789075737
 GameObject:
   m_ObjectHideFlags: 0
@@ -6242,10 +6251,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 207158972, guid: 4911f9de42113f64fa776b512f264502, type: 3}
-      propertyPath: m_Interpolate
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2573286818288912049, guid: 4911f9de42113f64fa776b512f264502, type: 3}
       propertyPath: m_Name
       value: PlayerMovementController
@@ -6313,7 +6318,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8489781829627952752, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8489781829627952752, guid: f1334852b574f4b489f89d4fbeeb403f, type: 3}
       propertyPath: m_LocalPosition.x

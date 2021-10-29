@@ -18,6 +18,9 @@ namespace SleepyCat.Tests
         public float valueGiven = 0;
         public isGreaterThanZero condition = new isGreaterThanZero();
 
+        public Condition conditionToMeet;
+        public State nextState;
+
         #endregion
         public RedLight()
         {

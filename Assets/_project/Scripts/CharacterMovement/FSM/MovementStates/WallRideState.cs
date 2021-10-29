@@ -9,11 +9,15 @@
 
 using UnityEngine;
 using SleepyCat.Utility.StateMachine;
+using UnityEngine.InputSystem;
 
 namespace SleepyCat.Movement
 {
     public class WallRideState : State
     {
+        private PlayerInput pInput;
+
+
         #region Public Methods
 
         public WallRideState()
@@ -21,13 +25,13 @@ namespace SleepyCat.Movement
 
         }
 
+        public void InitialiseState()
+        {
+
+        }
+
         public override State returnCurrentState()
         {
-            if(conditionToMeet.isConditionTrue())
-            {
-                return nextState;
-            }
-
             return this;
         }
 
@@ -44,7 +48,7 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
-            //To be overridden
+            pInput.SwitchCurrentActionMap("WallRiding");
             hasRan = true;
         }
 

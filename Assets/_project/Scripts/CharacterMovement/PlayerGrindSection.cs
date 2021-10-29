@@ -1,5 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+////////////////////////////////////////////////////////////
+// File: PlayerGrindSection.cs
+// Author: Charles Carter
+// Date Created: 26/10/21
+// Last Edited By: Charles Carter
+// Date Last Edited: 26/10/21
+// Brief: The trigger on the player to know whether they're on a grind rail or not
+//////////////////////////////////////////////////////////// 
+
 using UnityEngine;
 using SleepyCat.Utility.Splines;
 
@@ -12,29 +19,38 @@ namespace SleepyCat.Movement
 
         private void OnTriggerEnter(Collider other) 
         {
-            if (other.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.TryGetComponent(out GrindDetails grindCustomizable))
-            {
-                if (Debug.isDebugBuild)
-                {
-                    Debug.Log("Player going to grind");
-                }
+            //Debug.Log(other.name);
 
-                //Telling the grind condition that the player wants to start grinding
-                movementController.grindBelow.playerEnteredGrind(splineToGrindDown, grindCustomizable);
-            }    
+            if(other.transform.parent != null)
+            {
+                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.transform.parent.TryGetComponent(out GrindDetails grindCustomizable))
+                {
+                    if(Debug.isDebugBuild)
+                    {
+                        //Debug.Log("Player going to grind");
+                    }
+
+                    //Telling the grind condition that the player wants to start grinding
+                    movementController.grindBelow.playerEnteredGrind(splineToGrindDown, grindCustomizable);
+                }
+            }  
         }
 
         private void OnTriggerExit(Collider other) 
         {
-            if (other.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.TryGetComponent(out GrindDetails grindCustomizable)) 
+            if(other.transform.parent)
             {
-                if (Debug.isDebugBuild)
+                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.transform.parent.TryGetComponent(out GrindDetails grindCustomizable))
                 {
-                    Debug.Log("Player going off grind");
+                    if(Debug.isDebugBuild)
+                    {
+                        //Debug.Log("Player going off grind");
+                    }
+
+                    //Telling the grind condition that the player wants to start grinding
+                    movementController.grindBelow.playerExitedGrind(splineToGrindDown, grindCustomizable);
                 }
 
-                //Telling the grind condition that the player wants to start grinding
-                movementController.grindBelow.playerExitedGrind(splineToGrindDown, grindCustomizable);
             }
         }
     }

@@ -34,13 +34,14 @@ namespace SleepyCat.Movement
 
         #region Public Methods
 
-        public isGroundBelow(Transform player, Transform raycast, isGroundBelow groundBelow)
+        public isGroundBelow()
+        {
+        }
+
+        public void InitialiseCondition(Transform player, Transform raycast)
         {
             playerTransform = player;
             raycastPointTransform = raycast;
-
-            groundDist = groundBelow.groundDist;
-            playerMask = groundBelow.playerMask;
         }
 
         public override bool isConditionTrue() 

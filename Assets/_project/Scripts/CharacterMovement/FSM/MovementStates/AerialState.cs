@@ -17,19 +17,25 @@ namespace SleepyCat.Movement
     [Serializable]
     public class AerialState : State
     {
-        private isGroundBelow groundedCondition;
-        private isNextToWallRun wallRideCondition;
-        private isOnGrind grindCondition;
+        [NonSerialized] private isGroundBelow groundedCondition = null;
+        [NonSerialized] private isNextToWallRun wallRideCondition = null;
+        [NonSerialized] private isOnGrind grindCondition = null;
 
         private PlayerMovementController parentController;
         private Rigidbody movementRB;
+        private PlayerInput pInput;
 
         [SerializeField]
         public float AerialDrag = 0.05f;
         [SerializeField]
         private float adjustGroundSmoothness = 2f;
 
-        public AerialState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow, isNextToWallRun wallRunning, isOnGrind grinding, AerialState state)
+        public AerialState()
+        {
+
+        }
+
+        public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow, isNextToWallRun wallRunning, isOnGrind grinding)
         {
             parentController = controllerParent;
             movementRB = playerRB;
@@ -38,8 +44,7 @@ namespace SleepyCat.Movement
             groundedCondition = groundBelow;
             wallRideCondition = wallRunning;
 
-            AerialDrag = state.AerialDrag;
-            adjustGroundSmoothness = state.adjustGroundSmoothness;
+            pInput = controllerParent.input;
         }
 
         public override State returnCurrentState()
@@ -85,6 +90,8 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
+            pInput.SwitchCurrentActionMap("Aerial");
+
             parentController.playerCamera.FollowRotation = false;
             movementRB.drag = AerialDrag;
 
