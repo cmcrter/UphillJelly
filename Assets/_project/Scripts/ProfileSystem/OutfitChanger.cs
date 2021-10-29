@@ -16,6 +16,9 @@ public class OutfitChanger : MonoBehaviour
 
     #region Variables
 
+    //
+    public Shop shopScript;
+
     // Hat selecter game object
     public GameObject hatSelector;
 
@@ -50,13 +53,24 @@ public class OutfitChanger : MonoBehaviour
     public int currentCharacterint = 0;
 
 
-    
 
     #endregion
 
     #region Methods
 
-    
+    //
+    public void Start() {
+
+        //
+        currentGOint = 4;
+
+        //
+        currentGOMaterialint = 4;
+
+        //
+        currentCharacterint = 2;
+
+    }
 
 
     // function called from the b_Player to load the customizable objects
@@ -108,6 +122,9 @@ public class OutfitChanger : MonoBehaviour
         // set the hat selector mesh filter to the display game objects mesh filter
         hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
 
+        //
+        shopScript.NextHatPrice();
+
     }
 
     // previous hat option
@@ -118,7 +135,7 @@ public class OutfitChanger : MonoBehaviour
         currentGOMaterialint--;
 
         // if the hat int is less than or = to 0
-        if (currentGOint <= 0) {
+        if (currentGOint <= -1) {
 
             // set the hat int to the list of hats.count - 1
             currentGOint = gameObjectOptions.Count - 1;
@@ -126,7 +143,7 @@ public class OutfitChanger : MonoBehaviour
         }
 
         // if the Material hat int is less than or = to 0
-        if (currentGOMaterialint <= 0) {
+        if (currentGOMaterialint <= -1) {
 
             // set the material hat int to the list of materialsHats.count - 1
             currentGOMaterialint = gameObjectMaterialOptions.Count - 1;
@@ -141,6 +158,9 @@ public class OutfitChanger : MonoBehaviour
 
         // set the hat selector mesh filter to the display game objects mesh filter
         hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
+
+        //
+        shopScript.PreviousHatPrice();
 
     }
 
@@ -165,6 +185,9 @@ public class OutfitChanger : MonoBehaviour
         // to the characters material
         characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
+        //
+        shopScript.NextCharacterPrice();
+
     }
 
     // Previous character material option
@@ -174,7 +197,7 @@ public class OutfitChanger : MonoBehaviour
         currentCharacterint--;
 
         // if the character material int is less than or = 1
-        if (currentCharacterint <= 0) {
+        if (currentCharacterint <= -1) {
 
             // set the character material int to the material options - 1
             currentCharacterint = gameObjectCharacterMaterialOptions.Count - 1;
@@ -184,6 +207,9 @@ public class OutfitChanger : MonoBehaviour
         // get the character object in the scene and the mesh renderer material, set the material list with the current int
         // to the characters material
         characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+        //
+        shopScript.PreviousCharacterPrice();
 
     }
 
