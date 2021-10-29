@@ -43,7 +43,6 @@ namespace SleepyCat.Movement
         [SerializeField]
         float autoJumpCoroutineDuration;
         Coroutine autoJumpCoroutine;
-        float tIncrementPerSecond = 0.1f;
 
         #endregion
 
@@ -60,6 +59,8 @@ namespace SleepyCat.Movement
             movementRB = playerRB;
             onGrind = grind;
             grind.SetGrindState(this);
+
+            pInput = controllerParent.input;
         }
 
         public override void OnStateEnter()
@@ -100,27 +101,29 @@ namespace SleepyCat.Movement
         {
             if(onGrind.grindDetails != null && onGrind.splineCurrentlyGrindingOn)
             {
-                if(timeAlongGrind + dT * tIncrementPerSecond < 1)
-                {
-                    // Clamping it at the max value and min values of a unit interval
+                //if(timeAlongGrind + dT * tIncrementPerSecond < 1)
+                //{
+                //    // Clamping it at the max value and min values of a unit interval
 
-                    // Check the length of the next increment
-                    Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + dT * tIncrementPerSecond);
-                    Vector3 currentPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
-                    Vector3 velocity = nextPoint - currentPoint;
+                //    // Check the length of the next increment
+                //    Vector3 nextPoint = splineSequence.GetLengthBasedPoint(timeAlongGrind + dT * tIncrementPerSecond);
+                //    Vector3 currentPoint = splineSequence.GetLengthBasedPoint(timeAlongGrind);
+                //    Vector3 velocity = nextPoint - currentPoint;
 
 
-                    // Ideally the distance change should be speed * time.deltaTime
-                    float desiredDistance = onGrind.grindDetails.DuringGrindForce * Time.deltaTime;
-                    float currentDistanceChange = velocity.magnitude;
+                //    // Ideally the distance change should be speed * time.deltaTime
+                //    float desiredDistance = speed * Time.deltaTime;
+                //    float currentDistanceChange = velocity.magnitude;
 
-                    float desiredChange = desiredDistance / currentDistanceChange;
-                    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond * desiredChange); // add length to this calculation
-                }
-                else
-                {
-                    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
-                }
+                //    float desiredChange = desiredDistance / currentDistanceChange;
+                //    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond * desiredChange); // add length to this calculation
+                //}
+                //else
+                //{
+                //    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
+                //}
+
+                timeAlongGrind += (dT * onGrind.grindDetails.DuringGrindForce) / PotentialLengthOfGrind;
 
                 if(timeAlongGrind < 1f)
                 {

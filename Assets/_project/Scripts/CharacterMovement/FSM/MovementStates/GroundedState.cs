@@ -85,6 +85,7 @@ namespace SleepyCat.Movement
             movementRB = playerRB;
 
             groundedCondition = groundBelow;
+            pInput = controllerParent.input;
 
             //Register Input functions
 

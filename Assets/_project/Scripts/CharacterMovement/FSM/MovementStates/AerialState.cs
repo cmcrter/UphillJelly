@@ -43,6 +43,8 @@ namespace SleepyCat.Movement
             grindCondition = grinding;
             groundedCondition = groundBelow;
             wallRideCondition = wallRunning;
+
+            pInput = controllerParent.input;
         }
 
         public override State returnCurrentState()

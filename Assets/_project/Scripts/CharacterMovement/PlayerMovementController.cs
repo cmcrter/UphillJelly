@@ -41,6 +41,8 @@ namespace SleepyCat.Movement
         private Transform groundRaycastPoint;
         [SerializeField]
         private SphereCollider ballMovement;
+        [SerializeField]
+        public PlayerInput input;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
