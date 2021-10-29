@@ -188,28 +188,20 @@ namespace SleepyCat.Movement
         //The auto jump off
         private void JumpOff()
         {
-            timeAlongGrind = 1f;
             movementRB.isKinematic = false;
-
             movementRB.AddForce((parentController.transform.up * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward * onGrind.grindDetails.ExitForce.z), ForceMode.Impulse);
         }
 
         //Jump off when player pressed button...
         private void JumpOffPressed()
         {
-            if(!hasRan) 
-            {
-                return;
-            }
-
-            timeAlongGrind = 1f;
             movementRB.isKinematic = false;
 
             parentController.transform.forward = currentSplineDir;
 
             //essentially the same jump as when grounded
-            movementRB.AddForce((parentController.transform.up * jumpSpeed * 1000) + (parentController.transform.forward * jumpSpeed * 1000));
-            Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
+            movementRB.AddForce((parentController.transform.up * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward * onGrind.grindDetails.ExitForce.z), ForceMode.Impulse);
+            timeAlongGrind = 1f;
         }
 
         #endregion

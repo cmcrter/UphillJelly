@@ -32,6 +32,10 @@ namespace SleepyCat.Input
             inputHandler.balanceUpdate      += InputHandler_balanceUpdate;
             inputHandler.turningUpdated     += InputHandler_turningUpdated;
             inputHandler.groundedJumpUpPerformed    += InputHandler_jumpUpPerformed;
+
+            inputHandler.startGrindStarted += InputHandler_GrindButtonStart;
+            inputHandler.startGrindUpdate += InputHandler_GrindButtonUpdate;
+            inputHandler.startGrindEnded += InputHandler_GrindButtonEnded;
         }
 
         private void InputHandler_jumpUpPerformed()
@@ -100,6 +104,21 @@ namespace SleepyCat.Input
             Debug.Log("Brake Ended");
         }
 
+        private void InputHandler_GrindButtonStart()
+        {
+            Debug.Log("GrindButton Started");
+        }
+
+        private void InputHandler_GrindButtonUpdate()
+        {
+            Debug.Log("GrindButton Update");
+        }
+
+        private void InputHandler_GrindButtonEnded()
+        {
+            Debug.Log("GrindButton Ended");
+        }
+
         private void OnDisable()
         {
             inputHandler.brakeEnded         -= InputHandler_brakeEnded;
@@ -114,6 +133,10 @@ namespace SleepyCat.Input
             inputHandler.balanceUpdate      -= InputHandler_balanceUpdate;
             inputHandler.turningUpdated     -= InputHandler_turningUpdated;
             inputHandler.groundedJumpUpPerformed -= InputHandler_jumpUpPerformed;
+
+            inputHandler.startGrindStarted -= InputHandler_GrindButtonStart;
+            inputHandler.startGrindUpdate -= InputHandler_GrindButtonUpdate;
+            inputHandler.startGrindEnded -= InputHandler_GrindButtonEnded;
         }
     }
 }

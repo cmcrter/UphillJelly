@@ -433,7 +433,9 @@ namespace SleepyCat.Input
             playerInput.actions["Grounded_Turning"].canceled += TurningAction_Canceled;
 
             playerInput.actions["Grounded_StartGrind"].performed += StartGrindAction_Performed;
+            playerInput.actions["Grounded_StartGrind"].canceled += StartGrindAction_Canceled;
         }
+
         /// <summary>
         /// Bind to all the events to the wall riding actions
         /// </summary>
@@ -488,6 +490,7 @@ namespace SleepyCat.Input
             playerInput.actions["Grounded_Turning"].canceled        -= TurningAction_Canceled;
                                                                     
             playerInput.actions["Grounded_StartGrind"].performed    -= StartGrindAction_Performed;
+            playerInput.actions["Grounded_StartGrind"].canceled     -= StartGrindAction_Canceled;
         }
         /// <summary>
         /// Unbind to all the events to the wall riding actions

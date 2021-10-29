@@ -55,7 +55,14 @@ namespace SleepyCat.Movement
 
         public override bool isConditionTrue()
         {
-            return (splineCurrentlyGrindingOn != null) && inputHandler.StartGrindHeld;
+            if(grindedState.hasRan)
+            {
+                return (splineCurrentlyGrindingOn != null);
+            }
+            else
+            {
+                return (splineCurrentlyGrindingOn != null) && inputHandler.StartGrindHeld;
+            }
         }
 
         //The players' grind section has touched a grindable thing
