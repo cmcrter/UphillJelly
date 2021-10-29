@@ -31,7 +31,7 @@ namespace SleepyCat.Input
             inputHandler.pushUpdate         += InputHandler_pushUpdate;
             inputHandler.balanceUpdate      += InputHandler_balanceUpdate;
             inputHandler.turningUpdated     += InputHandler_turningUpdated;
-            inputHandler.jumpUpPerformed    += InputHandler_jumpUpPerformed;
+            inputHandler.groundedJumpUpPerformed    += InputHandler_jumpUpPerformed;
         }
 
         private void InputHandler_jumpUpPerformed()
@@ -113,7 +113,7 @@ namespace SleepyCat.Input
             inputHandler.pushUpdate         -= InputHandler_pushUpdate;
             inputHandler.balanceUpdate      -= InputHandler_balanceUpdate;
             inputHandler.turningUpdated     -= InputHandler_turningUpdated;
-            inputHandler.jumpUpPerformed    -= InputHandler_jumpUpPerformed;
+            inputHandler.groundedJumpUpPerformed -= InputHandler_jumpUpPerformed;
         }
     }
 }

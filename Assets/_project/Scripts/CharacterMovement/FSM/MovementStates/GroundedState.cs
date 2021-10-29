@@ -91,7 +91,7 @@ namespace SleepyCat.Movement
         public void RegisterInputs()
         {
             //Register functions
-            inputHandler.jumpUpPerformed += Jump;
+            inputHandler.groundedJumpUpPerformed += Jump;
             inputHandler.pressDownStarted += PressDown;
             inputHandler.pressDownEnded += UnPressDown;
         }
@@ -99,7 +99,7 @@ namespace SleepyCat.Movement
         public void UnRegisterInputs()
         {
             //Unregister functions
-            inputHandler.jumpUpPerformed -= Jump;
+            inputHandler.groundedJumpUpPerformed -= Jump;
             inputHandler.pressDownStarted -= PressDown;
             inputHandler.pressDownEnded -= UnPressDown;
 
@@ -220,7 +220,7 @@ namespace SleepyCat.Movement
 
         private void Jump()
         {
-            if(jumpCoroutine == null)
+            if(jumpCoroutine == null && hasRan)
             {
                 Debug.Log("Jumping");
                 StartJumpTimer();

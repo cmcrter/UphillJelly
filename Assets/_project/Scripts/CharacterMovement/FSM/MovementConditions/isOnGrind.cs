@@ -26,7 +26,6 @@ namespace SleepyCat.Movement
 
         public SplineWrapper splineCurrentlyGrindingOn;
         public GrindDetails grindDetails;
-        public bool bButtonPressed = false;
         [NonSerialized] private GrindedState grindedState = null;
 
         //Having a few frames of pressed before the button is registered as unpressed
@@ -54,19 +53,9 @@ namespace SleepyCat.Movement
             grindedState = state;
         }
 
-        public void RegisterInputs()
-        {
-            inputHandler.startGrindPerformed += PlayerPressedGrindButton;
-        }
-
-        public void UnRegisterInputs()
-        {
-            inputHandler.startGrindPerformed -= PlayerPressedGrindButton;
-        }
-
         public override bool isConditionTrue()
         {
-            return (splineCurrentlyGrindingOn != null) && bButtonPressed;
+            return (splineCurrentlyGrindingOn != null) && inputHandler.StartGrindHeld;
         }
 
         //The players' grind section has touched a grindable thing
@@ -88,14 +77,8 @@ namespace SleepyCat.Movement
                 {
                     grindDetails = null;
                     splineCurrentlyGrindingOn = null;
-                    bButtonPressed = false;
                 }
             }
-        }
-
-        public void PlayerPressedGrindButton()
-        {
-            bButtonPressed = true;
         }
 
         #endregion

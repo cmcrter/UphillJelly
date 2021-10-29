@@ -115,14 +115,12 @@ namespace SleepyCat.Movement
         private void OnEnable()
         {
             groundedState.RegisterInputs();
-            grindBelow.RegisterInputs();
             grindingState.RegisterInputs();
         }
 
         private void OnDisable()
         {
             groundedState.UnRegisterInputs();
-            grindBelow.UnRegisterInputs();
             grindingState.UnRegisterInputs();
         }
 

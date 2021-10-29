@@ -73,13 +73,13 @@ namespace SleepyCat.Movement
         public void RegisterInputs()
         {
             //Register functions
-            inputHandler.jumpUpPerformed += JumpOffPressed;
+            inputHandler.grindingJumpUpActionPerformed += JumpOffPressed;
         }
 
         public void UnRegisterInputs()
         {
             //Unregister functions
-            inputHandler.jumpUpPerformed -= JumpOffPressed;
+            inputHandler.grindingJumpUpActionPerformed -= JumpOffPressed;
         }
 
         public override void OnStateEnter()
