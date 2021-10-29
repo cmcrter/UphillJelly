@@ -39,6 +39,10 @@ namespace SleepyCat.Input
         /// If push button is currently being held down
         /// </summary>
         public bool PushHeldDown { get; private set; } = false;
+        /// <summary>
+        /// If the start grind key is held down
+        /// </summary>
+        public bool StartGrindHeld { get; private set; } = false;
 
         /// <summary>
         /// The axis value for the balance actions
@@ -104,14 +108,34 @@ namespace SleepyCat.Input
         public event System.Action pushUpdate;
         #endregion
 
+        #region Start Grinding Action
         /// <summary>
-        /// Called when the jump input action  has been performed
+        /// Called when the start grind input action has been ended
         /// </summary>
-        public event System.Action jumpUpPerformed;
+        public event System.Action startGrindEnded;
         /// <summary>
-        /// Called when the start grind input action has been performed
+        /// Called when the start grind input action has been start
         /// </summary>
-        public event System.Action startGrindPerformed;
+        public event System.Action startGrindStarted;
+        /// <summary>
+        /// Called when the start grind input action has been start
+        /// </summary>
+        public event System.Action startGrindUpdate;
+        #endregion
+
+        /// <summary>
+        /// Called when the grinding jump action from the 
+        /// </summary>
+        public event System.Action grindingJumpUpActionPerformed;
+        /// <summary>
+        /// Called when the grounded jump input action has been performed
+        /// </summary>
+        public event System.Action groundedJumpUpPerformed;
+        /// <summary>
+        /// Called when the wall riding jump input action has been performed
+        /// </summary>
+        public event System.Action wallRidingJumpUpAction;
+
 
         /// <summary>
         /// Called every frame with the current value of the balance action axis
@@ -171,8 +195,13 @@ namespace SleepyCat.Input
                 turningUpdated(TurningAxis);
             }
         }
-
-
+        private void OnDisable()
+        {
+            UnbindAerialActions();
+            UnbindGrindingActions();
+            UnbindGroundedAction();
+            UnbindWallRidingAction();
+        }
         #endregion
 
         #region Private Methods
@@ -196,16 +225,38 @@ namespace SleepyCat.Input
         }
         #endregion
 
-        #region Jump Action
+        #region Jumping Actions
         /// <summary>
-        /// Called when the player performs the jump action
+        /// Called when the player performs the grinding jump action
+        /// </summary>
+        /// <param name="callbackContext">Grinding Jump Action's CallbackContext</param>
+        private void GrindingJumpUpAction_Performed(InputAction.CallbackContext callbackContext)
+        {
+            if (grindingJumpUpActionPerformed != null)
+            {
+                grindingJumpUpActionPerformed();
+            }
+        }
+        /// <summary>
+        /// Called when the player performs the grounded jump action
         /// </summary>
         /// <param name="callbackContext">Jump Action's CallbackContext</param>
-        private void JumpUpAction_Performed(InputAction.CallbackContext callbackContext)
+        private void GroundedJumpUpAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            if (jumpUpPerformed != null)
+            if (groundedJumpUpPerformed != null)
             {
-                jumpUpPerformed();
+                groundedJumpUpPerformed();
+            }
+        }
+        /// <summary>
+        /// Called when the player performs the wall riding jump action
+        /// </summary>
+        /// <param name="callbackContext">Jump Action's CallbackContext</param>
+        private void WallRidingJumpUpAction_Performed(InputAction.CallbackContext callbackContext)
+        {
+            if (wallRidingJumpUpAction != null)
+            {
+                wallRidingJumpUpAction();
             }
         }
         #endregion
@@ -300,9 +351,20 @@ namespace SleepyCat.Input
         /// <param name="callbackContext">start grind action's CallbackContext</param>
         private void StartGrindAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            if (startGrindPerformed != null)
+            StartGrindHeld = true;
+            if (startGrindStarted != null)
             {
-                startGrindPerformed();
+                startGrindStarted();
+            }
+        }
+
+
+        private void StartGrindAction_Canceled(InputAction.CallbackContext callbackContext)
+        {
+            StartGrindHeld = false;
+            if (startGrindEnded != null)
+            {
+                startGrindEnded();
             }
         }
         #endregion
@@ -327,34 +389,39 @@ namespace SleepyCat.Input
         }
         #endregion
 
+        /// <summary>
+        /// Bind to all the events to the aerial actions
+        /// </summary>
         private void BindAerialActions()
         {
             playerInput.actions["Aerial_Turning"].performed += TurningAction_Peformed;
-            playerInput.actions["Aerial_Turning"].canceled += TurningAction_Canceled;
+            playerInput.actions["Aerial_Turning"].canceled  += TurningAction_Canceled;
 
             playerInput.actions["Aerial_StartGrind"].performed += StartGrindAction_Performed;
+            playerInput.actions["Aerial_StartGrind"].canceled += StartGrindAction_Canceled;
         }
-
+        /// <summary>
+        /// Bind to all the events to the grinding actions
+        /// </summary>
         private void BindGrindingActions()
         {
             playerInput.actions["Grinding_Turning"].performed   += TurningAction_Peformed;
             playerInput.actions["Grinding_Turning"].canceled    += TurningAction_Canceled;
 
-            playerInput.actions["Grinding_JumpUp"].performed    += JumpUpAction_Performed;
+            playerInput.actions["Grinding_JumpUp"].performed += GrindingJumpUpAction_Performed;
         }
-        
         /// <summary>
         /// Bind to all the events to the grounded actions
         /// </summary>
         private void BindGroundedActions()
         {
-            playerInput.actions["Grounded_Push"].canceled += PushAction_Canceled;
+            playerInput.actions["Grounded_Push"].canceled   += PushAction_Canceled;
             playerInput.actions["Grounded_Push"].performed += PushAction_Performed;
 
             playerInput.actions["Grounded_PressDown"].canceled += PressDownAction_Canceled;
             playerInput.actions["Grounded_PressDown"].performed += PressDownAction_Performed;
 
-            playerInput.actions["Grounded_JumpUp"].performed += JumpUpAction_Performed;
+            playerInput.actions["Grounded_JumpUp"].performed += GroundedJumpUpAction_Performed;
 
             playerInput.actions["Grounded_Balance"].performed += BalanceAction_Performed;
             playerInput.actions["Grounded_Balance"].canceled += BalanceAction_Canceled;
@@ -367,15 +434,37 @@ namespace SleepyCat.Input
 
             playerInput.actions["Grounded_StartGrind"].performed += StartGrindAction_Performed;
         }
-
+        /// <summary>
+        /// Bind to all the events to the wall riding actions
+        /// </summary>
         private void BindWallRidingAction()
         {
-            playerInput.actions["WallRiding_JumpUp"].performed += JumpUpAction_Performed;
+            playerInput.actions["WallRiding_JumpUp"].performed += WallRidingJumpUpAction_Performed;
 
             playerInput.actions["WallRiding_Turning"].performed += TurningAction_Peformed;
             playerInput.actions["WallRiding_Turning"].canceled += TurningAction_Canceled;
         }
+        /// <summary>
+        /// Unbind to all the events to the aerial actions
+        /// </summary>
+        private void UnbindAerialActions()
+        {
+            playerInput.actions["Aerial_Turning"].performed -= TurningAction_Peformed;
+            playerInput.actions["Aerial_Turning"].canceled -= TurningAction_Canceled;
 
+            playerInput.actions["Aerial_StartGrind"].performed -= StartGrindAction_Performed;
+            playerInput.actions["Aerial_StartGrind"].canceled -= StartGrindAction_Canceled;
+        }
+        /// <summary>
+        /// Unbind to all the events to the grinding actions
+        /// </summary>
+        private void UnbindGrindingActions()
+        {
+            playerInput.actions["Grinding_Turning"].performed -= TurningAction_Peformed;
+            playerInput.actions["Grinding_Turning"].canceled -= TurningAction_Canceled;
+
+            playerInput.actions["Grinding_JumpUp"].performed -= GrindingJumpUpAction_Performed;
+        }
         /// <summary>
         /// Unbind to all the events to the grounded actions
         /// </summary>
@@ -387,7 +476,7 @@ namespace SleepyCat.Input
             playerInput.actions["Grounded_PressDown"].canceled      -= PressDownAction_Canceled;
             playerInput.actions["Grounded_PressDown"].performed     -= PressDownAction_Performed;
                                                                     
-            playerInput.actions["Grounded_JumpUp"].performed        -= JumpUpAction_Performed;
+            playerInput.actions["Grounded_JumpUp"].performed        -= GroundedJumpUpAction_Performed;
                                                                     
             playerInput.actions["Grounded_Balance"].performed       -= BalanceAction_Performed;
             playerInput.actions["Grounded_Balance"].canceled        -= BalanceAction_Canceled;
@@ -400,8 +489,16 @@ namespace SleepyCat.Input
                                                                     
             playerInput.actions["Grounded_StartGrind"].performed    -= StartGrindAction_Performed;
         }
+        /// <summary>
+        /// Unbind to all the events to the wall riding actions
+        /// </summary>
+        private void UnbindWallRidingAction()
+        {
+            playerInput.actions["WallRiding_JumpUp"].performed -= WallRidingJumpUpAction_Performed;
 
-
+            playerInput.actions["WallRiding_Turning"].performed -= TurningAction_Peformed;
+            playerInput.actions["WallRiding_Turning"].canceled -= TurningAction_Canceled;
+        }
         #endregion
     }
 }
