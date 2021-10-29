@@ -1154,6 +1154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 353250058}
   - component: {fileID: 353250059}
+  - component: {fileID: 353250060}
   m_Layer: 0
   m_Name: DevManager
   m_TagString: Untagged
@@ -1190,6 +1191,19 @@ MonoBehaviour:
   characterController: {fileID: 5214214973714796662}
   CharacterRB: {fileID: 35022090}
   goControlUI: {fileID: 2101459279}
+--- !u!114 &353250060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353250057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bab1e17d4faf9924389393f8c11a923f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputHandler: {fileID: 1820690062}
 --- !u!1 &394822538 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ba47ca25756950d44b217a82f474a3f2, type: 3}
@@ -1270,6 +1284,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9cef5802c51aecb47aea91ee0f97be09, type: 2}
+--- !u!4 &467721777 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2573286818866706067, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+  m_PrefabInstance: {fileID: 7776232620832413380}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &512008785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2609,26 +2628,6 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 268597c3-a8ae-4bbd-9870-f67264ccd085
-    m_ActionName: Grounded/Turn Left[/Keyboard/a]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 719be385-385a-4aca-831d-d56ddf62b1c7
-    m_ActionName: Aerial/New action
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 383ed3d7-28a7-44cf-b868-fb4b2cf4895d
-    m_ActionName: Grinding/New action
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2e821f34-b059-4ccb-b491-bf0768156d08
-    m_ActionName: WallRiding/New action
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 69d4e3ec-d394-43ca-b8b7-c31a42a9cd49
-    m_ActionName: Grounded/TurnRight[/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: d5631a60-a821-4580-8d64-a30f7fe7eac1
     m_ActionName: Grounded/Push[/Keyboard/space]
   - m_PersistentCalls:
@@ -2641,16 +2640,44 @@ MonoBehaviour:
     m_ActionName: Grounded/JumpUp[/Keyboard/upArrow]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 7f1602e8-3d2a-4e27-868e-4232353ad342
-    m_ActionName: Grounded/BalanceDown[/Keyboard/x]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b931f260-c82f-4b7b-a474-5c4bfccc3faa
-    m_ActionName: Grounded/BalanceUp[/Keyboard/z]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: cf4ffeb6-64f3-4c43-bf55-d33e3ea010c5
     m_ActionName: Grounded/Brake[/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: de49cbe0-0360-4c91-b319-af493a798193
+    m_ActionName: Grounded/Grounded_Balance[/Keyboard/z,/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 548bd75b-b3b2-42be-9aa2-5d76f17fffb5
+    m_ActionName: Grounded/Grounded_Turning[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c5add246-c41b-4d6f-8522-a8cb1071cbd4
+    m_ActionName: Grounded/Grounded_StartGrind[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eba0aaf8-07cc-4350-9d28-2173357dffff
+    m_ActionName: Aerial/Aerial_Turning[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 33ba528a-1ece-4d94-83bf-c7450f18d3be
+    m_ActionName: Aerial/Aerial_StartGrind[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ce732a49-8d18-49f7-bd9d-02d12d8b6342
+    m_ActionName: Grinding/Grinding_Turning[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9f20ae02-6337-4afd-98f1-4798433ef4a2
+    m_ActionName: Grinding/Grinding_JumpUp[/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7dadd8da-b547-43b4-851d-fe952628987b
+    m_ActionName: WallRiding/WallRiding_JumpUp[/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6a8cb042-269a-45d0-9b29-d68472b61cc2
+    m_ActionName: WallRiding/WallRiding_Turning[/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Grounded
@@ -4329,6 +4356,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1791802707, guid: 4911f9de42113f64fa776b512f264502, type: 3}
   m_PrefabInstance: {fileID: 7776232620832413380}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1820690062 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8743188391020955400, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+  m_PrefabInstance: {fileID: 7776232620832413380}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593b5afb87d4b904ab26718f0ca6f8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1873024937
 GameObject:
   m_ObjectHideFlags: 0
@@ -6259,6 +6297,14 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1677140361}
+    - target: {fileID: 2573286818288912050, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+      propertyPath: groundRaycastPoint
+      value: 
+      objectReference: {fileID: 467721777}
+    - target: {fileID: 2573286818288912050, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+      propertyPath: backgroundRaycastPoint
+      value: 
+      objectReference: {fileID: 7776232620832413381}
     - target: {fileID: 2573286818288912060, guid: 4911f9de42113f64fa776b512f264502, type: 3}
       propertyPath: m_Camera
       value: 
@@ -6309,6 +6355,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+--- !u!4 &7776232620832413381 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9107716072724217871, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+  m_PrefabInstance: {fileID: 7776232620832413380}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8489781829020315096
 PrefabInstance:
   m_ObjectHideFlags: 0

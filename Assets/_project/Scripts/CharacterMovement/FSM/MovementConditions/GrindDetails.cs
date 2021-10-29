@@ -14,6 +14,11 @@ namespace SleepyCat.Movement
     public class GrindDetails : MonoBehaviour
     {
         public int DuringGrindForce = 10;
-        public int ExitGrindForce = 5;
+
+        /// <summary>
+        /// the vector parts are relative to the player, z being forward, y being up, x being right
+        /// </summary>
+        [Header("vector is relative to player... x being right, y being up, z being forward")]
+        public Vector3 ExitForce = new Vector3(0, 1.5f, 10f);
     }
 }

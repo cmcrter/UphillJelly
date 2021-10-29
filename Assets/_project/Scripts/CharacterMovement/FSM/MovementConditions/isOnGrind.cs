@@ -11,6 +11,7 @@ using System;
 using UnityEngine;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Utility.Splines;
+using SleepyCat.Input;
 
 namespace SleepyCat.Movement
 {
@@ -20,9 +21,17 @@ namespace SleepyCat.Movement
         #region Variables
 
         private Rigidbody movementRB;
+        private InputHandler inputHandler;
+
         public SplineWrapper splineCurrentlyGrindingOn;
         public GrindDetails grindDetails;
+        public bool bButtonPressed = false;
         [NonSerialized] private GrindedState grindedState = null;
+
+        //Having a few frames of pressed before the button is registered as unpressed
+        float coyoteDuration;
+        Timer coyoteTimer;
+        Coroutine Co_CoyoteCoroutine;
 
         #endregion
 
@@ -33,9 +42,10 @@ namespace SleepyCat.Movement
 
         }
 
-        public void InitialiseCondition(Rigidbody rb)
+        public void InitialiseCondition(Rigidbody rb, InputHandler iHandler)
         {
             movementRB = rb;
+            inputHandler = iHandler;
         }
 
         public void SetGrindState(GrindedState state)
@@ -43,9 +53,19 @@ namespace SleepyCat.Movement
             grindedState = state;
         }
 
+        public void RegisterInputs()
+        {
+            inputHandler.startGrindPerformed += PlayerPressedGrindButton;
+        }
+
+        public void UnRegisterInputs()
+        {
+            inputHandler.startGrindPerformed -= PlayerPressedGrindButton;
+        }
+
         public override bool isConditionTrue()
         {
-            return (splineCurrentlyGrindingOn != null);
+            return (splineCurrentlyGrindingOn != null) && bButtonPressed;
         }
 
         //The players' grind section has touched a grindable thing
@@ -67,15 +87,21 @@ namespace SleepyCat.Movement
                 {
                     grindDetails = null;
                     splineCurrentlyGrindingOn = null;
+                    bButtonPressed = false;
                 }
             }
+        }
+
+        public void PlayerPressedGrindButton()
+        {
+            bButtonPressed = true;
         }
 
         #endregion
 
         #region Private Methods
 
-        
+                
 
         #endregion
     }

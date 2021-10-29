@@ -9,8 +9,9 @@
 
 using System;
 using UnityEngine;
-using SleepyCat.Utility.StateMachine;
 using UnityEngine.InputSystem;
+using SleepyCat.Utility.StateMachine;
+using SleepyCat.Input;
 
 namespace SleepyCat.Movement 
 {
@@ -23,6 +24,7 @@ namespace SleepyCat.Movement
         private Rigidbody movementRB;
         [NonSerialized] private isOnGrind onGrind = null;
         private PlayerInput pInput;
+        private InputHandler inputHandler;
 
         [SerializeField]
         Transform grindVisualiser;
@@ -60,6 +62,8 @@ namespace SleepyCat.Movement
             grind.SetGrindState(this);
 
             pInput = controllerParent.input;
+
+
         }
 
         public override void OnStateEnter()
@@ -138,7 +142,7 @@ namespace SleepyCat.Movement
         {
             if(timeAlongGrind != 1)
             {
-                movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos, 12 * Time.deltaTime));
+                movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos, 15f * dT));
             }
 
             parentController.transform.position = movementRB.transform.position;
@@ -166,7 +170,7 @@ namespace SleepyCat.Movement
         private void JumpOff()
         {
             movementRB.isKinematic = false;
-            movementRB.AddForce(((Vector3.up * 1.5f) + parentController.transform.forward) * onGrind.grindDetails.ExitGrindForce, ForceMode.Impulse);
+            movementRB.AddForce((parentController.transform.up * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward * onGrind.grindDetails.ExitForce.z), ForceMode.Impulse);
         }
 
         #endregion

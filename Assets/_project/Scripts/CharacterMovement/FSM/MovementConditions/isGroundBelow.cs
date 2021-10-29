@@ -23,7 +23,8 @@ namespace SleepyCat.Movement
         public RaycastHit FrontGroundHit;
 
         private Transform playerTransform;
-        private Transform raycastPointTransform;
+        private Transform frontraycastPointTransform;
+        private Transform backRaycastPointTransform;
 
         [SerializeField]
         private float groundDist = 0.08f;
@@ -38,10 +39,11 @@ namespace SleepyCat.Movement
         {
         }
 
-        public void InitialiseCondition(Transform player, Transform raycast)
+        public void InitialiseCondition(Transform player, Transform raycast, Transform braycast)
         {
             playerTransform = player;
-            raycastPointTransform = raycast;
+            frontraycastPointTransform = raycast;
+            backRaycastPointTransform = braycast;
         }
 
         public override bool isConditionTrue() 
@@ -49,21 +51,21 @@ namespace SleepyCat.Movement
             FrontGroundHit.normal = Vector3.zero;
 
             //Checking if anything is below it
-            if(Physics.Raycast(raycastPointTransform.position, -playerTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
+            if(Physics.Raycast(frontraycastPointTransform.position, -playerTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
             {
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
                 {
                     //Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
-                    Debug.DrawLine(raycastPointTransform.position, raycastPointTransform.position + (-playerTransform.up * groundDist), Color.magenta);
-                    Debug.DrawLine(raycastPointTransform.position, raycastPointTransform.position + (playerTransform.forward * rampDist), Color.magenta);
+                    Debug.DrawLine(frontraycastPointTransform.position, frontraycastPointTransform.position + (-playerTransform.up * groundDist), Color.magenta);
+                    Debug.DrawLine(frontraycastPointTransform.position, frontraycastPointTransform.position + (playerTransform.forward * rampDist), Color.magenta);
 
                     //Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
                     //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
 
-                if(Physics.Raycast(raycastPointTransform.position, playerTransform.forward, out RaycastHit fronthit, rampDist, ~playerMask, QueryTriggerInteraction.UseGlobal))
+                if(Physics.Raycast(frontraycastPointTransform.position, playerTransform.forward, out RaycastHit fronthit, rampDist, ~playerMask, QueryTriggerInteraction.UseGlobal))
                 {
                     //Player is about to hit a ramp
                     FrontGroundHit = fronthit;
@@ -73,6 +75,15 @@ namespace SleepyCat.Movement
 
                 //This hit may still be used for smoothing when the player is in the air
                 if(hit.distance <= groundDist)
+                {
+                    return true;
+                }
+            }
+
+            if(Physics.Raycast(backRaycastPointTransform.position, -playerTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
+            {
+                //This hit may mean the board is still on some ground
+                if(backHit.distance <= groundDist)
                 {
                     return true;
                 }

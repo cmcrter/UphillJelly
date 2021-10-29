@@ -20,6 +20,7 @@ namespace SleepyCat.Movement
     public class GroundedState : State
     {
         [NonSerialized] private isGroundBelow groundedCondition = null;
+        [NonSerialized] private isOnGrind grindedCondition = null;
 
         private PlayerMovementController parentController;
         private InputHandler inputHandler;
@@ -41,26 +42,22 @@ namespace SleepyCat.Movement
         [SerializeField]
         private float groundAdjustSmoothness = 12;
 
-        //This is public in case other systems need to know if the player is pushing.
-        public Coroutine pushWaitCoroutine
+        //This is public in case other systems need to know if the player is pushing or jumping or recently unpressing down.
+        public Coroutine pushCoroutine
         {
             get; private set;
         }
-        public Coroutine pushDuringCoroutine
-        {
-            get; private set;
-        }
+
         public Coroutine jumpCoroutine
         {
             get; private set;
         }
 
+        [Header("Coroutine management")]
         [SerializeField]
-        private float pushCooldownTimerDuration = 0.65f;
+        private float pushTimerDuration = 0.65f;
         [SerializeField]
-        private Timer pushTimer;
-        [SerializeField]
-        private float pushDuringTimerDuration = 0.35f;
+        private float pushForceDuration = 0.35f;
         [SerializeField]
         private Timer pushDuringTimer;
 
@@ -77,7 +74,7 @@ namespace SleepyCat.Movement
         {      
         }
 
-        public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow)
+        public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow, isOnGrind onGrind)
         {
             //Apply variables needed
             parentController = controllerParent;
@@ -85,15 +82,26 @@ namespace SleepyCat.Movement
             movementRB = playerRB;
 
             groundedCondition = groundBelow;
+            grindedCondition = onGrind;
+
             pInput = controllerParent.input;
-
-            //Register Input functions
-
+            inputHandler = controllerParent.inputHandler;
         }
 
-        public void DeInitialiseState()
+        public void RegisterInputs()
+        {
+            //Register functions
+            inputHandler.jumpUpPerformed += Jump;
+            inputHandler.pressDownStarted += PressDown;
+            inputHandler.pressDownEnded += UnPressDown;
+        }
+
+        public void UnRegisterInputs()
         {
             //Unregister functions
+            inputHandler.jumpUpPerformed -= Jump;
+            inputHandler.pressDownStarted -= PressDown;
+            inputHandler.pressDownEnded -= UnPressDown;
 
         }
 
@@ -102,6 +110,10 @@ namespace SleepyCat.Movement
             if(!groundedCondition.isConditionTrue())
             {
                 return parentController.aerialState;
+            }
+            else if(grindedCondition.isConditionTrue())
+            {
+                return parentController.grindingState;
             }
 
             return this;
@@ -120,18 +132,13 @@ namespace SleepyCat.Movement
 
         public override void PhysicsTick(float dT)
         {
-            if(Keyboard.current.spaceKey.isPressed && !Keyboard.current.sKey.isPressed)
+            if(inputHandler.PushHeldDown && pushCoroutine == null)
             {
                 PushBoard();
             }
-            else if(Keyboard.current.sKey.isPressed)
+            else if(inputHandler.BrakeHeldDown)
             {
                 ApplyBrakeForce();
-            }
-
-            if(Keyboard.current.ctrlKey.isPressed)
-            {
-                Jump();
             }
         }
 
@@ -142,11 +149,20 @@ namespace SleepyCat.Movement
             parentController.playerCamera.FollowRotation = true;
             movementRB.drag = GroundedDrag;
 
+            //Making sure they can start a push when landing
+            if(inputHandler.PushHeldDown)
+            {
+                PushBoard();
+            }
+
             hasRan = true;
         }
 
         public override void OnStateExit()
         {
+            StopJumpTimerCoroutine();
+            StopPushTimerCoroutine();
+
             hasRan = false;
         }
 
@@ -190,21 +206,33 @@ namespace SleepyCat.Movement
             movementRB.AddForceAtPosition(-playerTransform.forward * backwardSpeed, movementRB.position + movementRB.centerOfMass, ForceMode.Force);
         }
 
+        private void PressDown()
+        {
+            movementRB.centerOfMass += new Vector3(0, -0.25f, 0);
+        }
+
+        private void UnPressDown()
+        {
+            movementRB.centerOfMass += new Vector3(0, 0.25f, 0);
+        }
+
         private void Jump()
         {
-            Debug.Log("Jumping");
-            StartJumpTimer();
+            if(jumpCoroutine == null)
+            {
+                Debug.Log("Jumping");
+                StartJumpTimer();
+            }
         }
 
         private void PushBoard()
         {
-            if(pushTimer != null && pushTimer.isActive)
+            if(pushCoroutine != null && pushDuringTimer.isActive)
             {
                 return;
             }
 
             StartPushTimerCoroutine();
-            StartPushDuringTimerCoroutine();
         }
 
         #endregion
@@ -214,39 +242,21 @@ namespace SleepyCat.Movement
         /// </summary>
         private void StartPushTimerCoroutine()
         {
-            StopPushTimerCoroutine();
-            pushWaitCoroutine = parentController.StartCoroutine(Co_BoardAfterPush());
+            pushCoroutine = parentController.StartCoroutine(Co_BoardPush());
         }
 
         private void StopPushTimerCoroutine()
         {
-            if(pushWaitCoroutine != null)
+            if(pushCoroutine != null)
             {
-                parentController.StopCoroutine(pushWaitCoroutine);
+                parentController.StopCoroutine(pushCoroutine);
             }
 
-            pushWaitCoroutine = null;
+            pushCoroutine = null;
         }
-
-        private void StartPushDuringTimerCoroutine()
-        {
-            StopPushDuringTimerCoroutine();
-            pushDuringCoroutine = parentController.StartCoroutine(Co_BoardDuringPush());
-        }
-
-        private void StopPushDuringTimerCoroutine()
-        {
-            if(pushDuringCoroutine != null)
-            {
-                parentController.StopCoroutine(pushDuringCoroutine);
-            }
-
-            pushDuringCoroutine = null;
-        }
-
+        
         private void StartJumpTimer()
         {
-            StopJumpTimerCoroutine();
             jumpCoroutine = parentController.StartCoroutine(Co_JumpTimer());
         }
 
@@ -260,7 +270,6 @@ namespace SleepyCat.Movement
             jumpCoroutine = null;
         }
 
-
         private IEnumerator Co_JumpTimer()
         {
             //It's technically a new timer on top of the class in use
@@ -268,6 +277,7 @@ namespace SleepyCat.Movement
 
             movementRB.AddForce(Vector3.up * jumpSpeed * 1000);
             Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
+
 
             //Whilst it has time left
             while(jumpTimer.isActive)
@@ -280,59 +290,45 @@ namespace SleepyCat.Movement
             jumpCoroutine = null;
         }
 
-        //Running the timer
-        private IEnumerator Co_BoardAfterPush()
-        {
-            //It's technically a new timer on top of the class in use
-            pushTimer = new Timer(pushCooldownTimerDuration);
-
-            //Whilst it has time left
-            while(pushTimer.isActive)
-            {
-                //Tick each frame
-                pushTimer.Tick(Time.deltaTime);
-                yield return null;
-            }
-
-            pushWaitCoroutine = null;
-        }
-
         //Running the during timer
-        private IEnumerator Co_BoardDuringPush()
+        private IEnumerator Co_BoardPush()
         {
             //It's technically a new timer on top of the class in use
-            pushDuringTimer = new Timer(pushDuringTimerDuration);
+            pushDuringTimer = new Timer(pushTimerDuration);
 
             //Whilst it has time left
             while(pushDuringTimer.isActive && hasRan)
             {
-                //Pushing forward
-                Vector3 force = playerTransform.forward * forwardSpeed * 1000 * Time.deltaTime;
-
-                if(movementRB.velocity.magnitude > 1)
+                if(pushDuringTimer.current_time <= pushForceDuration)
                 {
-                    //adjust the force depending on the current speed (15 being the amount that it can maximum be at if it's just pushing)
-                    float max = 10f / movementRB.velocity.magnitude;
-                    Mathf.Clamp(max, 0.05f, 1);
+                    //Pushing forward
+                    Vector3 force = playerTransform.forward * forwardSpeed * 1000 * Time.deltaTime;
 
-                    //Debug.Log(rb.velocity.magnitude + " " + max + " " + (1 - max).ToString());
+                    if(movementRB.velocity.magnitude > 1)
+                    {
+                        //adjust the force depending on the current speed (15 being the amount that it can maximum be at if it's just pushing)
+                        float max = 10f / movementRB.velocity.magnitude;
+                        Mathf.Clamp(max, 0.05f, 1);
 
-                    // if the force is above 12, pushing shouldn't add anything
-                    force *= max;
+                        //Debug.Log(rb.velocity.magnitude + " " + max + " " + (1 - max).ToString());
+
+                        // if the force is above 12, pushing shouldn't add anything
+                        force *= max;
+                    }
+                    else
+                    {
+                        force *= 2f;
+                    }
+
+                    movementRB.AddForce(force, ForceMode.Impulse);
                 }
-                else
-                {
-                    force *= 2f;
-                }
-
-                movementRB.AddForce(force, ForceMode.Impulse);
-
+             
                 //Tick each frame
                 pushDuringTimer.Tick(Time.deltaTime);
                 yield return null;
             }
 
-            pushDuringCoroutine = null;
+            pushCoroutine = null;
         }
 
         #endregion

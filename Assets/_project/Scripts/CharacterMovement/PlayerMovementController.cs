@@ -8,8 +8,9 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using SleepyCat.Utility.StateMachine;
 using UnityEngine.InputSystem;
+using SleepyCat.Utility.StateMachine;
+using SleepyCat.Input;
 
 namespace SleepyCat.Movement
 {
@@ -40,9 +41,11 @@ namespace SleepyCat.Movement
         [SerializeField]
         private Transform groundRaycastPoint;
         [SerializeField]
+        private Transform backgroundRaycastPoint;
+
         public SphereCollider ballMovement;
-        [SerializeField]
         public PlayerInput input;
+        public InputHandler inputHandler;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
@@ -96,16 +99,28 @@ namespace SleepyCat.Movement
         private void Awake()
         {
             //Setting up the state machine
-            groundBelow.InitialiseCondition(transform, groundRaycastPoint);
+            groundBelow.InitialiseCondition(transform, groundRaycastPoint, backgroundRaycastPoint);
             nextToWallRun.InitialiseCondition();
-            grindBelow.InitialiseCondition(rb);
+            grindBelow.InitialiseCondition(rb, inputHandler);
 
-            groundedState.InitialiseState(this, rb, groundBelow);
+            groundedState.InitialiseState(this, rb, groundBelow, grindBelow);
             aerialState.InitialiseState(this, rb, groundBelow, nextToWallRun, grindBelow);
             wallRideState.InitialiseState();
             grindingState.InitialiseState(this, rb, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(groundedState);
+        }
+
+        private void OnEnable()
+        {
+            groundedState.RegisterInputs();
+            grindBelow.RegisterInputs();
+        }
+
+        private void OnDisable()
+        {
+            groundedState.UnRegisterInputs();
+            grindBelow.UnRegisterInputs();
         }
 
         private void Start()
@@ -130,7 +145,7 @@ namespace SleepyCat.Movement
             //Multiple states need to know the current turning of the user
             currentTurnInput = 0;
 
-            if(Keyboard.current.aKey.isPressed)
+            if(inputHandler.TurningAxis < 0)
             {
                 if(rb.velocity.magnitude < 2)
                 {
@@ -142,7 +157,7 @@ namespace SleepyCat.Movement
                 }
             }
 
-            if(Keyboard.current.dKey.isPressed)
+            if(inputHandler.TurningAxis > 0)
             {
                 if(rb.velocity.magnitude < 2)
                 {

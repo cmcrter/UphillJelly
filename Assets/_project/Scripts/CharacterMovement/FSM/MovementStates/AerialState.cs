@@ -11,6 +11,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SleepyCat.Utility.StateMachine;
+using SleepyCat.Input;
 
 namespace SleepyCat.Movement
 {
@@ -24,7 +25,8 @@ namespace SleepyCat.Movement
         private PlayerMovementController parentController;
         private Rigidbody movementRB;
         private PlayerInput pInput;
-      
+        private InputHandler inputHandler;
+
         [SerializeField]
         public float AerialDrag = 0.05f;
         [SerializeField]
@@ -45,6 +47,17 @@ namespace SleepyCat.Movement
             wallRideCondition = wallRunning;
 
             pInput = controllerParent.input;
+            inputHandler = controllerParent.inputHandler;
+        }
+
+        public void RegisterInputs()
+        {
+            //Register functions
+        }
+
+        public void UnRegisterInputs()
+        {
+            //Unregister functions
         }
 
         public override State returnCurrentState()
@@ -59,7 +72,7 @@ namespace SleepyCat.Movement
             } 
             else if(wallRideCondition.isConditionTrue()) 
             {
-                //return parentController.;
+                return parentController.wallRideState;
             }
 
             return this;
@@ -75,13 +88,13 @@ namespace SleepyCat.Movement
         public override void PhysicsTick(float dT)
         {
             //Need some way of making the skateboard feel more stable in the air and just generally nicer
-            if(Keyboard.current.leftArrowKey.isPressed)
+            if(parentController.currentTurnInput < 0)
             {
                 //Turn Left
                 movementRB.transform.Rotate(new Vector3(0, 5f, 0));
             }
 
-            if(Keyboard.current.rightArrowKey.isPressed)
+            if(parentController.currentTurnInput > 0)
             {
                 //Turn Right
                 movementRB.transform.Rotate(new Vector3(0, -5, 0));
@@ -101,7 +114,6 @@ namespace SleepyCat.Movement
         public override void OnStateExit()
         {
             movementRB.angularVelocity = Vector3.zero;
-
             hasRan = false;
         }
     }
