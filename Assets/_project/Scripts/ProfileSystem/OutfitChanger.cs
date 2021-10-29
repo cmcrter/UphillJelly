@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 25/10/21
+// Date Last Edited: 29/10/21
 // Brief: A script to control the outfit system
 //////////////////////////////////////////////////////////// 
 
@@ -16,7 +16,7 @@ public class OutfitChanger : MonoBehaviour
 
     #region Variables
 
-    //
+    // reference to the shop script
     public Shop shopScript;
 
     // Hat selecter game object
@@ -58,16 +58,16 @@ public class OutfitChanger : MonoBehaviour
 
     #region Methods
 
-    //
+    // on start
     public void Start() {
 
-        //
+        // set the current hat object to 4
         currentGOint = 4;
 
-        //
+        // set the current hat material to 4
         currentGOMaterialint = 4;
 
-        //
+        // set the current character to 2
         currentCharacterint = 2;
 
     }
@@ -85,7 +85,7 @@ public class OutfitChanger : MonoBehaviour
         // set the hat selector mesh filter to the display game objects mesh filter
         hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
 
-        //
+        // load the current character material that has been saved
         characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
     }
@@ -122,7 +122,7 @@ public class OutfitChanger : MonoBehaviour
         // set the hat selector mesh filter to the display game objects mesh filter
         hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
 
-        //
+        // move to the next hat price
         shopScript.NextHatPrice();
 
     }
@@ -159,7 +159,7 @@ public class OutfitChanger : MonoBehaviour
         // set the hat selector mesh filter to the display game objects mesh filter
         hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
 
-        //
+        // move to the previous hat price
         shopScript.PreviousHatPrice();
 
     }
@@ -185,7 +185,7 @@ public class OutfitChanger : MonoBehaviour
         // to the characters material
         characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
-        //
+        // move to the next character price
         shopScript.NextCharacterPrice();
 
     }
@@ -208,7 +208,7 @@ public class OutfitChanger : MonoBehaviour
         // to the characters material
         characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
-        //
+        // move to the previous character price
         shopScript.PreviousCharacterPrice();
 
     }

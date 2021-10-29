@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 25/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 25/10/21
+// Date Last Edited: 29/10/21
 // Brief: A script to control the shop and all transactions
 //////////////////////////////////////////////////////////// 
 
@@ -17,7 +17,7 @@ public class Shop : MonoBehaviour
 
     #region Variables
 
-    //
+    // Outfitchanger reference
     public OutfitChanger outfitChanger;
 
     // int for the currency
@@ -26,43 +26,48 @@ public class Shop : MonoBehaviour
     // text for the currency text
     public Text currencyText;
 
+    // gameobject for the hat price panel
+    public GameObject HatPricePanel;
 
-    //
-    public bool IsBought;
+    // gameobject for the character price panel
+    public GameObject CharacterPricePanel;
+
+    // bool for if something is bought
+    //public bool IsBought;
 
 
-    //
+    // current hat price text
     public Text CurrentHatPriceText;
 
-    // 
+    // public list of the hat prices
     public List<int> IndividualHatPrices = new List<int>();
 
-    //
+    // current hat selected as an int
     public int CurrentHatSelectedInt;
 
-    //
+    // current hat price as an int
     public int CurrentHatPriceInt;
 
 
 
-    //
+    // list of bools for which hat is bought
     public List<bool> IsHatBought = new List<bool>();
 
-    //
+    // list of bools for which character is bought
     public List<bool> IsCharacterBought = new List<bool>();
 
 
 
-    //
+    // current character price text
     public Text CurrentCharacterPriceText;
 
-    // 
+    //  public list of all the character prices
     public List<int> IndividualCharacterPrices = new List<int>();
 
-    //
+    // current character selected as an int
     public int CurrentCharacterSelectedInt;
 
-    //
+    // current character price as an int
     public int CurrentCharacterPriceInt;
 
     #endregion
@@ -75,10 +80,10 @@ public class Shop : MonoBehaviour
         // set the currency to 500
         Currency = 500;
 
-        //
+        // set the current hat to 4 (No hat)
         CurrentHatSelectedInt = 4;
 
-        //
+        // set the current character to 2(one of the middle materials)
         CurrentCharacterSelectedInt = 2;
 
 
@@ -94,34 +99,76 @@ public class Shop : MonoBehaviour
 
 
 
-        //
+        // set the current hat selected int to the outfits current hat int
         CurrentHatSelectedInt = outfitChanger.currentGOint;
 
-        //
+        // set the current hat price to the individual hat price of that int
         CurrentHatPriceInt = IndividualHatPrices[CurrentHatSelectedInt];
 
-        //
+        // set the hat text to display the price of the hat
         CurrentHatPriceText.text = "This hat costs £" + CurrentHatPriceInt;
 
 
 
 
-        //
+        // set the current character selected int to the outfits current character int
         CurrentCharacterSelectedInt = outfitChanger.currentCharacterint;
 
-        //
+        // set the current character price to the individual character price of that int
         CurrentCharacterPriceInt = IndividualCharacterPrices[CurrentCharacterSelectedInt];
 
-        //
+        // set the character text to display the price of the character
         CurrentCharacterPriceText.text = "This Character costs £" + CurrentCharacterPriceInt;
+
+
+
+        // if the hat is bought with the current selected int of that hat
+        if (IsHatBought[CurrentHatSelectedInt]) {
+
+            // set the hat price panel to false
+            HatPricePanel.SetActive(false);
+
+        }
+
+        // if the hat is not bought with the current selected int of that hat
+        if (!IsHatBought[CurrentHatSelectedInt]) {
+
+            // set the hat price panel to true
+            HatPricePanel.SetActive(true);
+
+        }
+
+
+
+
+
+
+        // if the character is bought with the current selected int of that character
+        if (IsCharacterBought[CurrentCharacterSelectedInt]) {
+
+            // set the character price panel to false
+            CharacterPricePanel.SetActive(false);
+
+        }
+
+        // if the character is not bought with the current selected int of that character
+        if (!IsCharacterBought[CurrentCharacterSelectedInt]) {
+
+            // set the character price panel to true
+            CharacterPricePanel.SetActive(true);
+
+        }
+
+
+
 
 
     }
 
-    //
+    // Next hat price which is called in OutfitChanger
     public void NextHatPrice() {
 
-        //
+        // increment the current hat by 1
         CurrentHatSelectedInt++;
 
         /*
@@ -135,10 +182,10 @@ public class Shop : MonoBehaviour
         */
     }
 
-    //
+    // previous hat price which is called in OutfitChanger
     public void PreviousHatPrice() {
 
-        //
+        // increment the current hat by -1
         CurrentHatSelectedInt--;
 
         /*
@@ -153,11 +200,32 @@ public class Shop : MonoBehaviour
 
     }
 
-    //
+    // buy the current hat
     public void BuyCurrentHat() {
 
-        //
+        // if players currency is more than or = to the current hat price
+        if (Currency >= CurrentHatPriceInt) {
 
+            // takeaway the current hat price from the currency
+            Currency -= CurrentHatPriceInt;
+
+            // set the hat to the hat has been bought with the current hat int
+            IsHatBought[CurrentHatSelectedInt] = true;
+
+            // Debug
+            Debug.Log("BoughtHat");
+
+        }
+        
+        // if the player does not have enough currency for the hat
+        if (Currency < CurrentHatPriceInt) {
+
+            // Debug
+            Debug.Log("Hat Too Expensive");
+
+        }
+
+        
 
     }
 
@@ -165,10 +233,10 @@ public class Shop : MonoBehaviour
 
 
 
-    //
+    // next character price which is called in OutfitChanger
     public void NextCharacterPrice() {
 
-        //
+        // increment the current character by 1
         CurrentCharacterSelectedInt++;
 
         /*
@@ -183,10 +251,10 @@ public class Shop : MonoBehaviour
 
     }
 
-    //
+    // previous character price which is called in OutfitChanger
     public void PreviousCharacterPrice() {
 
-        //
+        // increment the current character by -1
         CurrentCharacterSelectedInt--;
 
         /*
@@ -201,11 +269,30 @@ public class Shop : MonoBehaviour
 
     }
 
-    //
+    // buy the current character
     public void BuyCurrentCharacter() {
 
-        //
+        // if players currency is more than or = to the current character price
+        if (Currency >= CurrentCharacterPriceInt) {
 
+            // takeaway the current character price from the currency
+            Currency -= CurrentCharacterPriceInt;
+
+            // set the character to the character has been bought with the current character int
+            IsCharacterBought[CurrentCharacterSelectedInt] = true;
+
+            // Debug
+            Debug.Log("BoughtCharacter");
+
+        }
+
+        // if the player does not have enough currency for the character
+        if (Currency < CurrentCharacterPriceInt) {
+
+            // Debug
+            Debug.Log("Character Too Expensive");
+
+        }
 
     }
 

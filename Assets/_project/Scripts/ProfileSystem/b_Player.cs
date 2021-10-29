@@ -16,6 +16,9 @@ public class b_Player : MonoBehaviour
 
     #region Variables
 
+    //
+    public List<bool> HatBoughtBools;
+
     // reference to the outfit changer script
     public OutfitChanger outfitChanger;
 
@@ -54,6 +57,13 @@ public class b_Player : MonoBehaviour
         // this currency int = shop currency int
         Currency = shop.Currency;
 
+
+
+        //
+        HatBoughtBools = shop.IsHatBought;
+
+
+
         // take this save player function and save it using the savesystem script
         b_SaveSystem.SavePlayer(this);
 
@@ -79,6 +89,13 @@ public class b_Player : MonoBehaviour
 
         // set the shop currency to this currency
         shop.Currency = Currency;
+
+
+
+        //
+        shop.IsHatBought = HatBoughtBools;
+
+
 
     }
 
