@@ -82,6 +82,8 @@ namespace SleepyCat.Movement
 
             if(Physics.Raycast(backRaycastPointTransform.position, -playerTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
             {
+                //Could use backhit to help smoothing with the board against the ground
+
                 //This hit may mean the board is still on some ground
                 if(backHit.distance <= groundDist)
                 {
