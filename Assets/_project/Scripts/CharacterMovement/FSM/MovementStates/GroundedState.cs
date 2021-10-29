@@ -12,6 +12,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SleepyCat.Utility.StateMachine;
+using SleepyCat.Input;
 
 namespace SleepyCat.Movement
 {
@@ -21,8 +22,10 @@ namespace SleepyCat.Movement
         [NonSerialized] private isGroundBelow groundedCondition = null;
 
         private PlayerMovementController parentController;
+        private InputHandler inputHandler;
         private Transform playerTransform;
         private Rigidbody movementRB;
+        private PlayerInput pInput;
 
         [SerializeField]
         public float GroundedDrag = 0.05f;
@@ -68,16 +71,29 @@ namespace SleepyCat.Movement
 
         public GroundedState()
         {
+        }
 
+        ~GroundedState()
+        {      
         }
 
         public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isGroundBelow groundBelow)
         {
+            //Apply variables needed
             parentController = controllerParent;
             playerTransform = controllerParent.transform;
             movementRB = playerRB;
 
             groundedCondition = groundBelow;
+
+            //Register Input functions
+
+        }
+
+        public void DeInitialiseState()
+        {
+            //Unregister functions
+
         }
 
         public override State returnCurrentState()
@@ -120,6 +136,8 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
+            pInput.SwitchCurrentActionMap("Grounded");
+            
             parentController.playerCamera.FollowRotation = true;
             movementRB.drag = GroundedDrag;
 

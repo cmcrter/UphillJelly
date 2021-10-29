@@ -10,6 +10,7 @@
 using System;
 using UnityEngine;
 using SleepyCat.Utility.StateMachine;
+using UnityEngine.InputSystem;
 
 namespace SleepyCat.Movement 
 {
@@ -21,6 +22,7 @@ namespace SleepyCat.Movement
         private PlayerMovementController parentController;
         private Rigidbody movementRB;
         [NonSerialized] private isOnGrind onGrind = null;
+        private PlayerInput pInput;
 
         [SerializeField]
         Transform grindVisualiser;
@@ -41,6 +43,7 @@ namespace SleepyCat.Movement
         [SerializeField]
         float autoJumpCoroutineDuration;
         Coroutine autoJumpCoroutine;
+        float tIncrementPerSecond = 0.1f;
 
         #endregion
 
@@ -61,7 +64,9 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
-            if (parentController.playerCamera)
+            pInput.SwitchCurrentActionMap("Grinding");
+
+            if(parentController.playerCamera)
             {
                 parentController.playerCamera.FollowRotation = false;
             }
@@ -95,30 +100,27 @@ namespace SleepyCat.Movement
         {
             if(onGrind.grindDetails != null && onGrind.splineCurrentlyGrindingOn)
             {
-                //UpdateTIncrement();
-                //if(currentTValue + Time.deltaTime * tIncrementPerSecond < 1)
-                //{
-                //    // Clamping it at the max value and min values of a unit interval
+                if(timeAlongGrind + dT * tIncrementPerSecond < 1)
+                {
+                    // Clamping it at the max value and min values of a unit interval
 
-                //    // Check the length of the next increment
-                //    Vector3 nextPoint = splineSequence.GetLengthBasedPoint(currentTValue + Time.deltaTime * tIncrementPerSecond);
-                //    Vector3 currentPoint = splineSequence.GetLengthBasedPoint(currentTValue);
-                //    Vector3 velocity = nextPoint - currentPoint;
+                    // Check the length of the next increment
+                    Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + dT * tIncrementPerSecond);
+                    Vector3 currentPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
+                    Vector3 velocity = nextPoint - currentPoint;
 
 
-                //    // Ideally the distance change should be speed * time.deltaTime
-                //    float desiredDistance = speed * Time.deltaTime;
-                //    float currentDistanceChange = velocity.magnitude;
+                    // Ideally the distance change should be speed * time.deltaTime
+                    float desiredDistance = onGrind.grindDetails.DuringGrindForce * Time.deltaTime;
+                    float currentDistanceChange = velocity.magnitude;
 
-                //    float desiredChange = desiredDistance / currentDistanceChange;
-                //    currentTValue = Mathf.Clamp01(currentTValue + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
-                //}
-                //else
-                //{
-                //    currentTValue = Mathf.Clamp01(currentTValue + Time.deltaTime * tIncrementPerSecond); // add length to this calculation
-                //}
-
-                timeAlongGrind += (dT * onGrind.grindDetails.DuringGrindForce) / PotentialLengthOfGrind;
+                    float desiredChange = desiredDistance / currentDistanceChange;
+                    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond * desiredChange); // add length to this calculation
+                }
+                else
+                {
+                    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
+                }
 
                 if(timeAlongGrind < 1f)
                 {

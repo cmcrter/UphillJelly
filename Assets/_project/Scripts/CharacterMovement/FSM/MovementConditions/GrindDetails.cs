@@ -13,7 +13,7 @@ namespace SleepyCat.Movement
 {
     public class GrindDetails : MonoBehaviour
     {
-        public int DuringGrindForce;
-        public int ExitGrindForce;
+        public int DuringGrindForce = 10;
+        public int ExitGrindForce = 5;
     }
 }

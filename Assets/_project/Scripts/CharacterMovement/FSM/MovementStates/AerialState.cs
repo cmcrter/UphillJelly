@@ -23,6 +23,7 @@ namespace SleepyCat.Movement
 
         private PlayerMovementController parentController;
         private Rigidbody movementRB;
+        private PlayerInput pInput;
 
         [SerializeField]
         public float AerialDrag = 0.05f;
@@ -87,6 +88,8 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
+            pInput.SwitchCurrentActionMap("Aerial");
+
             parentController.playerCamera.FollowRotation = false;
             movementRB.drag = AerialDrag;
 

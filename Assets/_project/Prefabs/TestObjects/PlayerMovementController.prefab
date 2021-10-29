@@ -775,7 +775,7 @@ MonoBehaviour:
     turnSpeed: 0.175
     backwardSpeed: 15
     jumpSpeed: 25
-    groundAdjustSmoothness: 12
+    groundAdjustSmoothness: 15
     pushCooldownTimerDuration: 0.75
     pushTimer:
       isLocked: 0
@@ -791,11 +791,12 @@ MonoBehaviour:
   grindingState:
     hasRan: 0
     grindVisualiser: {fileID: 1532173283}
-    grindSpeed: 1
-    grindExitForce: 10
     currentPlayerAim: {x: 0, y: 0, z: 0}
     currentSplineDir: {x: 0, y: 0, z: 0}
+    pos: {x: 0, y: 0, z: 0}
     timeAlongGrind: 0
+    jumpCoroutineDuration: 0
+    autoJumpCoroutineDuration: 0
   groundBelow:
     playerMask:
       serializedVersion: 2
@@ -804,6 +805,7 @@ MonoBehaviour:
     rampDist: 1
   grindBelow:
     splineCurrentlyGrindingOn: {fileID: 0}
+    grindDetails: {fileID: 0}
   playerCamera: {fileID: 0}
   currentTurnInput: 0
   playerModel: {fileID: 2573286819368759183}
