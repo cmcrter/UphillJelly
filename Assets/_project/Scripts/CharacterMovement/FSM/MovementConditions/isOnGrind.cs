@@ -33,6 +33,8 @@ namespace SleepyCat.Movement
         Timer coyoteTimer;
         Coroutine CoyoteCoroutine;
 
+        bool bTrue = false;
+
         #endregion
 
         #region Public Methods
@@ -55,14 +57,7 @@ namespace SleepyCat.Movement
 
         public override bool isConditionTrue()
         {
-            if(grindedState.hasRan)
-            {
-                return (splineCurrentlyGrindingOn != null);
-            }
-            else
-            {
-                return (splineCurrentlyGrindingOn != null) && inputHandler.StartGrindHeld;
-            }
+            return bTrue;
         }
 
         //The players' grind section has touched a grindable thing
@@ -72,6 +67,8 @@ namespace SleepyCat.Movement
             {
                 grindDetails = grindUsing;
                 splineCurrentlyGrindingOn = splineHit;
+
+                inputHandler.StartCoroutine(Co_WaitForButtonPress());
             }
         }
 
@@ -84,6 +81,8 @@ namespace SleepyCat.Movement
                 {
                     grindDetails = null;
                     splineCurrentlyGrindingOn = null;
+
+                    bTrue = false;
                 }
             }
         }
@@ -92,6 +91,18 @@ namespace SleepyCat.Movement
 
         #region Private Methods
 
-        #endregion
+        private IEnumerator Co_WaitForButtonPress()
+        {
+            while(splineCurrentlyGrindingOn != null && !bTrue)
+            {
+                if(inputHandler.StartGrindHeld)
+                {
+                    bTrue = true;
+                }
+
+                yield return null;
+            }
+        }
+            #endregion
     }
 }

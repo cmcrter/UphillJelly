@@ -149,7 +149,7 @@ namespace SleepyCat.Movement
                 else
                 {
                     timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
-                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.90f, 0.01f);
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
                     parentController.transform.forward = currentSplineDir;
                     JumpOff();
                 }
