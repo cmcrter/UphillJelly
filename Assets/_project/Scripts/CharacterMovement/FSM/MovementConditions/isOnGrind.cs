@@ -8,6 +8,7 @@
 //////////////////////////////////////////////////////////// 
 
 using System;
+using System.Collections;
 using UnityEngine;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Utility.Splines;
@@ -31,7 +32,7 @@ namespace SleepyCat.Movement
         //Having a few frames of pressed before the button is registered as unpressed
         float coyoteDuration;
         Timer coyoteTimer;
-        Coroutine Co_CoyoteCoroutine;
+        Coroutine CoyoteCoroutine;
 
         #endregion
 
@@ -100,8 +101,6 @@ namespace SleepyCat.Movement
         #endregion
 
         #region Private Methods
-
-                
 
         #endregion
     }

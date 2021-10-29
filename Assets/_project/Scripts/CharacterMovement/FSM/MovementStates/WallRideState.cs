@@ -1,15 +1,16 @@
 ////////////////////////////////////////////////////////////
-// File: 
-// Author: 
-// Date Created: 
-// Last Edited By:
-// Date Last Edited:
-// Brief: 
+// File: WallRideState.cs
+// Author: Charles Carter
+// Date Created: 29/10/21
+// Last Edited By: Charles Carter
+// Date Last Edited: 29/10/21
+// Brief: The state the player is in when they're riding along the wall
 //////////////////////////////////////////////////////////// 
-
+///
+using System.Collections;
 using UnityEngine;
-using SleepyCat.Utility.StateMachine;
 using UnityEngine.InputSystem;
+using SleepyCat.Utility.StateMachine;
 
 namespace SleepyCat.Movement
 {
@@ -17,6 +18,10 @@ namespace SleepyCat.Movement
     {
         private PlayerInput pInput;
 
+        [SerializeField]
+        private float coyoteDuration;
+        private Timer coyoteTimer;
+        private Coroutine Co_CoyoteCoroutine;
 
         #region Public Methods
 
@@ -61,6 +66,14 @@ namespace SleepyCat.Movement
         #endregion
 
         #region Private Methods
+
+        private IEnumerator Co_CoyoteTime()
+        {
+            coyoteTimer = new Timer(coyoteDuration);
+
+            yield return true;
+        }
+
         #endregion
     }
 }

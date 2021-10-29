@@ -128,10 +128,7 @@ namespace SleepyCat.Movement
             {
                 parentController.ResetBoard();
             }
-        }
 
-        public override void PhysicsTick(float dT)
-        {
             if(inputHandler.PushHeldDown && pushCoroutine == null)
             {
                 PushBoard();
@@ -140,6 +137,11 @@ namespace SleepyCat.Movement
             {
                 ApplyBrakeForce();
             }
+        }
+
+        public override void PhysicsTick(float dT)
+        {
+
         }
 
         public override void OnStateEnter()

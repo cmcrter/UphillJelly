@@ -26,8 +26,9 @@ namespace SleepyCat.Movement
         private PlayerInput pInput;
         private InputHandler inputHandler;
 
+        [Header("Spline Following Variables")]
         [SerializeField]
-        Transform grindVisualiser;
+        private Transform grindVisualiser;
         [SerializeField]
         private Vector3 currentPlayerAim = Vector3.zero;
         [SerializeField]
@@ -37,14 +38,18 @@ namespace SleepyCat.Movement
 
         [SerializeField]
         private float timeAlongGrind;
+        private float tIncrementPerSecond = 0.01f;
 
+        [Header("Jumping variables")]
         [SerializeField]
-        float jumpCoroutineDuration;
-        Coroutine jumpCoroutine;
+        private float jumpCoroutineDuration;
+        private Coroutine jumpCoroutine;
         [SerializeField]
-        float autoJumpCoroutineDuration;
-        Coroutine autoJumpCoroutine;
-        float tIncrementPerSecond = 0.01f;
+        private float autoJumpCoroutineDuration;
+        private Coroutine autoJumpCoroutine;
+        [SerializeField]
+        private float jumpSpeed = 50;
+
         #endregion
 
         #region Public Methods
@@ -62,8 +67,19 @@ namespace SleepyCat.Movement
             grind.SetGrindState(this);
 
             pInput = controllerParent.input;
+            inputHandler = controllerParent.inputHandler;
+        }
 
+        public void RegisterInputs()
+        {
+            //Register functions
+            inputHandler.jumpUpPerformed += JumpOffPressed;
+        }
 
+        public void UnRegisterInputs()
+        {
+            //Unregister functions
+            inputHandler.jumpUpPerformed -= JumpOffPressed;
         }
 
         public override void OnStateEnter()
@@ -85,7 +101,6 @@ namespace SleepyCat.Movement
             //Making sure nothing interferes with the movement
             movementRB.interpolation = RigidbodyInterpolation.Interpolate;
             movementRB.isKinematic = true;
-
             hasRan = true;
         }
 
@@ -95,9 +110,12 @@ namespace SleepyCat.Movement
             {
                 parentController.playerCamera.FollowRotation = true;
             }
+
+            pos = Vector3.zero;
+            currentSplineDir = Vector3.zero;
+
             movementRB.interpolation = RigidbodyInterpolation.None;
             timeAlongGrind = 0;
-
             hasRan = false;
         }
 
@@ -167,10 +185,31 @@ namespace SleepyCat.Movement
 
         #region Private Methods
 
+        //The auto jump off
         private void JumpOff()
         {
+            timeAlongGrind = 1f;
             movementRB.isKinematic = false;
+
             movementRB.AddForce((parentController.transform.up * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward * onGrind.grindDetails.ExitForce.z), ForceMode.Impulse);
+        }
+
+        //Jump off when player pressed button...
+        private void JumpOffPressed()
+        {
+            if(!hasRan) 
+            {
+                return;
+            }
+
+            timeAlongGrind = 1f;
+            movementRB.isKinematic = false;
+
+            parentController.transform.forward = currentSplineDir;
+
+            //essentially the same jump as when grounded
+            movementRB.AddForce((parentController.transform.up * jumpSpeed * 1000) + (parentController.transform.forward * jumpSpeed * 1000));
+            Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
         }
 
         #endregion

@@ -111,16 +111,19 @@ namespace SleepyCat.Movement
             playerStateMachine = new FiniteStateMachine(groundedState);
         }
 
+        //Adding the inputs to the finite state machine
         private void OnEnable()
         {
             groundedState.RegisterInputs();
             grindBelow.RegisterInputs();
+            grindingState.RegisterInputs();
         }
 
         private void OnDisable()
         {
             groundedState.UnRegisterInputs();
             grindBelow.UnRegisterInputs();
+            grindingState.UnRegisterInputs();
         }
 
         private void Start()
