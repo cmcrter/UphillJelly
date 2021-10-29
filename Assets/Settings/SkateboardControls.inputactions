@@ -6,7 +6,7 @@
             "id": "90d4607c-7a75-412e-bf21-2553f5cefec2",
             "actions": [
                 {
-                    "name": "Push",
+                    "name": "Grounded_Push",
                     "type": "Button",
                     "id": "d5631a60-a821-4580-8d64-a30f7fe7eac1",
                     "expectedControlType": "Button",
@@ -14,7 +14,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "PressDown",
+                    "name": "Grounded_PressDown",
                     "type": "Button",
                     "id": "2e3de2b0-c6d8-4062-9e3b-1c13ee2e6141",
                     "expectedControlType": "Button",
@@ -22,7 +22,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "JumpUp",
+                    "name": "Grounded_JumpUp",
                     "type": "Button",
                     "id": "f830f5d1-67f6-4855-be93-b409767a8874",
                     "expectedControlType": "Button",
@@ -30,7 +30,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Balance",
+                    "name": "Grounded_Balance",
                     "type": "Value",
                     "id": "de49cbe0-0360-4c91-b319-af493a798193",
                     "expectedControlType": "Axis",
@@ -38,7 +38,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Brake",
+                    "name": "Grounded_Brake",
                     "type": "Button",
                     "id": "cf4ffeb6-64f3-4c43-bf55-d33e3ea010c5",
                     "expectedControlType": "Button",
@@ -46,10 +46,18 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Turning",
+                    "name": "Grounded_Turning",
                     "type": "Value",
                     "id": "548bd75b-b3b2-42be-9aa2-5d76f17fffb5",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grounded_StartGrind",
+                    "type": "Button",
+                    "id": "c5add246-c41b-4d6f-8522-a8cb1071cbd4",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -62,7 +70,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
+                    "action": "Grounded_Push",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -73,7 +81,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
+                    "action": "Grounded_Push",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -84,7 +92,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PressDown",
+                    "action": "Grounded_PressDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -95,7 +103,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PressDown",
+                    "action": "Grounded_PressDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -106,7 +114,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "JumpUp",
+                    "action": "Grounded_JumpUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -117,7 +125,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "JumpUp",
+                    "action": "Grounded_JumpUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -128,7 +136,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Brake",
+                    "action": "Grounded_Brake",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -139,7 +147,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Brake",
+                    "action": "Grounded_Brake",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -150,7 +158,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Turning",
+                    "action": "Grounded_Turning",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -161,7 +169,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Turning",
+                    "action": "Grounded_Turning",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -172,7 +180,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Turning",
+                    "action": "Grounded_Turning",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -183,7 +191,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Turning",
+                    "action": "Grounded_Turning",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -194,7 +202,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Turning",
+                    "action": "Grounded_Turning",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -205,7 +213,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Turning",
+                    "action": "Grounded_Turning",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -216,7 +224,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Balance",
+                    "action": "Grounded_Balance",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -227,7 +235,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Balance",
+                    "action": "Grounded_Balance",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -238,7 +246,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Balance",
+                    "action": "Grounded_Balance",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -249,7 +257,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Balance",
+                    "action": "Grounded_Balance",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -260,7 +268,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Balance",
+                    "action": "Grounded_Balance",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -271,9 +279,31 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Balance",
+                    "action": "Grounded_Balance",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "38711268-e367-47be-a7a6-f2135c868152",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grounded_StartGrind",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a40e9f05-48ad-42bf-9c74-b12ed48cb345",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grounded_StartGrind",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -282,9 +312,17 @@
             "id": "cfca80dc-5176-46a7-a56d-4d57102cccdd",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Aerial_Turning",
+                    "type": "Value",
+                    "id": "eba0aaf8-07cc-4350-9d28-2173357dffff",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Aerial_StartGrind",
                     "type": "Button",
-                    "id": "719be385-385a-4aca-831d-d56ddf62b1c7",
+                    "id": "33ba528a-1ece-4d94-83bf-c7450f18d3be",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -292,13 +330,90 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "492612ea-a898-4930-bc21-d507c107159e",
-                    "path": "",
+                    "name": "Keyboard",
+                    "id": "0021438d-f916-4d8c-9db5-3c672b79447b",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Aerial_Turning",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "80c9e906-a511-4629-ba3a-da376c7d0a63",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "e02f8e68-5de2-42e4-b74d-80808e4d3603",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Gamepad",
+                    "id": "8892b03e-64af-45b7-b117-aa57e4ab5289",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_Turning",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "e3498901-05d5-44cf-adf5-83c28b37ab45",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "86e83abb-94ff-4839-9076-f73881fc92d8",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "5c7b6137-9f13-4b43-a703-cda6aa208d5a",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_StartGrind",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b74261d5-4374-4620-aa2d-124947465d35",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_StartGrind",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -309,9 +424,17 @@
             "id": "fe69fa03-9eaa-49d4-97d9-8f569bb3f32f",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Grinding_Turning",
+                    "type": "Value",
+                    "id": "ce732a49-8d18-49f7-bd9d-02d12d8b6342",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grinding_JumpUp",
                     "type": "Button",
-                    "id": "383ed3d7-28a7-44cf-b868-fb4b2cf4895d",
+                    "id": "9f20ae02-6337-4afd-98f1-4798433ef4a2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -319,13 +442,90 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "345df45d-9310-49e9-b441-4ca780b55722",
-                    "path": "",
+                    "name": "Keyboard",
+                    "id": "e9616640-546c-4203-84f8-84db0cd8820d",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Grinding_Turning",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "96a737a7-c948-4b7b-8770-b20347c1acaf",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "21a2a4eb-6b9c-488b-9686-19af9117c077",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Gamepad",
+                    "id": "b9be35bf-90b1-4715-9158-fee6636baa7b",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_Turning",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "bd2d02e2-7cb9-4b9b-8c30-7250adc15ff3",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "7deb0b00-678f-46d0-b60e-b7b1628875cc",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "2e16cafc-7aee-4659-988c-d0bdf5ab05b2",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_JumpUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "18944906-a60e-4190-a432-890fd12d60f9",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_JumpUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -336,23 +536,108 @@
             "id": "9dbf52b6-f339-4ded-ab1b-5bb300f5545f",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "WallRiding_JumpUp",
                     "type": "Button",
-                    "id": "2e821f34-b059-4ccb-b491-bf0768156d08",
+                    "id": "7dadd8da-b547-43b4-851d-fe952628987b",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "WallRiding_Turning",
+                    "type": "Value",
+                    "id": "6a8cb042-269a-45d0-9b29-d68472b61cc2",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 }
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "ae95c472-d163-4ed1-af42-01a79ccf63f3",
-                    "path": "",
+                    "name": "Keyboard",
+                    "id": "94cbf002-87da-4f59-b60c-bc8fe04b2157",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "WallRiding_Turning",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "dc7a7f5a-7cf5-4bca-8941-acb3e4ab6e65",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "063afd84-2e43-4492-b18a-ce7483f700fd",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Gamepad",
+                    "id": "f143199b-297d-4df5-89a1-b7733616b7a7",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_Turning",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "8e2814e7-e086-4728-91f4-be9417b15b1d",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "35fba849-411f-490c-8e6c-1128bacabfca",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "eb1a69e8-b2df-40bb-82f7-930ea16c62ad",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_JumpUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98f6da8d-7331-4b4b-8d3e-5b4d1c0502ff",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_JumpUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

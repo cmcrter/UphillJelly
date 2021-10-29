@@ -105,9 +105,13 @@ namespace SleepyCat.Input
         #endregion
 
         /// <summary>
-        /// Called when a jump input action  has been performed
+        /// Called when the jump input action  has been performed
         /// </summary>
         public event System.Action jumpUpPerformed;
+        /// <summary>
+        /// Called when the start grind input action has been performed
+        /// </summary>
+        public event System.Action startGrindPerformed;
 
         /// <summary>
         /// Called every frame with the current value of the balance action axis
@@ -125,23 +129,13 @@ namespace SleepyCat.Input
             // To the PlayerInput events if not done so already
             if (!MethodsBoundToPlayerEvents)
             {
+                // All actions need unique names even across all action maps
                 MethodsBoundToPlayerEvents = true;
-                playerInput.actions["Push"].canceled        += PushAction_Canceled;
-                playerInput.actions["Push"].performed       += PushAction_Performed;
 
-                playerInput.actions["PressDown"].canceled   += PressDownAction_Canceled;
-                playerInput.actions["PressDown"].performed  += PressDownAction_Performed;
-
-                playerInput.actions["JumpUp"].performed     += JumpUpAction_Performed;
-
-                playerInput.actions["Balance"].performed    += BalanceAction_Performed;
-                playerInput.actions["Balance"].canceled     += BalanceAction_Canceled;
-
-                playerInput.actions["Brake"].performed      += BrakeAction_Peformed;
-                playerInput.actions["Brake"].canceled       += BrakeAction_Canceled;
-
-                playerInput.actions["Turning"].performed    += TurningAction_Peformed;
-                playerInput.actions["Turning"].canceled     += TurningAction_Canceled;
+                BindGrindingActions();
+                BindGroundedActions();
+                BindAerialActions();
+                BindWallRidingAction();
             }
 
             // Buttons held down events
@@ -177,6 +171,8 @@ namespace SleepyCat.Input
                 turningUpdated(TurningAxis);
             }
         }
+
+
         #endregion
 
         #region Private Methods
@@ -297,6 +293,20 @@ namespace SleepyCat.Input
         }
         #endregion
 
+        #region Start Grind Action
+        /// <summary>
+        /// Called when the player performs the start grind action
+        /// </summary>
+        /// <param name="callbackContext">start grind action's CallbackContext</param>
+        private void StartGrindAction_Performed(InputAction.CallbackContext callbackContext)
+        {
+            if (startGrindPerformed != null)
+            {
+                startGrindPerformed();
+            }
+        }
+        #endregion
+
         #region Turning Action
         /// <summary>
         /// Called when the player cancels the turn action to cancel out the turning axis value
@@ -315,7 +325,83 @@ namespace SleepyCat.Input
         {
             TurningAxis = callbackContext.ReadValue<float>();
         }
-        #endregion  
+        #endregion
+
+        private void BindAerialActions()
+        {
+            playerInput.actions["Aerial_Turning"].performed += TurningAction_Peformed;
+            playerInput.actions["Aerial_Turning"].canceled += TurningAction_Canceled;
+
+            playerInput.actions["Aerial_StartGrind"].performed += StartGrindAction_Performed;
+        }
+
+        private void BindGrindingActions()
+        {
+            playerInput.actions["Grinding_Turning"].performed   += TurningAction_Peformed;
+            playerInput.actions["Grinding_Turning"].canceled    += TurningAction_Canceled;
+
+            playerInput.actions["Grinding_JumpUp"].performed    += JumpUpAction_Performed;
+        }
+        
+        /// <summary>
+        /// Bind to all the events to the grounded actions
+        /// </summary>
+        private void BindGroundedActions()
+        {
+            playerInput.actions["Grounded_Push"].canceled += PushAction_Canceled;
+            playerInput.actions["Grounded_Push"].performed += PushAction_Performed;
+
+            playerInput.actions["Grounded_PressDown"].canceled += PressDownAction_Canceled;
+            playerInput.actions["Grounded_PressDown"].performed += PressDownAction_Performed;
+
+            playerInput.actions["Grounded_JumpUp"].performed += JumpUpAction_Performed;
+
+            playerInput.actions["Grounded_Balance"].performed += BalanceAction_Performed;
+            playerInput.actions["Grounded_Balance"].canceled += BalanceAction_Canceled;
+
+            playerInput.actions["Grounded_Brake"].performed += BrakeAction_Peformed;
+            playerInput.actions["Grounded_Brake"].canceled += BrakeAction_Canceled;
+
+            playerInput.actions["Grounded_Turning"].performed += TurningAction_Peformed;
+            playerInput.actions["Grounded_Turning"].canceled += TurningAction_Canceled;
+
+            playerInput.actions["Grounded_StartGrind"].performed += StartGrindAction_Performed;
+        }
+
+        private void BindWallRidingAction()
+        {
+            playerInput.actions["WallRiding_JumpUp"].performed += JumpUpAction_Performed;
+
+            playerInput.actions["WallRiding_Turning"].performed += TurningAction_Peformed;
+            playerInput.actions["WallRiding_Turning"].canceled += TurningAction_Canceled;
+        }
+
+        /// <summary>
+        /// Unbind to all the events to the grounded actions
+        /// </summary>
+        private void UnbindGroundedAction()
+        {
+            playerInput.actions["Grounded_Push"].canceled           -= PushAction_Canceled;
+            playerInput.actions["Grounded_Push"].performed          -= PushAction_Performed;
+                                                                    
+            playerInput.actions["Grounded_PressDown"].canceled      -= PressDownAction_Canceled;
+            playerInput.actions["Grounded_PressDown"].performed     -= PressDownAction_Performed;
+                                                                    
+            playerInput.actions["Grounded_JumpUp"].performed        -= JumpUpAction_Performed;
+                                                                    
+            playerInput.actions["Grounded_Balance"].performed       -= BalanceAction_Performed;
+            playerInput.actions["Grounded_Balance"].canceled        -= BalanceAction_Canceled;
+                                                                    
+            playerInput.actions["Grounded_Brake"].performed         -= BrakeAction_Peformed;
+            playerInput.actions["Grounded_Brake"].canceled          -= BrakeAction_Canceled;
+                                                                    
+            playerInput.actions["Grounded_Turning"].performed       -= TurningAction_Peformed;
+            playerInput.actions["Grounded_Turning"].canceled        -= TurningAction_Canceled;
+                                                                    
+            playerInput.actions["Grounded_StartGrind"].performed    -= StartGrindAction_Performed;
+        }
+
+
         #endregion
     }
 }
