@@ -42,7 +42,7 @@ namespace SleepyCat.Movement
         [SerializeField]
         float autoJumpCoroutineDuration;
         Coroutine autoJumpCoroutine;
-        float tIncrementPerSecond = 0.1f;
+        float tIncrementPerSecond = 0.01f;
         #endregion
 
         #region Public Methods
@@ -74,11 +74,14 @@ namespace SleepyCat.Movement
             movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(parentController.transform.position, out timeAlongGrind) + new Vector3(0, 0.41f, 0);
             parentController.transform.position = movementRB.transform.position;
 
-            currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0f, 0.1f);
+            currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0f, 0.01f);
 
             parentController.transform.forward = Vector3.Cross(currentSplineDir, Vector3.up);
 
+            //Making sure nothing interferes with the movement
+            movementRB.interpolation = RigidbodyInterpolation.Interpolate;
             movementRB.isKinematic = true;
+
             hasRan = true;
         }
 
@@ -88,7 +91,7 @@ namespace SleepyCat.Movement
             {
                 parentController.playerCamera.FollowRotation = true;
             }
-
+            movementRB.interpolation = RigidbodyInterpolation.None;
             timeAlongGrind = 0;
 
             hasRan = false;
@@ -115,27 +118,29 @@ namespace SleepyCat.Movement
                     timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond * desiredChange); // add length to this calculation
 
                     //Using the calculated time to position everything correctly
-                    pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
-                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.1f);
+                    pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, parentController.ballMovement.radius + 0.01f, 0);
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
 
                     grindVisualiser.position = pos;
-                    movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos + new Vector3(0, 0.405f, 0), timeAlongGrind + dT * tIncrementPerSecond));
                     parentController.transform.forward = Vector3.Cross(currentSplineDir, Vector3.up);
                 }
                 else
                 {
                     timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
-                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.9f, 0.1f);
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.90f, 0.01f);
                     parentController.transform.forward = currentSplineDir;
                     JumpOff();
                 }
-
-                //timeAlongGrind += (dT * onGrind.grindDetails.DuringGrindForce) / PotentialLengthOfGrind;
             }
         }
 
         public override void PhysicsTick(float dT)
         {
+            if(timeAlongGrind != 1)
+            {
+                movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos, 12 * Time.deltaTime));
+            }
+
             parentController.transform.position = movementRB.transform.position;
         }
 

@@ -40,7 +40,7 @@ namespace SleepyCat.Movement
         [SerializeField]
         private Transform groundRaycastPoint;
         [SerializeField]
-        private SphereCollider ballMovement;
+        public SphereCollider ballMovement;
         [SerializeField]
         public PlayerInput input;
 
