@@ -7,9 +7,9 @@
             "actions": [
                 {
                     "name": "Grounded_Push",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d5631a60-a821-4580-8d64-a30f7fe7eac1",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Analog",
                     "processors": "",
                     "interactions": ""
                 },
@@ -320,6 +320,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Aerial_Push",
+                    "type": "Button",
+                    "id": "7be964fb-2875-41a7-9762-415601a76f8d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Aerial_StartGrind",
                     "type": "Button",
                     "id": "33ba528a-1ece-4d94-83bf-c7450f18d3be",
@@ -414,6 +422,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aerial_StartGrind",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5deb8e94-f180-44c4-9350-86bf4870e7f5",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_Push",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dbbc2ed0-9f1a-4ef6-ab14-94d2185a0a9d",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_Push",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
