@@ -107,13 +107,14 @@ namespace SleepyCat.Movement
 
         public override State returnCurrentState()
         {
-            if(!groundedCondition.isConditionTrue())
-            {
-                return parentController.aerialState;
-            }
-            else if(grindedCondition.isConditionTrue())
+            if (grindedCondition.isConditionTrue())
             {
                 return parentController.grindingState;
+            }
+
+            if (!groundedCondition.isConditionTrue())
+            {
+                return parentController.aerialState;
             }
 
             return this;
