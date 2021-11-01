@@ -85,9 +85,10 @@ namespace SleepyCat.Movement
             rb.isKinematic = true;
             rb.velocity = Vector3.zero;
 
+            //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.currentWallRide.transform.right;
             playerMovement.transform.forward = wallForward;
-
+            
            //TODO: Get whether they are going forward using rb vel and dot product
            Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 

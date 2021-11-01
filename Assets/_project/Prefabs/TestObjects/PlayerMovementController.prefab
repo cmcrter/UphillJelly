@@ -790,12 +790,12 @@ MonoBehaviour:
       isActive: 0
   wallRideState:
     hasRan: 0
-    coyoteDuration: 3
+    coyoteDuration: 1
     coyoteTimer:
       isLocked: 0
       isActive: 0
     wallForward: {x: 0, y: 0, z: 0}
-    rideSpeed: 1
+    rideSpeed: 0.25
   grindingState:
     hasRan: 0
     grindVisualiser: {fileID: 1532173283}
@@ -1552,9 +1552,9 @@ GameObject:
   - component: {fileID: 6988996918715620969}
   - component: {fileID: 1024689555015096100}
   - component: {fileID: 3239561786773128422}
-  - component: {fileID: 3860187287482548483}
   - component: {fileID: 4715914072580758496}
   - component: {fileID: 1415801993}
+  - component: {fileID: 1415801995}
   m_Layer: 6
   m_Name: Triggerable
   m_TagString: Untagged
@@ -1626,19 +1626,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3860187287482548483
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4243520946788990175}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.86, y: 0.9, z: 0.94}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4715914072580758496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1668,6 +1655,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &1415801995
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4243520946788990175}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.401
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4550287345548923854
 GameObject:
   m_ObjectHideFlags: 0
