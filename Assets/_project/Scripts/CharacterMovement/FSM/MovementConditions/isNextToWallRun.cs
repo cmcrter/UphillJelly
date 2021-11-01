@@ -8,6 +8,8 @@
 //////////////////////////////////////////////////////////// 
 
 using System;
+using UnityEngine;
+using SleepyCat.Triggerables;
 using SleepyCat.Utility.StateMachine;
 
 namespace SleepyCat.Movement
@@ -15,16 +17,36 @@ namespace SleepyCat.Movement
     [Serializable]
     public class isNextToWallRun : Condition
     {
+        #region Variables
+
+        public WallRideTriggerable currentWallRide;
+
+        private PlayerMovementController parentController;
+        private Rigidbody movementRB;
+
+        #endregion
+
         #region Public Methods
 
-        public void InitialiseCondition()
+        public void InitialiseCondition(PlayerMovementController movementController, Rigidbody playerRb)
         {
-
+            parentController = movementController;
+            movementRB = playerRb;
         }
 
         public override bool isConditionTrue()
         {
-            return false;
+            return (currentWallRide != null);
+        }
+
+        public void CheckWall(WallRideTriggerable wallRide)
+        {
+            currentWallRide = wallRide;
+        }
+
+        public void LeftWall(WallRideTriggerable wallRide)
+        {
+            currentWallRide = null;
         }
 
         #endregion

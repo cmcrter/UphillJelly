@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Input;
+using SleepyCat.Triggerables;
 
 namespace SleepyCat.Movement
 {
@@ -58,7 +59,7 @@ namespace SleepyCat.Movement
 
         #region Public Methods
 
-        public void ResetBoard()
+        public override void ResetPlayer()
         {
             rb.isKinematic = false;
 
@@ -94,6 +95,16 @@ namespace SleepyCat.Movement
             transform.position = rb.transform.position;
         }
 
+        public override void AddWallRide(WallRideTriggerable wallRide)
+        {
+            nextToWallRun.CheckWall(wallRide);
+        }
+
+        public override void RemoveWallRide(WallRideTriggerable wallRide)
+        {
+            nextToWallRun.LeftWall(wallRide);
+        }
+
         #endregion
 
         #region Unity Methods
@@ -102,12 +113,12 @@ namespace SleepyCat.Movement
         {
             //Setting up the state machine
             groundBelow.InitialiseCondition(transform, groundRaycastPoint, backgroundRaycastPoint);
-            nextToWallRun.InitialiseCondition();
+            nextToWallRun.InitialiseCondition(this, rb);
             grindBelow.InitialiseCondition(rb, inputHandler);
 
             groundedState.InitialiseState(this, rb, groundBelow, grindBelow);
             aerialState.InitialiseState(this, rb, groundBelow, nextToWallRun, grindBelow);
-            wallRideState.InitialiseState();
+            wallRideState.InitialiseState(this, rb, nextToWallRun, groundBelow);
             grindingState.InitialiseState(this, rb, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(groundedState);
@@ -142,7 +153,7 @@ namespace SleepyCat.Movement
 
             if(Keyboard.current.escapeKey.isPressed) 
             {
-                ResetBoard();
+                ResetPlayer();
             }
 
             //Multiple states need to know the current turning of the user

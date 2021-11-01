@@ -127,7 +127,7 @@ namespace SleepyCat.Movement
 
             if(Keyboard.current.escapeKey.isPressed)
             {
-                parentController.ResetBoard();
+                parentController.ResetPlayer();
             }
 
             if(inputHandler.PushHeldDown && pushCoroutine == null)

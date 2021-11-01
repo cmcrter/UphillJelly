@@ -8,34 +8,50 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using SleepyCat.Movement;
 
-namespace SleepyCat.Movement
+namespace SleepyCat.Triggerables
 {
     public class WallRideTriggerable : MonoBehaviour, ITriggerable
     {
         #region Interface Contracts
 
         GameObject ITriggerable.ReturnGameObject() => gameObject;
-        void ITriggerable.Trigger(PlayerController player) => PlayerEntered();
-        void ITriggerable.UnTrigger(PlayerController player) => PlayerLeft();
+        void ITriggerable.Trigger(PlayerController player) => PlayerEntered(player);
+        void ITriggerable.UnTrigger(PlayerController player) => PlayerLeft(player);
 
         #endregion
 
         #region Variables
 
+        [SerializeField]
+        private Transform wallRideWall;
+        [SerializeField]
+        private float CoyoteTime;
+
+        #endregion
+
+        #region Unity Methods
+
+        private void Awake()
+        {
+            wallRideWall = wallRideWall ?? transform;
+        }
 
         #endregion
 
         #region Private Methods
 
-        void PlayerEntered()
+        //Letting the player know that they entered a wall run space
+        void PlayerEntered(PlayerController player)
         {
-
+            player.AddWallRide(this);
         }
 
-        void PlayerLeft()
+        //Letting the player know that they exited a wall run space
+        void PlayerLeft(PlayerController player)
         {
-
+            player.RemoveWallRide(this);
         }
 
         #endregion

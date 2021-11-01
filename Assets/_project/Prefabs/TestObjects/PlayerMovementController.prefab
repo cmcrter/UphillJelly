@@ -788,6 +788,14 @@ MonoBehaviour:
     jumpTimer:
       isLocked: 0
       isActive: 0
+  wallRideState:
+    hasRan: 0
+    coyoteDuration: 3
+    coyoteTimer:
+      isLocked: 0
+      isActive: 0
+    wallForward: {x: 0, y: 0, z: 0}
+    rideSpeed: 1
   grindingState:
     hasRan: 0
     grindVisualiser: {fileID: 1532173283}
@@ -804,6 +812,8 @@ MonoBehaviour:
       m_Bits: 64
     groundDist: 0.09
     rampDist: 0.65
+  nextToWallRun:
+    currentWallRide: {fileID: 0}
   grindBelow:
     splineCurrentlyGrindingOn: {fileID: 0}
     grindDetails: {fileID: 0}
@@ -1544,6 +1554,7 @@ GameObject:
   - component: {fileID: 3239561786773128422}
   - component: {fileID: 3860187287482548483}
   - component: {fileID: 4715914072580758496}
+  - component: {fileID: 1415801993}
   m_Layer: 6
   m_Name: Triggerable
   m_TagString: Untagged
@@ -1623,10 +1634,10 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4243520946788990175}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.62, y: 1, z: 0.94}
+  m_Size: {x: 0.86, y: 0.9, z: 0.94}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4715914072580758496
 MonoBehaviour:
@@ -1640,6 +1651,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ebece39fcaf9c4893c001ef6d37c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisPlayer: {fileID: 2573286818288912050}
+--- !u!54 &1415801993
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4243520946788990175}
+  serializedVersion: 2
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4550287345548923854
 GameObject:
   m_ObjectHideFlags: 0
