@@ -27,9 +27,9 @@ namespace SleepyCat.Movement
         private Transform backRaycastPointTransform;
 
         [SerializeField]
-        private float groundDist = 0.08f;
+        private float groundDist = 0.09f;
         [SerializeField]
-        private float rampDist = 0.55f;
+        private float rampDist = 0.6f;
 
         #endregion
 

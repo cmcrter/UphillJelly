@@ -28,12 +28,15 @@ namespace SleepyCat.Movement
         public GrindDetails grindDetails;
         [NonSerialized] private GrindedState grindedState = null;
 
-        //Having a few frames of pressed before the button is registered as unpressed
-        float coyoteDuration;
-        Timer coyoteTimer;
+        //Having a few frames of leaving a grind before another one is registered
+        [SerializeField]
+        private float coyoteDuration = 0.2f;
+        [SerializeField]
+        private Timer coyoteTimer;
+
         Coroutine CoyoteCoroutine;
 
-        bool bTrue = false;
+        bool ButtonPressed = false;
 
         #endregion
 
@@ -57,13 +60,13 @@ namespace SleepyCat.Movement
 
         public override bool isConditionTrue()
         {
-            return bTrue;
+            return splineCurrentlyGrindingOn && ButtonPressed;
         }
 
         //The players' grind section has touched a grindable thing
         public void playerEnteredGrind(SplineWrapper splineHit, GrindDetails grindUsing)
         {
-            if (splineCurrentlyGrindingOn == null)
+            if (splineCurrentlyGrindingOn == null && !grindedState.hasRan)
             {
                 grindDetails = grindUsing;
                 splineCurrentlyGrindingOn = splineHit;
@@ -72,18 +75,28 @@ namespace SleepyCat.Movement
             }
         }
 
-        //The players' grind section has left a grindable thing
-        public void playerExitedGrind(SplineWrapper splineHit, GrindDetails grindUsing) 
+        public void playerExitedGrind()
         {
-            if (splineCurrentlyGrindingOn != null && grindedState.isRailDone())
-            {
-                if (splineCurrentlyGrindingOn.Equals(splineHit) && grindDetails.Equals(grindUsing))
-                {
-                    grindDetails = null;
-                    splineCurrentlyGrindingOn = null;
+            CoyoteCoroutine = inputHandler.StartCoroutine(Co_CoyoteTimer());
 
-                    bTrue = false;
-                }
+            ButtonPressed = false;
+            grindDetails = null;
+            splineCurrentlyGrindingOn = null;
+
+        }
+
+        //The player left a grind area
+        public void PlayerLeftGrindArea(SplineWrapper splineHit)
+        {
+            if(grindedState.hasRan)
+            {
+                return;
+            }
+
+            if(splineCurrentlyGrindingOn == splineHit)
+            {
+                splineCurrentlyGrindingOn = null;
+                grindDetails = null;
             }
         }
 
@@ -93,16 +106,34 @@ namespace SleepyCat.Movement
 
         private IEnumerator Co_WaitForButtonPress()
         {
-            while(splineCurrentlyGrindingOn != null && !bTrue)
+            while(splineCurrentlyGrindingOn)
             {
-                if(inputHandler.StartGrindHeld)
+                if(inputHandler.StartGrindHeld && CoyoteCoroutine == null)
                 {
-                    bTrue = true;
+                    ButtonPressed = true;
+                    inputHandler.StopCoroutine(Co_WaitForButtonPress());
                 }
 
                 yield return null;
             }
         }
-            #endregion
+
+        private IEnumerator Co_CoyoteTimer()
+        {
+            //It's technically a new timer on top of the class in use
+            coyoteTimer = new Timer(coyoteDuration);
+
+            //Whilst it has time left
+            while(coyoteTimer.isActive)
+            {
+                //Tick each frame
+                coyoteTimer.Tick(Time.deltaTime);
+                yield return null;
+            }
+
+            CoyoteCoroutine = null;
+        }
+
+        #endregion
     }
 }
