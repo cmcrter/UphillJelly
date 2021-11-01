@@ -34,6 +34,7 @@ namespace SleepyCat.Movement
         private Vector3 wallForward;
         [SerializeField]
         private float rideSpeed = 0.1f;
+        private bool bTravelBackwards = false;
 
         #region Public Methods
 
@@ -87,6 +88,11 @@ namespace SleepyCat.Movement
 
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.currentWallRide.transform.right;
+            if(nextToWallRun.dotProductWithWall < 0)
+            {
+                wallForward *= -1;
+            }
+
             playerMovement.transform.forward = wallForward;
             
            //TODO: Get whether they are going forward using rb vel and dot product

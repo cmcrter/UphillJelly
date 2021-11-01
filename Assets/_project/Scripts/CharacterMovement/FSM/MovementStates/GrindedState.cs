@@ -51,6 +51,7 @@ namespace SleepyCat.Movement
         [SerializeField]
         private float jumpSpeed = 50;
 
+        private bool bTravelBackwards = false;
         private bool bForceExit = false;
         Vector3 jumpDir;
 

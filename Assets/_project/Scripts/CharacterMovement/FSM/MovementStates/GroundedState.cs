@@ -281,7 +281,6 @@ namespace SleepyCat.Movement
             movementRB.AddForce(parentController.transform.up * jumpSpeed * 1000);
             Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
 
-
             //Whilst it has time left
             while(jumpTimer.isActive)
             {

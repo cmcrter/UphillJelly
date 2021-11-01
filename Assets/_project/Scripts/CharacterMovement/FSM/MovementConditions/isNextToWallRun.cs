@@ -20,10 +20,10 @@ namespace SleepyCat.Movement
         #region Variables
 
         public WallRideTriggerable currentWallRide;
+        public float dotProductWithWall;
 
         private PlayerMovementController parentController;
         private Rigidbody movementRB;
-
         #endregion
 
         #region Public Methods
@@ -32,21 +32,26 @@ namespace SleepyCat.Movement
         {
             parentController = movementController;
             movementRB = playerRb;
+            dotProductWithWall = 0;
         }
 
         public override bool isConditionTrue()
         {
-            return (currentWallRide != null);
+            return (currentWallRide != null) && (dotProductWithWall > 0.8f || dotProductWithWall < -0.8f);
         }
 
         public void CheckWall(WallRideTriggerable wallRide)
         {
             currentWallRide = wallRide;
+
+            //Getting the dot product with the wall to see if it's grindable
+            dotProductWithWall = Vector3.Dot(parentController.transform.forward, wallRide.transform.right);
         }
 
         public void LeftWall(WallRideTriggerable wallRide)
         {
             currentWallRide = null;
+            dotProductWithWall = 0f;
         }
 
         #endregion
