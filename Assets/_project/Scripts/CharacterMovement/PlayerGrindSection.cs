@@ -40,7 +40,7 @@ namespace SleepyCat.Movement
         {
             if(other.transform.parent)
             {
-                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.transform.parent.TryGetComponent(out GrindDetails grindCustomizable))
+                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController)
                 {
                     if(Debug.isDebugBuild)
                     {
@@ -48,7 +48,7 @@ namespace SleepyCat.Movement
                     }
 
                     //Telling the grind condition that the player wants to start grinding
-                    movementController.grindBelow.playerExitedGrind(splineToGrindDown, grindCustomizable);
+                    movementController.grindBelow.PlayerLeftGrindArea(splineToGrindDown);
                 }
 
             }

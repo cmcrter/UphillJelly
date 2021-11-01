@@ -40,7 +40,7 @@ namespace SleepyCat.Movement
         private float jumpSpeed = 50;
 
         [SerializeField]
-        private float groundAdjustSmoothness = 12;
+        private float groundAdjustSmoothness = 16;
 
         //This is public in case other systems need to know if the player is pushing or jumping or recently unpressing down.
         public Coroutine pushCoroutine

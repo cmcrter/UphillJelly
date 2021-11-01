@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Input;
+using System.Collections;
 
 namespace SleepyCat.Movement 
 {
@@ -50,6 +51,9 @@ namespace SleepyCat.Movement
         [SerializeField]
         private float jumpSpeed = 50;
 
+        private bool bForceExit = false;
+        Vector3 jumpDir;
+
         #endregion
 
         #region Public Methods
@@ -84,45 +88,55 @@ namespace SleepyCat.Movement
 
         public override void OnStateEnter()
         {
+            grindVisualiser.transform.parent = null;
+
             pInput.SwitchCurrentActionMap("Grinding");
+            parentController.playerCamera.FollowRotation = true;
 
-            if(parentController.playerCamera)
-            {
-                parentController.playerCamera.FollowRotation = false;
-            }
-
-            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(parentController.transform.position, out timeAlongGrind) + new Vector3(0, 0.41f, 0);
-            parentController.transform.position = movementRB.transform.position;
-
-            currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0f, 0.01f);
-
-            parentController.transform.forward = Vector3.Cross(currentSplineDir, Vector3.up);
+            //if(parentController.playerCamera)
+            //{
+            //    parentController.playerCamera.FollowRotation = false;
+            //}
 
             //Making sure nothing interferes with the movement
             movementRB.interpolation = RigidbodyInterpolation.Interpolate;
             movementRB.isKinematic = true;
+
+            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(parentController.transform.position, out timeAlongGrind) + new Vector3(0, 0.41f, 0);
+            parentController.transform.position = movementRB.transform.position;
+
+            currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+            parentController.transform.forward = currentSplineDir;
+
             hasRan = true;
         }
 
         public override void OnStateExit()
         {
-            if (parentController.playerCamera) 
-            {
-                parentController.playerCamera.FollowRotation = true;
-            }
+            grindVisualiser.transform.parent = parentController.transform;
+
+            //if (parentController.playerCamera) 
+            //{
+            //    parentController.playerCamera.FollowRotation = true;
+            //}
 
             pos = Vector3.zero;
             currentSplineDir = Vector3.zero;
 
-            movementRB.interpolation = RigidbodyInterpolation.None;
+            //Let the condition know to reset
+            onGrind.playerExitedGrind();
+
             timeAlongGrind = 0;
+            bForceExit = false;
             hasRan = false;
         }
 
         public override void Tick(float dT)
         {
-            if(onGrind.grindDetails != null && onGrind.splineCurrentlyGrindingOn)
+            if(onGrind.grindDetails != null && onGrind.splineCurrentlyGrindingOn && hasRan)
             {
+                grindVisualiser.position = pos;
+
                 if(timeAlongGrind + dT * tIncrementPerSecond < 1f)
                 {
                     // Clamping it at the max value and min values of a unit interval
@@ -142,25 +156,27 @@ namespace SleepyCat.Movement
                     //Using the calculated time to position everything correctly
                     pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, parentController.ballMovement.radius + 0.01f, 0);
                     currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+                    parentController.transform.forward = currentSplineDir;
 
-                    grindVisualiser.position = pos;
-                    parentController.transform.forward = Vector3.Cross(currentSplineDir, Vector3.up);
                 }
                 else
-                {
+                {                
                     timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
-                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
+
+                    pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, parentController.ballMovement.radius + 0.01f, 0);
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.999f, 0.001f);
                     parentController.transform.forward = currentSplineDir;
-                    JumpOff();
+
+                    JumpOffPressed();
                 }
             }
         }
 
         public override void PhysicsTick(float dT)
         {
-            if(timeAlongGrind != 1)
+            if(timeAlongGrind < 1)
             {
-                movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos, 15f * dT));
+                movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos, dT * 10f));
             }
 
             parentController.transform.position = movementRB.transform.position;
@@ -168,7 +184,8 @@ namespace SleepyCat.Movement
 
         public override State returnCurrentState()
         {
-            if (!onGrind.isConditionTrue())
+            //This is a condition specific to this state
+            if (isRailDone())
             {
                 return parentController.aerialState;
             }
@@ -178,7 +195,7 @@ namespace SleepyCat.Movement
 
         public bool isRailDone()
         {
-            return timeAlongGrind >= 1f && !movementRB.isKinematic;
+            return bForceExit;
         }
 
         #endregion
@@ -186,23 +203,14 @@ namespace SleepyCat.Movement
         #region Private Methods
 
         //The auto jump off
-        private void JumpOff()
-        {
-            timeAlongGrind = 1f;
-            movementRB.isKinematic = false;
-            movementRB.AddForce((parentController.transform.up * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward * onGrind.grindDetails.ExitForce.z), ForceMode.Impulse);
-        }
-
         //Jump off when player pressed button...
         private void JumpOffPressed()
         {
+            movementRB.interpolation = RigidbodyInterpolation.None;
             movementRB.isKinematic = false;
+            movementRB.AddForce(((parentController.transform.up.normalized * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward.normalized * onGrind.grindDetails.ExitForce.z)) * 100f, ForceMode.Impulse);
 
-            parentController.transform.forward = currentSplineDir;
-
-            //essentially the same jump as when grounded
-            movementRB.AddForce((parentController.transform.up * onGrind.grindDetails.ExitForce.y) + (parentController.transform.forward * onGrind.grindDetails.ExitForce.z), ForceMode.Impulse);
-            timeAlongGrind = 1f;
+            bForceExit = true;
         }
 
         #endregion
