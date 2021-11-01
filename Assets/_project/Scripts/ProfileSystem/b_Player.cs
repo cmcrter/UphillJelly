@@ -19,6 +19,13 @@ public class b_Player : MonoBehaviour
     //
     public List<bool> HatBoughtBools;
 
+    //
+    public List<bool> CharacterBoughtBools;
+
+
+    [SerializeField]
+    public List<int> hatBoughtInts = new List<int>();
+
     // reference to the outfit changer script
     public OutfitChanger outfitChanger;
 
@@ -45,6 +52,8 @@ public class b_Player : MonoBehaviour
     // Save the player
     public void SavePlayer() {
 
+        Debug.Log("SavedThePlayer");
+
         // set the current hat int to outfit changer current hat int
         CurrentGameObjectInt = outfitChanger.currentGOint;
 
@@ -57,15 +66,39 @@ public class b_Player : MonoBehaviour
         // this currency int = shop currency int
         Currency = shop.Currency;
 
+        //hatBoughtInts = shop.BoughtHatInts;
 
+        
 
         //
-        HatBoughtBools = shop.IsHatBought;
+        hatBoughtInts = shop.these;
 
+        //
+        //HatBoughtBools.
 
+        //
+        //CharacterBoughtBools = shop.IsCharacterBought;
+
+        //
+        //HatBoughtBools = shop.IsHatBought;
+
+        //SaveHats();
 
         // take this save player function and save it using the savesystem script
         b_SaveSystem.SavePlayer(this);
+
+        Debug.Log("Saved " + shop.these);
+
+        
+
+    }
+
+    public void SaveHats() {
+
+        //
+        hatBoughtInts = shop.BoughtHatInts;
+
+        shop.BoughtHatInts.Clear();
 
     }
 
@@ -90,10 +123,20 @@ public class b_Player : MonoBehaviour
         // set the shop currency to this currency
         shop.Currency = Currency;
 
-
+        //
+        shop.BoughtHatInts = hatBoughtInts;
 
         //
-        shop.IsHatBought = HatBoughtBools;
+        shop.these = hatBoughtInts;
+
+        //
+        //shop.ResetBools();
+
+        //
+        //shop.IsCharacterBought = CharacterBoughtBools;
+
+        //
+        //shop.IsHatBought = HatBoughtBools;
 
 
 

@@ -35,6 +35,14 @@ public class Shop : MonoBehaviour
     // bool for if something is bought
     //public bool IsBought;
 
+    //
+    public List<int> BoughtHatInts = new List<int>();
+
+    //
+    public GameObject BuyHatButton;
+
+    //
+    public GameObject BuyCharacterButton;
 
     // current hat price text
     public Text CurrentHatPriceText;
@@ -52,6 +60,9 @@ public class Shop : MonoBehaviour
 
     // list of bools for which hat is bought
     public List<bool> IsHatBought = new List<bool>();
+
+    //
+    public List<int> these = new List<int>();
 
     // list of bools for which character is bought
     public List<bool> IsCharacterBought = new List<bool>();
@@ -128,6 +139,9 @@ public class Shop : MonoBehaviour
             // set the hat price panel to false
             HatPricePanel.SetActive(false);
 
+            //
+            BuyHatButton.SetActive(false);
+
         }
 
         // if the hat is not bought with the current selected int of that hat
@@ -135,6 +149,9 @@ public class Shop : MonoBehaviour
 
             // set the hat price panel to true
             HatPricePanel.SetActive(true);
+
+            //
+            BuyHatButton.SetActive(true);
 
         }
 
@@ -149,6 +166,9 @@ public class Shop : MonoBehaviour
             // set the character price panel to false
             CharacterPricePanel.SetActive(false);
 
+            //
+            BuyCharacterButton.SetActive(false);
+
         }
 
         // if the character is not bought with the current selected int of that character
@@ -157,11 +177,50 @@ public class Shop : MonoBehaviour
             // set the character price panel to true
             CharacterPricePanel.SetActive(true);
 
+            //
+            BuyCharacterButton.SetActive(true);
+
         }
 
+        
+
+    }
+
+    //
+    public void BoughtHat() {
+
+        //
+        for (int i = 0; i < IsHatBought.Count; i++) {
+
+            if (these.Contains(i)) {
+
+                // do nothing
+
+            }
+
+            if (!these.Contains(i)) {
+
+                //
+                if (IsHatBought[i] == true) {
+
+                    // Do this
+                    Debug.Log("Bools are " + i + IsHatBought[i]);
+
+                    //
+                    these.Add(i);
+
+                } else if (IsHatBought[i] == false) {
+
+                    // Do nothing
 
 
+                }
 
+            }
+
+            
+
+        }
 
     }
 
@@ -211,6 +270,16 @@ public class Shop : MonoBehaviour
 
             // set the hat to the hat has been bought with the current hat int
             IsHatBought[CurrentHatSelectedInt] = true;
+
+
+            //IsHatBought
+
+            // save the currently selected hat int that was bought
+            //BoughtHatInts.Add(CurrentHatSelectedInt);
+
+            //BoughtHatInts.Add(IsHatBought.Count);
+
+            BoughtHat();
 
             // Debug
             Debug.Log("BoughtHat");
@@ -295,6 +364,23 @@ public class Shop : MonoBehaviour
         }
 
     }
+
+
+
+    /*
+
+    //
+    public void ResetBools() {
+
+        //
+        //IsHatBought.Clear();
+
+        //
+        //IsCharacterBought.Clear();
+
+    }
+
+    */
 
 
 

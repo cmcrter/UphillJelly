@@ -446,6 +446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ea8a8714bf4d2240a27346cbd648796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HatBoughtBools: 
+  CharacterBoughtBools: 
+  hatBoughtInts: 
   outfitChanger: {fileID: 791631653}
   shop: {fileID: 1135814750}
   CurrentGameObjectInt: 0
@@ -478,7 +481,7 @@ GameObject:
   - component: {fileID: 219075798}
   - component: {fileID: 219075797}
   m_Layer: 5
-  m_Name: ProfliePanel
+  m_Name: ProfilePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1892,12 +1895,15 @@ MonoBehaviour:
   currencyText: {fileID: 1726058144}
   HatPricePanel: {fileID: 1964939273}
   CharacterPricePanel: {fileID: 1294749786}
-  IsBought: 0
+  BoughtHatInts: 
+  BuyHatButton: {fileID: 2091593751}
+  BuyCharacterButton: {fileID: 1542757614}
   CurrentHatPriceText: {fileID: 1588846508}
   IndividualHatPrices: 00000000050000000a0000000f00000014000000190000001e00000023000000280000002d00000032000000
   CurrentHatSelectedInt: 0
   CurrentHatPriceInt: 0
   IsHatBought: 0000000000000000000000
+  these: 
   IsCharacterBought: 0000000000
   CurrentCharacterPriceText: {fileID: 513986409}
   IndividualCharacterPrices: 0100000002000000030000000400000005000000
