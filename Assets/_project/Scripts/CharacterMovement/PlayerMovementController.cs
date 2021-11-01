@@ -60,6 +60,8 @@ namespace SleepyCat.Movement
 
         public void ResetBoard()
         {
+            rb.isKinematic = false;
+
             rb.angularVelocity = Vector3.zero;
             rb.velocity = Vector3.zero;
 
