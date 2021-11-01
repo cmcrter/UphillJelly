@@ -7,6 +7,7 @@
 // Brief: A triggerable for unity events 
 //////////////////////////////////////////////////////////// 
 
+using SleepyCat.Movement;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,8 +20,8 @@ namespace SleepyCat.Triggerables
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         GameObject ITriggerable.ReturnGameObject() => gameObject;
 
-        void ITriggerable.Trigger() => TriggerEnterUnityEvent();
-        void ITriggerable.UnTrigger() => TriggerExitUnityEvent();
+        void ITriggerable.Trigger(PlayerController player) => TriggerEnterUnityEvent();
+        void ITriggerable.UnTrigger(PlayerController player) => TriggerExitUnityEvent();
 
         #endregion
 
