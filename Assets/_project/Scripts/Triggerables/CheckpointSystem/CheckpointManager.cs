@@ -38,7 +38,7 @@ namespace SleepyCat.Triggerables.CheckpointSystem
         #endregion
 
         #region Unity Methods
-        void Awake()
+        private void Awake()
         {
             playersCurrentCheckpoints = new Dictionary<PlayerController, Checkpoint>();
         }
@@ -49,6 +49,22 @@ namespace SleepyCat.Triggerables.CheckpointSystem
             {
                 managedCheckpoints[i].PlayerEntered += RegisterPlayersCurrentCheckpoint;
             }
+        }
+
+        private void Start()
+        {
+            if (defaultCheckpoint != null)
+            {
+                foreach (PlayerController player in FindObjectsOfType<PlayerController>())
+                {
+                    playersCurrentCheckpoints.Add(player, defaultCheckpoint);
+                }
+            }
+            else
+            {
+                Debug.LogError("defaultCheckpoint not assigned to checkpoint manager, cannot assign", this);
+            }
+
         }
 
         void Update()
