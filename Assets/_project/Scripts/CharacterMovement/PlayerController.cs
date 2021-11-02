@@ -19,7 +19,7 @@ namespace SleepyCat.Movement
         
         }
 
-        public virtual void MoveToPosition()
+        public virtual void MoveToPosition(Vector3 positionToMoveTo)
         {
 
         }
