@@ -8,6 +8,7 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using SleepyCat.Movement;
 
 namespace SleepyCat.Triggerables.CheckpointSystem
 {
@@ -18,8 +19,8 @@ namespace SleepyCat.Triggerables.CheckpointSystem
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         GameObject ITriggerable.ReturnGameObject() => gameObject;
 
-        void ITriggerable.Trigger() => CheckpointHit();
-        void ITriggerable.UnTrigger() => CheckpointUnHit();
+        void ITriggerable.Trigger(PlayerController player) => CheckpointHit();
+        void ITriggerable.UnTrigger(PlayerController player) => CheckpointUnHit();
 
         #endregion
 

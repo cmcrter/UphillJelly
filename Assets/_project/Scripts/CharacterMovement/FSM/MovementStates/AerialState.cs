@@ -66,11 +66,13 @@ namespace SleepyCat.Movement
             {
                 return parentController.groundedState;
             }
-            else if (grindCondition.isConditionTrue()) 
+
+            if (grindCondition.isConditionTrue()) 
             {
                 return parentController.grindingState;
             } 
-            else if(wallRideCondition.isConditionTrue()) 
+
+            if(wallRideCondition.isConditionTrue()) 
             {
                 return parentController.wallRideState;
             }

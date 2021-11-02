@@ -3,10 +3,11 @@
 // Author: Charles Carter
 // Date Created: 29/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 29/10/21
+// Date Last Edited: 01/11/21
 // Brief: The state the player is in when they're riding along the wall
 //////////////////////////////////////////////////////////// 
-///
+
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,14 +15,26 @@ using SleepyCat.Utility.StateMachine;
 
 namespace SleepyCat.Movement
 {
+    [Serializable]
     public class WallRideState : State
     {
+        private PlayerMovementController playerMovement;
         private PlayerInput pInput;
+        private Rigidbody rb;
+        [NonSerialized] private isNextToWallRun nextToWallRun;
+        [NonSerialized] private isGroundBelow nextToGround;
 
         [SerializeField]
-        private float coyoteDuration;
+        private float coyoteDuration = 3f;
+        [SerializeField]
         private Timer coyoteTimer;
         private Coroutine Co_CoyoteCoroutine;
+
+        [SerializeField]
+        private Vector3 wallForward;
+        [SerializeField]
+        private float rideSpeed = 0.1f;
+        private bool bTravelBackwards = false;
 
         #region Public Methods
 
@@ -30,36 +43,73 @@ namespace SleepyCat.Movement
 
         }
 
-        public void InitialiseState()
+        public void InitialiseState(PlayerMovementController controllerParent, Rigidbody playerRB, isNextToWallRun wallRun, isGroundBelow groundBelow)
         {
-
+            playerMovement = controllerParent;
+            pInput = controllerParent.input;
+            rb = playerRB;
+            nextToWallRun = wallRun;
+            nextToGround = groundBelow;
         }
 
         public override State returnCurrentState()
         {
+            if(nextToGround.isConditionTrue())
+            {
+                return playerMovement.groundedState;
+            }
+
+            if(!nextToWallRun.isConditionTrue()) 
+            {
+                return playerMovement.aerialState;
+            }
+
             return this;
         }
 
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            //To be overridden
+            //Pushing the player along the wall
+            rb.MovePosition(rb.transform.position + (wallForward * rideSpeed));
         }
 
         public override void PhysicsTick(float dT)
         {
-            //To be overridden
+            playerMovement.transform.position = rb.transform.position;
         }
 
         public override void OnStateEnter()
         {
             pInput.SwitchCurrentActionMap("WallRiding");
+
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+
+            //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
+            wallForward = nextToWallRun.currentWallRide.transform.right;
+            if(nextToWallRun.dotProductWithWall < 0)
+            {
+                wallForward *= -1;
+            }
+
+            playerMovement.transform.forward = wallForward;
+            
+           //TODO: Get whether they are going forward using rb vel and dot product
+           Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
+
             hasRan = true;
         }
 
         public override void OnStateExit()
         {
-            //To be overridden
+            if(Co_CoyoteCoroutine != null)
+            {
+                playerMovement.StopCoroutine(Co_CoyoteCoroutine);
+                coyoteTimer = null;
+            }
+
+            rb.isKinematic = false;
             hasRan = false;
         }
 
@@ -71,7 +121,14 @@ namespace SleepyCat.Movement
         {
             coyoteTimer = new Timer(coyoteDuration);
 
-            yield return true;
+            while(coyoteTimer.isActive)
+            {
+                coyoteTimer.Tick(Time.deltaTime);
+                yield return null;
+            }
+
+            rb.isKinematic = false;
+            Co_CoyoteCoroutine = null;
         }
 
         #endregion

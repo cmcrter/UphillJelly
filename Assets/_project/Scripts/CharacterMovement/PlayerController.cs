@@ -8,11 +8,30 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using SleepyCat.Triggerables;
 
 namespace SleepyCat.Movement
 {
     public abstract class PlayerController : MonoBehaviour
     {
+        public virtual void ResetPlayer()
+        {
+        
+        }
 
+        public virtual void MoveToPosition()
+        {
+
+        }
+
+        public virtual void AddWallRide(WallRideTriggerable wallRide)
+        {
+
+        }
+
+        public virtual void RemoveWallRide(WallRideTriggerable wallRide)
+        {
+
+        }
     }
 }

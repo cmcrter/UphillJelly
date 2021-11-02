@@ -107,12 +107,12 @@ namespace SleepyCat.Movement
 
         public override State returnCurrentState()
         {
-            if (grindedCondition.isConditionTrue())
+            if(grindedCondition.isConditionTrue())
             {
                 return parentController.grindingState;
             }
 
-            if (!groundedCondition.isConditionTrue())
+            if(!groundedCondition.isConditionTrue())
             {
                 return parentController.aerialState;
             }
@@ -127,7 +127,7 @@ namespace SleepyCat.Movement
 
             if(Keyboard.current.escapeKey.isPressed)
             {
-                parentController.ResetBoard();
+                parentController.ResetPlayer();
             }
 
             if(inputHandler.PushHeldDown && pushCoroutine == null)
@@ -280,7 +280,6 @@ namespace SleepyCat.Movement
 
             movementRB.AddForce(parentController.transform.up * jumpSpeed * 1000);
             Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
-
 
             //Whilst it has time left
             while(jumpTimer.isActive)
