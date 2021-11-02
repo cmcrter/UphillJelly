@@ -195,7 +195,13 @@ namespace SleepyCat.Movement
                 rb.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
             }
         }
+        #endregion
 
+        #region Public Methods
+        public override void MoveToPosition(Vector3 positionToMoveTo)
+        {
+            ballMovement.transform.position = positionToMoveTo;
+        }
         #endregion
 
         #region Private Methods
