@@ -20,54 +20,13 @@ using System;
 public class PlayerData
 {
 
-    //
-    public void SaveProfile() {
-
-        //
-        ProfileSaveSystem.SaveProfile(this);
-
-    }
-
-    //
-    public void LoadProfile() {
-
-        //
-        PlayerData data = ProfileSaveSystem.LoadProfile();
-
-    }
-
-    //
-    public OutfitChanger outfitChanger;
-
-
-    //
-    //public Material saveHatColour;
-    //saveHatColour material
-
-    //
-    public Mesh saveHatObject;
-    //saveHatObject mesh
-
-    // Reference to the TextMeshPro input field
-    //public TMP_InputField TMPProfileTextInput;
-
-    // public int currency for the shop
-    //public int Currency;
-
-    //
-    //public Material CurrentActivePlayerMaterial;
-
-    //
-    //public int currentActiveHat;
-
-    // Possibly change to "float[] position"
-    //
-    //public GameObject hatSpawnPosition;
-
-    
+    // int for currency
+    public int iCurrency;
 
     // Contructor to tell the PlayerData where to get the data from
-    public PlayerData (PlayerData profile) {
+    public PlayerData (Shop shopData, OutfitChanger outfitChangerData) {
+
+        iCurrency = shopData.Currency;
 
         //
         //saveHatColour = outfitChanger.hatColour;

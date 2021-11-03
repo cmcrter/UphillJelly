@@ -18,15 +18,24 @@ public class b_PlayerData
 
     #region Variables
 
+    // int for currency
+    public int iCurrency;
+
+    //
+    public List<int> boughtHatList;
+
     #endregion
 
     #region Methods
 
-    // Player Data that takes in the b_Player
-    public b_PlayerData(b_Player player) {
 
-        //
 
+    // Contructor to tell the PlayerData where to get the data from
+    public b_PlayerData(Shop shopData, OutfitChanger outfitChangerData) {
+
+        iCurrency = shopData.Currency;
+
+        boughtHatList = shopData.these;
 
     }
 

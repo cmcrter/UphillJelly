@@ -52,7 +52,10 @@ public class b_Player : MonoBehaviour
     // Save the player
     public void SavePlayer() {
 
-        Debug.Log("SavedThePlayer");
+        b_SaveSystem.SavePlayer(shop, outfitChanger);
+
+
+        /*
 
         // set the current hat int to outfit changer current hat int
         CurrentGameObjectInt = outfitChanger.currentGOint;
@@ -73,6 +76,8 @@ public class b_Player : MonoBehaviour
         //
         hatBoughtInts = shop.these;
 
+
+
         //
         //HatBoughtBools.
 
@@ -84,29 +89,73 @@ public class b_Player : MonoBehaviour
 
         //SaveHats();
 
-        // take this save player function and save it using the savesystem script
-        b_SaveSystem.SavePlayer(this);
-
-        Debug.Log("Saved " + shop.these);
-
         
 
+        // take this save player function and save it using the savesystem script
+        //b_SaveSystem.SavePlayer(this);
+
+        // this works and it tells you the saved amount of numbers
+        Debug.Log("Saved " + hatBoughtInts.Count + " Hat Ints"); // hatBoughtInts  shop.these.Count
+
+        Debug.Log("SavedThePlayer");
+
+        */
     }
+
+    /*
 
     public void SaveHats() {
 
         //
         hatBoughtInts = shop.BoughtHatInts;
 
-        shop.BoughtHatInts.Clear();
+        //shop.IsHatBought += shop.these;
+
+        //shop.IsHatBought[i] = false;
 
     }
+
+    */
 
     // Load the player
     public void LoadPlayer() {
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer();
+
+        shop.Currency = data.iCurrency;
+
+        shop.these = data.boughtHatList;
+
+        for (int i = 0; i < shop.IsHatBought.Count; i++) {
+
+
+            for (int j = 0; j < shop.these.Count; j++) {
+
+                if (i == shop.these[j]) {
+
+                    shop.IsHatBought[i] = true;
+
+                }
+
+            }
+
+            
+
+
+            /*
+            if (shop.these.IndexOf(i) == shop.IsHatBought.IndexOf(i)) {
+
+                //
+                //shop.these[i] = 1;
+
+            }
+            */
+
+            
+
+        }
+        /*
 
         // set the current hat int in the outfit changer to the current hat gameobject int that was saved
         outfitChanger.currentGOint = CurrentGameObjectInt;
@@ -124,10 +173,21 @@ public class b_Player : MonoBehaviour
         shop.Currency = Currency;
 
         //
-        shop.BoughtHatInts = hatBoughtInts;
+        //shop.BoughtHatInts = hatBoughtInts;
+
+        //shop.Loaded = true;
 
         //
-        shop.these = hatBoughtInts;
+        //shop.these = hatBoughtInts;
+
+        for (int i = 0; i < shop.these.Count; i++) {
+
+            shop.these[i] = hatBoughtInts[i];
+
+        }
+
+        //
+        //shop.IsHatBought= hatBoughtInts;
 
         //
         //shop.ResetBools();
@@ -139,7 +199,7 @@ public class b_Player : MonoBehaviour
         //shop.IsHatBought = HatBoughtBools;
 
 
-
+        */
     }
 
     #endregion

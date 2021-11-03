@@ -17,6 +17,9 @@ public class Shop : MonoBehaviour
 
     #region Variables
 
+    //
+    ////public b_Player b_player;
+
     // Outfitchanger reference
     public OutfitChanger outfitChanger;
 
@@ -67,7 +70,7 @@ public class Shop : MonoBehaviour
     // list of bools for which character is bought
     public List<bool> IsCharacterBought = new List<bool>();
 
-
+    //public bool Loaded = false;
 
     // current character price text
     public Text CurrentCharacterPriceText;
@@ -80,6 +83,10 @@ public class Shop : MonoBehaviour
 
     // current character price as an int
     public int CurrentCharacterPriceInt;
+
+
+    //int value;
+
 
     #endregion
 
@@ -182,7 +189,25 @@ public class Shop : MonoBehaviour
 
         }
 
-        
+
+        //value = IsHatBought.ForEach ? 1 : 0;
+
+
+        /*
+
+        foreach (bool bools in IsHatBought) {
+
+            //
+            if (IsHatBought[CurrentHatSelectedInt]) {
+
+                //
+                IsHatBought[these.Contains(i)] = true;
+
+            }
+
+        }
+
+        */
 
     }
 
@@ -195,6 +220,7 @@ public class Shop : MonoBehaviour
             if (these.Contains(i)) {
 
                 // do nothing
+                //these = b_player.hatBoughtInts;
 
             }
 
@@ -218,11 +244,13 @@ public class Shop : MonoBehaviour
 
             }
 
-            
+            //
+            //IsHatBought[these.Add(i)] = true;
 
         }
 
     }
+
 
     // Next hat price which is called in OutfitChanger
     public void NextHatPrice() {

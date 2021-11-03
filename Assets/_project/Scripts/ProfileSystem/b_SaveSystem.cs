@@ -24,19 +24,19 @@ public static class b_SaveSystem
     #region Methods
 
     // Save the player and take in data from the b_Player script
-    public static void SavePlayer(b_Player playerr) {
+    public static void SavePlayer(Shop shopData, OutfitChanger outfitChangerData) {
 
         // new binary formatter
         BinaryFormatter formatter = new BinaryFormatter();
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Player.txt";
+        string path = Application.persistentDataPath + "/Player.sdat";
 
         // create a new filestream taking in the "path" string
         FileStream stream = new FileStream(path, FileMode.Create);
 
         // reference b_PlayerData, called data (New b_PlayerData)
-        b_PlayerData data = new b_PlayerData(playerr);
+        b_PlayerData data = new b_PlayerData(shopData, outfitChangerData);
 
         // serialize the stream and data, data
         formatter.Serialize(stream, data);
@@ -51,7 +51,7 @@ public static class b_SaveSystem
     public static b_PlayerData LoadPlayer() {
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Player.txt";
+        string path = Application.persistentDataPath + "/Player.sdat";
 
         // if a file exists in the "path"
         if (File.Exists(path)) {
