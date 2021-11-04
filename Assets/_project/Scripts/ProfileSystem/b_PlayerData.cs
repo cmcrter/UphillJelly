@@ -22,7 +22,32 @@ public class b_PlayerData
     public int iCurrency;
 
     //
-    public List<int> boughtHatList;
+    public List<int> savedHatList;
+
+    //
+    public List<int> savedCharacterList;
+
+    // gameobject for the hat price panel
+    //public GameObject go_HatPricePanel;
+
+    // gameobject for the character price panel
+    //public GameObject go_CharacterPricePanel;
+
+    //
+    public List<int> iIndividualHatPrices;
+
+    //
+    public List<int> iIndividualCharacterPrices;
+
+    // current int for the hats
+    public int icurrentGOint;
+
+    // current int for the hat material 
+    public int icurrentGOMaterialint;
+
+    // current character int
+    public int icurrentCharacterint;
+
 
     #endregion
 
@@ -35,7 +60,22 @@ public class b_PlayerData
 
         iCurrency = shopData.Currency;
 
-        boughtHatList = shopData.these;
+
+        savedHatList = shopData.iSavedHatInts;
+
+        savedCharacterList = shopData.iSavedCharacterInts;
+
+
+        iIndividualHatPrices = shopData.IndividualHatPrices;
+
+        iIndividualCharacterPrices = shopData.IndividualCharacterPrices;
+
+
+        icurrentGOint = outfitChangerData.currentGOint;
+
+        icurrentGOMaterialint = outfitChangerData.currentGOMaterialint;
+
+        icurrentCharacterint = outfitChangerData.currentCharacterint;
 
     }
 

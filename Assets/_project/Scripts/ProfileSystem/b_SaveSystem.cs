@@ -24,13 +24,61 @@ public static class b_SaveSystem
     #region Methods
 
     // Save the player and take in data from the b_Player script
-    public static void SavePlayer(Shop shopData, OutfitChanger outfitChangerData) {
+    public static void SavePlayer1(Shop shopData, OutfitChanger outfitChangerData) {
 
         // new binary formatter
         BinaryFormatter formatter = new BinaryFormatter();
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Player.sdat";
+        string path = Application.persistentDataPath + "/Profile1.sdat";
+
+        // create a new filestream taking in the "path" string
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        // reference b_PlayerData, called data (New b_PlayerData)
+        b_PlayerData data = new b_PlayerData(shopData, outfitChangerData);
+
+        // serialize the stream and data, data
+        formatter.Serialize(stream, data);
+
+        // close the stream
+        stream.Close();
+
+    }
+
+
+    // Save the player and take in data from the b_Player script
+    public static void SavePlayer2(Shop shopData, OutfitChanger outfitChangerData) {
+
+        // new binary formatter
+        BinaryFormatter formatter = new BinaryFormatter();
+
+        // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
+        string path = Application.persistentDataPath + "/Profile2.sdat";
+
+        // create a new filestream taking in the "path" string
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        // reference b_PlayerData, called data (New b_PlayerData)
+        b_PlayerData data = new b_PlayerData(shopData, outfitChangerData);
+
+        // serialize the stream and data, data
+        formatter.Serialize(stream, data);
+
+        // close the stream
+        stream.Close();
+
+    }
+
+
+    // Save the player and take in data from the b_Player script
+    public static void SavePlayer3(Shop shopData, OutfitChanger outfitChangerData) {
+
+        // new binary formatter
+        BinaryFormatter formatter = new BinaryFormatter();
+
+        // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
+        string path = Application.persistentDataPath + "/Profile3.sdat";
 
         // create a new filestream taking in the "path" string
         FileStream stream = new FileStream(path, FileMode.Create);
@@ -48,10 +96,10 @@ public static class b_SaveSystem
 
 
     // Load the player and take in data from the b_PlayerData script
-    public static b_PlayerData LoadPlayer() {
+    public static b_PlayerData LoadPlayer1() {
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Player.sdat";
+        string path = Application.persistentDataPath + "/Profile1.sdat";
 
         // if a file exists in the "path"
         if (File.Exists(path)) {
@@ -73,6 +121,86 @@ public static class b_SaveSystem
 
             
            
+        } else {
+
+            //  debug log which outputs the save was not found in the "path"
+            Debug.LogError("Save file not found in " + path);
+
+            // return null
+            return null;
+
+        }
+
+
+    }
+
+
+    // Load the player and take in data from the b_PlayerData script
+    public static b_PlayerData LoadPlayer2() {
+
+        // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
+        string path = Application.persistentDataPath + "/Profile2.sdat";
+
+        // if a file exists in the "path"
+        if (File.Exists(path)) {
+
+            // new binary formatter
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            // create a new filestream taking in the "path" string and open it
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            // deserialize the stream data as b_PlayerData
+            b_PlayerData data = formatter.Deserialize(stream) as b_PlayerData;
+
+            // close the stream
+            stream.Close();
+
+            // return the data
+            return data;
+
+
+
+        } else {
+
+            //  debug log which outputs the save was not found in the "path"
+            Debug.LogError("Save file not found in " + path);
+
+            // return null
+            return null;
+
+        }
+
+
+    }
+
+
+    // Load the player and take in data from the b_PlayerData script
+    public static b_PlayerData LoadPlayer3() {
+
+        // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
+        string path = Application.persistentDataPath + "/Profile3.sdat";
+
+        // if a file exists in the "path"
+        if (File.Exists(path)) {
+
+            // new binary formatter
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            // create a new filestream taking in the "path" string and open it
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            // deserialize the stream data as b_PlayerData
+            b_PlayerData data = formatter.Deserialize(stream) as b_PlayerData;
+
+            // close the stream
+            stream.Close();
+
+            // return the data
+            return data;
+
+
+
         } else {
 
             //  debug log which outputs the save was not found in the "path"

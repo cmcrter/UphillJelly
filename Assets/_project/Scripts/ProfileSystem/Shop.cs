@@ -17,29 +17,20 @@ public class Shop : MonoBehaviour
 
     #region Variables
 
-    //
-    ////public b_Player b_player;
-
     // Outfitchanger reference
     public OutfitChanger outfitChanger;
 
     // int for the currency
-    public int Currency;
+    public int Currency; // SAVED
 
     // text for the currency text
     public Text currencyText;
 
     // gameobject for the hat price panel
-    public GameObject HatPricePanel;
+    public GameObject HatPricePanel; // SAVED
 
     // gameobject for the character price panel
-    public GameObject CharacterPricePanel;
-
-    // bool for if something is bought
-    //public bool IsBought;
-
-    //
-    public List<int> BoughtHatInts = new List<int>();
+    public GameObject CharacterPricePanel; // SAVED
 
     //
     public GameObject BuyHatButton;
@@ -51,43 +42,46 @@ public class Shop : MonoBehaviour
     public Text CurrentHatPriceText;
 
     // public list of the hat prices
-    public List<int> IndividualHatPrices = new List<int>();
+    public List<int> IndividualHatPrices = new List<int>(); // SAVED
+
+    //  public list of all the character prices
+    public List<int> IndividualCharacterPrices = new List<int>(); // SAVED
+
 
     // current hat selected as an int
     public int CurrentHatSelectedInt;
 
-    // current hat price as an int
-    public int CurrentHatPriceInt;
-
-
-
-    // list of bools for which hat is bought
-    public List<bool> IsHatBought = new List<bool>();
-
-    //
-    public List<int> these = new List<int>();
-
-    // list of bools for which character is bought
-    public List<bool> IsCharacterBought = new List<bool>();
-
-    //public bool Loaded = false;
-
-    // current character price text
-    public Text CurrentCharacterPriceText;
-
-    //  public list of all the character prices
-    public List<int> IndividualCharacterPrices = new List<int>();
-
     // current character selected as an int
     public int CurrentCharacterSelectedInt;
+
+
+
+    // current hat price as an int
+    public int CurrentHatPriceInt;
 
     // current character price as an int
     public int CurrentCharacterPriceInt;
 
+    
 
-    //int value;
+    // list of bools for which hat is bought
+    public List<bool> IsHatBought = new List<bool>();
+
+    // list of bools for which character is bought
+    public List<bool> IsCharacterBought = new List<bool>();
 
 
+    //
+    public List<int> iSavedHatInts = new List<int>(); // SAVED
+
+    //
+    public List<int> iSavedCharacterInts = new List<int>(); // SAVED
+
+
+    // current character price text
+    public Text CurrentCharacterPriceText;
+
+    
     #endregion
 
     #region Methods
@@ -189,67 +183,9 @@ public class Shop : MonoBehaviour
 
         }
 
-
-        //value = IsHatBought.ForEach ? 1 : 0;
-
-
-        /*
-
-        foreach (bool bools in IsHatBought) {
-
-            //
-            if (IsHatBought[CurrentHatSelectedInt]) {
-
-                //
-                IsHatBought[these.Contains(i)] = true;
-
-            }
-
-        }
-
-        */
-
     }
 
-    //
-    public void BoughtHat() {
-
-        //
-        for (int i = 0; i < IsHatBought.Count; i++) {
-
-            if (these.Contains(i)) {
-
-                // do nothing
-                //these = b_player.hatBoughtInts;
-
-            }
-
-            if (!these.Contains(i)) {
-
-                //
-                if (IsHatBought[i] == true) {
-
-                    // Do this
-                    Debug.Log("Bools are " + i + IsHatBought[i]);
-
-                    //
-                    these.Add(i);
-
-                } else if (IsHatBought[i] == false) {
-
-                    // Do nothing
-
-
-                }
-
-            }
-
-            //
-            //IsHatBought[these.Add(i)] = true;
-
-        }
-
-    }
+    
 
 
     // Next hat price which is called in OutfitChanger
@@ -258,15 +194,6 @@ public class Shop : MonoBehaviour
         // increment the current hat by 1
         CurrentHatSelectedInt++;
 
-        /*
-        // if the hat int is more than or = to the hat list.count
-        if (CurrentHatSelectedInt >= IndividualHatPrices.Count) {
-
-            // set the int to 0
-            CurrentHatSelectedInt = 0;
-
-        }
-        */
     }
 
     // previous hat price which is called in OutfitChanger
@@ -274,16 +201,6 @@ public class Shop : MonoBehaviour
 
         // increment the current hat by -1
         CurrentHatSelectedInt--;
-
-        /*
-        // if the hat int is less than or = to 0
-        if (CurrentHatSelectedInt == -1) {
-
-            // set the hat int to the list of hats.count - 1
-            CurrentHatSelectedInt = IndividualHatPrices.Count - 1;
-
-        }
-        */
 
     }
 
@@ -299,14 +216,7 @@ public class Shop : MonoBehaviour
             // set the hat to the hat has been bought with the current hat int
             IsHatBought[CurrentHatSelectedInt] = true;
 
-
-            //IsHatBought
-
-            // save the currently selected hat int that was bought
-            //BoughtHatInts.Add(CurrentHatSelectedInt);
-
-            //BoughtHatInts.Add(IsHatBought.Count);
-
+            //
             BoughtHat();
 
             // Debug
@@ -327,6 +237,42 @@ public class Shop : MonoBehaviour
     }
 
 
+    //
+    public void BoughtHat() {
+
+        //
+        for (int i = 0; i < IsHatBought.Count; i++) {
+
+            if (iSavedHatInts.Contains(i)) {
+
+                // do nothing
+            }
+
+            if (!iSavedHatInts.Contains(i)) {
+
+                //
+                if (IsHatBought[i] == true) {
+
+                    // Do this
+                    Debug.Log("Bools are " + i + IsHatBought[i]);
+
+                    //
+                    iSavedHatInts.Add(i);
+
+                } else if (IsHatBought[i] == false) {
+
+                    // Do nothing
+
+
+                }
+
+            }
+
+        }
+
+    }
+
+
 
 
 
@@ -336,16 +282,6 @@ public class Shop : MonoBehaviour
         // increment the current character by 1
         CurrentCharacterSelectedInt++;
 
-        /*
-        // if the hat int is more than or = to the hat list.count
-        if (CurrentCharacterSelectedInt >= IndividualCharacterPrices.Count) {
-
-            // set the int to 0
-            CurrentCharacterSelectedInt = 0;
-
-        }
-        */
-
     }
 
     // previous character price which is called in OutfitChanger
@@ -353,16 +289,6 @@ public class Shop : MonoBehaviour
 
         // increment the current character by -1
         CurrentCharacterSelectedInt--;
-
-        /*
-        // if the hat int is less than or = to 0
-        if (CurrentCharacterSelectedInt == -1) {
-
-            // set the hat int to the list of hats.count - 1
-            CurrentCharacterSelectedInt = IndividualCharacterPrices.Count - 1;
-
-        }
-        */
 
     }
 
@@ -377,6 +303,9 @@ public class Shop : MonoBehaviour
 
             // set the character to the character has been bought with the current character int
             IsCharacterBought[CurrentCharacterSelectedInt] = true;
+
+            //
+            BoughtCharacter();
 
             // Debug
             Debug.Log("BoughtCharacter");
@@ -395,20 +324,41 @@ public class Shop : MonoBehaviour
 
 
 
-    /*
-
     //
-    public void ResetBools() {
+    public void BoughtCharacter() {
 
         //
-        //IsHatBought.Clear();
+        for (int i = 0; i < IsCharacterBought.Count; i++) {
 
-        //
-        //IsCharacterBought.Clear();
+            if (iSavedCharacterInts.Contains(i)) {
+
+                // do nothing
+            }
+
+            if (!iSavedCharacterInts.Contains(i)) {
+
+                //
+                if (IsCharacterBought[i] == true) {
+
+                    // Do this
+                    Debug.Log("Bools are " + i + IsCharacterBought[i]);
+
+                    //
+                    iSavedCharacterInts.Add(i);
+
+                } else if (IsCharacterBought[i] == false) {
+
+                    // Do nothing
+
+
+                }
+
+            }
+
+        }
 
     }
 
-    */
 
 
 
