@@ -33,7 +33,18 @@ namespace SleepyCat.ScriptableObjects.Input
             public float distanceTolerance;
         }
 
+        [SerializeField]
+        [Tooltip("The list of pattern point that defines how the user should draw the pattern")]
         public List<PatternPoint> patternPoints;
+
+        [SerializeField]
+        [Tooltip("The unique value for this AnalogueStickPattern to separate it from all the other patterns")]
+        private int id;
+
+        /// <summary>
+        /// The unique value for this AnalogueStickPattern to separate it from all the other patterns
+        /// </summary>
+        public int ID { get { return id; } }
     }
 }
 
