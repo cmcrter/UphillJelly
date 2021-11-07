@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 175004973105848985}
   - component: {fileID: 2704773665298732627}
   - component: {fileID: 3623388826759385028}
+  - component: {fileID: 4334728419754087172}
+  - component: {fileID: 1827770575300910147}
   m_Layer: 0
   m_Name: Utility Pole
   m_TagString: Untagged
@@ -94,5 +96,31 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.30416667, y: 12.000002, z: 3.3348606}
-  m_Center: {x: -0.15230033, y: 5.8919296, z: 0.0033347604}
+  m_Size: {x: 0.30416664, y: 12.000002, z: 0.32331124}
+  m_Center: {x: -0.15230027, y: 5.8919296, z: 0.0031482952}
+--- !u!65 &4334728419754087172
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4506332057032062854}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.11524744, y: 0.25938416, z: 3.334957}
+  m_Center: {x: -0.057840537, y: 11.57469, z: 0.0033347604}
+--- !u!65 &1827770575300910147
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4506332057032062854}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.11524744, y: 0.25938416, z: 3.334957}
+  m_Center: {x: -0.057840537, y: 8.6, z: 0.0033347604}
