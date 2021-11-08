@@ -3,12 +3,14 @@
 // Author: Charles Carter, Matthew Mason
 // Date Created: 05/10/21
 // Last Edited By: Matthew Mason
-// Date Last Edited: 28/10/21
+// Date Last Edited: 02/11/21
 // Brief: A script which handles the inputs passed from the input system
 //////////////////////////////////////////////////////////// 
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SleepyCat.ScriptableObjects.Input;
 
 namespace SleepyCat.Input
 {
@@ -17,9 +19,48 @@ namespace SleepyCat.Input
     /// </summary>
     public class InputHandler : MonoBehaviour
     {
+        #region Private Structure
+        /// <summary>
+        /// Structure used to store an index of the current way-point reach and a timer indicating how long its been since the last way point was hit
+        /// </summary>
+        private struct AnalogueStickPatternsIndexAndTimer
+        {
+            /// <summary>
+            /// The current way-point that analogue stick pattern has reached
+            /// </summary>
+            public int currentWaypointIndex;
+            /// <summary>
+            /// The timer for how long the player has left to reach the next way-point
+            /// </summary>
+            public Timer timer;
+
+            /// <summary>
+            /// Constructor 
+            /// </summary>
+            /// <param name="currentIndex">The current way-point that analogue stick pattern has reached</param>
+            /// <param name="timer">The timer for how long the player has left to reach the next way-point</param>
+            public AnalogueStickPatternsIndexAndTimer(int currentIndex, Timer timer)
+            {
+                this.currentWaypointIndex = currentIndex;
+                this.timer = timer;
+            }
+        }
+        #endregion
+
         #region Private Serialized Fields
         [SerializeField] [Tooltip("The PlayerInput to get the action events from")]
         private PlayerInput playerInput;
+
+        [SerializeField]
+        [Tooltip("The patterns to check for from the analogue stick")]
+        private List<AnalogueStickPattern> analogueStickPatterns;
+        #endregion
+
+        #region Private Variables
+        /// <summary>
+        /// The patterns in use and AnalogueStickPatternsIndexAndTimers for how far along they have progressed
+        /// </summary>
+        private Dictionary<AnalogueStickPattern, AnalogueStickPatternsIndexAndTimer> analogueStickPatternsProgress;
         #endregion
 
         #region Publicly Accessible Properties
@@ -60,6 +101,12 @@ namespace SleepyCat.Input
         /// </summary>
         /// <param name="axisValue">a value between -1 to 1 as a 1d axis value</param>
         public delegate void OneDimensionalAxisAction(float axisValue);
+
+        /// <summary>
+        /// Delegate for events called when an AnalogueStickPattern has been completed by the user
+        /// </summary>
+        /// <param name="patternId">The Id of the AnalogueStickPattern</param>
+        public delegate void AnalogueStickPatternCompletedDelegate(int patternId);
         #endregion
 
         #region Public Events
@@ -136,6 +183,10 @@ namespace SleepyCat.Input
         /// </summary>
         public event System.Action wallRidingJumpUpAction;
 
+        /// <summary>
+        /// Called when an analogue stick pattern has been completed
+        /// </summary>
+        public event AnalogueStickPatternCompletedDelegate analogueStickPatternCompleted;
 
         /// <summary>
         /// Called every frame with the current value of the balance action axis
@@ -145,9 +196,19 @@ namespace SleepyCat.Input
         /// Called every frame with the current value of the turning action axis
         /// </summary>
         public event OneDimensionalAxisAction turningUpdated;
+
         #endregion
 
         #region Unity Methods
+        private void Awake()
+        {
+            analogueStickPatternsProgress = new Dictionary<AnalogueStickPattern, AnalogueStickPatternsIndexAndTimer>(analogueStickPatterns.Count);
+            for (int i = 0; i < analogueStickPatterns.Count; ++i)
+            {
+                analogueStickPatternsProgress.Add(analogueStickPatterns[i], new AnalogueStickPatternsIndexAndTimer(0, null));
+            }
+        }
+
         private void Update()
         {
             // To the PlayerInput events if not done so already
@@ -161,6 +222,8 @@ namespace SleepyCat.Input
                 BindAerialActions();
                 BindWallRidingAction();
             }
+
+            UpdatePatterns();
 
             // Buttons held down events
             if (BrakeHeldDown)
@@ -358,7 +421,10 @@ namespace SleepyCat.Input
             }
         }
 
-
+        /// <summary>
+        /// Called when the StartGrind action is canceled
+        /// </summary>
+        /// <param name="callbackContext">The brake action's CallbackContext</param>
         private void StartGrindAction_Canceled(InputAction.CallbackContext callbackContext)
         {
             StartGrindHeld = false;
@@ -389,6 +455,7 @@ namespace SleepyCat.Input
         }
         #endregion
 
+        #region Binding And Unbinding
         /// <summary>
         /// Bind to all the events to the aerial actions
         /// </summary>
@@ -435,7 +502,6 @@ namespace SleepyCat.Input
             playerInput.actions["Grounded_StartGrind"].performed += StartGrindAction_Performed;
             playerInput.actions["Grounded_StartGrind"].canceled += StartGrindAction_Canceled;
         }
-
         /// <summary>
         /// Bind to all the events to the wall riding actions
         /// </summary>
@@ -472,25 +538,25 @@ namespace SleepyCat.Input
         /// </summary>
         private void UnbindGroundedAction()
         {
-            playerInput.actions["Grounded_Push"].canceled           -= PushAction_Canceled;
-            playerInput.actions["Grounded_Push"].performed          -= PushAction_Performed;
-                                                                    
-            playerInput.actions["Grounded_PressDown"].canceled      -= PressDownAction_Canceled;
-            playerInput.actions["Grounded_PressDown"].performed     -= PressDownAction_Performed;
-                                                                    
-            playerInput.actions["Grounded_JumpUp"].performed        -= GroundedJumpUpAction_Performed;
-                                                                    
-            playerInput.actions["Grounded_Balance"].performed       -= BalanceAction_Performed;
-            playerInput.actions["Grounded_Balance"].canceled        -= BalanceAction_Canceled;
-                                                                    
-            playerInput.actions["Grounded_Brake"].performed         -= BrakeAction_Peformed;
-            playerInput.actions["Grounded_Brake"].canceled          -= BrakeAction_Canceled;
-                                                                    
-            playerInput.actions["Grounded_Turning"].performed       -= TurningAction_Peformed;
-            playerInput.actions["Grounded_Turning"].canceled        -= TurningAction_Canceled;
-                                                                    
-            playerInput.actions["Grounded_StartGrind"].performed    -= StartGrindAction_Performed;
-            playerInput.actions["Grounded_StartGrind"].canceled     -= StartGrindAction_Canceled;
+            playerInput.actions["Grounded_Push"].canceled -= PushAction_Canceled;
+            playerInput.actions["Grounded_Push"].performed -= PushAction_Performed;
+
+            playerInput.actions["Grounded_PressDown"].canceled -= PressDownAction_Canceled;
+            playerInput.actions["Grounded_PressDown"].performed -= PressDownAction_Performed;
+
+            playerInput.actions["Grounded_JumpUp"].performed -= GroundedJumpUpAction_Performed;
+
+            playerInput.actions["Grounded_Balance"].performed -= BalanceAction_Performed;
+            playerInput.actions["Grounded_Balance"].canceled -= BalanceAction_Canceled;
+
+            playerInput.actions["Grounded_Brake"].performed -= BrakeAction_Peformed;
+            playerInput.actions["Grounded_Brake"].canceled -= BrakeAction_Canceled;
+
+            playerInput.actions["Grounded_Turning"].performed -= TurningAction_Peformed;
+            playerInput.actions["Grounded_Turning"].canceled -= TurningAction_Canceled;
+
+            playerInput.actions["Grounded_StartGrind"].performed -= StartGrindAction_Performed;
+            playerInput.actions["Grounded_StartGrind"].canceled -= StartGrindAction_Canceled;
         }
         /// <summary>
         /// Unbind to all the events to the wall riding actions
@@ -501,6 +567,52 @@ namespace SleepyCat.Input
 
             playerInput.actions["WallRiding_Turning"].performed -= TurningAction_Peformed;
             playerInput.actions["WallRiding_Turning"].canceled -= TurningAction_Canceled;
+        }
+        #endregion
+        /// <summary>
+        /// Update the progress on performing the analogue stick patterns
+        /// </summary>
+        private void UpdatePatterns()
+        {
+            for (int i = 0; i < analogueStickPatterns.Count; ++i)
+            {
+                if (analogueStickPatternsProgress.TryGetValue(analogueStickPatterns[i], out AnalogueStickPatternsIndexAndTimer indexAndTimer))
+                {
+                    Vector2 StickPosition = playerInput.actions["Aerial_AnalogueStick"].ReadValue<Vector2>();
+                    // Check if it is within the distance tolerance of the next way point
+                    if (Vector2.Distance(StickPosition, analogueStickPatterns[i].patternPoints[indexAndTimer.currentWaypointIndex].pointOnAxis) < analogueStickPatterns[i].patternPoints[indexAndTimer.currentWaypointIndex].distanceTolerance)
+                    {
+                        int nextProgressStep = indexAndTimer.currentWaypointIndex + 1;
+                        if (analogueStickPatterns[i].patternPoints.Count > nextProgressStep)
+                        {
+                            // Move it on to the next way point and start the timer
+                            analogueStickPatternsProgress[analogueStickPatterns[i]] = new AnalogueStickPatternsIndexAndTimer(nextProgressStep, new Timer(analogueStickPatterns[i].patternPoints[nextProgressStep].timeToReach));
+                        }
+                        else
+                        {
+                            Debug.Log("Pattern Completed with Id: " + analogueStickPatterns[i].ID.ToString());
+                            if (analogueStickPatternCompleted != null)
+                            {
+                                analogueStickPatternCompleted(analogueStickPatterns[i].ID);
+                            }
+                            analogueStickPatternsProgress[analogueStickPatterns[i]] = new AnalogueStickPatternsIndexAndTimer(0, null);
+                        }
+                    }
+                    if (indexAndTimer.timer != null)
+                    {
+                        // If the timer ran out 
+                        if (!indexAndTimer.timer.isActive)
+                        {
+                            // Reset pattern
+                            analogueStickPatternsProgress[analogueStickPatterns[i]] = new AnalogueStickPatternsIndexAndTimer(0, null);
+                        }
+                        else
+                        {
+                            indexAndTimer.timer.Tick(Time.deltaTime);
+                        }
+                    }
+                }
+            }
         }
         #endregion
     }
