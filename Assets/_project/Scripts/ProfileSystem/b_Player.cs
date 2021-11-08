@@ -10,11 +10,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class b_Player : MonoBehaviour
 {
 
     #region Variables
+
+    //
+    //public TextMeshPro tmp;
 
     //
     public GameObject LoadPlayer1Button;
@@ -24,6 +28,15 @@ public class b_Player : MonoBehaviour
 
     //
     public GameObject LoadPlayer3Button;
+
+    //
+    public GameObject SavePlayer1Button;
+
+    //
+    public GameObject SavePlayer2Button;
+
+    //
+    public GameObject SavePlayer3Button;
 
 
     // gameobject for the hat price panel
@@ -73,6 +86,17 @@ public class b_Player : MonoBehaviour
     // Load the player
     public void LoadPlayer1() {
 
+        //
+        LoadPlayer2Button.SetActive(false);
+
+        //
+        LoadPlayer3Button.SetActive(false);
+
+        //
+        SavePlayer2Button.SetActive(false);
+
+        //
+        SavePlayer3Button.SetActive(false);
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
@@ -141,19 +165,29 @@ public class b_Player : MonoBehaviour
         //
         LoadPlayer3Button.SetActive(false);
 
+        //
+        SavePlayer1Button.SetActive(false);
+
+        //
+        LoadPlayer3Button.SetActive(false);
+
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer2();
-
-
 
         shop.Currency = data.iCurrency;
 
         shop.iSavedHatInts = data.savedHatList;
 
+        shop.iSavedCharacterInts = data.savedCharacterList;
+
+        outfitChanger.currentGOint = data.icurrentGOint;
+
+        outfitChanger.currentGOMaterialint = data.icurrentGOMaterialint;
+
+        outfitChanger.currentCharacterint = data.icurrentCharacterint;
 
 
         for (int i = 0; i < shop.IsHatBought.Count; i++) {
-
 
             for (int j = 0; j < shop.iSavedHatInts.Count; j++) {
 
@@ -161,7 +195,26 @@ public class b_Player : MonoBehaviour
 
                     shop.IsHatBought[i] = true;
 
-                } 
+                    Debug.Log(shop.IsHatBought[i]);
+
+                }
+
+            }
+
+        }
+
+
+        for (int i = 0; i < shop.IsCharacterBought.Count; i++) {
+
+            for (int j = 0; j < shop.iSavedCharacterInts.Count; j++) {
+
+                if (i == shop.iSavedCharacterInts[j]) {
+
+                    shop.IsCharacterBought[i] = true;
+
+                    Debug.Log(shop.IsCharacterBought[i]);
+
+                }
 
             }
 
@@ -183,19 +236,29 @@ public class b_Player : MonoBehaviour
         //
         LoadPlayer1Button.SetActive(false);
 
+        //
+        SavePlayer2Button.SetActive(false);
+
+        //
+        SavePlayer1Button.SetActive(false);
+
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer3();
-
-
 
         shop.Currency = data.iCurrency;
 
         shop.iSavedHatInts = data.savedHatList;
 
+        shop.iSavedCharacterInts = data.savedCharacterList;
+
+        outfitChanger.currentGOint = data.icurrentGOint;
+
+        outfitChanger.currentGOMaterialint = data.icurrentGOMaterialint;
+
+        outfitChanger.currentCharacterint = data.icurrentCharacterint;
 
 
         for (int i = 0; i < shop.IsHatBought.Count; i++) {
-
 
             for (int j = 0; j < shop.iSavedHatInts.Count; j++) {
 
@@ -203,7 +266,26 @@ public class b_Player : MonoBehaviour
 
                     shop.IsHatBought[i] = true;
 
-                } 
+                    Debug.Log(shop.IsHatBought[i]);
+
+                }
+
+            }
+
+        }
+
+
+        for (int i = 0; i < shop.IsCharacterBought.Count; i++) {
+
+            for (int j = 0; j < shop.iSavedCharacterInts.Count; j++) {
+
+                if (i == shop.iSavedCharacterInts[j]) {
+
+                    shop.IsCharacterBought[i] = true;
+
+                    Debug.Log(shop.IsCharacterBought[i]);
+
+                }
 
             }
 
