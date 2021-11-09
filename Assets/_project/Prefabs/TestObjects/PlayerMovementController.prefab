@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 207158970}
   - component: {fileID: 207158969}
   - component: {fileID: 207158968}
-  - component: {fileID: 207158972}
   m_Layer: 6
   m_Name: GrindCollider
   m_TagString: Untagged
@@ -29,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 207158966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.35, z: 0.072}
+  m_LocalPosition: {x: 0, y: -0.338, z: 0.02}
   m_LocalScale: {x: 0.46, y: 0.22, z: 0.84}
   m_Children: []
   m_Father: {fileID: 2573286818288912062}
@@ -96,7 +95,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.15, y: 2, z: 1.06}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &207158968
 MonoBehaviour:
@@ -111,22 +110,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: {fileID: 2573286818288912050}
---- !u!54 &207158972
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 207158966}
-  serializedVersion: 2
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1532173282
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,6 +711,7 @@ GameObject:
   - component: {fileID: 2573286818288912050}
   - component: {fileID: 2573286818288912060}
   - component: {fileID: 8743188391020955400}
+  - component: {fileID: 1803459479}
   m_Layer: 6
   m_Name: PlayerMovementController
   m_TagString: Untagged
@@ -810,10 +794,11 @@ MonoBehaviour:
     playerMask:
       serializedVersion: 2
       m_Bits: 64
-    groundDist: 0.09
-    rampDist: 0.65
+    groundDist: 0.095
+    rampDist: 0.55
   nextToWallRun:
     currentWallRide: {fileID: 0}
+    dotProductWithWall: 0
   grindBelow:
     splineCurrentlyGrindingOn: {fileID: 0}
     grindDetails: {fileID: 0}
@@ -823,6 +808,7 @@ MonoBehaviour:
       isActive: 0
   playerCamera: {fileID: 0}
   currentTurnInput: 0
+  turnDuration: 0.8
   playerModel: {fileID: 2573286819368759183}
   rb: {fileID: 2573286819093465939}
   groundRaycastPoint: {fileID: 2573286818866706067}
@@ -832,6 +818,30 @@ MonoBehaviour:
   inputHandler: {fileID: 8743188391020955400}
   AdditionalGravityAmount: 7
   bAddAdditionalGravity: 1
+  turnSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.111694336
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.7002716
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &2573286818288912060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,6 +885,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 2573286818288912060}
+  analogueStickPatterns: []
+--- !u!54 &1803459479
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2573286818288912049}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2573286818798095997
 GameObject:
   m_ObjectHideFlags: 0
@@ -1553,7 +1580,6 @@ GameObject:
   - component: {fileID: 1024689555015096100}
   - component: {fileID: 3239561786773128422}
   - component: {fileID: 4715914072580758496}
-  - component: {fileID: 1415801993}
   - component: {fileID: 1415801995}
   m_Layer: 6
   m_Name: Triggerable
@@ -1639,22 +1665,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisPlayer: {fileID: 2573286818288912050}
---- !u!54 &1415801993
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4243520946788990175}
-  serializedVersion: 2
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!136 &1415801995
 CapsuleCollider:
   m_ObjectHideFlags: 0

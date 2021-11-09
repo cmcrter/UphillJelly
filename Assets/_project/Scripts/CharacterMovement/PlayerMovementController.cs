@@ -12,6 +12,7 @@ using UnityEngine.InputSystem;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Input;
 using SleepyCat.Triggerables;
+using System.Collections;
 
 namespace SleepyCat.Movement
 {
@@ -33,6 +34,8 @@ namespace SleepyCat.Movement
 
         public PlayerCamera playerCamera;
         public float currentTurnInput;
+        [Tooltip("The time before the player is at full turn")]
+        public float turnDuration;        
 
         [Header("Player Setup")]
         [SerializeField]
@@ -54,6 +57,9 @@ namespace SleepyCat.Movement
 
         private Vector3 initalPos;
         private Quaternion initialRot;
+        private Coroutine turningCo;
+        private Timer turningTimer;
+        public AnimationCurve turnSpeedCurve;
 
         #endregion
 
@@ -75,16 +81,16 @@ namespace SleepyCat.Movement
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
         public void SmoothToGroundRotation(float smoothness, float speed, RaycastHit hit, RaycastHit frontHit)
         {
-            //GameObject's heading
+            //GameObject's heading based on the current input
             float headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
             Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
             Quaternion groundQuat = transform.rotation;
 
-            if(Vector3.Angle(hit.normal, Vector3.up) < 70f)
+            if(Vector3.Angle(hit.normal, Vector3.up) < 60f)
             {
                 groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, Time.deltaTime * smoothness);
 
-                if(frontHit.collider && Vector3.Angle(frontHit.normal, hit.normal) < 60)
+                if(frontHit.collider && Vector3.Angle(frontHit.normal, hit.normal) < 80)
                 {
                     groundQuat = Quaternion.Slerp(groundQuat, Quaternion.FromToRotation(transform.up, frontHit.normal) * transform.rotation, Time.deltaTime * smoothness);
                 }
@@ -151,39 +157,15 @@ namespace SleepyCat.Movement
         {
             playerStateMachine.RunMachine(Time.deltaTime);
 
-            if(Keyboard.current.escapeKey.isPressed) 
+            if(Keyboard.current.escapeKey.isPressed || Gamepad.current.startButton.isPressed) 
             {
                 ResetPlayer();
             }
 
-            //Multiple states need to know the current turning of the user
-            currentTurnInput = 0;
-
-            if(inputHandler.TurningAxis < 0)
+            if(inputHandler.TurningAxis != 0 && turningCo == null)
             {
-                if(rb.velocity.magnitude < 2)
-                {
-                    currentTurnInput = -1f;
-                }
-                else
-                {
-                    currentTurnInput -= 0.25f * rb.velocity.magnitude * 0.3f;
-                }
+                turningCo = StartCoroutine(Co_TurnAngle());
             }
-
-            if(inputHandler.TurningAxis > 0)
-            {
-                if(rb.velocity.magnitude < 2)
-                {
-                    currentTurnInput = 1f;
-                }
-                else
-                {
-                    currentTurnInput += 0.25f * rb.velocity.magnitude * 0.3f;
-                }
-            }
-
-            Mathf.Clamp(currentTurnInput, -1, 1);
         }
 
         private void FixedUpdate()
@@ -202,11 +184,61 @@ namespace SleepyCat.Movement
         {
             ballMovement.transform.position = positionToMoveTo;
         }
+
+        public void StopTurnCoroutine()
+        {
+            if(turningCo != null) 
+            {
+                StopCoroutine(Co_TurnAngle());
+            }
+        }
+
         #endregion
 
         #region Private Methods
 
+        private IEnumerator Co_TurnAngle()
+        {
+            turningTimer = new Timer(turnDuration);
+            currentTurnInput = 0;
 
+            //Whilst the player wants to turn
+            while(inputHandler.TurningAxis != 0)
+            {
+                //How far along into the timer is this
+                float timeAlongTimer = turnDuration / turningTimer.current_time;
+                timeAlongTimer = Mathf.Clamp(timeAlongTimer, 0f, 0.9f);
+
+                float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -0.55f, 0.55f);
+
+                //If the skateboard is moving
+                if(rb.velocity.magnitude > 0.3f)
+                {
+                    //Lerping towards the new input by the animation curves amounts (probably increasing over time)
+                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, turnSpeedCurve.Evaluate(timeAlongTimer));
+                }
+                //Else do a kick turn
+                else
+                {
+                    if(inputHandler.TurningAxis < 0)
+                    {
+                        currentTurnInput = -1f;
+                    }
+                    else
+                    {
+                        currentTurnInput = 1f;
+                    }
+                }
+
+                Mathf.Clamp(currentTurnInput, -1f, 1f);
+                //Ticking the timer along
+                turningTimer.Tick(Time.deltaTime);
+                yield return true;
+            }
+
+            currentTurnInput = 0;
+            turningCo = null;
+        }
 
         #endregion
     }

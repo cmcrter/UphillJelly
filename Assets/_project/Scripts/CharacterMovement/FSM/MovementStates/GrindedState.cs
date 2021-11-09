@@ -125,6 +125,7 @@ namespace SleepyCat.Movement
 
             //Let the condition know to reset
             onGrind.playerExitedGrind();
+            parentController.StopTurnCoroutine();
 
             timeAlongGrind = 0;
             bForceExit = false;
@@ -155,16 +156,19 @@ namespace SleepyCat.Movement
 
                     //Using the calculated time to position everything correctly
                     pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, parentController.ballMovement.radius + 0.01f, 0);
-                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
-                    parentController.transform.forward = currentSplineDir;
 
-                }
-                else
-                {                
-                    timeAlongGrind = Mathf.Clamp01(timeAlongGrind + dT * tIncrementPerSecond); // add length to this calculation
-
+                    if(timeAlongGrind < 0.95f)
+                    {
+                        currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+                        parentController.transform.forward = currentSplineDir;
+                    }
+                }             
+                //if it's at the end
+                else if(Vector3.Distance(parentController.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f)
+                {
                     pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, parentController.ballMovement.radius + 0.01f, 0);
-                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.999f, 0.001f);
+
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
                     parentController.transform.forward = currentSplineDir;
 
                     JumpOffPressed();
@@ -174,7 +178,7 @@ namespace SleepyCat.Movement
 
         public override void PhysicsTick(float dT)
         {
-            if(timeAlongGrind < 1)
+            if(!bForceExit)
             {
                 movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos, dT * 10f));
             }
