@@ -156,11 +156,21 @@ namespace SleepyCat.Movement
         private void Update()
         {
             playerStateMachine.RunMachine(Time.deltaTime);
-
-            if(Keyboard.current.escapeKey.isPressed || Gamepad.current.startButton.isPressed) 
+            if (Gamepad.current != null)
             {
-                ResetPlayer();
+                if (Keyboard.current.escapeKey.isPressed || Gamepad.current.startButton.isPressed)
+                {
+                    ResetPlayer();
+                }
             }
+            else
+            {
+                if (Keyboard.current.escapeKey.isPressed)
+                {
+                    ResetPlayer();
+                }
+            }
+
 
             if(inputHandler.TurningAxis != 0 && turningCo == null)
             {
