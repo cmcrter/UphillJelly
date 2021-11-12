@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 10/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 10/10/21
+// Date Last Edited: 12/11/21
 // Brief: Script to change the collectables shape or colour to show the player if the ghost has collected it 
 //////////////////////////////////////////////////////////// 
 
@@ -14,13 +14,15 @@ using UnityEngine;
 public class Replay_Collectable : MonoBehaviour
 {
 
-    //
-    public TempScoreSystem tempScoreSystem;
+    
 
     #region Variables
 
     // reference to the child object
     public GameObject childCollectableObject;
+
+    // reference to the temporary score system
+    public TempScoreSystem tempScoreSystem;
 
     #endregion
 
@@ -36,7 +38,7 @@ public class Replay_Collectable : MonoBehaviour
             // get the render component in this gameobject and set it to cyan
             this.gameObject.GetComponent<Renderer>().material.color = Color.cyan;
 
-            //
+            // increase the player score
             tempScoreSystem.IncreasePlayerScore();
 
             // debug
@@ -55,7 +57,7 @@ public class Replay_Collectable : MonoBehaviour
             // set the child object to active
             childCollectableObject.SetActive(true);
 
-            //
+            // increase thew ghost score
             tempScoreSystem.IncreaseGhostScore();
 
             // debug
@@ -78,16 +80,8 @@ public class Replay_Collectable : MonoBehaviour
         // on start set the child object to false
         childCollectableObject.SetActive(false);
 
-
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-
-
-    }
 
     #endregion
 

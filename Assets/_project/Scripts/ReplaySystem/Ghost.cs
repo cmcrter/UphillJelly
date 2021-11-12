@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 30/09/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 01/10/21
+// Date Last Edited: 12/11/21
 // Brief: Scriptable object to handle the visible ghost which will be shown on the screen
 //////////////////////////////////////////////////////////// 
 

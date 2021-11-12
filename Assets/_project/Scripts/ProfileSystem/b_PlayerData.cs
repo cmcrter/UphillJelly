@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 25/10/21
+// Date Last Edited: 12/11/21
 // Brief: A script to control the outfit system
 //////////////////////////////////////////////////////////// 
 
@@ -21,22 +21,16 @@ public class b_PlayerData
     // int for currency
     public int iCurrency;
 
-    //
+    // list of the saved hat ints
     public List<int> savedHatList;
 
-    //
+    // list of the saved character ints
     public List<int> savedCharacterList;
 
-    // gameobject for the hat price panel
-    //public GameObject go_HatPricePanel;
-
-    // gameobject for the character price panel
-    //public GameObject go_CharacterPricePanel;
-
-    //
+    // list of the individual hat prices
     public List<int> iIndividualHatPrices;
 
-    //
+    // list of the individual character prices
     public List<int> iIndividualCharacterPrices;
 
     // current int for the hats
@@ -58,23 +52,28 @@ public class b_PlayerData
     // Contructor to tell the PlayerData where to get the data from
     public b_PlayerData(Shop shopData, OutfitChanger outfitChangerData) {
 
+        // this classes currency = shop data currency
         iCurrency = shopData.Currency;
 
-
+        // this classes saved hat list ints = shop data saved hat ints
         savedHatList = shopData.iSavedHatInts;
 
+        // this classes saved character list = shop data saved character ints
         savedCharacterList = shopData.iSavedCharacterInts;
 
-
+        // this classes int individual hat prices = shop data individual hat prices
         iIndividualHatPrices = shopData.IndividualHatPrices;
 
+        // this classes int individual character prices = shop data individual character prices
         iIndividualCharacterPrices = shopData.IndividualCharacterPrices;
 
-
+        // this classes current hat gameobject int = outfitchanger current gameobject int
         icurrentGOint = outfitChangerData.currentGOint;
 
+        // this classes current character material int = outfitchanger current character material int
         icurrentGOMaterialint = outfitChangerData.currentGOMaterialint;
 
+        // this classes current character gameobject int = outfitchanger current character gameobject int
         icurrentCharacterint = outfitChangerData.currentCharacterint;
 
     }

@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 29/09/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 06/10/21
+// Date Last Edited: 12/11/21
 // Brief:   Ghost replay script which controls the temporary movement of a test character as well as recording and replaying 
 //          the characters movement and rotation to act as a "Ghost"
 //////////////////////////////////////////////////////////// 
@@ -30,6 +30,7 @@ public class GhostRecorder : MonoBehaviour
 
     #region Unity Methods
 
+    // On awake
     private void Awake() {
         
         // if the ghost is currently recording
@@ -46,11 +47,7 @@ public class GhostRecorder : MonoBehaviour
 
     }
 
-
-    // after the ghost has been recorded and the player is finished then stop the recording and save the file
-    // then clear the recorded data so when the game records again it starts on 0
-
-
+    // Update
     public void Update() {
 
 
@@ -84,6 +81,8 @@ public class GhostRecorder : MonoBehaviour
 
                 // transform hasnt changed
                 //Debug.Log("Transform hasnt changed");
+
+                // Removed ^^^ because it was being constantly called
 
             }
 

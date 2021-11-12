@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 30/09/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 01/10/21
+// Date Last Edited: 12/11/21
 // Brief: Script in charge of controlling the ghost of the player with the movement and positioning
 //////////////////////////////////////////////////////////// 
 
@@ -54,10 +54,9 @@ namespace SleepyCat.GhostPlayer
             }
 
             
-            //
+            // key triggers for recording the ghost without going in the inspector
             if (Keyboard.current.kKey.isPressed) {
 
-                //
                 ghost.isRecording = true;
                 ghost.isReplaying = false;
 
@@ -70,10 +69,9 @@ namespace SleepyCat.GhostPlayer
 
             }
 
-            //
+            // key triggers for replaying the ghost without going in the inspector
             if (Keyboard.current.lKey.isPressed) {
 
-                //
                 ghost.isRecording = false;
                 ghost.isReplaying = true;
 

@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 04/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 04/10/21
+// Date Last Edited: 12/11/21
 // Brief: Script to store the data of the ghosts poisition and rotation 
 //////////////////////////////////////////////////////////// 
 
@@ -20,9 +20,6 @@ public class ReplaySaveManager : MonoBehaviour
 
     // reference to the ghost
     public Ghost ghost;
-
-    //
-    //public GameObject[] GhostCollectables;
 
     #endregion
 
@@ -57,19 +54,6 @@ public class ReplaySaveManager : MonoBehaviour
     #endregion
 
     #region Methods
-
-
-    //
-    private void Start() {
-
-        //
-        //GhostCollectables = GameObject.FindGameObjectsWithTag("GhostCollectable");
-
-    }
-
-
-
-
 
 
     // bool for if there is a save file
@@ -109,14 +93,8 @@ public class ReplaySaveManager : MonoBehaviour
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost);
 
-        // pass in ghostcollectables object and save public variables
-        //var json1 = JsonUtility.ToJson(GhostCollectables);
-
         // serializes the data to binary format in a json file
         replay_bf1.Serialize(replay_file1, json);
-
-        // serializes the data to binary format in a json file
-        //replay_bf1.Serialize(replay_file1, json1);
 
         // close the replay file
         replay_file1.Close();
@@ -145,9 +123,6 @@ public class ReplaySaveManager : MonoBehaviour
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_bf1.Deserialize(file1), ghost);
-
-            //deseralize the ghost file 
-            //JsonUtility.FromJsonOverwrite((string)replay_bf1.Deserialize(file1), GhostCollectables);
 
             // close the file
             file1.Close();

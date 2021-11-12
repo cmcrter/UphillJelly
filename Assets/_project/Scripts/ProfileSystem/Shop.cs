@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 25/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 29/10/21
+// Date Last Edited: 12/11/21
 // Brief: A script to control the shop and all transactions
 //////////////////////////////////////////////////////////// 
 
@@ -32,10 +32,10 @@ public class Shop : MonoBehaviour
     // gameobject for the character price panel
     public GameObject CharacterPricePanel; // SAVED
 
-    //
+    // Buy hat button
     public GameObject BuyHatButton;
 
-    //
+    // buy character button
     public GameObject BuyCharacterButton;
 
     // current hat price text
@@ -55,7 +55,6 @@ public class Shop : MonoBehaviour
     public int CurrentCharacterSelectedInt;
 
 
-
     // current hat price as an int
     public int CurrentHatPriceInt;
 
@@ -71,10 +70,10 @@ public class Shop : MonoBehaviour
     public List<bool> IsCharacterBought = new List<bool>();
 
 
-    //
+    // List of the saved hat ints to save
     public List<int> iSavedHatInts = new List<int>(); // SAVED
 
-    //
+    // List of the character materials and gameobjects as ints to save
     public List<int> iSavedCharacterInts = new List<int>(); // SAVED
 
 
@@ -109,8 +108,6 @@ public class Shop : MonoBehaviour
         // set the currency text to "Currency : £ " + currency int
         currencyText.text = "Currency : £ " + Currency;
 
-
-
         // set the current hat selected int to the outfits current hat int
         CurrentHatSelectedInt = outfitChanger.currentGOint;
 
@@ -119,9 +116,6 @@ public class Shop : MonoBehaviour
 
         // set the hat text to display the price of the hat
         CurrentHatPriceText.text = "This hat costs £" + CurrentHatPriceInt;
-
-
-
 
         // set the current character selected int to the outfits current character int
         CurrentCharacterSelectedInt = outfitChanger.currentCharacterint;
@@ -132,15 +126,13 @@ public class Shop : MonoBehaviour
         // set the character text to display the price of the character
         CurrentCharacterPriceText.text = "This Character costs £" + CurrentCharacterPriceInt;
 
-
-
         // if the hat is bought with the current selected int of that hat
         if (IsHatBought[CurrentHatSelectedInt]) {
 
             // set the hat price panel to false
             HatPricePanel.SetActive(false);
 
-            //
+            // set the hat buy button to false (cant buy a hat they have bought)
             BuyHatButton.SetActive(false);
 
         }
@@ -151,15 +143,10 @@ public class Shop : MonoBehaviour
             // set the hat price panel to true
             HatPricePanel.SetActive(true);
 
-            //
+            // set the hat buy button to true (buy a hat they don't have)
             BuyHatButton.SetActive(true);
 
         }
-
-
-
-
-
 
         // if the character is bought with the current selected int of that character
         if (IsCharacterBought[CurrentCharacterSelectedInt]) {
@@ -167,7 +154,7 @@ public class Shop : MonoBehaviour
             // set the character price panel to false
             CharacterPricePanel.SetActive(false);
 
-            //
+            // set the character buy button to false (cant buy a character they have bought)
             BuyCharacterButton.SetActive(false);
 
         }
@@ -178,15 +165,12 @@ public class Shop : MonoBehaviour
             // set the character price panel to true
             CharacterPricePanel.SetActive(true);
 
-            //
+            // set the character buy button to true (buy a character they don't have)
             BuyCharacterButton.SetActive(true);
 
         }
 
     }
-
-    
-
 
     // Next hat price which is called in OutfitChanger
     public void NextHatPrice() {
@@ -216,7 +200,7 @@ public class Shop : MonoBehaviour
             // set the hat to the hat has been bought with the current hat int
             IsHatBought[CurrentHatSelectedInt] = true;
 
-            //
+            // Method to buy the current hat
             BoughtHat();
 
             // Debug
@@ -233,32 +217,33 @@ public class Shop : MonoBehaviour
         }
 
         
-
     }
 
-
-    //
+    // Bought hat method
     public void BoughtHat() {
 
-        //
+        // if i < hatbought count
         for (int i = 0; i < IsHatBought.Count; i++) {
 
+            // if the int for the hat contains i
             if (iSavedHatInts.Contains(i)) {
 
                 // do nothing
             }
 
+            // if the saved hat int doesn't contain i
             if (!iSavedHatInts.Contains(i)) {
 
-                //
+                // set the hat bought to true
                 if (IsHatBought[i] == true) {
 
                     // Do this
                     Debug.Log("Bools are " + i + IsHatBought[i]);
 
-                    //
+                    // add the hat to the saved hat ints
                     iSavedHatInts.Add(i);
 
+                    // If the hat [i] is false
                 } else if (IsHatBought[i] == false) {
 
                     // Do nothing
@@ -271,10 +256,6 @@ public class Shop : MonoBehaviour
         }
 
     }
-
-
-
-
 
     // next character price which is called in OutfitChanger
     public void NextCharacterPrice() {
@@ -304,7 +285,7 @@ public class Shop : MonoBehaviour
             // set the character to the character has been bought with the current character int
             IsCharacterBought[CurrentCharacterSelectedInt] = true;
 
-            //
+            // Method to buy the current Character
             BoughtCharacter();
 
             // Debug
@@ -324,28 +305,31 @@ public class Shop : MonoBehaviour
 
 
 
-    //
+    // bought character method
     public void BoughtCharacter() {
 
-        //
+        // if i < characterbought count
         for (int i = 0; i < IsCharacterBought.Count; i++) {
 
+            // if the int for the character contains i
             if (iSavedCharacterInts.Contains(i)) {
 
                 // do nothing
             }
 
+            // if the saved character int doesn't contain i
             if (!iSavedCharacterInts.Contains(i)) {
 
-                //
+                // set the character bought to true
                 if (IsCharacterBought[i] == true) {
 
                     // Do this
                     Debug.Log("Bools are " + i + IsCharacterBought[i]);
 
-                    //
+                    // add the character to the saved character ints
                     iSavedCharacterInts.Add(i);
 
+                    // If the character [i] is false
                 } else if (IsCharacterBought[i] == false) {
 
                     // Do nothing
