@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 29/09/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 01/10/21
+// Date Last Edited: 06/10/21
 // Brief:   Ghost replay script which controls the temporary movement of a test character as well as recording and replaying 
 //          the characters movement and rotation to act as a "Ghost"
 //////////////////////////////////////////////////////////// 
@@ -22,6 +22,9 @@ public class GhostRecorder : MonoBehaviour
 
     // store actual time value
     private float timeValue;
+
+    // gameobject for if this gameobjects position has changed
+    public GameObject HasChangedGO;
 
     #endregion
 
@@ -43,14 +46,20 @@ public class GhostRecorder : MonoBehaviour
 
     }
 
+
+    // after the ghost has been recorded and the player is finished then stop the recording and save the file
+    // then clear the recorded data so when the game records again it starts on 0
+
+
     public void Update() {
+
 
         // calculates the most recent frame of the timer and time value in intervals of seconds relevant to time
         timer += Time.unscaledDeltaTime;
         timeValue += Time.unscaledDeltaTime;
 
-        // if the ghost is recording and the timer is less than or = to 1 divided by the ghost recording frequency
-        if (ghost.isRecording & timer >= 1 / ghost.recordFrequency) {
+        // if the ghost is recording and the timer is less than or = to 1 divided by the ghost recording frequency and the players position has changed
+        if (ghost.isRecording & timer >= 1 / ghost.recordFrequency && HasChangedGO.transform.hasChanged) {
 
             //add the time value to the time stamp of the ghost
             ghost.timeStamp.Add(timeValue);
@@ -63,6 +72,20 @@ public class GhostRecorder : MonoBehaviour
 
             // set the timer to 0
             timer = 0f;
+
+            // set the has changed bool to false
+            HasChangedGO.transform.hasChanged = false;
+            
+            // else if the players position has not changed
+        } else if (!HasChangedGO.transform.hasChanged) {
+
+            // print debug log
+            if (Debug.isDebugBuild) {
+
+                // transform hasnt changed
+                //Debug.Log("Transform hasnt changed");
+
+            }
 
         }
 
