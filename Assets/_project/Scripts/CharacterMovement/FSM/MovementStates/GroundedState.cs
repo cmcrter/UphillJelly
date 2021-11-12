@@ -123,8 +123,6 @@ namespace SleepyCat.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            UpdatePositionAndRotation(dT);
-
             if(Keyboard.current.escapeKey.isPressed)
             {
                 parentController.ResetPlayer();
@@ -142,7 +140,7 @@ namespace SleepyCat.Movement
 
         public override void PhysicsTick(float dT)
         {
-
+            UpdatePositionAndRotation(dT);
         }
 
         public override void OnStateEnter()
@@ -183,18 +181,19 @@ namespace SleepyCat.Movement
                 dotAngle = Mathf.Abs(dotAngle);
 
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if(dotAngle < 0.99f)
+                if(dotAngle < 0.95f)
                 {
-                    movementRB.AddForce(-movementRB.velocity * (1f + (1.05f - dotAngle)), ForceMode.Impulse);
+                    //Cancelling the current velocity
+                    movementRB.AddForce(-movementRB.velocity * 1.002f, ForceMode.Impulse);
 
-                    if(dotAngle > 0.35f)
+                    //And conserving it if need be
+                    if(dotAngle > 0.325f)
                     {
-                        movementRB.AddForce(initialSpeed * (1f + 0.01f) * playerTransform.forward, ForceMode.Impulse);
+                        movementRB.AddForce(initialSpeed * 1.001f * playerTransform.forward, ForceMode.Impulse);
                     }
                     else
                     {
                         movementRB.velocity = Vector3.zero;
-                        movementRB.Sleep();
                         movementRB.AddForce(playerTransform.forward.normalized, ForceMode.Impulse);
                     }
                 }
