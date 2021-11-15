@@ -8,11 +8,15 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using SleepyCat.Movement;
 
-public interface ITriggerable
+namespace SleepyCat
 {
-    GameObject ReturnGameObject();
+    public interface ITriggerable
+    {
+        GameObject ReturnGameObject();
 
-    void Trigger();
-    void UnTrigger();
+        void Trigger(PlayerController player);
+        void UnTrigger(PlayerController player);
+    }
 }

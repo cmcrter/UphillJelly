@@ -17,6 +17,10 @@ namespace SleepyCat.Tests
 
         public float valueGiven = 0;
         public isLessThanZero condition = new isLessThanZero();
+
+        public Condition conditionToMeet;
+        public State nextState;
+
         #endregion
 
         public YellowLight()

@@ -36,6 +36,11 @@ namespace SleepyCat.Utility.StateMachine
         //The main function that determines what state is currently ran
         public void RunMachine(float dT)
         {
+            if (currentState == null)
+            {
+                return;
+            }
+
             //Tick the current state along
             currentState.Tick(dT);
 
@@ -50,6 +55,18 @@ namespace SleepyCat.Utility.StateMachine
                 currentState = thisState;
                 currentState.OnStateEnter();
             }
+        }
+
+        //This will run every fixed update
+        public void RunPhysicsOnMachine(float dT)
+        {
+            if(currentState == null)
+            {
+                return;
+            }
+
+            //Tick the current state along
+            currentState.PhysicsTick(dT);
         }
 
         //In-case a state needs to be forced to be on

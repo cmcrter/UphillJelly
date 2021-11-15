@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using SleepyCat.Movement;
 
 namespace SleepyCat.Triggerables
 {
@@ -19,8 +20,8 @@ namespace SleepyCat.Triggerables
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         GameObject ITriggerable.ReturnGameObject() => gameObject;
 
-        void ITriggerable.Trigger() => ActivateVFX();
-        void ITriggerable.UnTrigger() => DeActivateVFX();
+        void ITriggerable.Trigger(PlayerController player) => ActivateVFX();
+        void ITriggerable.UnTrigger(PlayerController player) => DeActivateVFX();
 
         #endregion
 

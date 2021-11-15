@@ -7,12 +7,16 @@
 // Brief: A script which triggers any triggerable when the collider touches them (generally it'll be only players that has this on them)
 //////////////////////////////////////////////////////////// 
 
+using SleepyCat.Movement;
 using UnityEngine;
 
 namespace SleepyCat.Triggerables
 {
     public class TriggerableTrigger : MonoBehaviour
     {
+        [SerializeField]
+        PlayerController thisPlayer;
+
         #region Unity Methods
 
         //When something enters or leaves the player's zone
@@ -25,7 +29,7 @@ namespace SleepyCat.Triggerables
                 if (triggerable.ReturnGameObject().activeSelf)
                 {
                     //Trigger it
-                    triggerable.Trigger();
+                    triggerable.Trigger(thisPlayer);
                 }
             }
         }
@@ -36,7 +40,7 @@ namespace SleepyCat.Triggerables
             {
                 if (triggerable.ReturnGameObject().activeSelf)
                 {
-                    triggerable.UnTrigger();
+                    triggerable.UnTrigger(thisPlayer);
                 }
             }
         }

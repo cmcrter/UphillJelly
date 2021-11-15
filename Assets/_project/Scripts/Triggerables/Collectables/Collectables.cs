@@ -7,6 +7,7 @@
 // Brief: An abstract script so that money/ secret items can be interacted with the same way
 //////////////////////////////////////////////////////////// 
 
+using SleepyCat.Movement;
 using UnityEngine;
 
 namespace SleepyCat.Triggerables.Collectables
@@ -18,8 +19,8 @@ namespace SleepyCat.Triggerables.Collectables
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         GameObject ITriggerable.ReturnGameObject() => gameObject;
 
-        void ITriggerable.Trigger() => PickupCollectable();
-        void ITriggerable.UnTrigger() => PutdownCollectable();
+        void ITriggerable.Trigger(PlayerController player) => PickupCollectable();
+        void ITriggerable.UnTrigger(PlayerController player) => PutdownCollectable();
 
         #endregion
 

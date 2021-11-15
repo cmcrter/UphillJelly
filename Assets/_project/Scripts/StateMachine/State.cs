@@ -19,10 +19,6 @@ namespace SleepyCat.Utility.StateMachine
         //Whether the state was running last frame
         public bool hasRan;
 
-        //Just a base condition for generic states
-        public Condition conditionToMeet;
-        public State nextState;
-
         #endregion
 
         #region Public Methods
@@ -37,16 +33,16 @@ namespace SleepyCat.Utility.StateMachine
 
         public virtual State returnCurrentState()
         {
-            if (conditionToMeet.isConditionTrue())
-            {
-                return nextState;
-            }
-
             return this;
         }
 
         //Ticking the state along this frame and passing in the deltaTime
         public virtual void Tick(float dT)
+        {
+            //To be overridden
+        }
+
+        public virtual void PhysicsTick(float dT)
         {
             //To be overridden
         }
