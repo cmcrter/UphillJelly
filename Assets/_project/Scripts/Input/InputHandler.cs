@@ -107,6 +107,12 @@ namespace SleepyCat.Input
         /// </summary>
         /// <param name="patternId">The Id of the AnalogueStickPattern</param>
         public delegate void AnalogueStickPatternCompletedDelegate(int patternId);
+
+        /// <summary>
+        /// Deleagate for events
+        /// </summary>
+        /// <param name="trickInputID"></param>
+        public delegate void TrickInputActionDelegate(int trickInputID);
         #endregion
 
         #region Public Events
@@ -182,6 +188,8 @@ namespace SleepyCat.Input
         /// Called when the wall riding jump input action has been performed
         /// </summary>
         public event System.Action wallRidingJumpUpAction;
+
+        public event System.Action TrickInputActionCalled;
 
         /// <summary>
         /// Called when an analogue stick pattern has been completed

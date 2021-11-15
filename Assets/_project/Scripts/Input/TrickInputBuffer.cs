@@ -28,6 +28,10 @@ namespace SleepyCat.Input
         public struct BufferedInput
         {
             /// <summary>
+            /// If the input has yet to have been let go
+            /// </summary>
+            public bool isHeld;
+            /// <summary>
             /// The Id of the input buffered
             /// </summary>
             public int inputID;
@@ -36,8 +40,11 @@ namespace SleepyCat.Input
             /// </summary>
             public Timer timeLeft;
 
-            public BufferedInput(int inputID, Timer timeLeft)
+
+
+            public BufferedInput(bool isHeld, int inputID, Timer timeLeft)
             {
+                this.isHeld = isHeld;
                 this.inputID = inputID;
                 this.timeLeft = timeLeft;
             }
@@ -153,20 +160,6 @@ namespace SleepyCat.Input
             {
                 trickForStates[movementController.aerialState] = aerialStateTricks;
             }
-            //// Adding the trick
-            //Trick testTrick = ScriptableObject.CreateInstance<Trick>();
-            //testTrick.inputCombo = new List<int>() { 12, 4, 6 };
-            //AerialStateTricks = new List<Trick>() { testTrick };
-            //// Make the combo happen
-            //AddInput(5);
-            //AddInput(12);
-            //AddInput(4);
-            //AddInput(6);
-            ////// Checking if the combo was found
-            //if (CheckForTricks(GetInputBufferCopy(), AerialStateTricks, out Trick trickFound))
-            //{
-            //    int i = 0;
-            //}
         }
 
         // Update is called once per frame
@@ -185,7 +178,6 @@ namespace SleepyCat.Input
         #endregion
 
         #region Public Methods
-
         /// <summary>
         /// Called to check a given input buffer list for a given selection of trick
         /// </summary>
@@ -193,7 +185,7 @@ namespace SleepyCat.Input
         /// <param name="tricksToCheckFor">The tricks to check against the inputs in the buffer for</param>
         /// <param name="tricksFound">The trick that was found in the buffer (null if one was not found)</param>
         /// <returns>True if a trick was found</returns>
-        public bool CheckForTricks(List<BufferedInput> currentlyBufferedInputs, List<Trick> tricksToCheckFor, out Trick tricksFound)
+        public static bool CheckForTricks(List<BufferedInput> currentlyBufferedInputs, List<Trick> tricksToCheckFor, out Trick tricksFound)
         {
             // Iterate through all the tricks checked against
             for (int trickIndex = 0; trickIndex < tricksToCheckFor.Count; ++trickIndex)
@@ -241,7 +233,7 @@ namespace SleepyCat.Input
         /// <param name="inputID">The id of the input to add</param>
         public void AddInput(int inputID)
         {
-            bufferedInputs.Add(new BufferedInput(inputID, new Timer(inputStoredDuration)));
+            bufferedInputs.Add(new BufferedInput(false ,inputID, new Timer(inputStoredDuration)));
             if (movementController != null)
             {
                 if (trickForStates.TryGetValue(movementController.playerStateMachine.currentState, out List<Trick> validTricks))

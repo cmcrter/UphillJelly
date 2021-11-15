@@ -43,7 +43,7 @@ namespace SleepyCat.Test
             inputBuffer.AddInput(4);
             inputBuffer.AddInput(6);
             //// Checking if the combo was found
-            if (inputBuffer.CheckForTricks(inputBuffer.GetInputBufferCopy(), inputBuffer.AerialStateTricks, out Trick trickFound))
+            if (TrickInputBuffer.CheckForTricks(inputBuffer.GetInputBufferCopy(), inputBuffer.AerialStateTricks, out Trick trickFound))
             {
                 Assert.AreEqual(trickFound, testTrick);
                 yield break;
@@ -71,7 +71,7 @@ namespace SleepyCat.Test
             inputBuffer.AddInput(4);
             inputBuffer.AddInput(6);
             //// Checking if the combo was found
-            if (inputBuffer.CheckForTricks(inputBuffer.GetInputBufferCopy(), inputBuffer.AerialStateTricks, out Trick trickFound))
+            if (TrickInputBuffer.CheckForTricks(inputBuffer.GetInputBufferCopy(), inputBuffer.AerialStateTricks, out Trick trickFound))
             {
                 // No trick should be found
                 Assert.IsTrue(false);

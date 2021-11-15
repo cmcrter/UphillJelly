@@ -342,6 +342,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Aerial_TrickInput0",
+                    "type": "Button",
+                    "id": "6ca62e3f-cfa3-4f13-9647-5f268ead40bf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -463,6 +471,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aerial_AnalogueStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cad9f047-3ca6-4c11-b9d4-1904637e54a7",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_TrickInput0",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
