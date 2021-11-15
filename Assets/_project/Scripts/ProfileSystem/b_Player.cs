@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/11/21
+// Date Last Edited: 15/11/21
 // Brief: A script to call the functions to save and load the player
 //////////////////////////////////////////////////////////// 
 
@@ -11,11 +11,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class b_Player : MonoBehaviour
 {
 
     #region Variables
+
+    //
+    public CC changeCamera;
+
+    //
+    public LoadCustomizablesInGame loadCustomizablesInGame;
 
     // reference to the ReplaySaveManager
     public ReplaySaveManager replayGhostSaveManager;
@@ -88,6 +95,7 @@ public class b_Player : MonoBehaviour
     // Load the player1
     public void LoadPlayer1() {
 
+
         // Set the load player button 2 to false
         LoadPlayer2Button.SetActive(false);
 
@@ -111,6 +119,7 @@ public class b_Player : MonoBehaviour
 
         // shop saved character ints = data saved character ints
         shop.iSavedCharacterInts = data.savedCharacterList;
+
 
         // outfit changer current gameobject int = data current gameobject int
         outfitChanger.currentGOint = data.icurrentGOint;
@@ -163,8 +172,13 @@ public class b_Player : MonoBehaviour
 
         }
 
+
+        outfitChanger.LoadedCustomizables1();
+
         // load the first replay through the ghost save manager
         replayGhostSaveManager.LoadReplay1();
+
+        changeCamera.ChangeToGameCam();
 
     }
 

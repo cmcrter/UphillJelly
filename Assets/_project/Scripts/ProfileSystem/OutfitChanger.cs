@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/11/21
+// Date Last Edited: 15/11/21
 // Brief: A script to control the outfit system
 //////////////////////////////////////////////////////////// 
 
@@ -24,6 +24,9 @@ public class OutfitChanger : MonoBehaviour
 
     // reference to the character in the scene
     public GameObject characterObjectInScene;
+
+    // reference to the character in the scene
+    public GameObject playableCharacterObjectInScene;
 
     [Header("Hat displayer")]
     // gameobject hat which will be displayed
@@ -54,12 +57,15 @@ public class OutfitChanger : MonoBehaviour
 
 
 
+
     #endregion
 
     #region Methods
 
     // on start
     public void Start() {
+
+        
 
         // set the current hat object to 4
         currentGOint = 4;
@@ -70,8 +76,23 @@ public class OutfitChanger : MonoBehaviour
         // set the current character to 2
         currentCharacterint = 2;
 
+
     }
 
+    public void LoadedCustomizables1() {
+
+        // set the player data to the loaded player in the save system
+        b_PlayerData data = b_SaveSystem.LoadPlayer1();
+
+        // load the current character material that has been saved
+        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+        // load the current character material that has been saved
+        playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+    }
+
+    
 
     // function called from the b_Player to load the customizable objects
     public void LoadedCustomizables() {
@@ -86,7 +107,9 @@ public class OutfitChanger : MonoBehaviour
         hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
 
         // load the current character material that has been saved
-        characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+        Debug.Log("Mat is " + characterObjectInScene.GetComponent<MeshRenderer>().material);
 
     }
 
@@ -183,7 +206,7 @@ public class OutfitChanger : MonoBehaviour
 
         // get the character object in the scene and the mesh renderer material, set the material list with the current int
         // to the characters material
-        characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
         // move to the next character price
         shopScript.NextCharacterPrice();
@@ -206,7 +229,7 @@ public class OutfitChanger : MonoBehaviour
 
         // get the character object in the scene and the mesh renderer material, set the material list with the current int
         // to the characters material
-        characterObjectInScene.GetComponent<MeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
         // move to the previous character price
         shopScript.PreviousCharacterPrice();
