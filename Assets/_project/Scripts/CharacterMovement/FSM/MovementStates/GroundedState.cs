@@ -54,6 +54,10 @@ namespace SleepyCat.Movement
         }
 
         public bool bConstantForce = false;
+        private bool bCurrentlyApplyingConstant = false;
+        [SerializeField]
+        private float constantForce;
+
         [Header("Coroutine management")]
         [SerializeField]
         private float pushTimerDuration = 0.65f;
@@ -87,6 +91,8 @@ namespace SleepyCat.Movement
 
             pInput = controllerParent.input;
             inputHandler = controllerParent.inputHandler;
+
+            bCurrentlyApplyingConstant = bConstantForce;
         }
 
         public void RegisterInputs()
@@ -124,11 +130,11 @@ namespace SleepyCat.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            if(Debug.isDebugBuild)
-            {
-                Debug.DrawRay(playerTransform.position, movementRB.velocity, Color.white);
-                Debug.DrawRay(playerTransform.position, playerTransform.forward, Color.black);
-            }
+            //if(Debug.isDebugBuild)
+            //{
+            //    Debug.DrawRay(playerTransform.position, movementRB.velocity, Color.white);
+            //    Debug.DrawRay(playerTransform.position, playerTransform.forward, Color.black);
+            //}
 
             if(Keyboard.current.escapeKey.isPressed)
             {
@@ -143,10 +149,17 @@ namespace SleepyCat.Movement
             {
                 ApplyBrakeForce();
             }
+
+            parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition.GroundHit, groundedCondition.FrontGroundHit);
         }
 
         public override void PhysicsTick(float dT)
         {
+            if(bConstantForce)
+            {
+                movementRB.AddForceAtPosition(playerTransform.forward * constantForce, movementRB.position + movementRB.centerOfMass, ForceMode.Force);
+            }
+
             UpdatePositionAndRotation(dT);
         }
 
@@ -178,8 +191,6 @@ namespace SleepyCat.Movement
 
         private void UpdatePositionAndRotation(float dT)
         {
-            parentController.SmoothToGroundRotation(groundAdjustSmoothness, turnSpeed, groundedCondition.GroundHit, groundedCondition.FrontGroundHit);
-
             if(jumpCoroutine == null) 
             {
                 //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)

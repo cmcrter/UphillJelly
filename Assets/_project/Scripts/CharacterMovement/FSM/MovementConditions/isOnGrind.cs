@@ -108,7 +108,7 @@ namespace SleepyCat.Movement
         {
             while(splineCurrentlyGrindingOn)
             {
-                if(inputHandler.StartGrindHeld && CoyoteCoroutine == null)
+                if(inputHandler.StartGrindHeld && CoyoteCoroutine == null && movementRB.velocity.magnitude > 0.5f)
                 {
                     ButtonPressed = true;
                     inputHandler.StopCoroutine(Co_WaitForButtonPress());
