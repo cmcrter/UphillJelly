@@ -17,6 +17,18 @@ namespace SleepyCat.Utility.Splines
     [System.Serializable]
     public abstract class Spline
     {
+        #region Public Constants
+        /// <summary>
+        /// The maximum value that t can be given for assessing a point along the spline
+        /// </summary>
+        public const float maxTValue = 1.0f;
+
+        /// <summary>
+        /// The minimum value
+        /// </summary>
+        public const float minTValue = 0.0f;
+        #endregion
+
         #region Public Properties
         /// <summary>
         /// The point at which at which the line spline ends, would be the position at t 1
@@ -51,13 +63,38 @@ namespace SleepyCat.Utility.Splines
         public abstract Vector3 GetPointAtTime(float t);
 
         /// <summary>
+        /// Returns a direction of the spline at the given t value, uses the length of the spline to judge how far ahead to check for the direction
+        /// </summary>
+        /// <param name="t">The t value to check which direction the spline is going at</param>
+        /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
+        public virtual Vector3 GetDirection(float t)
+        {
+            float baseStep = 0.1f;
+            float length = GetTotalLength();
+            if (length < baseStep)
+            {
+                baseStep = Mathf.Max(float.Epsilon, length * 0.001f);
+            }
+            return GetDirection(t, baseStep / GetTotalLength());
+        }
+        /// <summary>
         /// Returns a direction of the spline at the given t value
         /// </summary>
         /// <param name="t">The t value to check which direction the spline is going at</param>
         /// <param name="stepDistance">Distance to check the next step at, to calculate the direction</param>
         /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
-        public Vector3 GetDirection(float t, float stepDistance)
+        public virtual Vector3 GetDirection(float t, float stepDistance)
         {
+            Mathf.Clamp01(t);
+            // If t is one then don
+            if (t == maxTValue)
+            {
+                return (GetPointAtTime(t) - GetPointAtTime(t - stepDistance)).normalized;
+            }
+            if (t + stepDistance > maxTValue)
+            {
+                return (GetPointAtTime(maxTValue) - GetPointAtTime(t)).normalized;
+            }
             return (GetPointAtTime(t + stepDistance) - GetPointAtTime(t)).normalized;
         }
         #endregion
