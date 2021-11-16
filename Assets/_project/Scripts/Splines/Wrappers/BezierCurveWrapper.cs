@@ -160,12 +160,20 @@ namespace SleepyCat.Utility.Splines
         {
             if (spline.GetIsTwoControlPoint())
             {
+                if (worldControlPoints == null)
+                {
+                    UpdateWorldPositions();
+                }
                 return BezierCurve.GetTotalLengthTwoControlPoints(worldStartPoint, worldEndPoint,
                 worldControlPoints[BezierCurve.firstAddtionalPointIndex],
                 worldControlPoints[BezierCurve.secondAddtionalPointIndex], spline.distancePrecision);
             }
             else
             {
+                if (worldControlPoints == null)
+                {
+                    UpdateWorldPositions();
+                }
                 return BezierCurve.GetTotalLengthSingleControlPoint(worldStartPoint, worldEndPoint,
                     worldControlPoints[BezierCurve.firstAddtionalPointIndex], spline.distancePrecision);
             }
