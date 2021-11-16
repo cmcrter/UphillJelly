@@ -125,7 +125,7 @@ namespace SleepyCat.Movement
 
             //Let the condition know to reset
             onGrind.playerExitedGrind();
-            parentController.StopTurnCoroutine();
+            //parentController.StopTurnCoroutine();
 
             timeAlongGrind = 0;
             bForceExit = false;
