@@ -184,12 +184,12 @@ namespace SleepyCat.Movement
                 if(dotAngle < 0.95f)
                 {
                     //Cancelling the current velocity
-                    movementRB.AddForce(-movementRB.velocity * 1.002f, ForceMode.Impulse);
+                    movementRB.AddForce(-movementRB.velocity + (initialSpeed * playerTransform.forward), ForceMode.Acceleration);
 
                     //And conserving it if need be
                     if(dotAngle > 0.325f)
                     {
-                        movementRB.AddForce(initialSpeed * 1.001f * playerTransform.forward, ForceMode.Impulse);
+                        //movementRB.AddForce(initialSpeed * playerTransform.forward, ForceMode.Impulse);
                     }
                     else
                     {
