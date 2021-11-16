@@ -100,10 +100,10 @@ namespace SleepyCat.Movement
             //}
 
             //Making sure nothing interferes with the movement
-            movementRB.isKinematic = true;
-
             movementRB.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.401f, 0);
             parentController.transform.position = movementRB.transform.position;
+
+            movementRB.isKinematic = true;
 
             currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
             parentController.transform.forward = currentSplineDir;

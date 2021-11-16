@@ -79,14 +79,21 @@ namespace SleepyCat.Movement
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
-        public void SmoothToGroundRotation(float smoothness, float speed, RaycastHit hit, RaycastHit frontHit)
+        public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, RaycastHit hit, RaycastHit frontHit)
         {
-            //GameObject's heading based on the current input
-            float headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
-            Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
+            float headingDeltaAngle;
+            Quaternion headingDelta = Quaternion.identity;
+
+            if(!bAerial)
+            {
+                //GameObject's heading based on the current input
+                headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
+                headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
+            }
+
             Quaternion groundQuat = transform.rotation;
 
-            if(Vector3.Angle(hit.normal, Vector3.up) < 60f)
+            if(Vector3.Angle(hit.normal, Vector3.up) < 50f)
             {
                 groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, Time.deltaTime * smoothness);
 
