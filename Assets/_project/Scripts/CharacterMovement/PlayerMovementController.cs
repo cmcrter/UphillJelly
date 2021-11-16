@@ -60,7 +60,7 @@ namespace SleepyCat.Movement
         private Coroutine turningCo;
         private Timer turningTimer;
         public AnimationCurve turnSpeedCurve;
-
+        public float turnClamp = 0.55f;
         #endregion
 
         #region Public Methods
@@ -157,9 +157,12 @@ namespace SleepyCat.Movement
         {
             playerStateMachine.RunMachine(Time.deltaTime);
 
-            if(Keyboard.current.escapeKey.isPressed || Gamepad.current.startButton.isPressed) 
+            if (Keyboard.current != null)
             {
-                ResetPlayer();
+                if (Keyboard.current.escapeKey.isPressed)
+                {
+                    ResetPlayer();
+                }
             }
 
             if(inputHandler.TurningAxis != 0 && turningCo == null)
@@ -207,9 +210,9 @@ namespace SleepyCat.Movement
             {
                 //How far along into the timer is this
                 float timeAlongTimer = turnDuration / turningTimer.current_time;
-                timeAlongTimer = Mathf.Clamp(timeAlongTimer, 0f, 0.9f);
+                timeAlongTimer = Mathf.Clamp(timeAlongTimer, 0f, 0.99f);
 
-                float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -0.55f, 0.55f);
+                float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
 
                 //If the skateboard is moving
                 if(rb.velocity.magnitude > 0.3f)
@@ -231,9 +234,15 @@ namespace SleepyCat.Movement
                 }
 
                 Mathf.Clamp(currentTurnInput, -1f, 1f);
+
+                if (!turningTimer.isActive)
+                {
+                    yield return null;
+                }
+
                 //Ticking the timer along
                 turningTimer.Tick(Time.deltaTime);
-                yield return true;
+                yield return null;
             }
 
             currentTurnInput = 0;
