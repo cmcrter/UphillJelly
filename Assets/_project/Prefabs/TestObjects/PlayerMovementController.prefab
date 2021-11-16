@@ -757,9 +757,9 @@ MonoBehaviour:
     adjustGroundSmoothness: 2
   groundedState:
     hasRan: 0
-    GroundedDrag: 0.375
-    forwardSpeed: 1
-    turnSpeed: 0.175
+    GroundedDrag: 0.1
+    forwardSpeed: 1.1
+    turnSpeed: 0.16
     backwardSpeed: 15
     jumpSpeed: 25
     groundAdjustSmoothness: 15
@@ -823,13 +823,13 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.111694336
-      inSlope: 0
-      outSlope: 0
+      value: 0.25097656
+      inSlope: 1.2446315
+      outSlope: 1.2446315
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.028324155
     - serializedVersion: 3
       time: 1
       value: 0.7002716
@@ -842,7 +842,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  turnClamp: 0.3
+  turnClamp: 0.5
 --- !u!114 &2573286818288912060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,8 +1071,8 @@ Rigidbody:
   m_GameObject: {fileID: 2573286819093465942}
   serializedVersion: 2
   m_Mass: 75
-  m_Drag: 0.4
-  m_AngularDrag: 1.8
+  m_Drag: 0.1
+  m_AngularDrag: 5000
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0

@@ -53,6 +53,7 @@ namespace SleepyCat.Movement
             get; private set;
         }
 
+        public bool bConstantForce = false;
         [Header("Coroutine management")]
         [SerializeField]
         private float pushTimerDuration = 0.65f;
@@ -123,6 +124,12 @@ namespace SleepyCat.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
+            if(Debug.isDebugBuild)
+            {
+                Debug.DrawRay(playerTransform.position, movementRB.velocity, Color.white);
+                Debug.DrawRay(playerTransform.position, playerTransform.forward, Color.black);
+            }
+
             if(Keyboard.current.escapeKey.isPressed)
             {
                 parentController.ResetPlayer();
@@ -181,17 +188,15 @@ namespace SleepyCat.Movement
                 dotAngle = Mathf.Abs(dotAngle);
 
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if(dotAngle < 0.95f)
+                if(dotAngle < 1f)
                 {
-                    //Cancelling the current velocity
-                    movementRB.AddForce(-movementRB.velocity + (initialSpeed * playerTransform.forward), ForceMode.Acceleration);
+                    movementRB.angularVelocity = Vector3.zero;
 
+                    movementRB.transform.forward = playerTransform.forward;
+                    movementRB.velocity = initialSpeed * playerTransform.forward;
+                    
                     //And conserving it if need be
-                    if(dotAngle > 0.325f)
-                    {
-                        //movementRB.AddForce(initialSpeed * playerTransform.forward, ForceMode.Impulse);
-                    }
-                    else
+                    if(dotAngle < 0.3265f)
                     {
                         movementRB.velocity = Vector3.zero;
                         movementRB.AddForce(playerTransform.forward.normalized, ForceMode.Impulse);
