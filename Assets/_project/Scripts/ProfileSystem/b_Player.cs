@@ -12,11 +12,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class b_Player : MonoBehaviour
 {
 
     #region Variables
+
+    //
+    public GhostPlayer ghostPlayer;
 
     //
     public CC changeCamera;
@@ -88,7 +92,21 @@ public class b_Player : MonoBehaviour
             replayGhostSaveManager = GameObject.FindGameObjectWithTag("GhostReplaySaveSystem").GetComponent<ReplaySaveManager>();
 
         }
-        
+
+        if (Keyboard.current.escapeKey.isPressed) {
+
+            //ghostPlayer.isFirstRecord = false;
+
+            //
+            SavePlayer1();
+
+            //
+            // save the replay 1 through the ghost save manager
+            //replayGhostSaveManager.SaveReplay1();
+
+        }
+
+
     }
 
 

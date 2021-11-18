@@ -10,8 +10,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace SleepyCat.GhostPlayer
-{
+//namespace SleepyCat.GhostPlayer
+//{
 
     public class GhostPlayer : MonoBehaviour
     {
@@ -20,7 +20,6 @@ namespace SleepyCat.GhostPlayer
         // public reference to the ghost
         public Ghost ghost;
 
-        
 
         // linear interpolation to account for timestamps that are not stored e.g. 0.49, 0.27, 0.82,
         // timestamps that are stored e.g. 0.5, 1, 1.5
@@ -36,8 +35,10 @@ namespace SleepyCat.GhostPlayer
 
         #region Unity Methods
 
+
         // on update
         void Update() {
+
 
             // calculates the most recent frame of the timer and time value in intervals of seconds relevant to time
             timeValue += Time.unscaledDeltaTime;
@@ -160,6 +161,6 @@ namespace SleepyCat.GhostPlayer
         #endregion
     }
 
-}
+//}
 
 

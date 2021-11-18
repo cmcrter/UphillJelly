@@ -157,7 +157,7 @@ namespace SleepyCat.Movement
         {
             playerStateMachine.RunMachine(Time.deltaTime);
 
-            if(Keyboard.current.escapeKey.isPressed || Gamepad.current.startButton.isPressed) 
+            if(Keyboard.current.escapeKey.isPressed) //|| Gamepad.current.startButton.isPressed) 
             {
                 ResetPlayer();
             }
