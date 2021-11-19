@@ -58,7 +58,7 @@ using SleepyCat.Utility.Splines;
             {
                 if (containedSplines[containedSplines.Count - 1] != null)
                 {
-                    containedSplines[containedSplines.Count - 1].WorldEndPosition = transform.TransformPoint(value);
+                    containedSplines[containedSplines.Count - 1].SetWorldEndPointAndUpdateLocal(transform.TransformPoint(value));
                 }
             }
         }
@@ -82,7 +82,7 @@ using SleepyCat.Utility.Splines;
             {
                 if (containedSplines[0] != null)
                 {
-                    containedSplines[0].WorldStartPosition = transform.TransformPoint(value);
+                    containedSplines[containedSplines.Count - 1].SetWorldStartPointWithoutLocal(transform.TransformPoint(value));
                 }
             }
         }
@@ -100,16 +100,6 @@ using SleepyCat.Utility.Splines;
             }
             return transform.position;
         }
-        set
-        {
-            if (containedSplines.Count > 0)
-            {
-                if (containedSplines[containedSplines.Count - 1] != null)
-                {
-                    containedSplines[containedSplines.Count - 1].WorldEndPosition = value;
-                }
-            }
-        }
     }
     public override Vector3 WorldStartPosition
     {
@@ -123,16 +113,6 @@ using SleepyCat.Utility.Splines;
                 }
             }
             return transform.position;
-        }
-        set
-        {
-            if (containedSplines.Count > 0)
-            {
-                if (containedSplines[0] != null)
-                {
-                    containedSplines[0].WorldStartPosition = value;
-                }
-            }
         }
     }
     #endregion
@@ -176,6 +156,27 @@ using SleepyCat.Utility.Splines;
         if (containedSplines.Count > 0)
         {
             containedSplines[0].SetWorldStartPointAndUpdateLocal(startPoint);
+        }
+    }
+    public override void SetWorldEndPointWithoutLocal(Vector3 endPoint)
+    {
+        if (containedSplines.Count > 0)
+        {
+            if (containedSplines[0] != null)
+            {
+                containedSplines[0].SetWorldEndPointWithoutLocal(endPoint);
+            }
+        }
+    }
+
+    public override void SetWorldStartPointWithoutLocal(Vector3 startPoint)
+    {
+        if (containedSplines.Count > 0)
+        {
+            if (containedSplines[0] != null)
+            {
+                containedSplines[0].SetWorldStartPointWithoutLocal(startPoint);
+            }
         }
     }
 
@@ -340,5 +341,7 @@ using SleepyCat.Utility.Splines;
     {
         UpdateSplines();
     }
+
+
     #endregion
 }
