@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // save it in file
 [System.Serializable]
@@ -41,6 +42,7 @@ public class b_PlayerData
 
     // current character int
     public int icurrentCharacterint;
+
 
 
     #endregion
@@ -75,6 +77,7 @@ public class b_PlayerData
 
         // this classes current character gameobject int = outfitchanger current character gameobject int
         icurrentCharacterint = outfitChangerData.currentCharacterint;
+
 
     }
 

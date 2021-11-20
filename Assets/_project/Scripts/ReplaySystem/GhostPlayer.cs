@@ -46,6 +46,8 @@ using UnityEngine.InputSystem;
             // if ghost replaying is true
             if (ghost.isReplaying) {
 
+                //Debug.Log("IsReplaying");    
+
                 // Get the ghost index
                 GetGhostIndex();
 
@@ -119,10 +121,15 @@ using UnityEngine.InputSystem;
                     index1 = i;
                     index2 = i + 1;
                     return;
+                    
 
                 }
 
+                
+
             }
+
+            //Debug.Log("GottenGhostIndex");
 
             // increment the index of timestamps
             index1 = ghost.timeStamp.Count - 1;
@@ -155,6 +162,7 @@ using UnityEngine.InputSystem;
 
             }
 
+            //Debug.Log("SetTheGhostTransform");
         }
 
 

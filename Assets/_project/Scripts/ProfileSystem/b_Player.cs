@@ -65,6 +65,9 @@ public class b_Player : MonoBehaviour
     // reference to the shop script
     public Shop shop;
 
+    //
+    //public ShopText shopText;
+
     // int for the current hat gameobject
     public int CurrentGameObjectInt;
 
@@ -193,14 +196,20 @@ public class b_Player : MonoBehaviour
 
         outfitChanger.LoadedCustomizables1();
 
+        //shopText.LoadProfile1Text.text = data.TMP1ToSave.text;
+
+        
+
+    }
+
+    public void PlayPlayer1() {
+
         // load the first replay through the ghost save manager
         replayGhostSaveManager.LoadReplay1();
 
         changeCamera.ChangeToGameCam();
 
     }
-
-
 
 
     // Load the player2
