@@ -28,6 +28,7 @@ namespace SleepyCat.Movement
         private Rigidbody movementRB;
         private PlayerInput pInput;
 
+
         [SerializeField]
         public float GroundedDrag = 0.05f;
         [SerializeField]
@@ -150,7 +151,7 @@ namespace SleepyCat.Movement
                 ApplyBrakeForce();
             }
 
-            parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition.GroundHit, groundedCondition.FrontGroundHit);
+            parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
         }
 
         public override void PhysicsTick(float dT)
@@ -184,6 +185,7 @@ namespace SleepyCat.Movement
             StopJumpTimerCoroutine();
             StopPushTimerCoroutine();
 
+            parentController.playerCamera.bMovingBackwards = false;
             hasRan = false;
         }
 
@@ -196,18 +198,30 @@ namespace SleepyCat.Movement
                 //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)
                 float initialSpeed = movementRB.velocity.magnitude;
                 float dotAngle = Vector3.Dot(movementRB.velocity.normalized, playerTransform.forward.normalized);
-                dotAngle = Mathf.Abs(dotAngle);
+                float absDotAngle = Mathf.Abs(dotAngle);
 
-                movementRB.transform.forward = playerTransform.forward;
-                movementRB.velocity = initialSpeed * playerTransform.forward;
+                //Moving almost directly backwards
+                if(dotAngle < -0.98f)
+                {
+                    parentController.playerCamera.bMovingBackwards = true;
+                    movementRB.transform.forward = -playerTransform.forward;
+                }
+                //Must be moving forwards
+                else
+                {
+                    parentController.playerCamera.bMovingBackwards = false;
+                    movementRB.transform.forward = playerTransform.forward;
+                }
+
+                movementRB.velocity = initialSpeed * movementRB.transform.forward;
 
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if (dotAngle < 0.99f && playerTransform.forward.z != 0)
+                if (absDotAngle < 0.99f)
                 {
                     movementRB.angularVelocity = Vector3.zero;
                     
                     //And conserving it if need be
-                    if(dotAngle < 0.3265f)
+                    if(absDotAngle < 0.3265f)
                     {
                         movementRB.velocity = Vector3.zero;
                         movementRB.AddForce(playerTransform.forward.normalized, ForceMode.Impulse);

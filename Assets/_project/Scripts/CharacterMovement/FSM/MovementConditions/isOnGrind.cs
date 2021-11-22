@@ -9,6 +9,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using UnityEngine;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Utility.Splines;

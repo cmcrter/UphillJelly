@@ -79,7 +79,7 @@ namespace SleepyCat.Movement
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
-        public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, RaycastHit hit, RaycastHit frontHit)
+        public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, isGroundBelow groundBelow)
         {
             float headingDeltaAngle;
             Quaternion headingDelta = Quaternion.identity;
@@ -93,14 +93,14 @@ namespace SleepyCat.Movement
 
             Quaternion groundQuat = transform.rotation;
 
-            if(hit.collider)
+            if(groundBelow.GroundHit.collider)
             {
-                groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, hit.normal), hit.normal), Time.deltaTime * smoothness);
+                groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, groundBelow.GroundHit.normal), groundBelow.GroundHit.normal), Time.deltaTime * smoothness);
             }
 
             transform.rotation = groundQuat;
             transform.rotation = transform.rotation * headingDelta;
-            transform.position = rb.transform.position;
+            transform.position = Vector3.MoveTowards(transform.position, rb.transform.position, 0.5f);
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
@@ -120,7 +120,7 @@ namespace SleepyCat.Movement
         private void Awake()
         {
             //Setting up the state machine
-            groundBelow.InitialiseCondition(transform, groundRaycastPoint, backgroundRaycastPoint);
+            groundBelow.InitialiseCondition(transform);
             nextToWallRun.InitialiseCondition(this, rb);
             grindBelow.InitialiseCondition(rb, inputHandler);
 
@@ -152,7 +152,7 @@ namespace SleepyCat.Movement
             rb.transform.parent = null;
 
             //Setting up model position
-            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius + 0.001f, ballMovement.transform.position.z);
+            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y)) + 0.05f, ballMovement.transform.position.z);
         }
 
         private void Update()
