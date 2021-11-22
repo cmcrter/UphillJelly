@@ -220,7 +220,7 @@ namespace SleepyCat.Movement
                 if(rb.velocity.magnitude > 0.3f)
                 {
                     //Lerping towards the new input by the animation curves amounts (probably increasing over time)
-                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, turnSpeedCurve.Evaluate(timeAlongTimer));
+                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, 2f * turnSpeedCurve.Evaluate(timeAlongTimer) * Time.deltaTime);
                 }
                 //Else do a kick turn
                 else
