@@ -198,13 +198,13 @@ namespace SleepyCat.Movement
                 float dotAngle = Vector3.Dot(movementRB.velocity.normalized, playerTransform.forward.normalized);
                 dotAngle = Mathf.Abs(dotAngle);
 
+                movementRB.transform.forward = playerTransform.forward;
+                movementRB.velocity = initialSpeed * playerTransform.forward;
+
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if(dotAngle < 1f)
+                if (dotAngle < 0.99f && playerTransform.forward.z != 0)
                 {
                     movementRB.angularVelocity = Vector3.zero;
-
-                    movementRB.transform.forward = playerTransform.forward;
-                    movementRB.velocity = initialSpeed * playerTransform.forward;
                     
                     //And conserving it if need be
                     if(dotAngle < 0.3265f)

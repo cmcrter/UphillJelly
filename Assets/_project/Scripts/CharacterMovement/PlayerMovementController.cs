@@ -93,14 +93,9 @@ namespace SleepyCat.Movement
 
             Quaternion groundQuat = transform.rotation;
 
-            if(Vector3.Angle(hit.normal, Vector3.up) < 50f)
+            if(hit.collider)
             {
-                groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, Time.deltaTime * smoothness);
-
-                if(frontHit.collider && Vector3.Angle(frontHit.normal, hit.normal) < 80)
-                {
-                    groundQuat = Quaternion.Slerp(groundQuat, Quaternion.FromToRotation(transform.up, frontHit.normal) * transform.rotation, Time.deltaTime * smoothness);
-                }
+                groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, hit.normal), hit.normal), Time.deltaTime * smoothness);
             }
 
             transform.rotation = groundQuat;

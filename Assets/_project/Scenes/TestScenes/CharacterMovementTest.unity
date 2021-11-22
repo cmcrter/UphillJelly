@@ -5676,7 +5676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e694c544e3b821a4799a6e2e3538ac87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1791802707}
+  target: {fileID: 1929001514}
   smoothSpeed: 0.005
   followDist: 4
   FollowRotation: 1
@@ -6184,11 +6184,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1789075737}
   m_CullTransparentMesh: 1
---- !u!4 &1791802707 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1791802707, guid: 4911f9de42113f64fa776b512f264502, type: 3}
-  m_PrefabInstance: {fileID: 7776232620832413380}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1820690062 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8743188391020955400, guid: 4911f9de42113f64fa776b512f264502, type: 3}
@@ -7638,13 +7633,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1929001514 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2573286819093465943, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+  m_PrefabInstance: {fileID: 7776232620832413380}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1948609994
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh247578
+  m_Name: pb_Mesh79286
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8290,6 +8290,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1595925519}
     m_Modifications:
+    - target: {fileID: 1803459479, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 2573286818288912049, guid: 4911f9de42113f64fa776b512f264502, type: 3}
       propertyPath: m_Name
       value: PlayerMovementController
@@ -8345,6 +8349,10 @@ PrefabInstance:
     - target: {fileID: 2573286818288912062, guid: 4911f9de42113f64fa776b512f264502, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2573286819093465939, guid: 4911f9de42113f64fa776b512f264502, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4911f9de42113f64fa776b512f264502, type: 3}

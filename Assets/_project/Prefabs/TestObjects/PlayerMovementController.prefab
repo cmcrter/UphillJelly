@@ -757,9 +757,9 @@ MonoBehaviour:
     adjustGroundSmoothness: 2
   groundedState:
     hasRan: 0
-    GroundedDrag: 0.1
+    GroundedDrag: 0.2
     forwardSpeed: 1.1
-    turnSpeed: 0.19
+    turnSpeed: 0.25
     backwardSpeed: 20
     jumpSpeed: 25
     groundAdjustSmoothness: 15
@@ -810,7 +810,7 @@ MonoBehaviour:
       isActive: 0
   playerCamera: {fileID: 0}
   currentTurnInput: 0
-  turnDuration: 0.8
+  turnDuration: 0.5
   playerModel: {fileID: 2573286819368759183}
   rb: {fileID: 2573286819093465939}
   groundRaycastPoint: {fileID: 2573286818866706067}
@@ -1072,9 +1072,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2573286819093465942}
   serializedVersion: 2
-  m_Mass: 75
-  m_Drag: 0.1
-  m_AngularDrag: 5000
+  m_Mass: 70
+  m_Drag: 0.2
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
