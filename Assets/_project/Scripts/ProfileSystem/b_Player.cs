@@ -116,7 +116,7 @@ public class b_Player : MonoBehaviour
     // Load the player1
     public void LoadPlayer1() {
 
-
+        // DUPES (DELETE)
         // Set the load player button 2 to false
         LoadPlayer2Button.SetActive(false);
 
@@ -128,6 +128,7 @@ public class b_Player : MonoBehaviour
 
         // Set the save player button 3 to false
         SavePlayer3Button.SetActive(false);
+        //
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
@@ -193,25 +194,16 @@ public class b_Player : MonoBehaviour
 
         }
 
-
+        // Load the first customizables
         outfitChanger.LoadedCustomizables1();
 
         //shopText.LoadProfile1Text.text = data.TMP1ToSave.text;
 
-        
+
 
     }
 
-    public void PlayPlayer1() {
-
-        // load the first replay through the ghost save manager
-        replayGhostSaveManager.LoadReplay1();
-
-        changeCamera.ChangeToGameCam();
-
-    }
-
-
+    
     // Load the player2
     public void LoadPlayer2() {
 
@@ -290,8 +282,8 @@ public class b_Player : MonoBehaviour
 
         }
 
-        // load the second replay through the ghost save manager
-        replayGhostSaveManager.LoadReplay2();
+        // Load the second customizables
+        outfitChanger.LoadedCustomizables2();
 
     }
 
@@ -376,8 +368,8 @@ public class b_Player : MonoBehaviour
 
         }
 
-        // load the third replay through the ghost save manager
-        replayGhostSaveManager.LoadReplay3();
+        // Load the third customizables
+        outfitChanger.LoadedCustomizables3();
 
     }
 
@@ -414,6 +406,42 @@ public class b_Player : MonoBehaviour
 
         // save the replay 3 through the ghost save manager
         replayGhostSaveManager.SaveReplay3();
+
+    }
+
+
+
+
+    // play button 1 pressed
+    public void PlayPlayer1() {
+
+        // load the first replay through the ghost save manager
+        replayGhostSaveManager.LoadReplay1();
+
+        // Change to game camera
+        changeCamera.ChangeToGameCam();
+
+    }
+
+    // play button 2 pressed
+    public void PlayPlayer2() {
+
+        // load the second replay through the ghost save manager
+        replayGhostSaveManager.LoadReplay2();
+
+        // Change to game camera
+        changeCamera.ChangeToGameCam();
+
+    }
+
+    // play button 3 pressed
+    public void PlayPlayer3() {
+
+        // load the third replay through the ghost save manager
+        replayGhostSaveManager.LoadReplay3();
+
+        // Change to game camera
+        changeCamera.ChangeToGameCam();
 
     }
 

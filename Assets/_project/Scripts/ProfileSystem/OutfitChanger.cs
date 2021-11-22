@@ -22,16 +22,19 @@ public class OutfitChanger : MonoBehaviour
     // Hat selecter game object
     public GameObject hatSelector;
 
+    [Header("Characters In Scene")]
     // reference to the character in the scene
     public GameObject characterObjectInScene;
 
     // reference to the character in the scene
     public GameObject playableCharacterObjectInScene;
 
-    [Header("Hat displayer")]
+    [Header("Hats In Scene")]
     // gameobject hat which will be displayed
     public GameObject hatDisplayGameObject;
 
+    // gameobject hat which will be displayed
+    public GameObject playableHatDisplayGameObject;
 
     [Header("Gameobject Options")]
     // list of the hat gameobjects
@@ -65,8 +68,6 @@ public class OutfitChanger : MonoBehaviour
     // on start
     public void Start() {
 
-        
-
         // set the current hat object to 4
         currentGOint = 4;
 
@@ -77,12 +78,28 @@ public class OutfitChanger : MonoBehaviour
         currentCharacterint = 2;
 
 
+        // set the hatdisplay object to the int for the current hat
+        //hatDisplayGameObject = gameObjectOptions[currentGOint];
+
+        // get the mesh renderer material from this game object and make it the current material int
+        //GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        // set the hat selector mesh filter to the display game objects mesh filter
+        //hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
+
+
+        //hatDisplayGameObject = gameObjectOptions[currentGOint];
+
+        //GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
     }
 
+    // Loaded customizables 1
     public void LoadedCustomizables1() {
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
+
 
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
@@ -90,10 +107,61 @@ public class OutfitChanger : MonoBehaviour
         // load the current character material that has been saved
         playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
+
+        // set the players hat to the current hat
+        playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        // set the players material to the current hat material
+        playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+
     }
 
-    
+    // Loaded customizables 1
+    public void LoadedCustomizables2() {
 
+        // set the player data to the loaded player in the save system
+        b_PlayerData data = b_SaveSystem.LoadPlayer2();
+
+
+        // load the current character material that has been saved
+        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+        // load the current character material that has been saved
+        playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+
+        // set the players hat to the current hat
+        playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        // set the players material to the current hat material
+        playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+
+    }
+
+    // Loaded customizables 1
+    public void LoadedCustomizables3() {
+
+        // set the player data to the loaded player in the save system
+        b_PlayerData data = b_SaveSystem.LoadPlayer3();
+
+
+
+        // load the current character material that has been saved
+        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+        // load the current character material that has been saved
+        playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+
+        // set the players hat to the current hat
+        playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        // set the players material to the current hat material
+        playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+
+    }
+
+    /*
     // function called from the b_Player to load the customizable objects
     public void LoadedCustomizables() {
 
@@ -112,6 +180,7 @@ public class OutfitChanger : MonoBehaviour
         Debug.Log("Mat is " + characterObjectInScene.GetComponent<MeshRenderer>().material);
 
     }
+    */
 
     // next hat option
     public void NextGameObjectOption() {
