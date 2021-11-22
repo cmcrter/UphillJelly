@@ -107,7 +107,7 @@ namespace SleepyCat.Movement
         {
             pInput.SwitchCurrentActionMap("Aerial");
 
-            parentController.playerCamera.FollowRotation = false;
+            //parentController.playerCamera.FollowRotation = false;
             movementRB.drag = AerialDrag;
 
             hasRan = true;

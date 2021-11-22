@@ -753,16 +753,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aerialState:
     hasRan: 0
-    AerialDrag: 0.2
+    AerialDrag: 0.1
     adjustGroundSmoothness: 2
   groundedState:
     hasRan: 0
     GroundedDrag: 0.2
-    forwardSpeed: 1.1
+    forwardSpeed: 1
     turnSpeed: 0.25
     backwardSpeed: 20
     jumpSpeed: 25
-    groundAdjustSmoothness: 15
+    groundAdjustSmoothness: 25
     bConstantForce: 1
     constantForce: 75
     pushTimerDuration: 0.65
@@ -801,6 +801,7 @@ MonoBehaviour:
   nextToWallRun:
     currentWallRide: {fileID: 0}
     dotProductWithWall: 0
+    cooldownDuration: 0.5
   grindBelow:
     splineCurrentlyGrindingOn: {fileID: 0}
     grindDetails: {fileID: 0}
@@ -825,13 +826,13 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.25097656
-      inSlope: 1.2446315
-      outSlope: 1.2446315
+      value: 0.44985962
+      inSlope: 0.2352235
+      outSlope: 0.2352235
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.028324155
+      outWeight: 0.060358245
     - serializedVersion: 3
       time: 1
       value: 0.7002716
@@ -903,7 +904,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1 &2573286818798095997
 GameObject:
@@ -1078,7 +1079,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1 &2573286819123231245
 GameObject:

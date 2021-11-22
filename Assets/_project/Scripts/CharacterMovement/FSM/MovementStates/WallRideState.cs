@@ -109,6 +109,8 @@ namespace SleepyCat.Movement
                 coyoteTimer = null;
             }
 
+            nextToWallRun.StartCooldown();
+
             rb.isKinematic = false;
             hasRan = false;
         }
