@@ -19,7 +19,7 @@ namespace SleepyCat.Utility.Splines
     [System.Serializable]
     public class HermiteSpline : Spline
     {
-        #region Private Serialized Fields
+        #region Public Serialized Fields
         [SerializeField]
         [Min(float.Epsilon)]
         [Tooltip("The name of positions that are sampled along the length of the spline to calculate its distance, Cannot be less that 0")]
@@ -85,6 +85,7 @@ namespace SleepyCat.Utility.Splines
             set
             {
                 this.distancePrecision = value;
+                UpdateLength();
             }
         }
 
@@ -163,11 +164,20 @@ namespace SleepyCat.Utility.Splines
             // Sampling a given number of points to get the distance between them to get the whole length of the spline
             Vector3 lastPosition = startPoint;
             float tIncrement = 1.0f / distancePrecision;
-            for (float t = 0; t <= 1f; t += tIncrement)
+            float t = 0;
+            int i = 0;
+            for (; i <= distancePrecision; ++i)
             {
                 Vector3 newPosition = GetPointAtTime(startPoint, endPoint, startTangent, endTangent, t);
                 distance += Vector3.Distance(newPosition, lastPosition);
                 lastPosition = newPosition;
+                t += tIncrement;
+            }
+            // If distance precision is a decimal then get the end section
+            if (i - 1 != distancePrecision)
+            {
+                Vector3 newPosition = GetPointAtTime(startPoint, endPoint, startTangent, endTangent, Spline.maxTValue);
+                distance += Vector3.Distance(newPosition, lastPosition);
             }
             return distance;
         }

@@ -22,11 +22,15 @@ namespace SleepyCat.Utility.Splines
         /// <summary>
         /// The index in the additional points array the first additional point would be
         /// </summary>
-        public const int firstAddtionalPointIndex = 0;
+        public const int firstControlPointIndex = 0;
         /// <summary>
         /// The index in the additional points array the second additional point would be
         /// </summary>
-        public const int secondAddtionalPointIndex = 1;
+        public const int secondControlPointIndex = 1;
+        /// <summary>
+        /// The max number of possible control points accessible
+        /// </summary>
+        public const int maxNumberOfControlPoints = 2;
         #endregion
 
         #region Private Serialized Fields
@@ -47,7 +51,7 @@ namespace SleepyCat.Utility.Splines
 
         [SerializeField]
         [Tooltip("The additional points needed on top of the start and end point")]
-        public Vector3[] controlPoints;
+        private Vector3[] controlPoints;
         [SerializeField]
         [Tooltip("The point at which the spline ends")]
         private Vector3 endPoint;
@@ -81,6 +85,71 @@ namespace SleepyCat.Utility.Splines
             }
         }
         #endregion
+
+        /// <summary>
+        /// The number of control points the curve is currently using
+        /// </summary>
+        public int NumberOfControlPoints
+        {
+            get
+            {
+                return isTwoControlPoint ? 2 : 1;
+            }
+        }
+        /// <summary>
+        /// The first control point of the bezier curve 
+        /// </summary>
+        public Vector3 FirstControlPoint
+        {
+            get
+            {
+                if (controlPoints == null)
+                {
+                    SetUpControlPoints();
+                }
+                return controlPoints[firstControlPointIndex];
+            }
+            set
+            {
+                if (controlPoints == null)
+                {
+                    SetUpControlPoints();
+                }
+                controlPoints[firstControlPointIndex] = value;
+            }
+        }
+        /// <summary>
+        /// The second control point of the bezier curve 
+        /// </summary>
+        public Vector3 SecondControlPoint
+        {
+            get
+            {
+                if (!isTwoControlPoint)
+                {
+                    Debug.LogWarning("Second control point should not be accessed on a bezier curve marked as one control point ");
+                    SetIsTwoControlPoint(true);
+                }
+                if (controlPoints == null)
+                {
+                    SetUpControlPoints();
+                }
+                return controlPoints[secondControlPointIndex];
+            }
+            set
+            {
+                if (!isTwoControlPoint)
+                {
+                    Debug.LogWarning("Second control point should not be accessed on a bezier curve marked as one control point ");
+                    SetIsTwoControlPoint(true);
+                }
+                if (controlPoints == null)
+                {
+                    SetUpControlPoints();
+                }
+                controlPoints[secondControlPointIndex] = value;
+            }
+        }
         #endregion
 
         #region Public Static Methods
@@ -99,11 +168,20 @@ namespace SleepyCat.Utility.Splines
             // Sampling a given number of points to get the distance between them to get the whole length of the spline
             Vector3 lastPosition = startPoint;
             float tIncrement = 1.0f / distancePrecision;
-            for (float t = 0; t <= 1f; t += tIncrement)
+            float t = 0;
+            int i = 0;
+            for (; i <= distancePrecision; ++i)
             {
                 Vector3 newPosition = GetPositionAtTimeSingleControlPoint(startPoint, endPoint, controlPoint, t);
                 distance += Vector3.Distance(newPosition, lastPosition);
                 lastPosition = newPosition;
+                t += tIncrement;
+            }
+            // If distance precision is a decimal then get the end section
+            if (i - 1 != distancePrecision)
+            {
+                Vector3 newPosition = GetPositionAtTimeSingleControlPoint(startPoint, endPoint, controlPoint, 1f);
+                distance += Vector3.Distance(newPosition, lastPosition);
             }
             return distance;
         }
@@ -124,11 +202,20 @@ namespace SleepyCat.Utility.Splines
             // Sampling a given number of points to get the distance between them to get the whole length of the spline
             Vector3 lastPosition = startPoint;
             float tIncrement = 1.0f / distancePrecision;
-            for (float t = 0; t <= 1f; t += tIncrement)
+            float t = 0;
+            int i = 0;
+            for (; i <= distancePrecision; ++i)
             {
                 Vector3 newPosition = GetPositionAtTimeTwoControlPoints(startPoint, endPoint, controlPointOne, controlPointTwo, t);
                 distance += Vector3.Distance(newPosition, lastPosition);
                 lastPosition = newPosition;
+                t += tIncrement;
+            }
+            // If distance precision is a decimal then get the end section
+            if (i - 1 != distancePrecision)
+            {
+                Vector3 newPosition = GetPositionAtTimeTwoControlPoints(startPoint, endPoint, controlPointOne, controlPointTwo, 1f);
+                distance += Vector3.Distance(newPosition, lastPosition);
             }
             return distance;
         }
@@ -198,11 +285,11 @@ namespace SleepyCat.Utility.Splines
             if (isTwoControlPoint)
             {
                 return GetTotalLengthTwoControlPoints(startPoint, endPoint,
-                    controlPoints[firstAddtionalPointIndex], controlPoints[secondAddtionalPointIndex], distancePrecision);
+                    controlPoints[firstControlPointIndex], controlPoints[secondControlPointIndex], distancePrecision);
             }
             else
             {
-                return GetTotalLengthSingleControlPoint(startPoint, endPoint, controlPoints[firstAddtionalPointIndex], distancePrecision);
+                return GetTotalLengthSingleControlPoint(startPoint, endPoint, controlPoints[firstControlPointIndex], distancePrecision);
             }
         }
 
@@ -225,7 +312,37 @@ namespace SleepyCat.Utility.Splines
         /// <returns>If this Bezier Curve is using two control points or one</returns>
         public bool GetIsTwoControlPoint()
         {
+
             return isTwoControlPoint;
+        }
+
+        public void SetControlPointAt(int index, Vector3 newValue)
+        {
+            if (index == firstControlPointIndex)
+            {
+                FirstControlPoint = newValue;
+                return;
+            }
+            else if (index == secondControlPointIndex)
+            {
+                SecondControlPoint = newValue;
+                return;
+            }
+            Debug.LogError("SetControlPointAt was given an invalid index");
+        }
+
+        public Vector3 GetControlPointAt(int index)
+        {
+            if (index == firstControlPointIndex)
+            {
+                return FirstControlPoint;
+            }
+            else if (index == secondControlPointIndex)
+            {
+                return SecondControlPoint;
+            }
+            Debug.LogError("GetControlPointAt was given an invalid index");
+            return Vector3.negativeInfinity;
         }
 
         /// <summary>
@@ -263,7 +380,7 @@ namespace SleepyCat.Utility.Splines
         /// <returns>A point along the spline at a given unit interval</returns>
         private Vector3 GetPositionAtTimeSingleControlPoint(float t)
         {
-            return GetPositionAtTimeSingleControlPoint(startPoint, endPoint, controlPoints[firstAddtionalPointIndex], t);
+            return GetPositionAtTimeSingleControlPoint(startPoint, endPoint, controlPoints[firstControlPointIndex], t);
         }
 
         /// <summary>
@@ -274,7 +391,22 @@ namespace SleepyCat.Utility.Splines
         private Vector3 GetPositionAtTimeTwoControlPoints(float t)
         {
             return GetPositionAtTimeTwoControlPoints(startPoint, endPoint,
-                controlPoints[firstAddtionalPointIndex], controlPoints[secondAddtionalPointIndex], t);
+                controlPoints[firstControlPointIndex], controlPoints[secondControlPointIndex], t);
+        }
+
+        private void SetUpControlPoints()
+        {
+            if (controlPoints == null)
+            {
+                if (isTwoControlPoint)
+                {
+                    controlPoints = new Vector3[2];
+                }
+                else
+                {
+                    controlPoints = new Vector3[1];
+                }
+            }
         }
         #endregion
     }

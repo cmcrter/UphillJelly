@@ -75,6 +75,7 @@ namespace SleepyCat.Utility.Splines
 
             // Everything else section
             EditorGUILayout.PropertyField(distancePrecision);
+            EditorGUILayout.LabelField("Length: " + bezierCurveWrapper.GetTotalLength());
 
             serializedObject.ApplyModifiedProperties();
         }
