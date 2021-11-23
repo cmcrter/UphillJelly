@@ -94,11 +94,6 @@ namespace SleepyCat.Movement
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.playerCamera.FollowRotation = true;
 
-            //if(parentController.playerCamera)
-            //{
-            //    parentController.playerCamera.FollowRotation = false;
-            //}
-
             //Making sure nothing interferes with the movement
             movementRB.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.401f, 0);
             parentController.transform.position = movementRB.transform.position;
@@ -106,6 +101,7 @@ namespace SleepyCat.Movement
             movementRB.isKinematic = true;
 
             currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+            movementRB.transform.forward = currentSplineDir;
             parentController.transform.forward = currentSplineDir;
 
             hasRan = true;
@@ -115,17 +111,11 @@ namespace SleepyCat.Movement
         {
             grindVisualiser.transform.parent = parentController.transform;
 
-            //if (parentController.playerCamera) 
-            //{
-            //    parentController.playerCamera.FollowRotation = true;
-            //}
-
             pos = Vector3.zero;
             currentSplineDir = Vector3.zero;
 
             //Let the condition know to reset
             onGrind.playerExitedGrind();
-            //parentController.StopTurnCoroutine();
 
             timeAlongGrind = 0;
             bForceExit = false;
@@ -160,6 +150,8 @@ namespace SleepyCat.Movement
                     if(timeAlongGrind < 0.95f)
                     {
                         currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+
+                        movementRB.transform.forward = currentSplineDir;
                         parentController.transform.forward = currentSplineDir;
                     }
                 }             
@@ -169,6 +161,8 @@ namespace SleepyCat.Movement
                     pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, parentController.ballMovement.radius + 0.01f, 0);
 
                     currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
+
+                    movementRB.transform.forward = currentSplineDir;
                     parentController.transform.forward = currentSplineDir;
 
                     JumpOffPressed();
@@ -180,7 +174,7 @@ namespace SleepyCat.Movement
         {
             if(!bForceExit)
             {
-                movementRB.MovePosition(Vector3.Lerp(movementRB.position, pos, dT * 10f));
+                movementRB.transform.position = pos;
             }
 
             parentController.transform.position = movementRB.transform.position;

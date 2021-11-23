@@ -114,8 +114,6 @@ namespace SleepyCat.Movement
 
         public override void OnStateExit()
         {
-            movementRB.angularVelocity = Vector3.zero;
-
             hasRan = false;
         }
     }

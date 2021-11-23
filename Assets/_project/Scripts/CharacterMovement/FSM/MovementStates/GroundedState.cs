@@ -177,6 +177,11 @@ namespace SleepyCat.Movement
                 PushBoard();
             }
 
+            if(inputHandler.TurningAxis != 0)
+            {
+                parentController.StartTurnCoroutine();
+            }
+
             hasRan = true;
         }
 
