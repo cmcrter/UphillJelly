@@ -57,6 +57,7 @@ namespace SleepyCat.Movement
 
         private Vector3 initalPos;
         private Quaternion initialRot;
+        private Quaternion lastRot = Quaternion.identity;
         private Coroutine turningCo;
         private Timer turningTimer;
         public AnimationCurve turnSpeedCurve;
@@ -98,7 +99,12 @@ namespace SleepyCat.Movement
                 groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, groundBelow.GroundHit.normal), groundBelow.GroundHit.normal), Time.deltaTime * smoothness);
             }
 
-            transform.rotation = groundQuat;
+            if(Vector3.Angle(groundBelow.GroundHit.normal, transform.up) < 70f)
+            {
+                transform.rotation = groundQuat;
+            }
+
+            lastRot = groundQuat;            
             transform.rotation = transform.rotation * headingDelta;
             transform.position = rb.transform.position;
         }
