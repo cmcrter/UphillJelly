@@ -95,7 +95,7 @@ namespace SleepyCat.Movement
 
             //Making sure nothing interferes with the movement
             movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.4025f, 0);
-            timeAlongGrind = Mathf.Clamp01(timeAlongGrind);
+            timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.005f, 1f);
 
             parentController.transform.position = movementRB.transform.position;
 
@@ -133,20 +133,21 @@ namespace SleepyCat.Movement
 
             if(onGrind.splineCurrentlyGrindingOn != null) 
             {
+                float f = onGrind.splineCurrentlyGrindingOn.GetTotalLength();
                 tIncrementPerSecond = onGrind.grindDetails.DuringGrindForce / onGrind.splineCurrentlyGrindingOn.GetTotalLength();
             }
 
-            if(timeAlongGrind + dT * tIncrementPerSecond < 1f)
+            if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 1f)
             {
                 // Clamping it at the max value and min values of a unit interval
 
                 // Check the length of the next increment
-                Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + dT * tIncrementPerSecond);
+                Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + Time.deltaTime * tIncrementPerSecond);
                 Vector3 currentPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
                 Vector3 velocity = nextPoint - currentPoint;
 
                 // Ideally the distance change should be speed * time.deltaTime
-                float desiredDistance = onGrind.grindDetails.DuringGrindForce * dT;
+                float desiredDistance = onGrind.grindDetails.DuringGrindForce * Time.deltaTime;
                 float currentDistanceChange = velocity.magnitude;
 
                 float desiredChange = desiredDistance / currentDistanceChange;
