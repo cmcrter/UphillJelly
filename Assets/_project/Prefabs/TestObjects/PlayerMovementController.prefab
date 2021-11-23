@@ -784,7 +784,7 @@ MonoBehaviour:
   aerialState:
     hasRan: 0
     AerialDrag: 0.1
-    adjustGroundSmoothness: 2
+    adjustGroundSmoothness: 1
   groundedState:
     hasRan: 0
     GroundedDrag: 0.2
@@ -826,10 +826,8 @@ MonoBehaviour:
     playerMask:
       serializedVersion: 2
       m_Bits: 64
-    frRaycastTransform: {fileID: 8356929525954968363}
-    flRaycastTransform: {fileID: 2573286818866706067}
-    brRaycastTransform: {fileID: 9107716072724217871}
-    blRaycastTransform: {fileID: 2144843937193508605}
+    frontraycastPointTransform: {fileID: 0}
+    backRaycastPointTransform: {fileID: 0}
     groundDist: 0.095
     rampDist: 0.75
   nextToWallRun:
