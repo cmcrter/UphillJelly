@@ -100,7 +100,7 @@ namespace SleepyCat.Movement
 
             transform.rotation = groundQuat;
             transform.rotation = transform.rotation * headingDelta;
-            transform.position = Vector3.MoveTowards(transform.position, rb.transform.position, 0.5f);
+            transform.position = rb.transform.position;
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
@@ -129,7 +129,7 @@ namespace SleepyCat.Movement
             wallRideState.InitialiseState(this, rb, nextToWallRun, groundBelow);
             grindingState.InitialiseState(this, rb, grindBelow);
 
-            playerStateMachine = new FiniteStateMachine(groundedState);
+            playerStateMachine = new FiniteStateMachine(aerialState);
         }
 
         //Adding the inputs to the finite state machine
