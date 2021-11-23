@@ -51,7 +51,7 @@ namespace SleepyCat.Movement
             FrontGroundHit.normal = Vector3.zero;
 
             //Checking if anything is below it
-            if(Physics.Raycast(frontraycastPointTransform.position, -playerTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
+            if(Physics.Raycast(frontraycastPointTransform.position, -playerTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
@@ -65,7 +65,7 @@ namespace SleepyCat.Movement
                     //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
 
-                if(Physics.Raycast(frontraycastPointTransform.position, playerTransform.forward, out RaycastHit fronthit, rampDist, ~playerMask, QueryTriggerInteraction.UseGlobal))
+                if(Physics.Raycast(frontraycastPointTransform.position, playerTransform.forward, out RaycastHit fronthit, rampDist, ~playerMask, QueryTriggerInteraction.Ignore))
                 {
                     //Player is about to hit a ramp
                     FrontGroundHit = fronthit;
@@ -80,7 +80,7 @@ namespace SleepyCat.Movement
                 }
             }
 
-            if(Physics.Raycast(backRaycastPointTransform.position, -playerTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
+            if(Physics.Raycast(backRaycastPointTransform.position, -playerTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Could use backhit to help smoothing with the board against the ground
 
