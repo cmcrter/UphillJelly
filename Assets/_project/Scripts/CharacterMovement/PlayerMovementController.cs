@@ -190,6 +190,12 @@ namespace SleepyCat.Movement
             ballMovement.transform.position = positionToMoveTo;
         }
 
+        public void StartTurnCoroutine()
+        {
+            StopTurnCoroutine();
+            turningCo = StartCoroutine(Co_TurnAngle());
+        }
+
         public void StopTurnCoroutine()
         {
             if(turningCo != null) 
@@ -217,7 +223,7 @@ namespace SleepyCat.Movement
                 float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
 
                 //If the skateboard is moving
-                if(rb.velocity.magnitude > 0.3f)
+                if(rb.velocity.magnitude > 0.3f && playerStateMachine.currentState == groundedState)
                 {
                     //Lerping towards the new input by the animation curves amounts (probably increasing over time)
                     currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, 2f * turnSpeedCurve.Evaluate(timeAlongTimer) * Time.deltaTime);

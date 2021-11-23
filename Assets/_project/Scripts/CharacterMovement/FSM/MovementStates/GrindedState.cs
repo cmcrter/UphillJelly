@@ -115,17 +115,11 @@ namespace SleepyCat.Movement
         {
             grindVisualiser.transform.parent = parentController.transform;
 
-            //if (parentController.playerCamera) 
-            //{
-            //    parentController.playerCamera.FollowRotation = true;
-            //}
-
             pos = Vector3.zero;
             currentSplineDir = Vector3.zero;
 
             //Let the condition know to reset
             onGrind.playerExitedGrind();
-            //parentController.StopTurnCoroutine();
 
             timeAlongGrind = 0;
             bForceExit = false;
