@@ -28,7 +28,6 @@ namespace SleepyCat.Movement
         private Rigidbody movementRB;
         private PlayerInput pInput;
 
-
         [SerializeField]
         public float GroundedDrag = 0.05f;
         [SerializeField]

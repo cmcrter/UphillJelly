@@ -106,7 +106,12 @@ namespace SleepyCat.Movement
 
             lastRot = groundQuat;            
             transform.rotation = transform.rotation * headingDelta;
-            transform.position = rb.transform.position;
+
+            //With the hinge, this means that the rb wont just run away without the player
+            if(Vector3.Distance(transform.position, rb.transform.position) > 0.15f)
+            {
+                transform.position = rb.transform.position;
+            }
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
@@ -158,7 +163,7 @@ namespace SleepyCat.Movement
             rb.transform.parent = null;
 
             //Setting up model position
-            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y)) + 0.05f, ballMovement.transform.position.z);
+            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), ballMovement.transform.position.z);
         }
 
         private void Update()
