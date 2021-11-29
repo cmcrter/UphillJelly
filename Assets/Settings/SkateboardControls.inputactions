@@ -33,7 +33,7 @@
                     "name": "Grounded_Balance",
                     "type": "Value",
                     "id": "de49cbe0-0360-4c91-b319-af493a798193",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Analog",
                     "processors": "",
                     "interactions": ""
                 },
@@ -58,6 +58,22 @@
                     "type": "Button",
                     "id": "c5add246-c41b-4d6f-8522-a8cb1071cbd4",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grounded_KeyboardLeftTurn",
+                    "type": "Value",
+                    "id": "795f4fa5-65bf-4c30-9f93-82e2241522fd",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grounded_KeyboardRightTurn",
+                    "type": "Value",
+                    "id": "6d8d375c-59c4-4a59-9a81-94568a595c3c",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 }
@@ -152,72 +168,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Keyboard",
-                    "id": "95b3d327-e78a-4e4e-931a-c27eca69d477",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Grounded_Turning",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "b20dafec-9eb8-4bd9-b851-e6b4192d9f65",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Grounded_Turning",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "228aaf22-24fd-4ecc-afc5-325431d00026",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Grounded_Turning",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Gamepad",
-                    "id": "14e859b5-92fb-42dd-b5e8-f1b253f7fb19",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Grounded_Turning",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "a07eaa21-6693-48a1-9e46-53f3628a30fa",
-                    "path": "<Gamepad>/leftStick/left",
-                    "interactions": "",
-                    "processors": "AxisDeadzone",
-                    "groups": "",
-                    "action": "Grounded_Turning",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "f6ae7106-6ff0-4095-849f-266df493d8c4",
-                    "path": "<Gamepad>/leftStick/right",
-                    "interactions": "",
-                    "processors": "AxisDeadzone",
-                    "groups": "",
-                    "action": "Grounded_Turning",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "Gamepad",
                     "id": "605a88d2-6212-4205-94a3-91cbcdd6ce53",
                     "path": "1DAxis",
@@ -304,6 +254,39 @@
                     "action": "Grounded_StartGrind",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b5dfba48-0117-4883-a132-cc3a21a9663e",
+                    "path": "<Gamepad>/leftStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grounded_Turning",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "769f7073-d0cc-48aa-bfb0-b4c13351d5f2",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grounded_KeyboardLeftTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b836cf3b-7a45-4339-a665-35c522dad733",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grounded_KeyboardRightTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -340,6 +323,22 @@
                     "type": "Value",
                     "id": "7ebe7cbd-9037-4a96-bec2-759ad3ae93b5",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Aerial_KeyboardRightTurn",
+                    "type": "Value",
+                    "id": "f1de5021-ed3c-4196-816e-e930d01eb866",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Aerial_KeyboardLeftTurn",
+                    "type": "Value",
+                    "id": "ce1dab25-e870-4d4a-a22f-28419e2ed700",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 }
@@ -465,6 +464,28 @@
                     "action": "Aerial_AnalogueStick",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3fd2b013-cd07-4794-a8db-462aa35a1a40",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_KeyboardLeftTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "613df11d-1fb1-436f-a300-58ee19b1db92",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_KeyboardRightTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -477,7 +498,7 @@
                     "type": "Value",
                     "id": "ce732a49-8d18-49f7-bd9d-02d12d8b6342",
                     "expectedControlType": "Axis",
-                    "processors": "AxisDeadzone",
+                    "processors": "",
                     "interactions": ""
                 },
                 {
@@ -485,6 +506,22 @@
                     "type": "Button",
                     "id": "9f20ae02-6337-4afd-98f1-4798433ef4a2",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grinding_KeyboardRightTurn",
+                    "type": "Value",
+                    "id": "fc6d7d31-95c0-4834-8a40-155bd68d3f36",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grinding_KeyboardLeftTurn",
+                    "type": "Value",
+                    "id": "c7505b3b-88c9-4463-8e58-0c3750084f8a",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 }
@@ -577,6 +614,28 @@
                     "action": "Grinding_JumpUp",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1cef5122-cdd4-4d15-80be-3464c6fb8239",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_KeyboardLeftTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3315443e-8135-4664-b503-289a7347f961",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_KeyboardRightTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -597,7 +656,23 @@
                     "type": "Value",
                     "id": "6a8cb042-269a-45d0-9b29-d68472b61cc2",
                     "expectedControlType": "Axis",
-                    "processors": "AxisDeadzone",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "WallRiding_KeyboardRightTurn",
+                    "type": "Value",
+                    "id": "1384a8ae-bc8f-41e8-bfd2-d0da6a2be1fc",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "WallRiding_KeyboardLeftTurn",
+                    "type": "Value",
+                    "id": "8ba35259-6743-4fae-a483-26503bd8352e",
+                    "expectedControlType": "Axis",
+                    "processors": "",
                     "interactions": ""
                 }
             ],
@@ -687,6 +762,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "WallRiding_JumpUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "893a73b8-107f-4f09-a294-8e7fc2e183b8",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_KeyboardLeftTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ed208ce3-ba11-49eb-a6fd-0cba06103c33",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_KeyboardRightTurn",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
