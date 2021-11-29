@@ -83,8 +83,7 @@ namespace SleepyCat.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            RaycastHit hit = new RaycastHit();
-            parentController.SmoothToGroundRotation(true, adjustGroundSmoothness, 0f, groundedCondition.GroundHit, hit);
+            parentController.SmoothToGroundRotation(true, adjustGroundSmoothness, 0f, groundedCondition);
         }
 
         public override void PhysicsTick(float dT)
@@ -115,8 +114,6 @@ namespace SleepyCat.Movement
 
         public override void OnStateExit()
         {
-            movementRB.angularVelocity = Vector3.zero;
-
             hasRan = false;
         }
     }

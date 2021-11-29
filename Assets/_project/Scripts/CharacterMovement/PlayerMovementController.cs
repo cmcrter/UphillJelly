@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 22/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 22/10/21
+// Date Last Edited: 22/11/21
 // Brief: The script which will determine the player's movement for a release build
 //////////////////////////////////////////////////////////// 
 
@@ -57,6 +57,7 @@ namespace SleepyCat.Movement
 
         private Vector3 initalPos;
         private Quaternion initialRot;
+        private Quaternion lastRot = Quaternion.identity;
         private Coroutine turningCo;
         private Timer turningTimer;
         public AnimationCurve turnSpeedCurve;
@@ -79,7 +80,7 @@ namespace SleepyCat.Movement
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
-        public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, RaycastHit hit, RaycastHit frontHit)
+        public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, isGroundBelow groundBelow)
         {
             float headingDeltaAngle;
             Quaternion headingDelta = Quaternion.identity;
@@ -93,19 +94,24 @@ namespace SleepyCat.Movement
 
             Quaternion groundQuat = transform.rotation;
 
-            if(Vector3.Angle(hit.normal, Vector3.up) < 50f)
+            if(groundBelow.GroundHit.collider)
             {
-                groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, Time.deltaTime * smoothness);
-
-                if(frontHit.collider && Vector3.Angle(frontHit.normal, hit.normal) < 80)
-                {
-                    groundQuat = Quaternion.Slerp(groundQuat, Quaternion.FromToRotation(transform.up, frontHit.normal) * transform.rotation, Time.deltaTime * smoothness);
-                }
+                groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, groundBelow.GroundHit.normal), groundBelow.GroundHit.normal), Time.deltaTime * smoothness);
             }
 
-            transform.rotation = groundQuat;
+            if(Vector3.Angle(groundBelow.GroundHit.normal, transform.up) < 70f)
+            {
+                transform.rotation = groundQuat;
+            }
+
+            lastRot = groundQuat;            
             transform.rotation = transform.rotation * headingDelta;
-            transform.position = rb.transform.position;
+
+            //With the hinge, this means that the rb wont just run away without the player
+            if(Vector3.Distance(transform.position, rb.transform.position) > 0.15f)
+            {
+                transform.position = rb.transform.position;
+            }
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
@@ -125,7 +131,7 @@ namespace SleepyCat.Movement
         private void Awake()
         {
             //Setting up the state machine
-            groundBelow.InitialiseCondition(transform, groundRaycastPoint, backgroundRaycastPoint);
+            groundBelow.InitialiseCondition(transform);
             nextToWallRun.InitialiseCondition(this, rb);
             grindBelow.InitialiseCondition(rb, inputHandler);
 
@@ -134,7 +140,7 @@ namespace SleepyCat.Movement
             wallRideState.InitialiseState(this, rb, nextToWallRun, groundBelow);
             grindingState.InitialiseState(this, rb, grindBelow);
 
-            playerStateMachine = new FiniteStateMachine(groundedState);
+            playerStateMachine = new FiniteStateMachine(aerialState);
         }
 
         //Adding the inputs to the finite state machine
@@ -157,7 +163,7 @@ namespace SleepyCat.Movement
             rb.transform.parent = null;
 
             //Setting up model position
-            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius + 0.001f, ballMovement.transform.position.z);
+            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), ballMovement.transform.position.z);
         }
 
         private void Update()
@@ -195,6 +201,12 @@ namespace SleepyCat.Movement
             ballMovement.transform.position = positionToMoveTo;
         }
 
+        public void StartTurnCoroutine()
+        {
+            StopTurnCoroutine();
+            turningCo = StartCoroutine(Co_TurnAngle());
+        }
+
         public void StopTurnCoroutine()
         {
             if(turningCo != null) 
@@ -222,10 +234,10 @@ namespace SleepyCat.Movement
                 float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
 
                 //If the skateboard is moving
-                if(rb.velocity.magnitude > 0.3f)
+                if(rb.velocity.magnitude > 0.3f && playerStateMachine.currentState == groundedState)
                 {
                     //Lerping towards the new input by the animation curves amounts (probably increasing over time)
-                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, turnSpeedCurve.Evaluate(timeAlongTimer));
+                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, 2f * turnSpeedCurve.Evaluate(timeAlongTimer) * Time.deltaTime);
                 }
                 //Else do a kick turn
                 else
