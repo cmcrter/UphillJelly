@@ -48,6 +48,39 @@ namespace SleepyCat.Utility.Splines
         }
         #endregion
 
+        /// <summary>
+        /// Gets the length of a defined Bezier curve spline with a single control point
+        /// </summary>
+        /// <param name="startPoint">The point at which the spline starts</param>
+        /// <param name="endPoint">The point at which the spline ends</param>
+        /// <param name="controlPoint">The single control point of the Bezier curve</param>
+        /// <param name="distancePrecision">How many points will be samples along the spline to get its length</param>
+        /// <returns>The length of the spline, slightly smaller than its real length</returns>
+        public static float GetTotalLengthOfSpline(Spline spline, float distancePrecision)
+        {
+            float distance = 0.0f;
+
+            // Sampling a given number of points to get the distance between them to get the whole length of the spline
+            Vector3 lastPosition = spline.StartPosition;
+            float tIncrement = 1.0f / distancePrecision;
+            float t = 0;
+            int i = 0;
+            for (; i <= distancePrecision; ++i)
+            {
+                Vector3 newPosition = spline.GetPointAtTime(t);
+                distance += Vector3.Distance(newPosition, lastPosition);
+                lastPosition = newPosition;
+                t += tIncrement;
+            }
+            // If distance precision is a decimal then get the end section
+            if (i - 1 != distancePrecision)
+            {
+                Vector3 newPosition = spline.GetPointAtTime(1f);
+                distance += Vector3.Distance(newPosition, lastPosition);
+            }
+            return distance;
+        }
+
         #region Public Methods
         /// <summary>
         /// The returns the total length of the spline

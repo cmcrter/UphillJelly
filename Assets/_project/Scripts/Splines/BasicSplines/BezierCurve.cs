@@ -20,6 +20,11 @@ namespace SleepyCat.Utility.Splines
     {
         #region Public Constants
         /// <summary>
+        ///  The default number of samples that are used when drawing or calculating the length of the spline
+        /// </summary>
+        public const float defaultDistancePrecision = 20f;
+
+        /// <summary>
         /// The index in the additional points array the first additional point would be
         /// </summary>
         public const int firstControlPointIndex = 0;
@@ -154,73 +159,6 @@ namespace SleepyCat.Utility.Splines
 
         #region Public Static Methods
         /// <summary>
-        /// Gets the length of a defined Bezier curve spline with a single control point
-        /// </summary>
-        /// <param name="startPoint">The point at which the spline starts</param>
-        /// <param name="endPoint">The point at which the spline ends</param>
-        /// <param name="controlPoint">The single control point of the Bezier curve</param>
-        /// <param name="distancePrecision">How many points will be samples along the spline to get its length</param>
-        /// <returns>The length of the spline, slightly smaller than its real length</returns>
-        public static float GetTotalLengthSingleControlPoint(Vector3 startPoint, Vector3 endPoint, Vector3 controlPoint, float distancePrecision)
-        {
-            float distance = 0.0f;
-
-            // Sampling a given number of points to get the distance between them to get the whole length of the spline
-            Vector3 lastPosition = startPoint;
-            float tIncrement = 1.0f / distancePrecision;
-            float t = 0;
-            int i = 0;
-            for (; i <= distancePrecision; ++i)
-            {
-                Vector3 newPosition = GetPositionAtTimeSingleControlPoint(startPoint, endPoint, controlPoint, t);
-                distance += Vector3.Distance(newPosition, lastPosition);
-                lastPosition = newPosition;
-                t += tIncrement;
-            }
-            // If distance precision is a decimal then get the end section
-            if (i - 1 != distancePrecision)
-            {
-                Vector3 newPosition = GetPositionAtTimeSingleControlPoint(startPoint, endPoint, controlPoint, 1f);
-                distance += Vector3.Distance(newPosition, lastPosition);
-            }
-            return distance;
-        }
-        /// <summary>
-        /// Gets the length of a defined Bezier curve spline with a control point for the start and end
-        /// </summary>
-        /// <param name="startPoint">The point at which the spline starts</param>
-        /// <param name="endPoint">The point at which the spline ends</param>
-        /// <param name="controlPointOne">The control point for the beginning of the Bezier curve</param>
-        /// <param name="controlPointTwo">The control point for the end of the Bezier curve</param>
-        /// <param name="distancePrecision">How many points will be samples along the spline to get its length</param>
-        /// <returns>The length of the spline, slightly smaller than its real length</returns>
-        public static float GetTotalLengthTwoControlPoints(Vector3 startPoint, Vector3 endPoint,
-            Vector3 controlPointOne, Vector3 controlPointTwo, float distancePrecision)
-        {
-            float distance = 0.0f;
-
-            // Sampling a given number of points to get the distance between them to get the whole length of the spline
-            Vector3 lastPosition = startPoint;
-            float tIncrement = 1.0f / distancePrecision;
-            float t = 0;
-            int i = 0;
-            for (; i <= distancePrecision; ++i)
-            {
-                Vector3 newPosition = GetPositionAtTimeTwoControlPoints(startPoint, endPoint, controlPointOne, controlPointTwo, t);
-                distance += Vector3.Distance(newPosition, lastPosition);
-                lastPosition = newPosition;
-                t += tIncrement;
-            }
-            // If distance precision is a decimal then get the end section
-            if (i - 1 != distancePrecision)
-            {
-                Vector3 newPosition = GetPositionAtTimeTwoControlPoints(startPoint, endPoint, controlPointOne, controlPointTwo, 1f);
-                distance += Vector3.Distance(newPosition, lastPosition);
-            }
-            return distance;
-        }
-
-        /// <summary>
         /// Used to get a position at t along a defined Bezier curve spline using a single control point 
         /// </summary>
         /// <param name="startPoint">The point at which the spline starts</param>
@@ -266,31 +204,35 @@ namespace SleepyCat.Utility.Splines
         #region Public Methods
         public BezierCurve()
         {
-            if (controlPoints == null)
-            {
-                if (isTwoControlPoint)
-                {
-                    controlPoints = new Vector3[2];
-                }
-                else
-                {
-                    controlPoints = new Vector3[1];
-                }
-            }
+            startPoint = Vector3.zero;
+            endPoint = Vector3.zero;
+            isTwoControlPoint = false;
+            controlPoints = new Vector3[1] { Vector3.zero };
+            distancePrecision = defaultDistancePrecision;
+        }
+
+        public BezierCurve(Vector3 startPoint, Vector3 endPoint, Vector3 controlPoint, float distancePrecision = defaultDistancePrecision)
+        {
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            isTwoControlPoint = false;
+            controlPoints = new Vector3[1] { controlPoint };
+            this.distancePrecision = distancePrecision;
+        }
+
+        public BezierCurve(Vector3 startPoint, Vector3 endPoint, Vector3 controlPoint0, Vector3 controlPoint1, float distancePrecision = defaultDistancePrecision)
+        {
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            isTwoControlPoint = false;
+            controlPoints = new Vector3[2] { controlPoint0, controlPoint1 };
+            this.distancePrecision = distancePrecision;
         }
 
         #region Overrides
         public override float GetTotalLength()
         {
-            if (isTwoControlPoint)
-            {
-                return GetTotalLengthTwoControlPoints(startPoint, endPoint,
-                    controlPoints[firstControlPointIndex], controlPoints[secondControlPointIndex], distancePrecision);
-            }
-            else
-            {
-                return GetTotalLengthSingleControlPoint(startPoint, endPoint, controlPoints[firstControlPointIndex], distancePrecision);
-            }
+            return Spline.GetTotalLengthOfSpline(this, distancePrecision);
         }
 
         public override Vector3 GetPointAtTime(float t)

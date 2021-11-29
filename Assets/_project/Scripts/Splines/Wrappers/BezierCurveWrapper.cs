@@ -163,15 +163,15 @@ namespace SleepyCat.Utility.Splines
         #region Overrides
         public override float GetTotalLength()
         {
+
             if (spline.GetIsTwoControlPoint())
             {
                 if (worldControlPoints == null)
                 {
                     UpdateWorldPositions();
                 }
-                return BezierCurve.GetTotalLengthTwoControlPoints(worldStartPoint, worldEndPoint,
-                worldControlPoints[BezierCurve.firstControlPointIndex],
-                worldControlPoints[BezierCurve.secondControlPointIndex], spline.distancePrecision);
+                return Spline.GetTotalLengthOfSpline(new BezierCurve(WorldStartPosition, worldEndPoint, worldControlPoints[BezierCurve.firstControlPointIndex],
+                    worldControlPoints[BezierCurve.secondControlPointIndex], DistancePrecision), DistancePrecision);
             }
             else
             {
@@ -179,8 +179,8 @@ namespace SleepyCat.Utility.Splines
                 {
                     UpdateWorldPositions();
                 }
-                return BezierCurve.GetTotalLengthSingleControlPoint(worldStartPoint, worldEndPoint,
-                    worldControlPoints[BezierCurve.firstControlPointIndex], spline.distancePrecision);
+                return Spline.GetTotalLengthOfSpline(new BezierCurve(WorldStartPosition, worldEndPoint, worldControlPoints[BezierCurve.firstControlPointIndex],
+                    DistancePrecision), DistancePrecision);
             }
         }
 
