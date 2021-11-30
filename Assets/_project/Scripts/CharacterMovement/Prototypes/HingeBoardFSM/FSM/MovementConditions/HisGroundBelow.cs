@@ -49,7 +49,7 @@ namespace SleepyCat.Movement
         public override bool isConditionTrue() 
         {
             //Checking if anything is below it
-            if(Physics.Raycast(frontraycastPointTransform.position, -Vector3.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(frontraycastPointTransform.position, -frontraycastPointTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
@@ -66,7 +66,7 @@ namespace SleepyCat.Movement
                 FrontGroundHit = hit;
             }
 
-            if(Physics.Raycast(backRaycastPointTransform.position, -Vector3.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(backRaycastPointTransform.position, -frontraycastPointTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Could use backhit to help smoothing with the board against the ground
                 //Player is about to hit a ramp

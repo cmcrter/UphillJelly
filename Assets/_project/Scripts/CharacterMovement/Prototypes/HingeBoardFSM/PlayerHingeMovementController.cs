@@ -84,38 +84,65 @@ namespace SleepyCat.Movement
             transform.position = initalPos;
         }
 
+        public override void ResetPlayer(Transform point)
+        {
+            Time.timeScale = 0;
+
+            fRB.isKinematic = false;
+
+            fRB.angularVelocity = Vector3.zero;
+            fRB.velocity = Vector3.zero;
+
+            fRB.transform.rotation = point.rotation;
+            fRB.transform.position = point.position;
+
+            bRB.isKinematic = false;
+
+            bRB.angularVelocity = Vector3.zero;
+            bRB.velocity = Vector3.zero;
+
+            bRB.transform.rotation = point.rotation;
+            bRB.transform.position = point.position;
+
+            transform.rotation = point.rotation;
+            transform.position = point.position;
+
+            Time.timeScale = 1;
+        }
+
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
         public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, HisGroundBelow groundBelow)
         {
-            float headingDeltaAngle;
+            float headingDeltaAngle = 0;
             Quaternion headingDelta = Quaternion.identity;
-
             Quaternion groundQuat = transform.rotation;
-
-            Vector3 posUP = transform.forward;
-            Vector3 upright = Vector3.up;
 
             if(groundBelow.FrontGroundHit.collider || groundBelow.BackGroundHit.collider)
             {
-                posUP = -((groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
-                upright = Vector3.Cross(transform.right, posUP);
+                Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
 
-                groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright), transform.up);
+                Debug.DrawRay(bRB.transform.position, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized, Color.green);
+                Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
+                Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
 
-                if(Vector3.Angle(upright, transform.up) < 70f)
+                if(Vector3.Angle(upright, transform.up) < 90f)
                 {
-                    transform.rotation = groundQuat;
+                    if(bAerial)
+                    {
+                        groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, upright)), smoothness * Time.deltaTime);
+                    }
+                    else
+                    {
+                        groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright));
+                    }
                 }
             }
 
-            if(!bAerial)
-            {
-                //GameObject's heading based on the current input
-                headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
-                headingDelta = Quaternion.AngleAxis(headingDeltaAngle, Vector3.up);
-            }
+            //GameObject's heading based on the current input
+            headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
+            headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
 
-            lastRot = groundQuat;            
+            transform.rotation = groundQuat;
             transform.rotation = transform.rotation * headingDelta;
 
             //With the hinge, this means that the rb wont just run away without the player

@@ -201,6 +201,9 @@ namespace SleepyCat.Movement
 
         private void UpdatePositionAndRotation(float dT)
         {
+            movementRB.transform.up = Vector3.up;
+            followRB.transform.up = Vector3.up;
+
             if(jumpCoroutine == null) 
             {
                 //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)
