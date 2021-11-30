@@ -246,6 +246,12 @@ namespace SleepyCat.Movement
                     }
                 }
             }
+
+            //With the hinge, this means that the rb wont just run away without the player
+            if(Vector3.Distance(playerTransform.position, movementRB.transform.position) > 0.5f)
+            {
+                movementRB.transform.position = parentController.boardObject.transform.position + (playerTransform.forward * 0.281f);
+            }
         }
 
         #region Controls Functions

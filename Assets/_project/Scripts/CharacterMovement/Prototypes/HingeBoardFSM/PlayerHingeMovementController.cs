@@ -42,7 +42,7 @@ namespace SleepyCat.Movement
         private GameObject playerModel;
 
         [SerializeField]
-        private GameObject boardObject;
+        public GameObject boardObject;
         //Front Rigidbody
         [SerializeField]
         private Rigidbody fRB;
@@ -144,12 +144,6 @@ namespace SleepyCat.Movement
 
             transform.rotation = groundQuat;
             transform.rotation = transform.rotation * headingDelta;
-
-            //With the hinge, this means that the rb wont just run away without the player
-            if(Vector3.Distance(transform.position, fRB.transform.position) > 0.5f)
-            {
-                fRB.transform.position = boardObject.transform.position + (transform.forward * 0.281f);
-            }
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
