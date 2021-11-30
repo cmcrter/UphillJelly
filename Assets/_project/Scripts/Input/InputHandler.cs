@@ -95,6 +95,8 @@ namespace SleepyCat.Input
         public float TurningAxis { get; private set; } = 0f;
         #endregion
 
+
+
         #region Public Delegates
         /// <summary>
         /// Delegate for events that take in a value between -1 to 1 as a 1d axis value
@@ -107,6 +109,17 @@ namespace SleepyCat.Input
         /// </summary>
         /// <param name="patternId">The Id of the AnalogueStickPattern</param>
         public delegate void AnalogueStickPatternCompletedDelegate(int patternId);
+        #endregion
+
+        #region Private Variables
+        /// <summary>
+        /// How far along the left the character is turning from 0-1
+        /// </summary>
+        private float leftTurnAxisValue;
+        /// <summary>
+        /// How far along the right the character is turning from 0-1
+        /// </summary>
+        private float rightTurnAxisValue;
         #endregion
 
         #region Public Events
@@ -199,6 +212,8 @@ namespace SleepyCat.Input
 
         #endregion
 
+
+
         #region Unity Methods
         private void Awake()
         {
@@ -208,6 +223,8 @@ namespace SleepyCat.Input
                 analogueStickPatternsProgress.Add(analogueStickPatterns[i], new AnalogueStickPatternsIndexAndTimer(0, null));
             }
         }
+
+        private InputActionMap currentMap = null;
 
         private void Update()
         {
@@ -247,6 +264,37 @@ namespace SleepyCat.Input
                     pressDownUpdate();
                 }
             }
+            
+
+            if (currentMap != playerInput.currentActionMap)
+            {
+                currentMap = playerInput.currentActionMap;
+            }
+
+            //if (playerInput.actions["Grounded_Turning"].actionMap == playerInput.currentActionMap)
+            //{
+            //    TurningAxis = playerInput.actions["Grounded_Turning"].ReadValue<float>();
+            //    if (TurningAxis == 0f)
+            //    {
+            //        TurningAxis = playerInput.actions
+            //    }
+            //    //Debug.Log("Ground Turn " + TurningAxis.ToString() + " " + playerInput.actions["Grounded_Turning"].phase + " " +  playerInput.actions["Grounded_Turning"].triggered + playerInput.devices.Count);
+            //}
+            //else if (playerInput.actions["Aerial_Turning"].actionMap == playerInput.currentActionMap)
+            //{
+            //    TurningAxis = playerInput.actions["Aerial_Turning"].ReadValue<float>();
+            //    //Debug.Log("Air Turn " + TurningAxis.ToString());
+            //}
+            //else if (playerInput.actions["Grinding_Turning"].actionMap == playerInput.currentActionMap)
+            //{
+            //    TurningAxis = playerInput.actions["Grinding_Turning"].ReadValue<float>();
+            //    //Debug.Log("Grind Turn " + TurningAxis.ToString());
+            //}
+            //else if (playerInput.actions["WallRiding_Turning"].actionMap == playerInput.currentActionMap)
+            //{
+            //    TurningAxis = playerInput.actions["WallRiding_Turning"].ReadValue<float>();
+            //    //Debug.Log("Wall Turn " + TurningAxis.ToString());
+            //}
 
             // Axis Update events
             if (balanceUpdate != null)
@@ -257,6 +305,9 @@ namespace SleepyCat.Input
             {
                 turningUpdated(TurningAxis);
             }
+
+
+
         }
         private void OnDisable()
         {
@@ -358,6 +409,7 @@ namespace SleepyCat.Input
         /// <param name="callbackContext">The push action's CallbackContext</param>
         private void PushAction_Performed(InputAction.CallbackContext callbackContext)
         {
+
             PushHeldDown = true;
             if (pushStarted != null)
             {
@@ -442,16 +494,40 @@ namespace SleepyCat.Input
         /// <param name="callbackContext">The turning action's CallbackContext</param>
         private void TurningAction_Canceled(InputAction.CallbackContext callbackContext)
         {
-            TurningAxis = 0.0f;
+            TurningAxis = callbackContext.ReadValue<float>();
+            if (TurningAxis == 0.0f)
+            {
+                //Debug.Log("did the thing");
+            }
         }
-
         /// <summary>
         /// Called when the player performs the turning action
         /// </summary>
         /// <param name="callbackContext">The turning action's CallbackContext</param>
         private void TurningAction_Peformed(InputAction.CallbackContext callbackContext)
         {
+            //Debug.Log("Turning");
             TurningAxis = callbackContext.ReadValue<float>();
+        }
+        private void TurningActionLeftTurn_Performed(InputAction.CallbackContext callbackContext)
+        {
+            leftTurnAxisValue = callbackContext.ReadValue<float>();
+            UpateTurnAxisFromLeftAndRight();
+        }
+        private void TurningActionLeftTurn_Canceled(InputAction.CallbackContext callbackContext)
+        {
+            leftTurnAxisValue = callbackContext.ReadValue<float>();
+            UpateTurnAxisFromLeftAndRight();
+        }
+        private void TurningActionRightTurn_Performed(InputAction.CallbackContext callbackContext)
+        {
+            rightTurnAxisValue = callbackContext.ReadValue<float>();
+            UpateTurnAxisFromLeftAndRight();
+        }
+        private void TurningActionRightTurn_Canceled(InputAction.CallbackContext callbackContext)
+        {
+            rightTurnAxisValue = callbackContext.ReadValue<float>();
+            UpateTurnAxisFromLeftAndRight();
         }
         #endregion
 
@@ -462,18 +538,20 @@ namespace SleepyCat.Input
         private void BindAerialActions()
         {
             playerInput.actions["Aerial_Turning"].performed += TurningAction_Peformed;
-            playerInput.actions["Aerial_Turning"].canceled  += TurningAction_Canceled;
+
+            playerInput.actions["Aerial_Turning"].canceled += TurningAction_Canceled;
 
             playerInput.actions["Aerial_StartGrind"].performed += StartGrindAction_Performed;
             playerInput.actions["Aerial_StartGrind"].canceled += StartGrindAction_Canceled;
         }
+
         /// <summary>
         /// Bind to all the events to the grinding actions
         /// </summary>
         private void BindGrindingActions()
         {
-            playerInput.actions["Grinding_Turning"].performed   += TurningAction_Peformed;
-            playerInput.actions["Grinding_Turning"].canceled    += TurningAction_Canceled;
+            playerInput.actions["Grinding_Turning"].performed += TurningAction_Peformed;
+            playerInput.actions["Grinding_Turning"].canceled += TurningAction_Canceled;
 
             playerInput.actions["Grinding_JumpUp"].performed += GrindingJumpUpAction_Performed;
         }
@@ -501,6 +579,12 @@ namespace SleepyCat.Input
 
             playerInput.actions["Grounded_StartGrind"].performed += StartGrindAction_Performed;
             playerInput.actions["Grounded_StartGrind"].canceled += StartGrindAction_Canceled;
+
+            playerInput.actions["Grounded_KeyboardLeftTurn"].performed  += TurningActionLeftTurn_Performed;
+            playerInput.actions["Grounded_KeyboardLeftTurn"].canceled   += TurningActionLeftTurn_Canceled;
+
+            playerInput.actions["Grounded_KeyboardRightTurn"].performed += TurningActionRightTurn_Performed;
+            playerInput.actions["Grounded_KeyboardRightTurn"].canceled  += TurningActionRightTurn_Canceled;
         }
         /// <summary>
         /// Bind to all the events to the wall riding actions
@@ -563,8 +647,6 @@ namespace SleepyCat.Input
         /// </summary>
         private void UnbindWallRidingAction()
         {
-            playerInput.actions["WallRiding_JumpUp"].performed -= WallRidingJumpUpAction_Performed;
-
             playerInput.actions["WallRiding_Turning"].performed -= TurningAction_Peformed;
             playerInput.actions["WallRiding_Turning"].canceled -= TurningAction_Canceled;
         }
@@ -615,6 +697,11 @@ namespace SleepyCat.Input
             }
         }
         #endregion
+
+        private void UpateTurnAxisFromLeftAndRight()
+        {
+            TurningAxis = rightTurnAxisValue - leftTurnAxisValue;
+        }
     }
 }
 

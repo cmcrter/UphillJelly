@@ -202,11 +202,10 @@ namespace SleepyCat.Utility.Splines
         /// </summary>
         private void UpdateLength()
         {
-            totalWorldLength = HermiteSpline.GetTotalLength(worldStartPoint, worldEndPoint, spline.StartTangent,
-                spline.EndTangent, spline.DistancePrecision);
+            // Create a basic spline based on the world coordinates
+            totalWorldLength = Spline.GetTotalLengthOfSpline(new HermiteSpline(worldStartPoint, worldEndPoint, spline.StartTangent,
+                spline.EndTangent, spline.DistancePrecision), spline.DistancePrecision);
         }
-
-
         #endregion
     }
 }

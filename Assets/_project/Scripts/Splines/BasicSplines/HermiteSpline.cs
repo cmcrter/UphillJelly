@@ -19,6 +19,10 @@ namespace SleepyCat.Utility.Splines
     [System.Serializable]
     public class HermiteSpline : Spline
     {
+        #region Public Constants
+        public const float defaultDistancePrecision = 20f;
+        #endregion
+
         #region Public Serialized Fields
         [SerializeField]
         [Min(float.Epsilon)]
@@ -159,6 +163,9 @@ namespace SleepyCat.Utility.Splines
         /// <returns>Approximate length of the defined spline</returns>
         public static float GetTotalLength(Vector3 startPoint, Vector3 endPoint, Vector3 startTangent, Vector3 endTangent, float distancePrecision)
         {
+            // Create the spline
+
+
             float distance = 0.0f;
 
             // Sampling a given number of points to get the distance between them to get the whole length of the spline
@@ -199,6 +206,35 @@ namespace SleepyCat.Utility.Splines
             return GetPointAtTime(startPoint, endPoint, startTangent, endTangent, t);
         }
         #endregion
+
+        public HermiteSpline()
+        {
+            startPoint = Vector3.zero;
+            endPoint = Vector3.zero;
+            startTangent = Vector3.zero;
+            endTangent = Vector3.zero;
+            distancePrecision = defaultDistancePrecision;
+            UpdateLength();
+        }
+        public HermiteSpline(Vector3 startPoint, Vector3 endPoint, Vector3 startTangent, Vector3 endTangent, float distancePrecision = defaultDistancePrecision)
+        {
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            this.startTangent = startTangent;
+            this.endTangent = endTangent;
+            this.distancePrecision = distancePrecision;
+            UpdateLength();
+        }
+
+        public HermiteSpline(HermiteSpline copiedHermiteSpline)
+        {
+            this.startPoint = copiedHermiteSpline.startPoint;
+            this.endPoint = copiedHermiteSpline.endPoint;
+            this.startTangent = copiedHermiteSpline.startTangent;
+            this.endTangent = copiedHermiteSpline.endTangent;
+            this.distancePrecision = copiedHermiteSpline.distancePrecision;
+            UpdateLength();
+        }
         #endregion
 
         #region Private Methods
@@ -207,7 +243,7 @@ namespace SleepyCat.Utility.Splines
         /// </summary>
         private void UpdateLength()
         {
-            totalLength = GetTotalLength(startPoint, endPoint, startTangent, endTangent, distancePrecision);
+            totalLength = Spline.GetTotalLengthOfSpline(this, distancePrecision);
         }
         #endregion
     }

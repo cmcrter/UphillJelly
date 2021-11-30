@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 25/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 25/10/21
+// Date Last Edited: 25/11/21
 // Brief: The player state for when the player is grinding
 //////////////////////////////////////////////////////////// 
 
@@ -102,7 +102,22 @@ namespace SleepyCat.Movement
             movementRB.velocity = Vector3.zero;
             movementRB.isKinematic = true;
 
+            if(onGrind.grindDotProduct < -onGrind.angleAllowance)
+            {
+                bTravelBackwards = true;
+            }
+            else
+            {
+                bTravelBackwards = false;
+            }
+
             currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+
+            if(bTravelBackwards)
+            {
+                currentSplineDir *= -1;
+            }
+
             movementRB.transform.forward = currentSplineDir;
             parentController.transform.forward = currentSplineDir;
 
@@ -123,6 +138,7 @@ namespace SleepyCat.Movement
             onGrind.playerExitedGrind();
 
             timeAlongGrind = 0;
+            bTravelBackwards = false;
             bForceExit = false;
             hasRan = false;
         }
@@ -134,57 +150,26 @@ namespace SleepyCat.Movement
             if(onGrind.splineCurrentlyGrindingOn != null) 
             {
                 float f = onGrind.splineCurrentlyGrindingOn.GetTotalLength();
-                tIncrementPerSecond = onGrind.grindDetails.DuringGrindForce / onGrind.splineCurrentlyGrindingOn.GetTotalLength();
+                tIncrementPerSecond = onGrind.grindDetails.DuringGrindForce / f;
             }
 
-            if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 1f)
+            if(!bTravelBackwards)
             {
-                // Clamping it at the max value and min values of a unit interval
-
-                // Check the length of the next increment
-                Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + Time.deltaTime * tIncrementPerSecond);
-                Vector3 currentPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
-                Vector3 velocity = nextPoint - currentPoint;
-
-                // Ideally the distance change should be speed * time.deltaTime
-                float desiredDistance = onGrind.grindDetails.DuringGrindForce * Time.deltaTime;
-                float currentDistanceChange = velocity.magnitude;
-
-                float desiredChange = desiredDistance / currentDistanceChange;
-                timeAlongGrind = Mathf.Clamp01(timeAlongGrind + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
-
-                //Using the calculated time to position everything correctly
-                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, parentController.ballMovement.radius + 0.025f, 0);
-
-                if(timeAlongGrind < 0.95f)
-                {
-                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
-
-                    movementRB.transform.forward = currentSplineDir;
-                    parentController.transform.forward = currentSplineDir;
-                }
+                ForwardMovement();
             }
-            //if it's at the end
-            else if(Vector3.Distance(parentController.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f)
+            else
             {
-                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, parentController.ballMovement.radius + 0.025f, 0);
+                BackwardMovement();
+            }
 
-                currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
-
-                movementRB.transform.forward = currentSplineDir;
-                parentController.transform.forward = currentSplineDir;
-
-                bForceExit = true;
+            if(!bForceExit)
+            {
+                movementRB.transform.position = pos;
             }
         }
 
         public override void PhysicsTick(float dT)
         {
-            if(!bForceExit)
-            {
-                movementRB.transform.position = pos;
-            }
-
             parentController.transform.position = movementRB.transform.position;
         }
 
@@ -233,6 +218,94 @@ namespace SleepyCat.Movement
    
             jumpCoroutine = null;
             yield return true;
+        }
+
+        private void ForwardMovement()
+        {
+            if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 1f)
+            {
+                // Clamping it at the max value and min values of a unit interval
+
+                // Check the length of the next increment
+                Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + Time.deltaTime * tIncrementPerSecond);
+                Vector3 currentPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
+                Vector3 velocity = nextPoint - currentPoint;
+
+                // Ideally the distance change should be speed * time.deltaTime
+                float desiredDistance = onGrind.grindDetails.DuringGrindForce * Time.deltaTime;
+                float currentDistanceChange = velocity.magnitude;
+
+                float desiredChange = desiredDistance / currentDistanceChange;
+                timeAlongGrind = Mathf.Clamp01(timeAlongGrind + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
+
+                //Using the calculated time to position everything correctly
+                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, parentController.ballMovement.radius + 0.0375f, 0);
+
+                if(timeAlongGrind < 0.95f)
+                {
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+
+                    movementRB.transform.forward = currentSplineDir;
+                    parentController.transform.forward = currentSplineDir;
+                }
+            }
+            //if it's at the end
+            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f)
+            {
+                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, parentController.ballMovement.radius + 0.0375f, 0);
+
+                currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
+
+                movementRB.transform.forward = currentSplineDir;
+                parentController.transform.forward = currentSplineDir;
+
+                bForceExit = true;
+            }
+        }
+
+        private void BackwardMovement()
+        {
+            if(timeAlongGrind - Time.deltaTime * tIncrementPerSecond > 0f)
+            {
+                // Clamping it at the max value and min values of a unit interval
+
+                // Check the length of the next increment
+                Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind - Time.deltaTime * tIncrementPerSecond);
+                Vector3 currentPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind);
+                Vector3 velocity = nextPoint - currentPoint;
+
+                // Ideally the distance change should be speed * time.deltaTime
+                float desiredDistance = onGrind.grindDetails.DuringGrindForce * Time.deltaTime;
+                float currentDistanceChange = velocity.magnitude;
+
+                float desiredChange = desiredDistance / currentDistanceChange;
+                timeAlongGrind = Mathf.Clamp01(timeAlongGrind - Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
+
+                //Using the calculated time to position everything correctly
+                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, parentController.ballMovement.radius + 0.0375f, 0);
+
+                if(timeAlongGrind > 0.05f)
+                {
+                    currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+                    currentSplineDir *= -1;
+
+                    movementRB.transform.forward = currentSplineDir;
+                    parentController.transform.forward = currentSplineDir;
+                }
+            }
+            //if it's at the end
+            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldStartPosition) < 0.7f)
+            {
+                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, parentController.ballMovement.radius + 0.0375f, 0);
+
+                currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.01f, 0.01f);
+                currentSplineDir *= -1;
+
+                movementRB.transform.forward = currentSplineDir;
+                parentController.transform.forward = currentSplineDir;
+
+                bForceExit = true;
+            }
         }
 
         #endregion
