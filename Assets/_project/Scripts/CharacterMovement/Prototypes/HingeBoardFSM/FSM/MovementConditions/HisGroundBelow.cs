@@ -19,8 +19,8 @@ namespace SleepyCat.Movement
         #region Variables
 
         public LayerMask playerMask;
-        public RaycastHit GroundHit;
         public RaycastHit FrontGroundHit;
+        public RaycastHit BackGroundHit;
 
         private Transform playerTransform;
         [SerializeField]
@@ -48,47 +48,35 @@ namespace SleepyCat.Movement
 
         public override bool isConditionTrue() 
         {
-            FrontGroundHit.normal = Vector3.zero;
-
             //Checking if anything is below it
-            if(Physics.Raycast(frontraycastPointTransform.position, -playerTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(frontraycastPointTransform.position, -Vector3.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
                 {
                     //Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
-                    Debug.DrawLine(frontraycastPointTransform.position, frontraycastPointTransform.position + (-playerTransform.up * groundDist), Color.magenta);
-                    Debug.DrawLine(frontraycastPointTransform.position, frontraycastPointTransform.position + (playerTransform.forward * rampDist), Color.magenta);
+                    Debug.DrawLine(frontraycastPointTransform.position, frontraycastPointTransform.position + (-Vector3.up * groundDist), Color.magenta);
+                    Debug.DrawLine(backRaycastPointTransform.position, backRaycastPointTransform.position + (-Vector3.up * groundDist), Color.magenta);
 
                     //Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
                     //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
 
-                if(Physics.Raycast(frontraycastPointTransform.position, playerTransform.forward, out RaycastHit fronthit, rampDist, ~playerMask, QueryTriggerInteraction.Ignore))
-                {
-                    //Player is about to hit a ramp
-                    FrontGroundHit = fronthit;
-                }
-
-                GroundHit = hit;
-
-                //This hit may still be used for smoothing when the player is in the air
-                if(hit.distance <= groundDist)
-                {
-                    return true;
-                }
+                FrontGroundHit = hit;
             }
 
-            if(Physics.Raycast(backRaycastPointTransform.position, -playerTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(backRaycastPointTransform.position, -Vector3.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Could use backhit to help smoothing with the board against the ground
+                //Player is about to hit a ramp
+                BackGroundHit = backHit;
+            }
 
-                //This hit may mean the board is still on some ground
-                if(backHit.distance <= groundDist)
-                {
-                    return true;
-                }
+            //This hit may still be used for smoothing when the player is in the air
+            if(BackGroundHit.distance <= groundDist || FrontGroundHit.distance <= groundDist)
+            {
+                return true;
             }
 
             return false;         
