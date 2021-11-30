@@ -213,12 +213,14 @@ namespace SleepyCat.Movement
                 {
                     parentController.playerCamera.bMovingBackwards = true;
                     movementRB.transform.forward = -playerTransform.forward;
-                    followRB.transform.forward = playerTransform.forward;
+                    followRB.transform.forward = -playerTransform.forward;
                 }
                 //Must be moving forwards
                 else
                 {
                     parentController.playerCamera.bMovingBackwards = false;
+
+                    movementRB.transform.up = playerTransform.up;
                     movementRB.transform.forward = playerTransform.forward;
                     followRB.transform.forward = playerTransform.forward;
                 }

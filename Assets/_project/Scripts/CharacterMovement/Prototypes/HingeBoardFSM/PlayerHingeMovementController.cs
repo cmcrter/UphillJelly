@@ -90,33 +90,38 @@ namespace SleepyCat.Movement
             float headingDeltaAngle;
             Quaternion headingDelta = Quaternion.identity;
 
+            Quaternion groundQuat = transform.rotation;
+
+            Vector3 posUP = transform.forward;
+            Vector3 upright = Vector3.up;
+
+            if(groundBelow.FrontGroundHit.collider || groundBelow.BackGroundHit.collider)
+            {
+                posUP = -((groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
+                upright = Vector3.Cross(transform.right, posUP);
+
+                groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright), transform.up);
+
+                if(Vector3.Angle(upright, transform.up) < 70f)
+                {
+                    transform.rotation = groundQuat;
+                }
+            }
+
             if(!bAerial)
             {
                 //GameObject's heading based on the current input
                 headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
-                headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
-            }
-
-            Quaternion groundQuat = transform.rotation;
-
-            if(groundBelow.GroundHit.collider)
-            {
-                groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, groundBelow.GroundHit.normal), groundBelow.GroundHit.normal), Time.deltaTime * smoothness);
-            }
-
-            if(Vector3.Angle(groundBelow.GroundHit.normal, transform.up) < 40f)
-            {
-                transform.rotation = groundQuat;
+                headingDelta = Quaternion.AngleAxis(headingDeltaAngle, Vector3.up);
             }
 
             lastRot = groundQuat;            
             transform.rotation = transform.rotation * headingDelta;
-            boardObject.transform.rotation = transform.rotation;
 
             //With the hinge, this means that the rb wont just run away without the player
-            if(Vector3.Distance(transform.position, fRB.transform.position) >= 0.45f)
+            if(Vector3.Distance(transform.position, fRB.transform.position) > 0.5f)
             {
-                fRB.transform.position = boardObject.transform.position + (transform.forward * 0.3f);
+                fRB.transform.position = boardObject.transform.position + (transform.forward * 0.281f);
             }
         }
 
@@ -174,8 +179,6 @@ namespace SleepyCat.Movement
 
         private void Update()
         {
-            Debug.Log((playerModel.transform.position - boardObject.transform.position));
-
             playerStateMachine.RunMachine(Time.deltaTime);
 
             if (Keyboard.current != null)
