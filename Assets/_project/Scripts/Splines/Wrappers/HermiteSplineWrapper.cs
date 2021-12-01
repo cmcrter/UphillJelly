@@ -72,20 +72,12 @@ namespace SleepyCat.Utility.Splines
             {
                 return worldEndPoint;
             }
-            set
-            {
-                worldEndPoint = value;
-            }
         }
         public override Vector3 WorldStartPosition
         {
             get
             {
                 return worldStartPoint;
-            }
-            set
-            {
-                worldStartPoint = value;
             }
         }
         #endregion
@@ -183,6 +175,15 @@ namespace SleepyCat.Utility.Splines
             worldStartPoint = startPoint;
             spline.StartPosition = transform.InverseTransformPoint(startPoint);
         }
+        public override void SetWorldEndPointWithoutLocal(Vector3 endPoint)
+        {
+            worldEndPoint = endPoint;
+        }
+        public override void SetWorldStartPointWithoutLocal(Vector3 startPoint)
+        {
+            worldStartPoint = startPoint;
+        }
+
         public override void UpdateWorldPositions()
         {
             if (spline == null)
@@ -201,8 +202,9 @@ namespace SleepyCat.Utility.Splines
         /// </summary>
         private void UpdateLength()
         {
-            totalWorldLength = HermiteSpline.GetTotalLength(worldStartPoint, worldEndPoint, spline.StartTangent,
-                spline.EndTangent, spline.DistancePrecision);
+            // Create a basic spline based on the world coordinates
+            totalWorldLength = Spline.GetTotalLengthOfSpline(new HermiteSpline(worldStartPoint, worldEndPoint, spline.StartTangent,
+                spline.EndTangent, spline.DistancePrecision), spline.DistancePrecision);
         }
         #endregion
     }

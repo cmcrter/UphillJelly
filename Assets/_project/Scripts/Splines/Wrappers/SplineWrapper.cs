@@ -59,7 +59,6 @@ namespace SleepyCat.Utility.Splines
         public abstract Vector3 WorldEndPosition
         {
             get;
-            set;
         }
         /// <summary>
         /// The Point at which the spline starts, would be the position at t 0
@@ -67,7 +66,6 @@ namespace SleepyCat.Utility.Splines
         public abstract Vector3 WorldStartPosition
         {
             get;
-            set;
         }
         #endregion
 
@@ -92,7 +90,6 @@ namespace SleepyCat.Utility.Splines
         /// <returns>Get calculated point at the t value</returns>
         public abstract Vector3 GetPointAtTime(float t);
 
-
         /// <summary>
         /// Sets the end point of the spline in terms of world coordinates and correct the spline's local values
         /// </summary>
@@ -103,6 +100,16 @@ namespace SleepyCat.Utility.Splines
         /// </summary>
         /// <param name="startPoint">The new world coordinates to set as the start point of the spline</param>
         public abstract void SetWorldStartPointAndUpdateLocal(Vector3 startPoint);
+        /// <summary>
+        /// Sets the world end point of the spline without updating the local
+        /// </summary>
+        /// <param name="endPoint">The new world endpoint</param>
+        public abstract void SetWorldEndPointWithoutLocal(Vector3 endPoint);
+        /// <summary>
+        /// Sets the world end point of the spline without updating the local
+        /// </summary>
+        /// <param name="startPoint">The new world start point</param>
+        public abstract void SetWorldStartPointWithoutLocal(Vector3 startPoint);
         /// <summary>
         /// Updates the world positions based on the local ones of the contained spline
         /// </summary>
@@ -155,6 +162,21 @@ namespace SleepyCat.Utility.Splines
             return closestPoint;
         }
         /// <summary>
+        /// Returns a direction of the spline at the given t value, uses the length of the spline to judge how far ahead to check for the direction
+        /// </summary>
+        /// <param name="t">The t value to check which direction the spline is going at</param>
+        /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
+        public virtual Vector3 GetDirection(float t)
+        {
+            float baseStep = 0.1f;
+            float length = GetTotalLength();
+            if (length < baseStep)
+            {
+                baseStep = Mathf.Max(float.Epsilon, length * 0.001f);
+            }
+            return GetDirection(t, baseStep / GetTotalLength());
+        }
+        /// <summary>
         /// Returns a direction of the spline at the given t value
         /// </summary>
         /// <param name="t">The t value to check which direction the spline is going at</param>
@@ -162,9 +184,15 @@ namespace SleepyCat.Utility.Splines
         /// <returns>A normalized vector for the direction the spline is moving at a given value</returns>
         public virtual Vector3 GetDirection(float t, float stepDistance)
         {
-            if (t + stepDistance > 1.0f)
+            Mathf.Clamp01(t);
+            // If t is one then don
+            if (t == Spline.maxTValue)
             {
-                stepDistance = 1.0f - t;
+                return (GetPointAtTime(t) - GetPointAtTime(t - stepDistance)).normalized;
+            }
+            if (t + stepDistance > Spline.maxTValue)
+            {
+                return (GetPointAtTime(Spline.maxTValue) - GetPointAtTime(t)).normalized;
             }
             return (GetPointAtTime(t + stepDistance) - GetPointAtTime(t)).normalized;
         }

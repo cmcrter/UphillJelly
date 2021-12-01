@@ -9,6 +9,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using UnityEngine;
 using SleepyCat.Utility.StateMachine;
 using SleepyCat.Utility.Splines;
@@ -34,9 +36,12 @@ namespace SleepyCat.Movement
         [SerializeField]
         private Timer coyoteTimer;
 
+        public float grindDotProduct = 0f;
+        public float angleAllowance = 0.4f;
+
         Coroutine CoyoteCoroutine;
 
-        bool ButtonPressed = false;
+        private bool ButtonPressed = false;
 
         #endregion
 
@@ -108,10 +113,17 @@ namespace SleepyCat.Movement
         {
             while(splineCurrentlyGrindingOn)
             {
-                if(inputHandler.StartGrindHeld && CoyoteCoroutine == null)
+                if(inputHandler.StartGrindHeld && CoyoteCoroutine == null && movementRB.velocity.magnitude > 0.5f)
                 {
-                    ButtonPressed = true;
-                    inputHandler.StopCoroutine(Co_WaitForButtonPress());
+                    float timeAlongGrind;
+                    Vector3 point = splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind);
+                    grindDotProduct = Vector3.Dot(movementRB.velocity.normalized, splineCurrentlyGrindingOn.GetDirection(timeAlongGrind));
+
+                    if(grindDotProduct < -angleAllowance || grindDotProduct > angleAllowance)
+                    {
+                        ButtonPressed = true;
+                        inputHandler.StopCoroutine(Co_WaitForButtonPress());
+                    }
                 }
 
                 yield return null;

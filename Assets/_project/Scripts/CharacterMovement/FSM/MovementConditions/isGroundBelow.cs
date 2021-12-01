@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////
 // File: isGroundBelow.cs
 // Author: Charles Carter
-// Date Created: 
-// Last Edited By:
-// Date Last Edited:
+// Date Created: 10/10/21
+// Last Edited By: Charles Carter
+// Date Last Edited: 22/11/21
 // Brief: A condition for changing movement states, whether it's on the ground or not
 //////////////////////////////////////////////////////////// 
 
@@ -23,7 +23,9 @@ namespace SleepyCat.Movement
         public RaycastHit FrontGroundHit;
 
         private Transform playerTransform;
+        [SerializeField]
         private Transform frontraycastPointTransform;
+        [SerializeField]
         private Transform backRaycastPointTransform;
 
         [SerializeField]
@@ -39,11 +41,9 @@ namespace SleepyCat.Movement
         {
         }
 
-        public void InitialiseCondition(Transform player, Transform raycast, Transform braycast)
+        public void InitialiseCondition(Transform player)
         {
             playerTransform = player;
-            frontraycastPointTransform = raycast;
-            backRaycastPointTransform = braycast;
         }
 
         public override bool isConditionTrue() 
@@ -51,7 +51,7 @@ namespace SleepyCat.Movement
             FrontGroundHit.normal = Vector3.zero;
 
             //Checking if anything is below it
-            if(Physics.Raycast(frontraycastPointTransform.position, -playerTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
+            if(Physics.Raycast(frontraycastPointTransform.position, -playerTransform.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
@@ -65,7 +65,7 @@ namespace SleepyCat.Movement
                     //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
 
-                if(Physics.Raycast(frontraycastPointTransform.position, playerTransform.forward, out RaycastHit fronthit, rampDist, ~playerMask, QueryTriggerInteraction.UseGlobal))
+                if(Physics.Raycast(frontraycastPointTransform.position, playerTransform.forward, out RaycastHit fronthit, rampDist, ~playerMask, QueryTriggerInteraction.Ignore))
                 {
                     //Player is about to hit a ramp
                     FrontGroundHit = fronthit;
@@ -80,7 +80,7 @@ namespace SleepyCat.Movement
                 }
             }
 
-            if(Physics.Raycast(backRaycastPointTransform.position, -playerTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.UseGlobal))
+            if(Physics.Raycast(backRaycastPointTransform.position, -playerTransform.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Could use backhit to help smoothing with the board against the ground
 

@@ -91,12 +91,12 @@ namespace SleepyCat.Triggerables.CheckpointSystem
             if (playersCurrentCheckpoints.TryGetValue(playerToMove, out Checkpoint playerLastCheckpoint))
             {
                 Transform spawnTransform = playerLastCheckpoint.SpawnTransform;
-                playerToMove.MoveToPosition(spawnTransform.position);
+                playerToMove.ResetPlayer(spawnTransform);
             }
             else
             {
                 Transform spawnTransform = defaultCheckpoint.SpawnTransform;
-                playerToMove.MoveToPosition(spawnTransform.position);
+                playerToMove.ResetPlayer(spawnTransform);
             }
         }
         #endregion

@@ -83,20 +83,19 @@ namespace SleepyCat.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            RaycastHit hit = new RaycastHit();
-            parentController.SmoothToGroundRotation(adjustGroundSmoothness, 0.1f, groundedCondition.GroundHit, hit);
+            parentController.SmoothToGroundRotation(true, adjustGroundSmoothness, 0f, groundedCondition);
         }
 
         public override void PhysicsTick(float dT)
         {
             //Need some way of making the skateboard feel more stable in the air and just generally nicer
-            if(parentController.currentTurnInput < 0)
+            if(inputHandler.TurningAxis < 0)
             {
                 //Turn Left
                 movementRB.transform.Rotate(new Vector3(0, 5f, 0));
             }
 
-            if(parentController.currentTurnInput > 0)
+            if(inputHandler.TurningAxis > 0)
             {
                 //Turn Right
                 movementRB.transform.Rotate(new Vector3(0, -5, 0));
@@ -115,8 +114,6 @@ namespace SleepyCat.Movement
 
         public override void OnStateExit()
         {
-            movementRB.angularVelocity = Vector3.zero;
-
             hasRan = false;
         }
     }

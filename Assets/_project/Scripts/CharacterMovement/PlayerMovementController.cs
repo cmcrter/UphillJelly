@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 22/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 22/10/21
+// Date Last Edited: 22/11/21
 // Brief: The script which will determine the player's movement for a release build
 //////////////////////////////////////////////////////////// 
 
@@ -57,10 +57,11 @@ namespace SleepyCat.Movement
 
         private Vector3 initalPos;
         private Quaternion initialRot;
+        private Quaternion lastRot = Quaternion.identity;
         private Coroutine turningCo;
         private Timer turningTimer;
         public AnimationCurve turnSpeedCurve;
-
+        public float turnClamp = 0.55f;
         #endregion
 
         #region Public Methods
@@ -79,26 +80,38 @@ namespace SleepyCat.Movement
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
-        public void SmoothToGroundRotation(float smoothness, float speed, RaycastHit hit, RaycastHit frontHit)
+        public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, isGroundBelow groundBelow)
         {
-            //GameObject's heading based on the current input
-            float headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
-            Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
-            Quaternion groundQuat = transform.rotation;
+            float headingDeltaAngle;
+            Quaternion headingDelta = Quaternion.identity;
 
-            if(Vector3.Angle(hit.normal, Vector3.up) < 60f)
+            if(!bAerial)
             {
-                groundQuat = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, Time.deltaTime * smoothness);
-
-                if(frontHit.collider && Vector3.Angle(frontHit.normal, hit.normal) < 80)
-                {
-                    groundQuat = Quaternion.Slerp(groundQuat, Quaternion.FromToRotation(transform.up, frontHit.normal) * transform.rotation, Time.deltaTime * smoothness);
-                }
+                //GameObject's heading based on the current input
+                headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
+                headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
             }
 
-            transform.rotation = groundQuat;
+            Quaternion groundQuat = transform.rotation;
+
+            if(groundBelow.GroundHit.collider)
+            {
+                groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, groundBelow.GroundHit.normal), groundBelow.GroundHit.normal), Time.deltaTime * smoothness);
+            }
+
+            if(Vector3.Angle(groundBelow.GroundHit.normal, transform.up) < 70f)
+            {
+                transform.rotation = groundQuat;
+            }
+
+            lastRot = groundQuat;            
             transform.rotation = transform.rotation * headingDelta;
-            transform.position = rb.transform.position;
+
+            //With the hinge, this means that the rb wont just run away without the player
+            if(Vector3.Distance(transform.position, rb.transform.position) > 0.15f)
+            {
+                transform.position = rb.transform.position;
+            }
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
@@ -118,7 +131,7 @@ namespace SleepyCat.Movement
         private void Awake()
         {
             //Setting up the state machine
-            groundBelow.InitialiseCondition(transform, groundRaycastPoint, backgroundRaycastPoint);
+            groundBelow.InitialiseCondition(transform);
             nextToWallRun.InitialiseCondition(this, rb);
             grindBelow.InitialiseCondition(rb, inputHandler);
 
@@ -127,7 +140,7 @@ namespace SleepyCat.Movement
             wallRideState.InitialiseState(this, rb, nextToWallRun, groundBelow);
             grindingState.InitialiseState(this, rb, grindBelow);
 
-            playerStateMachine = new FiniteStateMachine(groundedState);
+            playerStateMachine = new FiniteStateMachine(aerialState);
         }
 
         //Adding the inputs to the finite state machine
@@ -150,16 +163,19 @@ namespace SleepyCat.Movement
             rb.transform.parent = null;
 
             //Setting up model position
-            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, ballMovement.transform.position.y - ballMovement.radius + 0.001f, ballMovement.transform.position.z);
+            playerModel.transform.position = new Vector3(ballMovement.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), ballMovement.transform.position.z);
         }
 
         private void Update()
         {
             playerStateMachine.RunMachine(Time.deltaTime);
 
-            if(Keyboard.current.escapeKey.isPressed || Gamepad.current.startButton.isPressed) 
+            if (Keyboard.current != null)
             {
-                ResetPlayer();
+                if (Keyboard.current.escapeKey.isPressed)
+                {
+                    ResetPlayer();
+                }
             }
 
             if(inputHandler.TurningAxis != 0 && turningCo == null)
@@ -185,6 +201,12 @@ namespace SleepyCat.Movement
             ballMovement.transform.position = positionToMoveTo;
         }
 
+        public void StartTurnCoroutine()
+        {
+            StopTurnCoroutine();
+            turningCo = StartCoroutine(Co_TurnAngle());
+        }
+
         public void StopTurnCoroutine()
         {
             if(turningCo != null) 
@@ -207,15 +229,15 @@ namespace SleepyCat.Movement
             {
                 //How far along into the timer is this
                 float timeAlongTimer = turnDuration / turningTimer.current_time;
-                timeAlongTimer = Mathf.Clamp(timeAlongTimer, 0f, 0.9f);
+                timeAlongTimer = Mathf.Clamp(timeAlongTimer, 0f, 0.99f);
 
-                float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -0.55f, 0.55f);
+                float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
 
                 //If the skateboard is moving
-                if(rb.velocity.magnitude > 0.3f)
+                if(rb.velocity.magnitude > 0.3f && playerStateMachine.currentState == groundedState)
                 {
                     //Lerping towards the new input by the animation curves amounts (probably increasing over time)
-                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, turnSpeedCurve.Evaluate(timeAlongTimer));
+                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, 2f * turnSpeedCurve.Evaluate(timeAlongTimer) * Time.deltaTime);
                 }
                 //Else do a kick turn
                 else
@@ -231,9 +253,15 @@ namespace SleepyCat.Movement
                 }
 
                 Mathf.Clamp(currentTurnInput, -1f, 1f);
+
+                if (!turningTimer.isActive)
+                {
+                    yield return null;
+                }
+
                 //Ticking the timer along
                 turningTimer.Tick(Time.deltaTime);
-                yield return true;
+                yield return null;
             }
 
             currentTurnInput = 0;

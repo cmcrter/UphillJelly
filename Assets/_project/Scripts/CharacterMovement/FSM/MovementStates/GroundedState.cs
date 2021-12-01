@@ -53,6 +53,11 @@ namespace SleepyCat.Movement
             get; private set;
         }
 
+        public bool bConstantForce = false;
+        private bool bCurrentlyApplyingConstant = false;
+        [SerializeField]
+        private float constantForce;
+
         [Header("Coroutine management")]
         [SerializeField]
         private float pushTimerDuration = 0.65f;
@@ -86,6 +91,8 @@ namespace SleepyCat.Movement
 
             pInput = controllerParent.input;
             inputHandler = controllerParent.inputHandler;
+
+            bCurrentlyApplyingConstant = bConstantForce;
         }
 
         public void RegisterInputs()
@@ -123,6 +130,12 @@ namespace SleepyCat.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
+            //if(Debug.isDebugBuild)
+            //{
+            //    Debug.DrawRay(playerTransform.position, movementRB.velocity, Color.white);
+            //    Debug.DrawRay(playerTransform.position, playerTransform.forward, Color.black);
+            //}
+
             if(Keyboard.current.escapeKey.isPressed)
             {
                 parentController.ResetPlayer();
@@ -136,10 +149,17 @@ namespace SleepyCat.Movement
             {
                 ApplyBrakeForce();
             }
+
+            parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
         }
 
         public override void PhysicsTick(float dT)
         {
+            if(bConstantForce)
+            {
+                movementRB.AddForceAtPosition(playerTransform.forward * constantForce, movementRB.position + movementRB.centerOfMass, ForceMode.Force);
+            }
+
             UpdatePositionAndRotation(dT);
         }
 
@@ -156,6 +176,11 @@ namespace SleepyCat.Movement
                 PushBoard();
             }
 
+            if(inputHandler.TurningAxis != 0)
+            {
+                parentController.StartTurnCoroutine();
+            }
+
             hasRan = true;
         }
 
@@ -164,6 +189,7 @@ namespace SleepyCat.Movement
             StopJumpTimerCoroutine();
             StopPushTimerCoroutine();
 
+            parentController.playerCamera.bMovingBackwards = false;
             hasRan = false;
         }
 
@@ -171,27 +197,35 @@ namespace SleepyCat.Movement
 
         private void UpdatePositionAndRotation(float dT)
         {
-            parentController.SmoothToGroundRotation(groundAdjustSmoothness, turnSpeed, groundedCondition.GroundHit, groundedCondition.FrontGroundHit);
-
             if(jumpCoroutine == null) 
             {
                 //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)
                 float initialSpeed = movementRB.velocity.magnitude;
                 float dotAngle = Vector3.Dot(movementRB.velocity.normalized, playerTransform.forward.normalized);
-                dotAngle = Mathf.Abs(dotAngle);
+                float absDotAngle = Mathf.Abs(dotAngle);
+
+                //Moving almost directly backwards
+                if(dotAngle < -0.98f)
+                {
+                    parentController.playerCamera.bMovingBackwards = true;
+                    movementRB.transform.forward = -playerTransform.forward;
+                }
+                //Must be moving forwards
+                else
+                {
+                    parentController.playerCamera.bMovingBackwards = false;
+                    movementRB.transform.forward = playerTransform.forward;
+                }
+
+                movementRB.velocity = initialSpeed * movementRB.transform.forward;
 
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
-                if(dotAngle < 0.95f)
+                if (absDotAngle < 0.99f)
                 {
-                    //Cancelling the current velocity
-                    movementRB.AddForce(-movementRB.velocity * 1.002f, ForceMode.Impulse);
-
+                    movementRB.angularVelocity = Vector3.zero;
+                    
                     //And conserving it if need be
-                    if(dotAngle > 0.325f)
-                    {
-                        movementRB.AddForce(initialSpeed * 1.001f * playerTransform.forward, ForceMode.Impulse);
-                    }
-                    else
+                    if(absDotAngle < 0.3265f)
                     {
                         movementRB.velocity = Vector3.zero;
                         movementRB.AddForce(playerTransform.forward.normalized, ForceMode.Impulse);

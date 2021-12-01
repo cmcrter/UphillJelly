@@ -19,6 +19,11 @@ namespace SleepyCat.Movement
         
         }
 
+        public virtual void ResetPlayer(Transform point)
+        {
+
+        }
+
         public virtual void MoveToPosition(Vector3 positionToMoveTo)
         {
 
