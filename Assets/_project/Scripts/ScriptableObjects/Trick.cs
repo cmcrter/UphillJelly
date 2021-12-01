@@ -29,4 +29,9 @@ public class Trick : ScriptableObject
     /// The amount of score the trick gains per second
     /// </summary>
     public float baseScorePerSecond;
+
+    /// <summary>
+    /// If the trick can be held for more points
+    /// </summary>
+    public bool holdable;
 }

@@ -40,8 +40,6 @@ namespace SleepyCat.Input
             /// </summary>
             public Timer timeLeft;
 
-
-
             public BufferedInput(bool isHeld, int inputID, Timer timeLeft)
             {
                 this.isHeld = isHeld;
@@ -49,6 +47,8 @@ namespace SleepyCat.Input
                 this.timeLeft = timeLeft;
             }
         }
+
+        public Trick activeTrick;
         #endregion
 
         #region Private Serialized Fields
@@ -62,7 +62,7 @@ namespace SleepyCat.Input
 
         [SerializeField]
         [Tooltip("The player to check the state of")]
-        private PlayerMovementController movementController;
+        private PlayerHingeMovementController movementController;
         #endregion
 
         #region Private Variables
@@ -104,10 +104,21 @@ namespace SleepyCat.Input
             }
             set
             {
+                Debug.Log("aerialStateTricks is being set");
                 aerialStateTricks = value;
                 if (movementController != null)
                 {
-                    trickForStates[movementController.aerialState] = aerialStateTricks;
+                    Debug.Log("trickForStates is " + trickForStates);
+                    if (trickForStates == null)
+                    {
+                        Debug.Log("trickForStates is made");
+                        trickForStates = new Dictionary<Utility.StateMachine.State, List<Trick>>();
+                    }
+                    trickForStates[movementController.aerialState] = value;
+                }
+                else
+                {
+                    Debug.LogWarning("movementController was null when aerial trick were set", this);
                 }
             }
         }
@@ -115,7 +126,7 @@ namespace SleepyCat.Input
         /// <summary>
         /// The player to check the state of
         /// </summary>
-        public PlayerMovementController MovementController
+        public PlayerHingeMovementController MovementController
         {
             get
             {
@@ -130,24 +141,32 @@ namespace SleepyCat.Input
 
         #region Public Delegates
         /// <summary>
-        /// Delegate for events called when a trick has been detected to have been performed by the user
+        /// Delegate for events called when a trick is involved
         /// </summary>
-        /// <param name="performedTrick">The trick that was just detected as being performed</param>
-        public delegate void TrickInputsPerformedDelegate(Trick performedTrick);
+        /// <param name="performedTrick">The trick that the event relates too</param>
+        public delegate void TrickInputsDelegate(Trick affectingTrick);
         #endregion
 
         #region Public Events
         /// <summary>
         /// Event called when a trick has been detected to have been performed by the user
         /// </summary>
-        public event TrickInputsPerformedDelegate trickPerformed;
+        public event TrickInputsDelegate trickPerformed;
+
+        /// <summary>
+        /// Event called when a trick has been detected to have been performed by the user
+        /// </summary>
+        public event TrickInputsDelegate trickStarted;
         #endregion
 
         #region Unity Methods
         // Start is called before the first frame update
         private void Start()
         {
-            bufferedInputs = new List<BufferedInput>();
+            if (bufferedInputs == null)
+            {
+                bufferedInputs = new List<BufferedInput>();
+            }
             if (aerialStateTricks == null)
             {
                 aerialStateTricks = new List<Trick>();
@@ -167,10 +186,14 @@ namespace SleepyCat.Input
         {
             for (int i = 0; i < bufferedInputs.Count; ++i)
             {
-                bufferedInputs[i].timeLeft.Tick(Time.deltaTime);
+                if (!bufferedInputs[i].isHeld)
+                {
+                    bufferedInputs[i].timeLeft.Tick(Time.deltaTime);
+                }
                 // Remove any inputs that have timed out
                 if (!bufferedInputs[i].timeLeft.isActive)
                 {
+                    Debug.Log("Removing buffered input: " + bufferedInputs[i]);
                     bufferedInputs.RemoveAt(i);
                 }
             }
@@ -188,10 +211,19 @@ namespace SleepyCat.Input
         public static bool CheckForTricks(List<BufferedInput> currentlyBufferedInputs, List<Trick> tricksToCheckFor, out Trick tricksFound)
         {
             // Iterate through all the tricks checked against
+            Debug.Log("TrickChecked Here 0");
             for (int trickIndex = 0; trickIndex < tricksToCheckFor.Count; ++trickIndex)
             {
+                Debug.Log("TrickChecked Here 1");
+                if (currentlyBufferedInputs.Count <= 0)
+                {
+                    Debug.LogWarning("Check for tricks was called when the input buffer was empty");
+                    tricksFound = null;
+                    return false;
+                }
                 if (currentlyBufferedInputs[currentlyBufferedInputs.Count - 1].inputID == tricksToCheckFor[trickIndex].inputCombo[tricksToCheckFor[trickIndex].inputCombo.Count - 1])
                 {
+                    Debug.Log("TrickChecked Here 2");
                     // Loop forward from the matching ID to see if it matches the combo
                     bool matchingCombo = true;
                     for (int subsectionIndex = 0; subsectionIndex < tricksToCheckFor[trickIndex].inputCombo.Count; ++subsectionIndex)
@@ -227,25 +259,122 @@ namespace SleepyCat.Input
             return new List<BufferedInput>(bufferedInputs);
         }
 
+
+        public void AddHeldInput(int inputID)
+        {
+            // Add the input
+            if (bufferedInputs == null)
+            {
+                bufferedInputs = new List<BufferedInput>();
+            }
+            bufferedInputs.Add(new BufferedInput(true, inputID, new Timer(inputStoredDuration)));
+            Debug.Log("Happend 0");
+
+            // Check the input against the tricks
+            if (movementController != null)
+            {
+                Debug.Log("Happend 1");
+                if (trickForStates == null)
+                {
+                    trickForStates = new Dictionary<Utility.StateMachine.State, List<Trick>>();
+                }
+                if (trickForStates.TryGetValue(movementController.playerStateMachine.currentState, out List<Trick> validTricks))
+                {
+                    Debug.Log("Happend 2");
+                    if (CheckForTricks(bufferedInputs, validTricks, out Trick trickFound))
+                    {
+                        if (trickFound.holdable)
+                        {
+                            if (trickStarted != null)
+                            {
+                                trickStarted(trickFound);
+                            }
+                            activeTrick = trickFound;
+                        }
+                        else
+                        {
+                            if (trickPerformed != null)
+                            {
+                                trickPerformed(trickFound);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("movementController was null when reference in ");
+            }
+        }
+
+        public void FinishHoldingInput(int inputID)
+        {
+            // Search for the input being held
+            for (int i = 0; i < bufferedInputs.Count; ++i)
+            {
+                if (bufferedInputs[i].inputID == inputID)
+                {
+                    if (bufferedInputs[i].isHeld)
+                    {
+                        bufferedInputs[i] = new BufferedInput(false, inputID, new Timer(inputStoredDuration));
+                        
+                        // If the active trick was just released then broadcast it as being performed
+                        if (activeTrick != null)
+                        {
+                            if (activeTrick.inputCombo[activeTrick.inputCombo.Count - 1] == inputID)
+                            {
+                                trickPerformed(activeTrick);
+                                activeTrick = null;
+                            }
+                        }
+                        return;
+                    }
+                }
+            }
+            Debug.LogWarning("No input matching inputID was being held", this);
+        }
+
         /// <summary>
         /// Adds a given input to the buffer
         /// </summary>
         /// <param name="inputID">The id of the input to add</param>
-        public void AddInput(int inputID)
+        public void AddUnHeldInput(int inputID)
         {
-            bufferedInputs.Add(new BufferedInput(false ,inputID, new Timer(inputStoredDuration)));
+            // Add the input
+            if (bufferedInputs == null)
+            {
+                bufferedInputs = new List<BufferedInput>();
+            }
+            bufferedInputs.Add(new BufferedInput(false, inputID, new Timer(inputStoredDuration)));
+            Debug.Log("Happend 0");
+            
+            // Check the input against the tricks
             if (movementController != null)
             {
+                Debug.Log("Happend 1");
+                if (trickForStates == null)
+                {
+                    trickForStates = new Dictionary<Utility.StateMachine.State, List<Trick>>();
+                }
                 if (trickForStates.TryGetValue(movementController.playerStateMachine.currentState, out List<Trick> validTricks))
                 {
+                    Debug.Log("Happend 2");
                     if (CheckForTricks(bufferedInputs, validTricks, out Trick trickFound))
                     {
+                        Debug.Log("Happend 3");
+                        Debug.Log(trickPerformed != null);
                         if (trickPerformed != null)
                         {
+                            Debug.Log("Happend 4");
+                            Debug.Log("Trick Event Called");
                             trickPerformed(trickFound);
                         }
                     }
                 }
+            }
+            else
+            {
+                Debug.LogError("movementController was null when reference in AddUnHeldInput of trick input buffer", this);
             }
         }
         #endregion
