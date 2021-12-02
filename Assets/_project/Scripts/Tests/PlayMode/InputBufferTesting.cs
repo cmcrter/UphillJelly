@@ -187,6 +187,11 @@ namespace SleepyCat.Test
             inputBuffer.AddUnHeldInput(26);
             Assert.AreEqual(false, trickPeformedEventReceived);
 
+            testTrick.inputCombo = new List<int>(3) { 0, 1 };
+
+            inputBuffer.AddUnHeldInput(1);
+            inputBuffer.AddHeldInput(0);
+            Assert.AreEqual(false, trickPeformedEventReceived);
             inputBuffer.trickPerformed -= ReceiveTrickPeformedEvent;
             yield break;
         }

@@ -54,6 +54,10 @@ namespace SleepyCat.Input
         [SerializeField]
         [Tooltip("The patterns to check for from the analogue stick")]
         private List<AnalogueStickPattern> analogueStickPatterns;
+
+        [SerializeField]
+        [Tooltip("The trick input buffer to pass inputs too")]
+        private TrickInputBuffer trickInputBuffer;
         #endregion
 
         #region Private Variables
@@ -94,8 +98,6 @@ namespace SleepyCat.Input
         /// </summary>
         public float TurningAxis { get; private set; } = 0f;
         #endregion
-
-
 
         #region Public Delegates
         /// <summary>
@@ -219,8 +221,6 @@ namespace SleepyCat.Input
         public event OneDimensionalAxisAction turningUpdated;
 
         #endregion
-
-
 
         #region Unity Methods
         private void Awake()
@@ -551,6 +551,35 @@ namespace SleepyCat.Input
 
             playerInput.actions["Aerial_StartGrind"].performed += StartGrindAction_Performed;
             playerInput.actions["Aerial_StartGrind"].canceled += StartGrindAction_Canceled;
+
+            playerInput.actions["Aerial_TestInput_0"].performed += TestInput0_performed;
+            playerInput.actions["Aerial_TestInput_0"].canceled += TestInput0_Canceled;
+
+            playerInput.actions["Aerial_TestInput_1"].performed += TestInput1_performed;
+            playerInput.actions["Aerial_TestInput_1"].canceled += TestInput1_Canceled;
+
+        }
+
+        private void TestInput0_Canceled(InputAction.CallbackContext obj)
+        {
+            //trickInputBuffer.FinishHoldingInput(0);
+            //Debug.Log("Trick0 Canceled(");
+        }
+
+        private void TestInput0_performed(InputAction.CallbackContext obj)
+        {
+            //trickInputBuffer.AddHeldInput(0);
+            //Debug.Log("Trick0 performed");
+        }
+
+        private void TestInput1_Canceled(InputAction.CallbackContext obj)
+        {
+            trickInputBuffer.FinishHoldingInput(1);
+        }
+
+        private void TestInput1_performed(InputAction.CallbackContext obj)
+        {
+            trickInputBuffer.AddHeldInput(1);
         }
 
         /// <summary>
@@ -681,6 +710,7 @@ namespace SleepyCat.Input
                         else
                         {
                             Debug.Log("Pattern Completed with Id: " + analogueStickPatterns[i].ID.ToString());
+                            trickInputBuffer.AddUnHeldInput(analogueStickPatterns[i].ID);
                             if (analogueStickPatternCompleted != null)
                             {
                                 analogueStickPatternCompleted(analogueStickPatterns[i].ID);

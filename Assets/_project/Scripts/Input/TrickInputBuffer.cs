@@ -184,8 +184,10 @@ namespace SleepyCat.Input
         // Update is called once per frame
         private void Update()
         {
+            string currentBufferId = "";
             for (int i = 0; i < bufferedInputs.Count; ++i)
             {
+
                 if (!bufferedInputs[i].isHeld)
                 {
                     bufferedInputs[i].timeLeft.Tick(Time.deltaTime);
@@ -193,10 +195,27 @@ namespace SleepyCat.Input
                 // Remove any inputs that have timed out
                 if (!bufferedInputs[i].timeLeft.isActive)
                 {
-                    Debug.Log("Removing buffered input: " + bufferedInputs[i]);
+                    Debug.Log("Removing buffered input: " + bufferedInputs[i].inputID + ", " + bufferedInputs.Count +  " buffered inputs left" );
                     bufferedInputs.RemoveAt(i);
+                    --i;
                 }
+                else
+                {
+                    currentBufferId += bufferedInputs[i].inputID.ToString() + ", ";
+                }
+
             }
+            //Debug.Log(currentBufferId);
+        }
+
+        private void OnEnable()
+        {
+            trickPerformed += LogTrickPerformed;
+        }
+
+        private void OnDisable()
+        {
+            trickPerformed -= LogTrickPerformed;
         }
         #endregion
 
@@ -211,10 +230,8 @@ namespace SleepyCat.Input
         public static bool CheckForTricks(List<BufferedInput> currentlyBufferedInputs, List<Trick> tricksToCheckFor, out Trick tricksFound)
         {
             // Iterate through all the tricks checked against
-            Debug.Log("TrickChecked Here 0");
             for (int trickIndex = 0; trickIndex < tricksToCheckFor.Count; ++trickIndex)
             {
-                Debug.Log("TrickChecked Here 1");
                 if (currentlyBufferedInputs.Count <= 0)
                 {
                     Debug.LogWarning("Check for tricks was called when the input buffer was empty");
@@ -223,7 +240,6 @@ namespace SleepyCat.Input
                 }
                 if (currentlyBufferedInputs[currentlyBufferedInputs.Count - 1].inputID == tricksToCheckFor[trickIndex].inputCombo[tricksToCheckFor[trickIndex].inputCombo.Count - 1])
                 {
-                    Debug.Log("TrickChecked Here 2");
                     // Loop forward from the matching ID to see if it matches the combo
                     bool matchingCombo = true;
                     for (int subsectionIndex = 0; subsectionIndex < tricksToCheckFor[trickIndex].inputCombo.Count; ++subsectionIndex)
@@ -268,19 +284,16 @@ namespace SleepyCat.Input
                 bufferedInputs = new List<BufferedInput>();
             }
             bufferedInputs.Add(new BufferedInput(true, inputID, new Timer(inputStoredDuration)));
-            Debug.Log("Happend 0");
 
             // Check the input against the tricks
             if (movementController != null)
             {
-                Debug.Log("Happend 1");
                 if (trickForStates == null)
                 {
                     trickForStates = new Dictionary<Utility.StateMachine.State, List<Trick>>();
                 }
                 if (trickForStates.TryGetValue(movementController.playerStateMachine.currentState, out List<Trick> validTricks))
                 {
-                    Debug.Log("Happend 2");
                     if (CheckForTricks(bufferedInputs, validTricks, out Trick trickFound))
                     {
                         if (trickFound.holdable)
@@ -346,27 +359,21 @@ namespace SleepyCat.Input
                 bufferedInputs = new List<BufferedInput>();
             }
             bufferedInputs.Add(new BufferedInput(false, inputID, new Timer(inputStoredDuration)));
-            Debug.Log("Happend 0");
             
             // Check the input against the tricks
             if (movementController != null)
             {
-                Debug.Log("Happend 1");
                 if (trickForStates == null)
                 {
                     trickForStates = new Dictionary<Utility.StateMachine.State, List<Trick>>();
                 }
                 if (trickForStates.TryGetValue(movementController.playerStateMachine.currentState, out List<Trick> validTricks))
                 {
-                    Debug.Log("Happend 2");
                     if (CheckForTricks(bufferedInputs, validTricks, out Trick trickFound))
                     {
-                        Debug.Log("Happend 3");
                         Debug.Log(trickPerformed != null);
                         if (trickPerformed != null)
                         {
-                            Debug.Log("Happend 4");
-                            Debug.Log("Trick Event Called");
                             trickPerformed(trickFound);
                         }
                     }
@@ -376,6 +383,16 @@ namespace SleepyCat.Input
             {
                 Debug.LogError("movementController was null when reference in AddUnHeldInput of trick input buffer", this);
             }
+        }
+
+        private void LogTrickPerformed(Trick trick)
+        {
+            Debug.Log(trick.name + " was performed!");
+        }
+
+        private void LogTrickStarted(Trick trick)
+        {
+            Debug.Log(trick.name + " was started!");
         }
         #endregion
     }

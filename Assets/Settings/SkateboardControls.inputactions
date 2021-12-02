@@ -341,6 +341,22 @@
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Aerial_TestInput_0",
+                    "type": "Button",
+                    "id": "62aab005-2660-4a52-b9e5-69019e14d1b4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Aerial_TestInput_1",
+                    "type": "Button",
+                    "id": "5d890ac3-21e2-4932-a120-afb6abfba540",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -484,6 +500,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aerial_KeyboardRightTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f2aad36-6a0d-4693-b970-9e9367229ad9",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_TestInput_0",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9494cbaf-5906-4a32-9a05-2c113cf6a87c",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_TestInput_1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
