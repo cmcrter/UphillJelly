@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7034872088989306377}
   - component: {fileID: 6201238372737581484}
   - component: {fileID: 8208881486474736998}
-  - component: {fileID: 7307709058617590408}
+  - component: {fileID: 629440154582764355}
   m_Layer: 0
   m_Name: TriBuilding02
   m_TagString: Untagged
@@ -83,8 +83,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7307709058617590408
-BoxCollider:
+--- !u!64 &629440154582764355
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,6 +93,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 10.5112915, y: 13.050209, z: 7.8112793}
-  m_Center: {x: -0.8363495, y: -0.04424286, z: 3.474091}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -9197160996850140646, guid: 942852080fd154f4c92d552f4a225011, type: 3}
