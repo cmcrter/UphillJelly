@@ -55,6 +55,12 @@ public class ReplaySaveManager : MonoBehaviour
 
     #region Methods
 
+    public void SaveReplay1Button() {
+
+        //
+        SaveReplay1();
+
+    }
 
     // bool for if there is a save file
     public bool IsReplaySaveFile1() {

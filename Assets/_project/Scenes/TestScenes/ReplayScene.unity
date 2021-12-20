@@ -443,7 +443,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1199034882}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReplaySaveManager, Scripts
         m_MethodName: SaveReplay1
         m_Mode: 1
@@ -655,7 +655,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1199034882}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReplaySaveManager, Scripts
         m_MethodName: LoadReplay1
         m_Mode: 1
@@ -1359,7 +1359,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1199034882}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReplaySaveManager, Scripts
         m_MethodName: SaveReplay3
         m_Mode: 1
@@ -1547,7 +1547,7 @@ PrefabInstance:
     - target: {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: tempScoreSystem
       value: 
-      objectReference: {fileID: 1454737106}
+      objectReference: {fileID: 0}
     - target: {fileID: 2884512056026011217, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: m_Name
       value: Collectable 1 (1)
@@ -1562,6 +1562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6353773364258727381, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
+    - {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
 --- !u!1 &856254922
 GameObject:
@@ -1753,7 +1754,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1199034882}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReplaySaveManager, Scripts
         m_MethodName: LoadReplay3
         m_Mode: 1
@@ -1865,7 +1866,7 @@ PrefabInstance:
     - target: {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: tempScoreSystem
       value: 
-      objectReference: {fileID: 1454737106}
+      objectReference: {fileID: 0}
     - target: {fileID: 2884512056026011217, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: m_Name
       value: Collectable 1 (4)
@@ -1880,6 +1881,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6353773364258727381, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
+    - {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
 --- !u!1 &1047902056
 GameObject:
@@ -2039,7 +2041,7 @@ PrefabInstance:
     - target: {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: tempScoreSystem
       value: 
-      objectReference: {fileID: 1454737106}
+      objectReference: {fileID: 0}
     - target: {fileID: 2884512056026011217, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: m_Name
       value: Collectable 1 (6)
@@ -2054,6 +2056,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6353773364258727381, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
+    - {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
 --- !u!1 &1073381128
 GameObject:
@@ -2067,7 +2070,6 @@ GameObject:
   - component: {fileID: 1073381131}
   - component: {fileID: 1073381130}
   - component: {fileID: 1073381129}
-  - component: {fileID: 1073381133}
   - component: {fileID: 1073381134}
   m_Layer: 0
   m_Name: Player
@@ -2155,20 +2157,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1073381133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1073381128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f0938ab1c4b97d47b57d355a0118b05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ghost: {fileID: 11400000, guid: ef4c4b59d7524f147ab7df2d5ed06d57, type: 2}
-  HasChangedGO: {fileID: 1675642735}
 --- !u!54 &1073381134
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2194,7 +2182,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1199034883}
-  - component: {fileID: 1199034882}
   m_Layer: 0
   m_Name: ReplaySaveManager
   m_TagString: GhostReplaySaveSystem
@@ -2202,19 +2189,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1199034882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199034881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f37b6b11bf001f64fbef3da5fec554eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ghost: {fileID: 11400000, guid: ef4c4b59d7524f147ab7df2d5ed06d57, type: 2}
 --- !u!4 &1199034883
 Transform:
   m_ObjectHideFlags: 0
@@ -2370,7 +2344,7 @@ PrefabInstance:
     - target: {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: tempScoreSystem
       value: 
-      objectReference: {fileID: 1454737106}
+      objectReference: {fileID: 0}
     - target: {fileID: 2884512056026011217, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: m_Name
       value: Collectable 1 (3)
@@ -2385,6 +2359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6353773364258727381, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
+    - {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
 --- !u!1 &1397824162
 GameObject:
@@ -2397,7 +2372,6 @@ GameObject:
   - component: {fileID: 1397824166}
   - component: {fileID: 1397824165}
   - component: {fileID: 1397824164}
-  - component: {fileID: 1397824163}
   - component: {fileID: 1397824167}
   - component: {fileID: 1397824168}
   m_Layer: 0
@@ -2407,19 +2381,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1397824163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1397824162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 940c50612f320d34694ee6ea794e7c52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ghost: {fileID: 11400000, guid: ef4c4b59d7524f147ab7df2d5ed06d57, type: 2}
 --- !u!23 &1397824164
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2597,7 +2558,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1199034882}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReplaySaveManager, Scripts
         m_MethodName: SaveReplay2
         m_Mode: 1
@@ -2656,7 +2617,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1454737107}
-  - component: {fileID: 1454737106}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -2664,22 +2624,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1454737106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1454737105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e76dd1d46dedfe64a8739d1e00249bce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerScore: 0
-  PlayerScoreText: {fileID: 1849177718}
-  GhostScore: 0
-  GhostScoreText: {fileID: 68542042}
 --- !u!4 &1454737107
 Transform:
   m_ObjectHideFlags: 0
@@ -2756,7 +2700,7 @@ PrefabInstance:
     - target: {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: tempScoreSystem
       value: 
-      objectReference: {fileID: 1454737106}
+      objectReference: {fileID: 0}
     - target: {fileID: 2884512056026011217, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: m_Name
       value: Collectable 1 (2)
@@ -2771,6 +2715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6353773364258727381, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
+    - {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
 --- !u!1 &1614752502
 GameObject:
@@ -2908,7 +2853,7 @@ PrefabInstance:
     - target: {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: tempScoreSystem
       value: 
-      objectReference: {fileID: 1454737106}
+      objectReference: {fileID: 0}
     - target: {fileID: 2884512056026011217, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: m_Name
       value: Collectable 1 (5)
@@ -2923,6 +2868,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6353773364258727381, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
+    - {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
 --- !u!1 &1675642735
 GameObject:
@@ -3389,7 +3335,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1199034882}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReplaySaveManager, Scripts
         m_MethodName: LoadReplay2
         m_Mode: 1
@@ -3501,7 +3447,7 @@ PrefabInstance:
     - target: {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: tempScoreSystem
       value: 
-      objectReference: {fileID: 1454737106}
+      objectReference: {fileID: 0}
     - target: {fileID: 2884512056026011217, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
       propertyPath: m_Name
       value: Collectable 1
@@ -3516,4 +3462,5 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6353773364258727381, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
+    - {fileID: 2403838701885646478, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d1bffcb2262d2c44a1281513fc7f9a5, type: 3}

@@ -19,7 +19,9 @@ using UnityEngine.InputSystem;
 
         // public reference to the ghost
         public Ghost ghost;
-
+        
+        // private float for the time value
+        private float timeValue;
 
         // linear interpolation to account for timestamps that are not stored e.g. 0.49, 0.27, 0.82,
         // timestamps that are stored e.g. 0.5, 1, 1.5
@@ -28,13 +30,19 @@ using UnityEngine.InputSystem;
         private int index1;
         private int index2;
 
-        // private float for the time value
-        private float timeValue;
+
 
         #endregion
 
         #region Unity Methods
 
+        // private on awake function
+        private void Awake() {
+
+            // on awake set time value to 0
+            timeValue = 0f;
+
+        }
 
         // on update
         void Update() {
@@ -56,7 +64,7 @@ using UnityEngine.InputSystem;
 
             }
 
-            
+            /*
             // key triggers for recording the ghost without going in the inspector
             if (Keyboard.current.kKey.isPressed) {
 
@@ -86,19 +94,13 @@ using UnityEngine.InputSystem;
 
 
             }
-
+            */
         }
         #endregion
 
         #region Private Methods
 
-        // private on awake function
-        private void Awake() {
-
-            // on awake set time value to 0
-            timeValue = 0f;
-
-        }
+        
 
         // get the ghosts index depending on the position of the ghost
         private void GetGhostIndex() {

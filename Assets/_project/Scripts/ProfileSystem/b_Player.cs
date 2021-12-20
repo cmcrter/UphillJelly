@@ -22,6 +22,8 @@ public class b_Player : MonoBehaviour
     //
     public GhostPlayer ghostPlayer;
 
+    //public Ghost ghost;
+
     //
     public CC changeCamera;
 
@@ -95,6 +97,7 @@ public class b_Player : MonoBehaviour
             replayGhostSaveManager = GameObject.FindGameObjectWithTag("GhostReplaySaveSystem").GetComponent<ReplaySaveManager>();
 
         }
+
 
         if (Keyboard.current.escapeKey.isPressed) {
 
@@ -198,7 +201,6 @@ public class b_Player : MonoBehaviour
         outfitChanger.LoadedCustomizables1();
 
         //shopText.LoadProfile1Text.text = data.TMP1ToSave.text;
-
 
 
     }
@@ -418,6 +420,9 @@ public class b_Player : MonoBehaviour
         // load the first replay through the ghost save manager
         replayGhostSaveManager.LoadReplay1();
 
+        //ghost.isRecording = false;
+        //ghost.isReplaying = true;
+
         // Change to game camera
         changeCamera.ChangeToGameCam();
 
@@ -428,6 +433,8 @@ public class b_Player : MonoBehaviour
 
         // load the second replay through the ghost save manager
         replayGhostSaveManager.LoadReplay2();
+
+        //ghost.
 
         // Change to game camera
         changeCamera.ChangeToGameCam();

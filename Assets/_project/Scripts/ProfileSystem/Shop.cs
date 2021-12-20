@@ -61,7 +61,6 @@ public class Shop : MonoBehaviour
     // current character price as an int
     public int CurrentCharacterPriceInt;
 
-    
 
     // list of bools for which hat is bought
     public List<bool> IsHatBought = new List<bool>();
@@ -97,8 +96,6 @@ public class Shop : MonoBehaviour
         // set the current character to 2(one of the middle materials)
         CurrentCharacterSelectedInt = 2;
 
-
-        
 
     }
 
@@ -170,6 +167,9 @@ public class Shop : MonoBehaviour
 
         }
 
+        
+
+
     }
 
     // Next hat price which is called in OutfitChanger
@@ -191,6 +191,15 @@ public class Shop : MonoBehaviour
     // buy the current hat
     public void BuyCurrentHat() {
 
+
+        // if the player does not have enough currency for the hat
+        if (Currency < CurrentHatPriceInt) {
+
+            // Debug
+            Debug.Log("Hat Too Expensive");
+
+        }
+
         // if players currency is more than or = to the current hat price
         if (Currency >= CurrentHatPriceInt) {
 
@@ -207,17 +216,9 @@ public class Shop : MonoBehaviour
             Debug.Log("BoughtHat");
 
         }
-        
-        // if the player does not have enough currency for the hat
-        if (Currency < CurrentHatPriceInt) {
 
-            // Debug
-            Debug.Log("Hat Too Expensive");
-
-        }
-
-        
     }
+
 
     // Bought hat method
     public void BoughtHat() {
