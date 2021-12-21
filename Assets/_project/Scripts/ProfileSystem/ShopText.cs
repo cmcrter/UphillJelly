@@ -17,35 +17,17 @@ using System.IO;
 public class ShopText : MonoBehaviour
 {
 
+    //
+    public Shop shop;
+
     // Reference to the b_Player
-    public b_Player b_Player; 
+    public b_Player b_player; 
 
     // text input field
     public TMP_InputField tmp_Input;
 
     // gameobject panel for the starting background
     public GameObject StartingBackground;
-
-    [Header("Save And Load Buttons")]
-
-    // button for save player 1
-    public GameObject SavePlayer1;
-
-    // button for load player 1
-    public GameObject LoadPlayer1;
-
-    // button for save player 2
-    public GameObject SavePlayer2;
-
-    // button for load player 2
-    public GameObject LoadPlayer2;
-
-    // button for save player 3
-    public GameObject SavePlayer3;
-
-    // button for load player 3
-    public GameObject LoadPlayer3;
-
 
     [Header("Starting Menu Buttons")]
 
@@ -74,19 +56,6 @@ public class ShopText : MonoBehaviour
     public void ButtonPressed1() {
 
         
-        // set the save player 2 button to false
-        SavePlayer2.SetActive(false);
-
-        // set the load player 2 button to false
-        LoadPlayer2.SetActive(false);
-
-        // set the save player 3 button to false
-        SavePlayer3.SetActive(false);
-
-        // set the load player 3 button to false
-        LoadPlayer3.SetActive(false);
-
-
         // set the second play button to false
         PlayButton2.SetActive(false);
 
@@ -99,27 +68,19 @@ public class ShopText : MonoBehaviour
 
 
         // load player 1 data
-        b_Player.LoadPlayer1();
+        b_player.LoadPlayer1();
 
         // set the load profile text to load (Players name)
         LoadProfile1Text.text = "Load " + tmp_Input.text;
+
+        //
+        b_player.isSave1 = true;
 
     }
 
     // second button pressed
     public void ButtonPressed2() {
 
-        // set the save player 1 button to false
-        SavePlayer1.SetActive(false);
-
-        // set the load player 1 button to false
-        LoadPlayer1.SetActive(false);
-
-        // set the save player 3 button to false
-        SavePlayer3.SetActive(false);
-
-        // set the load player 3 button to false
-        LoadPlayer3.SetActive(false);
 
 
         // set the first play button to false
@@ -128,13 +89,15 @@ public class ShopText : MonoBehaviour
         // set the third play button to false
         PlayButton3.SetActive(false);
 
+        //
+        b_player.isSave2 = true;
 
         // set the starting background to false
         StartingBackground.SetActive(false);
 
 
         // load player 1 data
-        b_Player.LoadPlayer2();
+        b_player.LoadPlayer2();
 
         // set the load profile text to load (Players name)
         LoadProfile2Text.text = "Load " + tmp_Input.text;
@@ -144,19 +107,6 @@ public class ShopText : MonoBehaviour
     // third button pressed
     public void ButtonPressed3() {
 
-        // set the save player 2 button to false
-        SavePlayer2.SetActive(false);
-
-        // set the load player 2 button to false
-        LoadPlayer2.SetActive(false);
-
-        // set the save player 1 button to false
-        SavePlayer1.SetActive(false);
-
-        // set the load player 1 button to false
-        LoadPlayer1.SetActive(false);
-
-
         // set the first play button to false
         PlayButton1.SetActive(false);
 
@@ -169,10 +119,13 @@ public class ShopText : MonoBehaviour
 
 
         // load player 1 data
-        b_Player.LoadPlayer3();
+        b_player.LoadPlayer3();
 
         // set the load profile text to load (Players name)
         LoadProfile3Text.text = "Load " + tmp_Input.text;
+
+        //
+        b_player.isSave3 = true;
 
     }
 
@@ -235,33 +188,93 @@ public class ShopText : MonoBehaviour
     // press play button 1
     public void PressPlayButton1() {
 
+        // If the current hat is not one that is bought then don't start the game
+        if (!shop.IsHatBought[shop.CurrentHatSelectedInt]) {
+
+            //
+            Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
+
+            return;
+
+        }
+
+        // If the current hat is not one that is bought then don't start the game
+        if (!shop.IsCharacterBought[shop.CurrentCharacterSelectedInt]) {
+
+            //
+            Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
+
+            return;
+
+        }
+
         // Load all of the data from the first player
-        b_Player.LoadPlayer1();
+        b_player.LoadPlayer1();
 
         // play 1
-        b_Player.PlayPlayer1();
+        b_player.PlayPlayer1();
 
     }
 
     // press play button 2
     public void PressPlayButton2() {
 
+        // If the current hat is not one that is bought then don't start the game
+        if (!shop.IsHatBought[shop.CurrentHatSelectedInt]) {
+
+            //
+            Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
+
+            return;
+
+        }
+
+        // If the current hat is not one that is bought then don't start the game
+        if (!shop.IsCharacterBought[shop.CurrentCharacterSelectedInt]) {
+
+            //
+            Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
+
+            return;
+
+        }
+
         // Load all of the data from the second player
-        b_Player.LoadPlayer2();
+        b_player.LoadPlayer2();
 
         // play 2
-        b_Player.PlayPlayer2();
+        b_player.PlayPlayer2();
 
     }
 
     // press play button 3
     public void PressPlayButton3() {
 
+        // If the current hat is not one that is bought then don't start the game
+        if (!shop.IsHatBought[shop.CurrentHatSelectedInt]) {
+
+            //
+            Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
+
+            return;
+
+        }
+
+        // If the current hat is not one that is bought then don't start the game
+        if (!shop.IsCharacterBought[shop.CurrentCharacterSelectedInt]) {
+
+            //
+            Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
+
+            return;
+
+        }
+
         // Load all of the data from the third player
-        b_Player.LoadPlayer3();
+        b_player.LoadPlayer3();
 
         // play 3
-        b_Player.PlayPlayer3();
+        b_player.PlayPlayer3();
 
     }
 

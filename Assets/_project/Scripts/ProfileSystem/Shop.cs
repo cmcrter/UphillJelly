@@ -17,6 +17,15 @@ public class Shop : MonoBehaviour
 
     #region Variables
 
+    //
+    public GameObject SureYouWantToBuyHat;
+
+    //
+    public GameObject SureYouWantToBuyCharacter;
+
+    //
+    public b_Player b_player;
+
     // Outfitchanger reference
     public OutfitChanger outfitChanger;
 
@@ -172,6 +181,38 @@ public class Shop : MonoBehaviour
 
     }
 
+    //
+    public void SureWantToBuyHat() {
+
+        //
+        SureYouWantToBuyHat.SetActive(true);
+
+    }
+
+    //
+    public void SureWantToBuyCharacter() {
+
+        //
+        SureYouWantToBuyCharacter.SetActive(true);
+
+    }
+
+    //
+    public void HideHatBuyPanel() {
+
+        //
+        SureYouWantToBuyHat.SetActive(false);
+
+    }
+
+    //
+    public void HideCharacterBuyPanel() {
+
+        //
+        SureYouWantToBuyCharacter.SetActive(false);
+
+    }
+
     // Next hat price which is called in OutfitChanger
     public void NextHatPrice() {
 
@@ -191,6 +232,8 @@ public class Shop : MonoBehaviour
     // buy the current hat
     public void BuyCurrentHat() {
 
+        //
+        SureYouWantToBuyHat.SetActive(false);
 
         // if the player does not have enough currency for the hat
         if (Currency < CurrentHatPriceInt) {
@@ -214,6 +257,37 @@ public class Shop : MonoBehaviour
 
             // Debug
             Debug.Log("BoughtHat");
+
+        }
+
+        // Add in save after every purchase
+        //
+        if (b_player.isSave1 == true) {
+
+            Debug.Log("SAVED1");
+
+            //
+            b_player.SavePlayer1();
+
+        }
+
+        //
+        if (b_player.isSave2 == true) {
+
+            Debug.Log("SAVED2");
+
+            //
+            b_player.SavePlayer2();
+
+        }
+
+        //
+        if (b_player.isSave3 == true) {
+
+            Debug.Log("SAVED3");
+
+            //
+            b_player.SavePlayer3();
 
         }
 
@@ -277,6 +351,9 @@ public class Shop : MonoBehaviour
     // buy the current character
     public void BuyCurrentCharacter() {
 
+        //
+        SureYouWantToBuyCharacter.SetActive(false);
+
         // if players currency is more than or = to the current character price
         if (Currency >= CurrentCharacterPriceInt) {
 
@@ -299,6 +376,37 @@ public class Shop : MonoBehaviour
 
             // Debug
             Debug.Log("Character Too Expensive");
+
+        }
+
+        // Add in save after every purchase
+        //
+        if (b_player.isSave1 == true) {
+
+            Debug.Log("SAVED1");
+
+            //
+            b_player.SavePlayer1();
+
+        }
+
+        //
+        if (b_player.isSave2 == true) {
+
+            Debug.Log("SAVED2");
+
+            //
+            b_player.SavePlayer2();
+
+        }
+
+        //
+        if (b_player.isSave3 == true) {
+
+            Debug.Log("SAVED3");
+
+            //
+            b_player.SavePlayer3();
 
         }
 

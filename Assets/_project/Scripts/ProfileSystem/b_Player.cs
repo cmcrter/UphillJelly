@@ -22,7 +22,14 @@ public class b_Player : MonoBehaviour
     //
     public GhostPlayer ghostPlayer;
 
-    //public Ghost ghost;
+    //
+    public bool isSave1 = false;
+
+    //
+    public bool isSave2 = false;
+
+    //
+    public bool isSave3 = false;
 
     //
     public CC changeCamera;
@@ -33,23 +40,6 @@ public class b_Player : MonoBehaviour
     // reference to the ReplaySaveManager
     public ReplaySaveManager replayGhostSaveManager;
 
-    // reference to the 1st load player button
-    public GameObject LoadPlayer1Button;
-
-    // reference to the 2nd load player button
-    public GameObject LoadPlayer2Button;
-
-    // reference to the 3rd load player button
-    public GameObject LoadPlayer3Button;
-
-    // reference to the 1st save player button
-    public GameObject SavePlayer1Button;
-
-    // reference to the 2nd save player button
-    public GameObject SavePlayer2Button;
-
-    // reference to the 3rd save player button
-    public GameObject SavePlayer3Button;
 
     // list of the hat bought bools
     public List<bool> HatBoughtBools;
@@ -66,9 +56,6 @@ public class b_Player : MonoBehaviour
 
     // reference to the shop script
     public Shop shop;
-
-    //
-    //public ShopText shopText;
 
     // int for the current hat gameobject
     public int CurrentGameObjectInt;
@@ -119,19 +106,6 @@ public class b_Player : MonoBehaviour
     // Load the player1
     public void LoadPlayer1() {
 
-        // DUPES (DELETE)
-        // Set the load player button 2 to false
-        LoadPlayer2Button.SetActive(false);
-
-        // Set the load player button 3 to false
-        LoadPlayer3Button.SetActive(false);
-
-        // Set the save player button 2 to false
-        SavePlayer2Button.SetActive(false);
-
-        // Set the save player button 3 to false
-        SavePlayer3Button.SetActive(false);
-        //
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
@@ -209,17 +183,6 @@ public class b_Player : MonoBehaviour
     // Load the player2
     public void LoadPlayer2() {
 
-        // Set the load player button 1 to false
-        LoadPlayer1Button.SetActive(false);
-
-        // Set the load player button 3 to false
-        LoadPlayer3Button.SetActive(false);
-
-        // Set the save player button 1 to false
-        SavePlayer1Button.SetActive(false);
-
-        // Set the save player button 3 to false
-        LoadPlayer3Button.SetActive(false);
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer2();
@@ -295,17 +258,6 @@ public class b_Player : MonoBehaviour
     // Load the player3
     public void LoadPlayer3() {
 
-        // Set the load player button 2 to false
-        LoadPlayer2Button.SetActive(false);
-
-        // Set the load player button 1 to false
-        LoadPlayer1Button.SetActive(false);
-
-        // Set the save player button 2 to false
-        SavePlayer2Button.SetActive(false);
-
-        // Set the save player button 1 to false
-        SavePlayer1Button.SetActive(false);
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer3();
@@ -385,6 +337,8 @@ public class b_Player : MonoBehaviour
         // save the replay 1 through the ghost save manager
         replayGhostSaveManager.SaveReplay1();
 
+        Debug.Log("Saved Player 1");
+
     }
 
 
@@ -397,6 +351,8 @@ public class b_Player : MonoBehaviour
         // save the replay 2 through the ghost save manager
         replayGhostSaveManager.SaveReplay2();
 
+        Debug.Log("Saved Player 2");
+
     }
 
 
@@ -408,6 +364,8 @@ public class b_Player : MonoBehaviour
 
         // save the replay 3 through the ghost save manager
         replayGhostSaveManager.SaveReplay3();
+
+        Debug.Log("Saved Player 3");
 
     }
 
