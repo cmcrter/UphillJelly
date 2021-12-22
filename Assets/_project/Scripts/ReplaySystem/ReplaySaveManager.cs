@@ -21,6 +21,15 @@ public class ReplaySaveManager : MonoBehaviour
     // reference to the ghost
     public Ghost ghost;
 
+    // reference to the ghost
+    public Ghost2 ghost2;
+
+    //
+    public GameObject Ghost1character;
+
+    //
+    public GameObject Ghost2character;
+
     #endregion
 
     #region replaySaveManager check
@@ -54,6 +63,25 @@ public class ReplaySaveManager : MonoBehaviour
     #endregion
 
     #region Methods
+
+    //
+    public void HideReplay1() {
+
+        //
+        Ghost1character.SetActive(false);
+
+    }
+
+    //
+    public void HideReplay2() {
+
+        //
+        Ghost2character.SetActive(false);
+
+    }
+
+
+
 
     public void SaveReplay1Button() {
 
@@ -135,7 +163,106 @@ public class ReplaySaveManager : MonoBehaviour
 
         }
 
+        Debug.Log("Loaded Save 1");
+
     }
+
+
+
+
+
+
+
+
+
+
+    // bool for if there is a save file
+    public bool IsReplaySecondSaveFile1() {
+
+        // return the applications persistent data path of the replay save if the save file exists
+        return Directory.Exists(Application.persistentDataPath + "/replay_secondSave1");
+
+    }
+
+
+    // public void for save replay
+    public void SaveSecondReplay1() {
+
+        // if there is not a save file for the replay
+        if (!IsReplaySecondSaveFile1()) {
+
+            // create a save file in the data path folder called /replay_save
+            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData1");
+
+        }
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/replay_SecondSavedData1")) {
+
+            // create a directory for "/replay_save/replay_data"
+            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData1");
+
+        }
+
+        // create a new binary formatter called replay_bf
+        BinaryFormatter replay_secondBF1 = new BinaryFormatter();
+
+        // create a filestream in the replay data and call it "replay_SavedData"
+        FileStream replay_secondFile1 = File.Create(Application.persistentDataPath + "/replay_SavedData1.sdat");
+
+        // pass in ghost object and save public variables
+        var json = JsonUtility.ToJson(ghost2);
+
+        // serializes the data to binary format in a json file
+        replay_secondBF1.Serialize(replay_secondFile1, json);
+
+        // close the replay file
+        replay_secondFile1.Close();
+
+    }
+
+    // load the replay
+    public void LoadSecondReplay1() {
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/replay_secondData1")) {
+
+            // create a directory for "/replay_save/replay_data"
+            Directory.CreateDirectory(Application.persistentDataPath + "/replay_secondData1");
+
+        }
+
+        // create a new binary formatter called replay_bf
+        BinaryFormatter replay_secondBF1 = new BinaryFormatter();
+
+        // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
+        if (File.Exists(Application.persistentDataPath + "/replay_secondSavedData1.sdat")) {
+
+            // open the file "/replay_save/replay_data/replay_SavedData.txt"
+            FileStream secondFile1 = File.Open(Application.persistentDataPath + "/replay_secondSavedData1.sdat", FileMode.Open);
+
+            //deseralize the ghost file 
+            JsonUtility.FromJsonOverwrite((string)replay_secondBF1.Deserialize(secondFile1), ghost2);
+
+            // close the file
+            secondFile1.Close();
+
+        }
+
+        Debug.Log("Loaded Second Save 1");
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
