@@ -41,7 +41,7 @@ public class Ghost2 : ScriptableObject
 
         isRecording = false;
 
-        isReplaying = false;
+        isReplaying = true;
 
     }
 
@@ -54,6 +54,7 @@ public class Ghost2 : ScriptableObject
         rotation.Clear();
 
     }
+
 
 
     #endregion

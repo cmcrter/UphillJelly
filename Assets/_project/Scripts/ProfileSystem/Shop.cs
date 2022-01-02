@@ -258,38 +258,40 @@ public class Shop : MonoBehaviour
             // Debug
             Debug.Log("BoughtHat");
 
-        }
+            // Add in save after every purchase
+            //
+            if (b_player.isSave1 == true) {
 
-        // Add in save after every purchase
-        //
-        if (b_player.isSave1 == true) {
+                Debug.Log("SAVED1");
 
-            Debug.Log("SAVED1");
+                //
+                b_player.SavePlayer1();
+
+            }
 
             //
-            b_player.SavePlayer1();
+            if (b_player.isSave2 == true) {
 
-        }
+                Debug.Log("SAVED2");
 
-        //
-        if (b_player.isSave2 == true) {
+                //
+                b_player.SavePlayer2();
 
-            Debug.Log("SAVED2");
-
-            //
-            b_player.SavePlayer2();
-
-        }
-
-        //
-        if (b_player.isSave3 == true) {
-
-            Debug.Log("SAVED3");
+            }
 
             //
-            b_player.SavePlayer3();
+            if (b_player.isSave3 == true) {
+
+                Debug.Log("SAVED3");
+
+                //
+                b_player.SavePlayer3();
+
+            }
 
         }
+
+        
 
     }
 
@@ -369,6 +371,37 @@ public class Shop : MonoBehaviour
             // Debug
             Debug.Log("BoughtCharacter");
 
+            // Add in save after every purchase
+            //
+            if (b_player.isSave1 == true) {
+
+                Debug.Log("SAVED1");
+
+                //
+                b_player.SavePlayer1();
+
+            }
+
+            //
+            if (b_player.isSave2 == true) {
+
+                Debug.Log("SAVED2");
+
+                //
+                b_player.SavePlayer2();
+
+            }
+
+            //
+            if (b_player.isSave3 == true) {
+
+                Debug.Log("SAVED3");
+
+                //
+                b_player.SavePlayer3();
+
+            }
+
         }
 
         // if the player does not have enough currency for the character
@@ -379,36 +412,7 @@ public class Shop : MonoBehaviour
 
         }
 
-        // Add in save after every purchase
-        //
-        if (b_player.isSave1 == true) {
-
-            Debug.Log("SAVED1");
-
-            //
-            b_player.SavePlayer1();
-
-        }
-
-        //
-        if (b_player.isSave2 == true) {
-
-            Debug.Log("SAVED2");
-
-            //
-            b_player.SavePlayer2();
-
-        }
-
-        //
-        if (b_player.isSave3 == true) {
-
-            Debug.Log("SAVED3");
-
-            //
-            b_player.SavePlayer3();
-
-        }
+        
 
     }
 

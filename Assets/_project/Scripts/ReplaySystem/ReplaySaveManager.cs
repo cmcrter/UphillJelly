@@ -208,7 +208,7 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF1 = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_secondFile1 = File.Create(Application.persistentDataPath + "/replay_SavedData1.sdat");
+        FileStream replay_secondFile1 = File.Create(Application.persistentDataPath + "/replay_SecondSavedData1.sdat");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost2);

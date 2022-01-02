@@ -35,16 +35,22 @@ public class Ghost : ScriptableObject
     #endregion
 
     #region Unity Methods
-    /*
+
     //
     public void Start() {
 
-        isRecording = false;
+        // Reset the saved ghost data for a new ghost to be recorded
+        timeStamp.Clear();
+        position.Clear();
+        rotation.Clear();
 
-        isReplaying = false;
+        //isRecording = true;
+
+        //isReplaying = false;
+
+        Debug.Log("543211");
 
     }
-    */
 
     // On command reset the ghosts data
     public void ResetGhostData() {
@@ -53,6 +59,8 @@ public class Ghost : ScriptableObject
         timeStamp.Clear();
         position.Clear();
         rotation.Clear();
+
+        Debug.Log("12345");
 
     }
 

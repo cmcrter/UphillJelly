@@ -20,16 +20,22 @@ public class b_Player : MonoBehaviour
     #region Variables
 
     //
-    public GhostPlayer ghostPlayer;
+    //public GhostPlayer ghostPlayer;
 
     //
-    public bool isSave1 = false;
+    public Ghost ghostSO1;
 
     //
-    public bool isSave2 = false;
+    public Ghost2 ghostSO2;
 
     //
-    public bool isSave3 = false;
+    public bool isSave1;
+
+    //
+    public bool isSave2;
+
+    //
+    public bool isSave3;
 
     //
     public CC changeCamera;
@@ -74,6 +80,23 @@ public class b_Player : MonoBehaviour
 
     #region Methods
 
+    //
+    public void Start() {
+
+        //
+        isSave1 = false;
+
+        //
+        isSave2 = false;
+
+        //
+        isSave3 = false;
+
+        //
+        ghostSO1.ResetGhostData();
+
+    }
+
     // update
     public void Update() {
 
@@ -85,23 +108,71 @@ public class b_Player : MonoBehaviour
 
         }
 
+        /*
+        if (Keyboard.current.tKey.isPressed) {
 
-        if (Keyboard.current.escapeKey.isPressed) {
-
-            //ghostPlayer.isFirstRecord = false;
-
-            //
-            SavePlayer1();
-
-            //
-            // save the replay 1 through the ghost save manager
-            //replayGhostSaveManager.SaveReplay1();
+            TestPressed1();
 
         }
 
+        if (Input.GetKeyDown(KeyCode.B)) {
+
+            TestPressed1();
+
+        }
+
+        if (Keyboard.current.tabKey.isPressed) {
+
+            TestPressed2();
+
+        }
+        */
 
     }
 
+    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
+    public void TestPressed1() {
+
+        //
+        ghostSO1.isRecording = false;
+
+        //
+        ghostSO2.isReplaying = false;
+
+        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+        // Ghost 2 replays best time 
+        //
+        // Save replay 1 as replay 2
+        //
+        SavePlayer1();
+
+        //
+        ghostSO2.timeStamp = ghostSO1.timeStamp;
+
+        //
+        ghostSO2.position = ghostSO1.position;
+
+        //
+        ghostSO2.rotation = ghostSO1.rotation;
+
+        //
+        SavePlayer1Second();
+
+        Debug.Log("22222222");
+    }
+
+    //
+    public void TestPressed2() {
+
+        //
+        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+        // Ghost 2 replays best time 
+        //
+        // 
+        //
+        SavePlayer1();
+
+    }
 
     // Load the player1
     public void LoadPlayer1() {
@@ -341,6 +412,19 @@ public class b_Player : MonoBehaviour
 
     }
 
+    // Save the player1's second ghost replay
+    public void SavePlayer1Second() {
+
+        // save the player 1 and pass through the shop and outfitchanger
+        //b_SaveSystem.SavePlayer1(shop, outfitChanger);
+
+        // save the replay 1 through the ghost save manager
+        replayGhostSaveManager.SaveSecondReplay1();
+
+        Debug.Log("Saved Player 1");
+
+    }
+
 
     // Save the player2
     public void SavePlayer2() {
@@ -376,10 +460,13 @@ public class b_Player : MonoBehaviour
     public void PlayPlayer1() {
 
         // load the first replay through the ghost save manager
-        replayGhostSaveManager.LoadReplay1();
+        //replayGhostSaveManager.LoadReplay1();
 
-        //ghost.isRecording = false;
-        //ghost.isReplaying = true;
+        ghostSO1.isRecording = true;
+        ghostSO1.isReplaying = false;
+
+        ghostSO2.isRecording = false;
+        ghostSO2.isReplaying = true;
 
         // Change to game camera
         changeCamera.ChangeToGameCam();
@@ -410,6 +497,17 @@ public class b_Player : MonoBehaviour
 
     }
 
+    //
+    public void ExitedTheGame() {
+
+        //
+        ghostSO1.isRecording = false;
+        ghostSO1.isReplaying = false;
+
+        ghostSO2.isRecording = false;
+        ghostSO2.isReplaying = false;
+
+    }
 
     #endregion
 

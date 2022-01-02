@@ -55,7 +55,9 @@ public class ShopText : MonoBehaviour
     // first button pressed
     public void ButtonPressed1() {
 
-        
+        //
+        b_player.isSave1 = true;
+
         // set the second play button to false
         PlayButton2.SetActive(false);
 
@@ -66,15 +68,19 @@ public class ShopText : MonoBehaviour
         // set the starting background to false
         StartingBackground.SetActive(false);
 
+        // load player 1 data
+        b_player.SavePlayer1();
 
         // load player 1 data
         b_player.LoadPlayer1();
 
+        //
+        b_player.SavePlayer1Second();
+
         // set the load profile text to load (Players name)
         LoadProfile1Text.text = "Load " + tmp_Input.text;
 
-        //
-        b_player.isSave1 = true;
+        
 
     }
 

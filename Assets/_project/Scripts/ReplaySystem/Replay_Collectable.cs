@@ -14,8 +14,6 @@ using UnityEngine;
 public class Replay_Collectable : MonoBehaviour
 {
 
-    
-
     #region Variables
 
     // reference to the child object
