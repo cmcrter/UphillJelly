@@ -22,6 +22,8 @@ public class OutfitChanger : MonoBehaviour
     // Hat selecter game object
     public GameObject hatSelector;
 
+
+
     [Header("Characters In Scene")]
     // reference to the character in the scene
     public GameObject characterObjectInScene;
@@ -29,12 +31,22 @@ public class OutfitChanger : MonoBehaviour
     // reference to the character in the scene
     public GameObject playableCharacterObjectInScene;
 
+    //
+    public GameObject Ghost2CharacterInScene;
+
+
+
     [Header("Hats In Scene")]
     // gameobject hat which will be displayed
     public GameObject hatDisplayGameObject;
 
     // gameobject hat which will be displayed
     public GameObject playableHatDisplayGameObject;
+
+    //
+    public GameObject Ghost2HatInScene;
+
+
 
     [Header("Gameobject Options")]
     // list of the hat gameobjects
@@ -108,11 +120,24 @@ public class OutfitChanger : MonoBehaviour
         playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
 
+        // load the current character material that has been saved
+        Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+
+
         // set the players hat to the current hat
         playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
 
         // set the players material to the current hat material
         playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+
+
+        // set the players hat to the current hat
+        Ghost2HatInScene.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        // set the players material to the current hat material
+        Ghost2HatInScene.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+        
 
     }
 

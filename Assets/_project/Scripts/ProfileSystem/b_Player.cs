@@ -200,6 +200,12 @@ public class b_Player : MonoBehaviour
         // outfit changer current character int = data current character int
         outfitChanger.currentCharacterint = data.icurrentCharacterint;
 
+        //
+        Debug.Log(outfitChanger.currentGOMaterialint);
+
+        //
+        //outfitChanger.ChangeGhostOutfit();
+
         // for i < shop hat bought count
         for (int i = 0; i < shop.IsHatBought.Count; i++) {
 

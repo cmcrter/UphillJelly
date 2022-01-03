@@ -69,7 +69,7 @@ public class ShopText : MonoBehaviour
         StartingBackground.SetActive(false);
 
         // load player 1 data
-        b_player.SavePlayer1();
+        //b_player.SavePlayer1();
 
         // load player 1 data
         b_player.LoadPlayer1();
@@ -87,7 +87,8 @@ public class ShopText : MonoBehaviour
     // second button pressed
     public void ButtonPressed2() {
 
-
+        //
+        b_player.isSave2 = true;
 
         // set the first play button to false
         PlayButton1.SetActive(false);
@@ -95,12 +96,8 @@ public class ShopText : MonoBehaviour
         // set the third play button to false
         PlayButton3.SetActive(false);
 
-        //
-        b_player.isSave2 = true;
-
         // set the starting background to false
         StartingBackground.SetActive(false);
-
 
         // load player 1 data
         b_player.LoadPlayer2();
