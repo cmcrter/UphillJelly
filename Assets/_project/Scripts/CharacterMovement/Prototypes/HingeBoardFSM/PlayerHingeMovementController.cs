@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 29/11/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 29/11/21
+// Date Last Edited: 04/01/22
 // Brief: A prototype character controller using a board made of 2 RBs with 2 Joints used
 //////////////////////////////////////////////////////////// 
 

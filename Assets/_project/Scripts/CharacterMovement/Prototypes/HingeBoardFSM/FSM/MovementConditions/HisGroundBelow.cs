@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 10/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 22/11/21
+// Date Last Edited: 04/01/22
 // Brief: A condition for changing movement states, whether it's on the ground or not
 //////////////////////////////////////////////////////////// 
 

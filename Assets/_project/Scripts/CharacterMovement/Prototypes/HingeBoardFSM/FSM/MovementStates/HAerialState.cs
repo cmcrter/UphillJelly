@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 22/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 22/10/21
+// Date Last Edited: 04/01/22
 // Brief: The state the character is in when they're in the air
 //////////////////////////////////////////////////////////// 
 
