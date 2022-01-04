@@ -101,13 +101,13 @@ namespace SleepyCat.Movement
                 if(inputHandler.TurningAxis < 0)
                 {
                     //Turn Left
-                    parentController.transform.Rotate(new Vector3(0, 5f, 0));
+                    parentController.transform.Rotate(new Vector3(0, 1f, 0));
                 }
 
                 if(inputHandler.TurningAxis > 0)
                 {
                     //Turn Right
-                    parentController.transform.Rotate(new Vector3(0, -5, 0));
+                    parentController.transform.Rotate(new Vector3(0, -1f, 0));
                 }
             }
         }

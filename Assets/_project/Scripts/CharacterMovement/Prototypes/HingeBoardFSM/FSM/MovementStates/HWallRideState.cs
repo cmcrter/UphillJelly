@@ -85,6 +85,9 @@ namespace SleepyCat.Movement
             rb.isKinematic = true;
             rb.velocity = Vector3.zero;
 
+            playerMovement.ResetWheelPos();
+            playerMovement.AlignWheels();
+
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.currentWallRide.transform.right;
             if(nextToWallRun.dotProductWithWall < 0)

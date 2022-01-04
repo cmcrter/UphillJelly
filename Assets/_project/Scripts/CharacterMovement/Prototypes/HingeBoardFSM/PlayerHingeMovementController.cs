@@ -277,9 +277,19 @@ namespace SleepyCat.Movement
             turningTimer = new Timer(turnDuration);
             currentTurnInput = 0;
 
+            bool initialTurningDir = inputHandler.TurningAxis < 0 ? true : false;
+
             //Whilst the player wants to turn
             while(inputHandler.TurningAxis != 0)
             {
+                bool newTurningDir = inputHandler.TurningAxis < 0 ? true : false;
+
+                if(initialTurningDir != newTurningDir)
+                {
+                    StopTurnCoroutine();
+                    break;
+                }
+
                 //How far along into the timer is this
                 float timeAlongTimer = turnDuration / turningTimer.current_time;
                 timeAlongTimer = Mathf.Clamp(timeAlongTimer, 0f, 0.99f);
