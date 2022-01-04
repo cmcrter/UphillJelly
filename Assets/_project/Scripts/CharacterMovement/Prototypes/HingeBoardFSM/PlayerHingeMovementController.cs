@@ -42,7 +42,7 @@ namespace SleepyCat.Movement
         private GameObject playerModel;
 
         [SerializeField]
-        private GameObject boardObject;
+        public GameObject boardObject;
         //Front Rigidbody
         [SerializeField]
         private Rigidbody fRB;
@@ -53,6 +53,11 @@ namespace SleepyCat.Movement
         public SphereCollider ballMovement;
         public PlayerInput input;
         public InputHandler inputHandler;
+
+        [SerializeField]
+        private Transform frontWheelPos;
+        [SerializeField]
+        private Transform backWheelPos;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
@@ -93,19 +98,16 @@ namespace SleepyCat.Movement
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
 
-            fRB.transform.rotation = point.rotation;
-            fRB.transform.position = point.position;
-
             bRB.isKinematic = false;
 
             bRB.angularVelocity = Vector3.zero;
             bRB.velocity = Vector3.zero;
 
-            bRB.transform.rotation = point.rotation;
-            bRB.transform.position = point.position;
-
             transform.rotation = point.rotation;
             transform.position = point.position;
+
+            ResetWheelPos();
+            AlignWheels();
 
             Time.timeScale = 1;
         }
@@ -117,7 +119,7 @@ namespace SleepyCat.Movement
             Quaternion headingDelta = Quaternion.identity;
             Quaternion groundQuat = transform.rotation;
 
-            if(groundBelow.FrontGroundHit.collider || groundBelow.BackGroundHit.collider)
+            if(groundBelow.FrontGroundHit.collider && groundBelow.BackGroundHit.collider)
             {
                 Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
 
@@ -125,7 +127,8 @@ namespace SleepyCat.Movement
                 Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
                 Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
 
-                if(Vector3.Angle(upright, transform.up) < 90f)
+                float angle = Vector3.Angle(upright, transform.up);
+                if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 7.5f)
                 {
                     if(bAerial)
                     {
@@ -144,12 +147,6 @@ namespace SleepyCat.Movement
 
             transform.rotation = groundQuat;
             transform.rotation = transform.rotation * headingDelta;
-
-            //With the hinge, this means that the rb wont just run away without the player
-            if(Vector3.Distance(transform.position, fRB.transform.position) > 0.5f)
-            {
-                fRB.transform.position = boardObject.transform.position + (transform.forward * 0.281f);
-            }
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
@@ -174,7 +171,7 @@ namespace SleepyCat.Movement
             grindBelow.InitialiseCondition(fRB, inputHandler);
 
             groundedState.InitialiseState(this, fRB, bRB, groundBelow, grindBelow);
-            aerialState.InitialiseState(this, fRB, groundBelow, nextToWallRun, grindBelow);
+            aerialState.InitialiseState(this, fRB, bRB, groundBelow, nextToWallRun, grindBelow);
             wallRideState.InitialiseState(this, fRB, nextToWallRun, groundBelow);
             grindingState.InitialiseState(this, fRB, grindBelow);
 
@@ -237,6 +234,20 @@ namespace SleepyCat.Movement
         public override void MoveToPosition(Vector3 positionToMoveTo)
         {
             ballMovement.transform.position = positionToMoveTo;
+        }
+
+        public void ResetWheelPos()
+        {
+            fRB.transform.position = frontWheelPos.transform.position;
+            bRB.transform.position = backWheelPos.transform.position;
+        }
+
+        public void AlignWheels()
+        {
+            fRB.transform.up = transform.up;
+            fRB.transform.forward = transform.forward;
+            bRB.transform.forward = transform.forward;
+            bRB.transform.up = transform.up;
         }
 
         public void StartTurnCoroutine()

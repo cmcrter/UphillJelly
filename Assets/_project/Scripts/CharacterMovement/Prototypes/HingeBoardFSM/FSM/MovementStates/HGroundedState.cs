@@ -185,6 +185,8 @@ namespace SleepyCat.Movement
                 parentController.StartTurnCoroutine();
             }
 
+            parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
+
             hasRan = true;
         }
 
@@ -222,10 +224,7 @@ namespace SleepyCat.Movement
                 else
                 {
                     parentController.playerCamera.bMovingBackwards = false;
-
-                    movementRB.transform.up = playerTransform.up;
-                    movementRB.transform.forward = playerTransform.forward;
-                    followRB.transform.forward = playerTransform.forward;
+                    parentController.AlignWheels();
                 }
 
                 movementRB.velocity = initialSpeed * movementRB.transform.forward;
@@ -245,6 +244,12 @@ namespace SleepyCat.Movement
                         movementRB.AddForce(playerTransform.forward.normalized, ForceMode.Impulse);
                     }
                 }
+            }
+
+            //With the hinge, this means that the rb wont just run away without the player
+            if(Vector3.Distance(playerTransform.position, movementRB.transform.position) > 0.5f)
+            {
+                movementRB.transform.position = parentController.boardObject.transform.position + (playerTransform.forward * 0.281f);
             }
         }
 

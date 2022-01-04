@@ -24,23 +24,28 @@ namespace SleepyCat.Movement
 
         private PlayerHingeMovementController parentController;
         private Rigidbody movementRB;
+        private Rigidbody followRB;
         private PlayerInput pInput;
         private InputHandler inputHandler;
+
+        private Transform playerTransform;
 
         [SerializeField]
         public float AerialDrag = 0.05f;
         [SerializeField]
-        private float adjustGroundSmoothness = 2f;
+        private float adjustGroundSmoothness = 4f;
 
         public HAerialState()
         {
 
         }
 
-        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody playerRB, HisGroundBelow groundBelow, HisNextToWallRun wallRunning, HisOnGrind grinding)
+        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody playerRB, Rigidbody backWheelRB, HisGroundBelow groundBelow, HisNextToWallRun wallRunning, HisOnGrind grinding)
         {
             parentController = controllerParent;
+            playerTransform = controllerParent.transform;
             movementRB = playerRB;
+            followRB = backWheelRB;
 
             grindCondition = grinding;
             groundedCondition = groundBelow;
@@ -83,22 +88,27 @@ namespace SleepyCat.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            parentController.SmoothToGroundRotation(true, adjustGroundSmoothness, 0f, groundedCondition);
+            parentController.AlignWheels();
+            parentController.SmoothToGroundRotation(true, adjustGroundSmoothness, 1f, groundedCondition);
         }
 
         public override void PhysicsTick(float dT)
         {
-            //Need some way of making the skateboard feel more stable in the air and just generally nicer
-            if(inputHandler.TurningAxis < 0)
+            //Giving a minimum distance before the turning is effective
+            if(Vector3.Distance(groundedCondition.BackGroundHit.point, followRB.transform.position) > 5f && Vector3.Distance(groundedCondition.FrontGroundHit.point, movementRB.transform.position) > 5f)
             {
-                //Turn Left
-                movementRB.transform.Rotate(new Vector3(0, 5f, 0));
-            }
+                //Need some way of making the skateboard feel more stable in the air and just generally nicer
+                if(inputHandler.TurningAxis < 0)
+                {
+                    //Turn Left
+                    parentController.transform.Rotate(new Vector3(0, 5f, 0));
+                }
 
-            if(inputHandler.TurningAxis > 0)
-            {
-                //Turn Right
-                movementRB.transform.Rotate(new Vector3(0, -5, 0));
+                if(inputHandler.TurningAxis > 0)
+                {
+                    //Turn Right
+                    parentController.transform.Rotate(new Vector3(0, -5, 0));
+                }
             }
         }
 
@@ -106,8 +116,13 @@ namespace SleepyCat.Movement
         {
             pInput.SwitchCurrentActionMap("Aerial");
 
+            parentController.ResetWheelPos();
+            parentController.AlignWheels();
+
             parentController.playerCamera.FollowRotation = false;
+
             movementRB.drag = AerialDrag;
+            followRB.drag = AerialDrag;
 
             hasRan = true;
         }

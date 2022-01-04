@@ -181,6 +181,9 @@ namespace SleepyCat.Movement
                 parentController.StartTurnCoroutine();
             }
 
+            parentController.gameObject.transform.rotation = Quaternion.identity;
+            parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
+
             hasRan = true;
         }
 
