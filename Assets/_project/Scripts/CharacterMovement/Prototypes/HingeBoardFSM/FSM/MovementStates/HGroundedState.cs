@@ -25,6 +25,8 @@ namespace SleepyCat.Movement
         private PlayerHingeMovementController parentController;
         private InputHandler inputHandler;
         private Transform playerTransform;
+        [SerializeField]
+        private Transform testPressDownObject;
         private Rigidbody movementRB;
         private Rigidbody followRB;
 
@@ -72,6 +74,7 @@ namespace SleepyCat.Movement
         private float jumpTimerDuration = 0.35f;
         [SerializeField]
         private Timer jumpTimer;
+        private bool bPressingDown = false;
 
         public HGroundedState()
         {
@@ -195,6 +198,7 @@ namespace SleepyCat.Movement
             StopJumpTimerCoroutine();
             StopPushTimerCoroutine();
 
+            bPressingDown = false;
             parentController.playerCamera.bMovingBackwards = false;
             hasRan = false;
         }
@@ -266,11 +270,15 @@ namespace SleepyCat.Movement
         private void PressDown()
         {
             movementRB.centerOfMass += new Vector3(0, -0.25f, 0);
+            testPressDownObject.position += new Vector3(0, -0.3f, 0);
+            bPressingDown = true;
         }
 
         private void UnPressDown()
         {
             movementRB.centerOfMass += new Vector3(0, 0.25f, 0);
+            testPressDownObject.position += new Vector3(0, 0.3f, 0);
+            bPressingDown = false;
         }
 
         private void Jump()
@@ -314,7 +322,7 @@ namespace SleepyCat.Movement
         
         private void StartJumpTimer()
         {
-            jumpCoroutine = parentController.StartCoroutine(Co_JumpTimer());
+            jumpCoroutine = parentController.StartCoroutine(Co_JumpTimer(bPressingDown));
         }
 
         private void StopJumpTimerCoroutine()
@@ -327,12 +335,15 @@ namespace SleepyCat.Movement
             jumpCoroutine = null;
         }
 
-        private IEnumerator Co_JumpTimer()
+        private IEnumerator Co_JumpTimer(bool isPressingDown)
         {
             //It's technically a new timer on top of the class in use
             jumpTimer = new Timer(jumpTimerDuration);
 
-            movementRB.AddForce(parentController.transform.up * jumpSpeed * 1000);
+            //Pressing down makes jumping bigger
+            float newjumpSpeed = isPressingDown ? jumpSpeed * 1.5f : jumpSpeed;
+
+            movementRB.AddForce(parentController.transform.up * newjumpSpeed * 1000);
             Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
 
             //Whilst it has time left

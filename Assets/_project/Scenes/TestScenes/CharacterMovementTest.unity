@@ -3241,7 +3241,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh831004
+  m_Name: pb_Mesh471024
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3575,6 +3575,10 @@ PrefabInstance:
       propertyPath: wallRideState.rideSpeed
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6587126617156609406, guid: c49642d14f405704381462b1390931ca, type: 3}
+      propertyPath: groundedState.testPressDownObject
+      value: 
+      objectReference: {fileID: 1216596219}
     - target: {fileID: 6587126617156609406, guid: c49642d14f405704381462b1390931ca, type: 3}
       propertyPath: turnSpeedCurve.m_Curve.Array.data[0].time
       value: -0.00013328157
@@ -3924,6 +3928,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
   analogueStickPatterns: []
+  trickInputBuffer: {fileID: 0}
 --- !u!1 &1154528266
 GameObject:
   m_ObjectHideFlags: 0
@@ -4071,6 +4076,11 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!4 &1216596219 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5370616682765242826, guid: c49642d14f405704381462b1390931ca, type: 3}
+  m_PrefabInstance: {fileID: 1053565974}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1228316359
 GameObject:
   m_ObjectHideFlags: 0
@@ -4220,7 +4230,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh190198
+  m_Name: pb_Mesh470866
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5275,7 +5285,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh190508
+  m_Name: pb_Mesh471178
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7711,7 +7721,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh190618
+  m_Name: pb_Mesh471288
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10559,6 +10569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 791570300273447}
   analogueStickPatterns: []
+  trickInputBuffer: {fileID: 0}
 --- !u!4 &6760451510322693524
 Transform:
   m_ObjectHideFlags: 0
