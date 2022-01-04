@@ -128,6 +128,8 @@ namespace SleepyCat.Movement
                 Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
 
                 float angle = Vector3.Angle(upright, transform.up);
+
+                //If it's a reasonable adjustment
                 if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 7.5f)
                 {
                     if(bAerial)
@@ -231,6 +233,8 @@ namespace SleepyCat.Movement
         #endregion
 
         #region Public Methods
+
+        //A few utility functions
         public override void MoveToPosition(Vector3 positionToMoveTo)
         {
             ballMovement.transform.position = positionToMoveTo;
