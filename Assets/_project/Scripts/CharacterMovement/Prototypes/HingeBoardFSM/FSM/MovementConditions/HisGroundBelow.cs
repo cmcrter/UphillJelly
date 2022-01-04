@@ -22,7 +22,6 @@ namespace L7Games.Movement
         public RaycastHit FrontGroundHit;
         public RaycastHit BackGroundHit;
 
-        private Transform playerTransform;
         [SerializeField]
         private Transform frontraycastPointTransform;
         [SerializeField]
@@ -30,8 +29,6 @@ namespace L7Games.Movement
 
         [SerializeField]
         private float groundDist = 0.09f;
-        [SerializeField]
-        private float rampDist = 0.6f;
 
         #endregion
 
@@ -43,7 +40,7 @@ namespace L7Games.Movement
 
         public void InitialiseCondition(Transform player)
         {
-            playerTransform = player;
+
         }
 
         public override bool isConditionTrue() 

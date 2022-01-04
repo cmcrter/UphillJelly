@@ -123,9 +123,12 @@ namespace L7Games.Movement
             {
                 Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
 
-                Debug.DrawRay(bRB.transform.position, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized, Color.green);
-                Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
-                Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
+                if(Debug.isDebugBuild)
+                {
+                    Debug.DrawRay(bRB.transform.position, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized, Color.green);
+                    Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
+                    Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
+                }
 
                 float angle = Vector3.Angle(upright, transform.up);
 
@@ -148,7 +151,11 @@ namespace L7Games.Movement
             headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
 
             transform.rotation = groundQuat;
-            transform.rotation = transform.rotation * headingDelta;
+
+            if(!bAerial)
+            {
+                transform.rotation = transform.rotation * headingDelta;
+            }
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)

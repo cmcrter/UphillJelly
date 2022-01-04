@@ -136,12 +136,6 @@ namespace L7Games.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            //if(Debug.isDebugBuild)
-            //{
-            //    Debug.DrawRay(playerTransform.position, movementRB.velocity, Color.white);
-            //    Debug.DrawRay(playerTransform.position, playerTransform.forward, Color.black);
-            //}
-
             if(Keyboard.current.escapeKey.isPressed)
             {
                 parentController.ResetPlayer();

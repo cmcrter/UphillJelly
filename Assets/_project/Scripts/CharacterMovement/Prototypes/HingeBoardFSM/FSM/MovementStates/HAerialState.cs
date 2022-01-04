@@ -95,8 +95,14 @@ namespace L7Games.Movement
         public override void PhysicsTick(float dT)
         {
             //Giving a minimum distance before the turning is effective
-            if(Vector3.Distance(groundedCondition.BackGroundHit.point, followRB.transform.position) > 5f && Vector3.Distance(groundedCondition.FrontGroundHit.point, movementRB.transform.position) > 5f)
+            if(groundedCondition.BackGroundHit.distance > 5f && groundedCondition.FrontGroundHit.distance > 5f)
             {
+                if(Debug.isDebugBuild)
+                {
+                    //Debug.Log("Back Hit: " + groundedCondition.BackGroundHit.distance);
+                    //Debug.Log("Front Hit: " + groundedCondition.FrontGroundHit.distance);
+                }
+
                 //Need some way of making the skateboard feel more stable in the air and just generally nicer
                 if(inputHandler.TurningAxis < 0)
                 {

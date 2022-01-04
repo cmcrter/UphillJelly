@@ -89,15 +89,11 @@ namespace L7Games.Movement
             playerMovement.AlignWheels();
 
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
-            wallForward = nextToWallRun.currentWallRide.transform.right;
-            if(nextToWallRun.dotProductWithWall < 0)
-            {
-                wallForward *= -1;
-            }
+            wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
 
             playerMovement.transform.forward = wallForward;
             
-           Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
+            Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
             hasRan = true;
         }
@@ -120,6 +116,9 @@ namespace L7Games.Movement
 
         #region Private Methods
 
+        /// <summary>
+        /// Coyote time for being on the wall ride
+        /// </summary>
         private IEnumerator Co_CoyoteTime()
         {
             coyoteTimer = new Timer(coyoteDuration);
