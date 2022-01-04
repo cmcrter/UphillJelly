@@ -69,9 +69,6 @@ public class ShopText : MonoBehaviour
         StartingBackground.SetActive(false);
 
         // load player 1 data
-        //b_player.SavePlayer1();
-
-        // load player 1 data
         b_player.LoadPlayer1();
 
         //
@@ -102,6 +99,9 @@ public class ShopText : MonoBehaviour
         // load player 1 data
         b_player.LoadPlayer2();
 
+        //
+        b_player.SavePlayer2Second();
+
         // set the load profile text to load (Players name)
         LoadProfile2Text.text = "Load " + tmp_Input.text;
 
@@ -109,6 +109,9 @@ public class ShopText : MonoBehaviour
 
     // third button pressed
     public void ButtonPressed3() {
+
+        //
+        b_player.isSave3 = true;
 
         // set the first play button to false
         PlayButton1.SetActive(false);
@@ -124,11 +127,12 @@ public class ShopText : MonoBehaviour
         // load player 1 data
         b_player.LoadPlayer3();
 
+        //
+        b_player.SavePlayer3Second();
+
         // set the load profile text to load (Players name)
         LoadProfile3Text.text = "Load " + tmp_Input.text;
 
-        //
-        b_player.isSave3 = true;
 
     }
 

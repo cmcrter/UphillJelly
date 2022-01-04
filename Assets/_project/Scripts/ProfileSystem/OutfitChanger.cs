@@ -89,20 +89,8 @@ public class OutfitChanger : MonoBehaviour
         // set the current character to 2
         currentCharacterint = 2;
 
-
-        // set the hatdisplay object to the int for the current hat
-        //hatDisplayGameObject = gameObjectOptions[currentGOint];
-
-        // get the mesh renderer material from this game object and make it the current material int
-        //GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
-
-        // set the hat selector mesh filter to the display game objects mesh filter
-        //hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
-
-
-        //hatDisplayGameObject = gameObjectOptions[currentGOint];
-
-        //GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+        // load the current character material that has been saved
+        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
     }
 
@@ -185,27 +173,6 @@ public class OutfitChanger : MonoBehaviour
         playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
 
     }
-
-    /*
-    // function called from the b_Player to load the customizable objects
-    public void LoadedCustomizables() {
-
-        // hat display gameobject = current hat gameobject int
-        hatDisplayGameObject = gameObjectOptions[currentGOint];
-
-        // get component of this gameobjects as mesh renderer material = current hat material int
-        GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
-
-        // set the hat selector mesh filter to the display game objects mesh filter
-        hatSelector.GetComponent<MeshFilter>().sharedMesh = hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh;
-
-        // load the current character material that has been saved
-        characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
-
-        Debug.Log("Mat is " + characterObjectInScene.GetComponent<MeshRenderer>().material);
-
-    }
-    */
 
     // next hat option
     public void NextGameObjectOption() {

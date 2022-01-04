@@ -20,9 +20,6 @@ public class b_Player : MonoBehaviour
     #region Variables
 
     //
-    //public GhostPlayer ghostPlayer;
-
-    //
     public Ghost ghostSO1;
 
     //
@@ -108,30 +105,10 @@ public class b_Player : MonoBehaviour
 
         }
 
-        /*
-        if (Keyboard.current.tKey.isPressed) {
-
-            TestPressed1();
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.B)) {
-
-            TestPressed1();
-
-        }
-
-        if (Keyboard.current.tabKey.isPressed) {
-
-            TestPressed2();
-
-        }
-        */
-
     }
 
     // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
-    public void TestPressed1() {
+    public void TestPressed1Update() {
 
         //
         ghostSO1.isRecording = false;
@@ -158,8 +135,76 @@ public class b_Player : MonoBehaviour
         //
         SavePlayer1Second();
 
-        Debug.Log("22222222");
+        Debug.Log("11111111111");
+
     }
+
+    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
+    public void TestPressed2Update() {
+
+        //
+        ghostSO1.isRecording = false;
+
+        //
+        ghostSO2.isReplaying = false;
+
+        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+        // Ghost 2 replays best time 
+        //
+        // Save replay 1 as replay 2
+        //
+        SavePlayer2();
+
+        //
+        ghostSO2.timeStamp = ghostSO1.timeStamp;
+
+        //
+        ghostSO2.position = ghostSO1.position;
+
+        //
+        ghostSO2.rotation = ghostSO1.rotation;
+
+        //
+        SavePlayer2Second();
+
+        Debug.Log("22222222");
+
+    }
+
+    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
+    public void TestPressed3Update() {
+
+        //
+        ghostSO1.isRecording = false;
+
+        //
+        ghostSO2.isReplaying = false;
+
+        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+        // Ghost 2 replays best time 
+        //
+        // Save replay 1 as replay 2
+        //
+        SavePlayer3();
+
+        //
+        ghostSO2.timeStamp = ghostSO1.timeStamp;
+
+        //
+        ghostSO2.position = ghostSO1.position;
+
+        //
+        ghostSO2.rotation = ghostSO1.rotation;
+
+        //
+        SavePlayer3Second();
+
+        Debug.Log("3333333333");
+
+    }
+
+
+
 
     //
     public void TestPressed2() {
@@ -199,12 +244,6 @@ public class b_Player : MonoBehaviour
 
         // outfit changer current character int = data current character int
         outfitChanger.currentCharacterint = data.icurrentCharacterint;
-
-        //
-        Debug.Log(outfitChanger.currentGOMaterialint);
-
-        //
-        //outfitChanger.ChangeGhostOutfit();
 
         // for i < shop hat bought count
         for (int i = 0; i < shop.IsHatBought.Count; i++) {
@@ -251,9 +290,7 @@ public class b_Player : MonoBehaviour
         // Load the first customizables
         outfitChanger.LoadedCustomizables1();
 
-        //shopText.LoadProfile1Text.text = data.TMP1ToSave.text;
-
-
+        
     }
 
     
@@ -427,7 +464,7 @@ public class b_Player : MonoBehaviour
         // save the replay 1 through the ghost save manager
         replayGhostSaveManager.SaveSecondReplay1();
 
-        Debug.Log("Saved Player 1");
+        Debug.Log("Saved Player 1S");
 
     }
 
@@ -445,6 +482,18 @@ public class b_Player : MonoBehaviour
 
     }
 
+    // Save the player2
+    public void SavePlayer2Second() {
+
+        // save the player 2 and pass through the shop and outfitchanger
+        //b_SaveSystem.SavePlayer2(shop, outfitChanger);
+
+        // save the replay 2 through the ghost save manager
+        replayGhostSaveManager.SaveSecondReplay2();
+
+        Debug.Log("Saved Player 2S");
+
+    }
 
     // Save the player3
     public void SavePlayer3() {
@@ -459,14 +508,25 @@ public class b_Player : MonoBehaviour
 
     }
 
+    // Save the player3
+    public void SavePlayer3Second() {
 
+        // save the player 3 and pass through the shop and outfitchanger
+        //b_SaveSystem.SavePlayer3(shop, outfitChanger);
+
+        // save the replay 3 through the ghost save manager
+        replayGhostSaveManager.SaveSecondReplay3();
+
+        Debug.Log("Saved Player 3");
+
+    }
 
 
     // play button 1 pressed
     public void PlayPlayer1() {
 
-        // load the first replay through the ghost save manager
-        //replayGhostSaveManager.LoadReplay1();
+        // Load the first second replay for ghost 2
+        replayGhostSaveManager.LoadSecondReplay1();
 
         ghostSO1.isRecording = true;
         ghostSO1.isReplaying = false;
@@ -482,10 +542,14 @@ public class b_Player : MonoBehaviour
     // play button 2 pressed
     public void PlayPlayer2() {
 
-        // load the second replay through the ghost save manager
-        replayGhostSaveManager.LoadReplay2();
+        // Load the first second replay for ghost 2
+        replayGhostSaveManager.LoadSecondReplay2();
 
-        //ghost.
+        ghostSO1.isRecording = true;
+        ghostSO1.isReplaying = false;
+
+        ghostSO2.isRecording = false;
+        ghostSO2.isReplaying = true;
 
         // Change to game camera
         changeCamera.ChangeToGameCam();
@@ -495,8 +559,14 @@ public class b_Player : MonoBehaviour
     // play button 3 pressed
     public void PlayPlayer3() {
 
-        // load the third replay through the ghost save manager
-        replayGhostSaveManager.LoadReplay3();
+        // Load the first second replay for ghost 2
+        replayGhostSaveManager.LoadSecondReplay3();
+
+        ghostSO1.isRecording = true;
+        ghostSO1.isReplaying = false;
+
+        ghostSO2.isRecording = false;
+        ghostSO2.isReplaying = true;
 
         // Change to game camera
         changeCamera.ChangeToGameCam();
