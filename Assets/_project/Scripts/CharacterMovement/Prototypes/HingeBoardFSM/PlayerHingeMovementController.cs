@@ -55,6 +55,11 @@ namespace SleepyCat.Movement
         public InputHandler inputHandler;
 
         [SerializeField]
+        private Transform frontWheelPos;
+        [SerializeField]
+        private Transform backWheelPos;
+
+        [SerializeField]
         private float AdditionalGravityAmount = 8;
         public bool bAddAdditionalGravity = true;
 
@@ -93,19 +98,16 @@ namespace SleepyCat.Movement
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
 
-            fRB.transform.rotation = point.rotation;
-            fRB.transform.position = point.position;
-
             bRB.isKinematic = false;
 
             bRB.angularVelocity = Vector3.zero;
             bRB.velocity = Vector3.zero;
 
-            bRB.transform.rotation = point.rotation;
-            bRB.transform.position = point.position;
-
             transform.rotation = point.rotation;
             transform.position = point.position;
+
+            ResetWheelPos();
+            AlignWheels();
 
             Time.timeScale = 1;
         }
@@ -117,7 +119,7 @@ namespace SleepyCat.Movement
             Quaternion headingDelta = Quaternion.identity;
             Quaternion groundQuat = transform.rotation;
 
-            if(groundBelow.FrontGroundHit.collider || groundBelow.BackGroundHit.collider)
+            if(groundBelow.FrontGroundHit.collider && groundBelow.BackGroundHit.collider)
             {
                 Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
 
@@ -125,7 +127,8 @@ namespace SleepyCat.Movement
                 Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
                 Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
 
-                if(Vector3.Angle(upright, transform.up) < 90f)
+                float angle = Vector3.Angle(upright, transform.up);
+                if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 7.5f)
                 {
                     if(bAerial)
                     {
@@ -168,7 +171,7 @@ namespace SleepyCat.Movement
             grindBelow.InitialiseCondition(fRB, inputHandler);
 
             groundedState.InitialiseState(this, fRB, bRB, groundBelow, grindBelow);
-            aerialState.InitialiseState(this, fRB, groundBelow, nextToWallRun, grindBelow);
+            aerialState.InitialiseState(this, fRB, bRB, groundBelow, nextToWallRun, grindBelow);
             wallRideState.InitialiseState(this, fRB, nextToWallRun, groundBelow);
             grindingState.InitialiseState(this, fRB, grindBelow);
 
@@ -231,6 +234,20 @@ namespace SleepyCat.Movement
         public override void MoveToPosition(Vector3 positionToMoveTo)
         {
             ballMovement.transform.position = positionToMoveTo;
+        }
+
+        public void ResetWheelPos()
+        {
+            fRB.transform.position = frontWheelPos.transform.position;
+            bRB.transform.position = backWheelPos.transform.position;
+        }
+
+        public void AlignWheels()
+        {
+            fRB.transform.up = transform.up;
+            fRB.transform.forward = transform.forward;
+            bRB.transform.forward = transform.forward;
+            bRB.transform.up = transform.up;
         }
 
         public void StartTurnCoroutine()

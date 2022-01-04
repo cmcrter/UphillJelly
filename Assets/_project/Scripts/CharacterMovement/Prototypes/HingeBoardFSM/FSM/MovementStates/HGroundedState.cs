@@ -185,6 +185,8 @@ namespace SleepyCat.Movement
                 parentController.StartTurnCoroutine();
             }
 
+            parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
+
             hasRan = true;
         }
 
@@ -222,10 +224,7 @@ namespace SleepyCat.Movement
                 else
                 {
                     parentController.playerCamera.bMovingBackwards = false;
-
-                    movementRB.transform.up = playerTransform.up;
-                    movementRB.transform.forward = playerTransform.forward;
-                    followRB.transform.forward = playerTransform.forward;
+                    parentController.AlignWheels();
                 }
 
                 movementRB.velocity = initialSpeed * movementRB.transform.forward;
