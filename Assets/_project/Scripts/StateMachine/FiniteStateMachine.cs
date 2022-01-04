@@ -7,7 +7,7 @@
 // Brief: The class which manages the running of states
 //////////////////////////////////////////////////////////// 
 
-namespace SleepyCat.Utility.StateMachine
+namespace L7Games.Utility.StateMachine
 {
     public class FiniteStateMachine
     {

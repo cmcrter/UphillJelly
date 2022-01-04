@@ -9,9 +9,9 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using SleepyCat.Movement;
+using L7Games.Movement;
 
-namespace SleepyCat.Triggerables.CheckpointSystem
+namespace L7Games.Triggerables.CheckpointSystem
 {
     public class Checkpoint : MonoBehaviour, ITriggerable
     {

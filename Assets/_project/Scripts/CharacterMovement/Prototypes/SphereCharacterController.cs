@@ -11,7 +11,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public class SphereCharacterController : PlayerController
     {

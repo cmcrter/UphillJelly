@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat.Utility.Splines
+namespace L7Games.Utility.Splines
 {
     /// <summary>
     /// A spline containing additional tangents for the start and end point that dictate the curve of the spline

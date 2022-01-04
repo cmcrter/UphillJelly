@@ -8,9 +8,9 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using SleepyCat.Triggerables;
+using L7Games.Triggerables;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public abstract class PlayerController : MonoBehaviour
     {

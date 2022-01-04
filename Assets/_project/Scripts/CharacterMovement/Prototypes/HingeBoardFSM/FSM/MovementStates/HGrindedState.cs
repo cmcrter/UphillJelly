@@ -10,11 +10,11 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SleepyCat.Utility.StateMachine;
-using SleepyCat.Input;
+using L7Games.Utility.StateMachine;
+using L7Games.Input;
 using System.Collections;
 
-namespace SleepyCat.Movement 
+namespace L7Games.Movement 
 {
     [Serializable]
     public class HGrindedState : State

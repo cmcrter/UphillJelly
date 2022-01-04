@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace SleepyCat.Utility.Splines
+namespace L7Games.Utility.Splines
 {
     /// <summary>
     /// The custom inspector the Bezier curve spline wrapper script

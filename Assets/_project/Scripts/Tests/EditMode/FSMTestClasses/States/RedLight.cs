@@ -7,9 +7,9 @@
 // Brief: A state to go into the unit tested state machine
 //////////////////////////////////////////////////////////// 
 
-using SleepyCat.Utility.StateMachine;
+using L7Games.Utility.StateMachine;
 
-namespace SleepyCat.Tests
+namespace L7Games.Tests
 {
     public class RedLight : State
     {

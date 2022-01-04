@@ -9,7 +9,7 @@
 
 using UnityEngine;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public class PlayerCamera : MonoBehaviour
 	{

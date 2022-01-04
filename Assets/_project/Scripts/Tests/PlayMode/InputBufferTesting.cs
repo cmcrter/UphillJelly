@@ -13,11 +13,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using SleepyCat.Input;
-using SleepyCat.Movement;
+using L7Games.Input;
+using L7Games.Movement;
 
 
-namespace SleepyCat.Test
+namespace L7Games.Test
 {
 
 

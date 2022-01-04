@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat.Utility.Splines
+namespace L7Games.Utility.Splines
 {
     /// <summary>
     /// A spline that is a line between 2 points

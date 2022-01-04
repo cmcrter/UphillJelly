@@ -9,8 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using SleepyCat.Utility.Splines;
-using SleepyCat.Movement;
+using L7Games.Utility.Splines;
+using L7Games.Movement;
 
 public class SplineGrindColliderGenerationWindow : EditorWindow
 {

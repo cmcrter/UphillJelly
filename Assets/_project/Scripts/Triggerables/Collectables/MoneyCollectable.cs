@@ -9,7 +9,7 @@
 
 using UnityEngine;
 
-namespace SleepyCat.Triggerables.Collectables
+namespace L7Games.Triggerables.Collectables
 {
     public class MoneyCollectable : Collectables, ITriggerable
     {

@@ -10,9 +10,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SleepyCat.ScriptableObjects.Input;
+using L7Games.ScriptableObjects.Input;
 
-namespace SleepyCat.Input
+namespace L7Games.Input
 {
     /// <summary>
     /// A script which handles the inputs passed from the input system

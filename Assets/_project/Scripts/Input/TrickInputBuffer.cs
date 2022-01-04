@@ -11,10 +11,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SleepyCat;
-using SleepyCat.Movement;
+using L7Games;
+using L7Games.Movement;
 
-namespace SleepyCat.Input
+namespace L7Games.Input
 {
     /// <summary>
     /// Script used to buffer input as it is performed by the player to detect when they have performed a trick

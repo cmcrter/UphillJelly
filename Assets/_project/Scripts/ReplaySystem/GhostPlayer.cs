@@ -10,7 +10,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace SleepyCat.GhostPlayer
+namespace L7Games.GhostPlayer
 {
 
     public class GhostPlayer : MonoBehaviour

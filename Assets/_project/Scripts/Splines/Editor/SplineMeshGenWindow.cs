@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using SleepyCat.Utility.Splines;
+using L7Games.Utility.Splines;
 
 /// <summary>
 /// An editor window used to  generate a mesh from a spline

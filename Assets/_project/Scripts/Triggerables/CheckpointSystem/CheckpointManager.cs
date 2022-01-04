@@ -9,11 +9,11 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using SleepyCat.Movement;
+using L7Games.Movement;
 
 using UnityEngine.InputSystem;
 
-namespace SleepyCat.Triggerables.CheckpointSystem
+namespace L7Games.Triggerables.CheckpointSystem
 {
     /// <summary>
     /// A script in charge of managing the checkpoints and the player entry of them

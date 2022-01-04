@@ -10,9 +10,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SleepyCat.Utility.StateMachine;
+using L7Games.Utility.StateMachine;
 
-namespace SleepyCat.Movement.Prototypes
+namespace L7Games.Movement.Prototypes
 {
     public class CharacterController : PlayerController
     {

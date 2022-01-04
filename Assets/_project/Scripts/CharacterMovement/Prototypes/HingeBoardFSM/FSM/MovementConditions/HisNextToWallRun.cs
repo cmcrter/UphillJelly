@@ -9,11 +9,11 @@
 
 using System;
 using UnityEngine;
-using SleepyCat.Triggerables;
-using SleepyCat.Utility.StateMachine;
+using L7Games.Triggerables;
+using L7Games.Utility.StateMachine;
 using System.Collections;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     [Serializable]
     public class HisNextToWallRun : Condition

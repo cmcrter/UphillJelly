@@ -9,7 +9,7 @@
 
 using System;
 
-namespace SleepyCat.Utility.StateMachine
+namespace L7Games.Utility.StateMachine
 {
     [Serializable]
     public abstract class State

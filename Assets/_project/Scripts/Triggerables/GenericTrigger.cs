@@ -7,11 +7,11 @@
 // Brief: A triggerable for unity events 
 //////////////////////////////////////////////////////////// 
 
-using SleepyCat.Movement;
+using L7Games.Movement;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace SleepyCat.Triggerables
+namespace L7Games.Triggerables
 {
     public class GenericTrigger : MonoBehaviour, ITriggerable
     {

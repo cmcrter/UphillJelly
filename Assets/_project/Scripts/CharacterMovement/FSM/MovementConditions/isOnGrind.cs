@@ -12,11 +12,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
-using SleepyCat.Utility.StateMachine;
-using SleepyCat.Utility.Splines;
-using SleepyCat.Input;
+using L7Games.Utility.StateMachine;
+using L7Games.Utility.Splines;
+using L7Games.Input;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     [Serializable]
     public class isOnGrind : Condition

@@ -9,7 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SleepyCat.Utility.Splines;
+using L7Games.Utility.Splines;
 
     /// <summary>
     /// A component for getting a sequence of splines and lerping through them

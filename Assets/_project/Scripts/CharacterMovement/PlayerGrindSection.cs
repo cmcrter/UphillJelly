@@ -8,9 +8,9 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using SleepyCat.Utility.Splines;
+using L7Games.Utility.Splines;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public class PlayerGrindSection : MonoBehaviour
     {

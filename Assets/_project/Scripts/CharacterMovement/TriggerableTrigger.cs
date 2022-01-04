@@ -7,10 +7,10 @@
 // Brief: A script which triggers any triggerable when the collider touches them (generally it'll be only players that has this on them)
 //////////////////////////////////////////////////////////// 
 
-using SleepyCat.Movement;
+using L7Games.Movement;
 using UnityEngine;
 
-namespace SleepyCat.Triggerables
+namespace L7Games.Triggerables
 {
     public class TriggerableTrigger : MonoBehaviour
     {

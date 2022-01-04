@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
 using UnityEngine.TestTools;
-using SleepyCat.Utility.Splines;
+using L7Games.Utility.Splines;
 
 
 public class LineSplineWrapperTests

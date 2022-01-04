@@ -9,9 +9,9 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using SleepyCat.Movement;
+using L7Games.Movement;
 
-namespace SleepyCat.Triggerables
+namespace L7Games.Triggerables
 {
     public class VFXTrigger : MonoBehaviour, ITriggerable
     {

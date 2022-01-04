@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace SleepyCat.Utility
+namespace L7Games.Utility
 {
     /// <summary>
     /// Static class containing functions used for quick functionality with the Editor Handles

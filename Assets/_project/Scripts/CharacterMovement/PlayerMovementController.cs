@@ -9,12 +9,12 @@
 
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SleepyCat.Utility.StateMachine;
-using SleepyCat.Input;
-using SleepyCat.Triggerables;
+using L7Games.Utility.StateMachine;
+using L7Games.Input;
+using L7Games.Triggerables;
 using System.Collections;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public class PlayerMovementController : PlayerController
     {
