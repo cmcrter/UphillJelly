@@ -28,11 +28,19 @@ public static class b_SaveSystem
     // Save the player and take in data from the b_Player script
     public static void SavePlayer1(Shop shopData, OutfitChanger outfitChangerData) {
 
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/ProfileData")) {
+
+            // create a directory for "/replay_save/replay_data"
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/ProfileData");
+
+        }
+
         // new binary formatter
         BinaryFormatter formatter = new BinaryFormatter();
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Profile1.sdat";
+        string path = Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat";
 
         // create a new filestream taking in the "path" string
         FileStream stream = new FileStream(path, FileMode.Create);
@@ -56,7 +64,7 @@ public static class b_SaveSystem
         BinaryFormatter formatter = new BinaryFormatter();
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Profile2.sdat";
+        string path = Application.persistentDataPath + "/Profile2/ProfileData/Profile2Data.sdat";
 
         // create a new filestream taking in the "path" string
         FileStream stream = new FileStream(path, FileMode.Create);
@@ -80,7 +88,7 @@ public static class b_SaveSystem
         BinaryFormatter formatter = new BinaryFormatter();
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Profile3.sdat";
+        string path = Application.persistentDataPath + "/Profile3/ProfileData/Profile3Data.sdat";
 
         // create a new filestream taking in the "path" string
         FileStream stream = new FileStream(path, FileMode.Create);
@@ -101,7 +109,7 @@ public static class b_SaveSystem
     public static b_PlayerData LoadPlayer1() {
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Profile1.sdat";
+        string path = Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat";
 
         // if a file exists in the "path"
         if (File.Exists(path)) {
@@ -141,7 +149,7 @@ public static class b_SaveSystem
     public static b_PlayerData LoadPlayer2() {
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Profile2.sdat";
+        string path = Application.persistentDataPath + "/Profile2/ProfileData/Profile2Data.sdat";
 
         // if a file exists in the "path"
         if (File.Exists(path)) {
@@ -181,7 +189,7 @@ public static class b_SaveSystem
     public static b_PlayerData LoadPlayer3() {
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path = Application.persistentDataPath + "/Profile3.sdat";
+        string path = Application.persistentDataPath + "/Profile3/ProfileData/Profile3Data.sdat";
 
         // if a file exists in the "path"
         if (File.Exists(path)) {

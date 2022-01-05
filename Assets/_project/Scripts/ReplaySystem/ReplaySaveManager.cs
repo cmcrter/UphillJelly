@@ -94,7 +94,7 @@ public class ReplaySaveManager : MonoBehaviour
     public bool IsReplaySaveFile1() {
 
         // return the applications persistent data path of the replay save if the save file exists
-        return Directory.Exists(Application.persistentDataPath + "/replay_save1");
+        return Directory.Exists(Application.persistentDataPath + "/Profile1/Replays");
 
     }
 
@@ -106,15 +106,15 @@ public class ReplaySaveManager : MonoBehaviour
         if (!IsReplaySaveFile1()) {
 
             // create a save file in the data path folder called /replay_save
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SavedData1");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays");
 
         }
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_SavedData1")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SavedData1");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays");
 
         }
 
@@ -122,7 +122,7 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_bf1 = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_file1 = File.Create(Application.persistentDataPath + "/replay_SavedData1.sdat");
+        FileStream replay_file1 = File.Create(Application.persistentDataPath + "/Profile1/Replays/replay_SavedData1.sdat");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost);
@@ -139,10 +139,10 @@ public class ReplaySaveManager : MonoBehaviour
     public void LoadReplay1() {
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_data1")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays/replay_SavedData1")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_data1");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays/replay_SavedData1");
 
         }
 
@@ -150,10 +150,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_bf1 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/replay_SavedData1.sdat")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile1/Replays/replay_SavedData1.sdat")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream file1 = File.Open(Application.persistentDataPath + "/replay_SavedData1.sdat", FileMode.Open);
+            FileStream file1 = File.Open(Application.persistentDataPath + "/Profile1/Replays/replay_SavedData1.sdat", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_bf1.Deserialize(file1), ghost);
@@ -180,7 +180,7 @@ public class ReplaySaveManager : MonoBehaviour
     public bool IsReplaySecondSaveFile1() {
 
         // return the applications persistent data path of the replay save if the save file exists
-        return Directory.Exists(Application.persistentDataPath + "/replay_secondSave1");
+        return Directory.Exists(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1");
 
     }
 
@@ -192,15 +192,15 @@ public class ReplaySaveManager : MonoBehaviour
         if (!IsReplaySecondSaveFile1()) {
 
             // create a save file in the data path folder called /replay_save
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData1");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1");
 
         }
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_SecondSavedData1")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData1");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1");
 
         }
 
@@ -208,7 +208,7 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF1 = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_secondFile1 = File.Create(Application.persistentDataPath + "/replay_SecondSavedData1.sdat");
+        FileStream replay_secondFile1 = File.Create(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1.sdat");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost2);
@@ -225,10 +225,10 @@ public class ReplaySaveManager : MonoBehaviour
     public void LoadSecondReplay1() {
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_secondData1")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_secondData1");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1");
 
         }
 
@@ -236,10 +236,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF1 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/replay_secondSavedData1.sdat")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1.sdat")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream secondFile1 = File.Open(Application.persistentDataPath + "/replay_secondSavedData1.sdat", FileMode.Open);
+            FileStream secondFile1 = File.Open(Application.persistentDataPath + "/Profile1/Replays/replay_secondSave1.sdat", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_secondBF1.Deserialize(secondFile1), ghost2);
@@ -276,7 +276,7 @@ public class ReplaySaveManager : MonoBehaviour
     public bool IsReplaySaveFile2() {
 
         // return the applications persistent data path of the replay save if the save file exists
-        return Directory.Exists(Application.persistentDataPath + "/replay_save2");
+        return Directory.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_save2");
 
     }
 
@@ -288,15 +288,15 @@ public class ReplaySaveManager : MonoBehaviour
         if (!IsReplaySaveFile2()) {
 
             // create a save file in the data path folder called /replay_save
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_save2");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile2/Replays/replay_save2");
 
         }
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_save2/replay_data2")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_save2")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_save2/replay_data2");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile2/Replays/replay_save2");
 
         }
 
@@ -304,7 +304,7 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_bf2 = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_file2 = File.Create(Application.persistentDataPath + "/replay_save2/replay_data2/replay_SavedData2.txt");
+        FileStream replay_file2 = File.Create(Application.persistentDataPath + "/Profile2/Replays/replay_save2.txt");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost);
@@ -322,10 +322,10 @@ public class ReplaySaveManager : MonoBehaviour
     public void LoadReplay2() {
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_save2/replay_data2")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_save2")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_save2/replay_data2");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile2/Replays/replay_save2");
 
         }
 
@@ -333,10 +333,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_bf2 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/replay_save2/replay_data2/replay_SavedData2.txt")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_save2.txt")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream file2 = File.Open(Application.persistentDataPath + "/replay_save2/replay_data2/replay_SavedData2.txt", FileMode.Open);
+            FileStream file2 = File.Open(Application.persistentDataPath + "/Profile2/Replays/replay_save2.txt", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_bf2.Deserialize(file2), ghost);
@@ -356,7 +356,7 @@ public class ReplaySaveManager : MonoBehaviour
     public bool IsReplaySecondSaveFile2() {
 
         // return the applications persistent data path of the replay save if the save file exists
-        return Directory.Exists(Application.persistentDataPath + "/replay_secondSave2");
+        return Directory.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2");
 
     }
 
@@ -368,15 +368,15 @@ public class ReplaySaveManager : MonoBehaviour
         if (!IsReplaySecondSaveFile2()) {
 
             // create a save file in the data path folder called /replay_save
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData2");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2");
 
         }
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_SecondSavedData2")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData2");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2");
 
         }
 
@@ -384,7 +384,7 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF2 = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_secondFile2 = File.Create(Application.persistentDataPath + "/replay_SecondSavedData2.sdat");
+        FileStream replay_secondFile2 = File.Create(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2.sdat");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost2);
@@ -401,10 +401,10 @@ public class ReplaySaveManager : MonoBehaviour
     public void LoadSecondReplay2() {
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_secondData2")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_secondData2");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2");
 
         }
 
@@ -412,10 +412,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF2 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/replay_secondSavedData2.sdat")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2.sdat")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream secondFile2 = File.Open(Application.persistentDataPath + "/replay_secondSavedData2.sdat", FileMode.Open);
+            FileStream secondFile2 = File.Open(Application.persistentDataPath + "/Profile2/Replays/replay_secondSave2.sdat", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_secondBF2.Deserialize(secondFile2), ghost2);
@@ -446,7 +446,7 @@ public class ReplaySaveManager : MonoBehaviour
     public bool IsReplaySaveFile3() {
 
         // return the applications persistent data path of the replay save if the save file exists
-        return Directory.Exists(Application.persistentDataPath + "/replay_save3");
+        return Directory.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_save3");
 
     }
 
@@ -458,15 +458,15 @@ public class ReplaySaveManager : MonoBehaviour
         if (!IsReplaySaveFile3()) {
 
             // create a save file in the data path folder called /replay_save
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_save3");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile3/Replays/replay_save3");
 
         }
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_save3/replay_data3")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_save3")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_save3/replay_data3");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile3/Replays/replay_save3");
 
         }
 
@@ -474,7 +474,7 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_bf3 = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_file3 = File.Create(Application.persistentDataPath + "/replay_save3/replay_data3/replay_SavedData3.txt");
+        FileStream replay_file3 = File.Create(Application.persistentDataPath + "/Profile3/Replays/replay_save3.txt");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost);
@@ -492,10 +492,10 @@ public class ReplaySaveManager : MonoBehaviour
     public void LoadReplay3() {
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_save3/replay_data3")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_save3")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_save3/replay_data3");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile3/Replays/replay_save3");
 
         }
 
@@ -503,10 +503,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_bf3 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/replay_save3/replay_data3/replay_SavedData3.txt")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_save3.txt")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream file3 = File.Open(Application.persistentDataPath + "/replay_save3/replay_data3/replay_SavedData3.txt", FileMode.Open);
+            FileStream file3 = File.Open(Application.persistentDataPath + "/Profile3/Replays/replay_save3.txt", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_bf3.Deserialize(file3), ghost);
@@ -522,7 +522,7 @@ public class ReplaySaveManager : MonoBehaviour
     public bool IsReplaySecondSaveFile3() {
 
         // return the applications persistent data path of the replay save if the save file exists
-        return Directory.Exists(Application.persistentDataPath + "/replay_secondSave3");
+        return Directory.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3");
 
     }
 
@@ -534,15 +534,15 @@ public class ReplaySaveManager : MonoBehaviour
         if (!IsReplaySecondSaveFile3()) {
 
             // create a save file in the data path folder called /replay_save
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData3");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3");
 
         }
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_SecondSavedData3")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_SecondSavedData3");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3");
 
         }
 
@@ -550,7 +550,7 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF3 = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_secondFile3 = File.Create(Application.persistentDataPath + "/replay_SecondSavedData3.sdat");
+        FileStream replay_secondFile3 = File.Create(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3.sdat");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost2);
@@ -567,10 +567,10 @@ public class ReplaySaveManager : MonoBehaviour
     public void LoadSecondReplay3() {
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/replay_secondData3")) {
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3")) {
 
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/replay_secondData3");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3");
 
         }
 
@@ -578,10 +578,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF3 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/replay_secondSavedData3.sdat")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3.sdat")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream secondFile3 = File.Open(Application.persistentDataPath + "/replay_secondSavedData3.sdat", FileMode.Open);
+            FileStream secondFile3 = File.Open(Application.persistentDataPath + "/Profile3/Replays/replay_secondSave3.sdat", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_secondBF3.Deserialize(secondFile3), ghost2);

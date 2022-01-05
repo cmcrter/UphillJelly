@@ -77,8 +77,29 @@ public class b_Player : MonoBehaviour
 
     #region Methods
 
+    public void TESTTEST1() {
+
+        //
+        SavePlayer1();
+
+    }
+
     //
     public void Start() {
+
+        //
+        ghostSO1.isRecording = false;
+
+        //
+        ghostSO1.isReplaying = false;
+
+
+        //
+        ghostSO2.isReplaying = false;
+
+        //
+        ghostSO2.isRecording = false;
+
 
         //
         isSave1 = false;

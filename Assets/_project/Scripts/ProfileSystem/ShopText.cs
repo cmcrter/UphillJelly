@@ -55,8 +55,19 @@ public class ShopText : MonoBehaviour
     // first button pressed
     public void ButtonPressed1() {
 
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays")) {
+
+            //
+            b_player.ghostSO2.ResetGhostData();
+
+        }
+
         //
         b_player.isSave1 = true;
+
+        // set the load profile text to load (Players name)
+        //LoadProfile1Text.text = "Load Profile 1"; //+ tmp_Input.text
 
         // set the second play button to false
         PlayButton2.SetActive(false);
@@ -74,8 +85,7 @@ public class ShopText : MonoBehaviour
         //
         b_player.SavePlayer1Second();
 
-        // set the load profile text to load (Players name)
-        LoadProfile1Text.text = "Load " + tmp_Input.text;
+        
 
         
 
@@ -103,7 +113,7 @@ public class ShopText : MonoBehaviour
         b_player.SavePlayer2Second();
 
         // set the load profile text to load (Players name)
-        LoadProfile2Text.text = "Load " + tmp_Input.text;
+        //LoadProfile2Text.text = "Load " + tmp_Input.text;
 
     }
 
@@ -131,7 +141,7 @@ public class ShopText : MonoBehaviour
         b_player.SavePlayer3Second();
 
         // set the load profile text to load (Players name)
-        LoadProfile3Text.text = "Load " + tmp_Input.text;
+        //LoadProfile3Text.text = "Load " + tmp_Input.text;
 
 
     }
@@ -142,7 +152,7 @@ public class ShopText : MonoBehaviour
     {
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path1 = Application.persistentDataPath + "/Profile1.sdat";
+        string path1 = Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat";
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
         string path2 = Application.persistentDataPath + "/Profile2.sdat";
