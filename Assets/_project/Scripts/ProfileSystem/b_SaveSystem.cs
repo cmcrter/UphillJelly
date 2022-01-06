@@ -60,6 +60,14 @@ public static class b_SaveSystem
     // Save the player and take in data from the b_Player script
     public static void SavePlayer2(Shop shopData, OutfitChanger outfitChangerData) {
 
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/ProfileData")) {
+
+            // create a directory for "/replay_save/replay_data"
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile2/ProfileData");
+
+        }
+
         // new binary formatter
         BinaryFormatter formatter = new BinaryFormatter();
 
@@ -83,6 +91,14 @@ public static class b_SaveSystem
 
     // Save the player and take in data from the b_Player script
     public static void SavePlayer3(Shop shopData, OutfitChanger outfitChangerData) {
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/ProfileData")) {
+
+            // create a directory for "/replay_save/replay_data"
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile3/ProfileData");
+
+        }
 
         // new binary formatter
         BinaryFormatter formatter = new BinaryFormatter();

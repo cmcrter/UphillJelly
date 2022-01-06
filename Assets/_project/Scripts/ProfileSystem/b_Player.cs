@@ -19,6 +19,8 @@ public class b_Player : MonoBehaviour
 
     #region Variables
 
+    public ReplaySaveManager replaySaveManager;
+
     //
     public Ghost ghostSO1;
 
@@ -133,15 +135,14 @@ public class b_Player : MonoBehaviour
 
         //
         ghostSO1.isRecording = false;
+        ghostSO1.isReplaying = false;
 
-        //
+        ghostSO2.isRecording = false;
         ghostSO2.isReplaying = false;
 
         // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
         // Ghost 2 replays best time 
-        //
         // Save replay 1 as replay 2
-        //
         SavePlayer1();
 
         //
@@ -156,10 +157,73 @@ public class b_Player : MonoBehaviour
         //
         SavePlayer1Second();
 
-        Debug.Log("11111111111");
+        Debug.Log("Saved Replay 1's");
 
     }
 
+    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
+    public void TestPressed2Update() {
+
+        //
+        ghostSO1.isRecording = false;
+        ghostSO1.isReplaying = false;
+
+        ghostSO2.isRecording = false;
+        ghostSO2.isReplaying = false;
+
+        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+        // Ghost 2 replays best time 
+        // Save replay 1 as replay 2
+        SavePlayer2();
+
+        //
+        ghostSO2.timeStamp = ghostSO1.timeStamp;
+
+        //
+        ghostSO2.position = ghostSO1.position;
+
+        //
+        ghostSO2.rotation = ghostSO1.rotation;
+
+        //
+        SavePlayer2Second();
+
+        Debug.Log("Saved Replay 2's");
+
+    }
+
+    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
+    public void TestPressed3Update() {
+
+        //
+        ghostSO1.isRecording = false;
+        ghostSO1.isReplaying = false;
+
+        ghostSO2.isRecording = false;
+        ghostSO2.isReplaying = false;
+
+        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+        // Ghost 2 replays best time 
+        // Save replay 1 as replay 2
+        SavePlayer3();
+
+        //
+        ghostSO2.timeStamp = ghostSO1.timeStamp;
+
+        //
+        ghostSO2.position = ghostSO1.position;
+
+        //
+        ghostSO2.rotation = ghostSO1.rotation;
+
+        //
+        SavePlayer3Second();
+
+        Debug.Log("Saved Replay 3's");
+
+    }
+
+    /*
     // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
     public void TestPressed2Update() {
 
@@ -223,10 +287,10 @@ public class b_Player : MonoBehaviour
         Debug.Log("3333333333");
 
     }
+    */
 
 
-
-
+    /*
     //
     public void TestPressed2() {
 
@@ -239,6 +303,7 @@ public class b_Player : MonoBehaviour
         SavePlayer1();
 
     }
+    */
 
     // Load the player1
     public void LoadPlayer1() {
@@ -311,7 +376,6 @@ public class b_Player : MonoBehaviour
         // Load the first customizables
         outfitChanger.LoadedCustomizables1();
 
-        
     }
 
     
@@ -546,6 +610,9 @@ public class b_Player : MonoBehaviour
     // play button 1 pressed
     public void PlayPlayer1() {
 
+        //
+        ghostSO2.ResetGhostData();
+
         // Load the first second replay for ghost 2
         replayGhostSaveManager.LoadSecondReplay1();
 
@@ -562,6 +629,9 @@ public class b_Player : MonoBehaviour
 
     // play button 2 pressed
     public void PlayPlayer2() {
+
+        //
+        ghostSO2.ResetGhostData();
 
         // Load the first second replay for ghost 2
         replayGhostSaveManager.LoadSecondReplay2();
@@ -580,6 +650,9 @@ public class b_Player : MonoBehaviour
     // play button 3 pressed
     public void PlayPlayer3() {
 
+        //
+        ghostSO2.ResetGhostData();
+
         // Load the first second replay for ghost 2
         replayGhostSaveManager.LoadSecondReplay3();
 
@@ -594,17 +667,6 @@ public class b_Player : MonoBehaviour
 
     }
 
-    //
-    public void ExitedTheGame() {
-
-        //
-        ghostSO1.isRecording = false;
-        ghostSO1.isReplaying = false;
-
-        ghostSO2.isRecording = false;
-        ghostSO2.isReplaying = false;
-
-    }
 
     #endregion
 

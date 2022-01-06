@@ -66,9 +66,6 @@ public class ShopText : MonoBehaviour
         //
         b_player.isSave1 = true;
 
-        // set the load profile text to load (Players name)
-        //LoadProfile1Text.text = "Load Profile 1"; //+ tmp_Input.text
-
         // set the second play button to false
         PlayButton2.SetActive(false);
 
@@ -85,14 +82,18 @@ public class ShopText : MonoBehaviour
         //
         b_player.SavePlayer1Second();
 
-        
-
-        
-
     }
 
     // second button pressed
     public void ButtonPressed2() {
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays")) {
+
+            //
+            b_player.ghostSO2.ResetGhostData();
+
+        }
 
         //
         b_player.isSave2 = true;
@@ -112,13 +113,18 @@ public class ShopText : MonoBehaviour
         //
         b_player.SavePlayer2Second();
 
-        // set the load profile text to load (Players name)
-        //LoadProfile2Text.text = "Load " + tmp_Input.text;
-
     }
 
     // third button pressed
     public void ButtonPressed3() {
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays")) {
+
+            //
+            b_player.ghostSO2.ResetGhostData();
+
+        }
 
         //
         b_player.isSave3 = true;
@@ -140,10 +146,6 @@ public class ShopText : MonoBehaviour
         //
         b_player.SavePlayer3Second();
 
-        // set the load profile text to load (Players name)
-        //LoadProfile3Text.text = "Load " + tmp_Input.text;
-
-
     }
 
 
@@ -155,10 +157,10 @@ public class ShopText : MonoBehaviour
         string path1 = Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat";
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path2 = Application.persistentDataPath + "/Profile2.sdat";
+        string path2 = Application.persistentDataPath + "/Profile2/ProfileData/Profile2Data.sdat";
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path3 = Application.persistentDataPath + "/Profile3.sdat";
+        string path3 = Application.persistentDataPath + "/Profile3/ProfileData/Profile3Data.sdat";
 
         // if a file exists in the "path"
         if (File.Exists(path1)) {
