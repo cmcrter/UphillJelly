@@ -156,7 +156,7 @@ public class ReplaySaveManager : MonoBehaviour
             FileStream file1 = File.Open(Application.persistentDataPath + "/Profile1/Replays/Replay_SavedData1.sdat", FileMode.Open);
 
             //deseralize the ghost file 
-            JsonUtility.FromJsonOverwrite((string)replay_bf1.Deserialize(file1), ghost2);
+            JsonUtility.FromJsonOverwrite((string)replay_bf1.Deserialize(file1), ghost);
 
             // close the file
             file1.Close();
@@ -211,7 +211,7 @@ public class ReplaySaveManager : MonoBehaviour
         FileStream replay_secondFile1 = File.Create(Application.persistentDataPath + "/Profile1/Replays/Replay_SecondSavedData1.sdat");
 
         // pass in ghost object and save public variables
-        var json = JsonUtility.ToJson(ghost2);
+        var json = JsonUtility.ToJson(ghost);
 
         // serializes the data to binary format in a json file
         replay_secondBF1.Serialize(replay_secondFile1, json);
@@ -236,16 +236,16 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF1 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/Profile1/Replays/Replay_SecondSavedData1.sdat")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile1/Replays/Replay_SavedData1.sdat")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream secondFile1 = File.Open(Application.persistentDataPath + "/Profile1/Replays/Replay_SecondSavedData1.sdat", FileMode.Open);
+            FileStream replay_secondFile1 = File.Open(Application.persistentDataPath + "/Profile1/Replays/Replay_SavedData1.sdat", FileMode.Open);
 
             //deseralize the ghost file 
-            JsonUtility.FromJsonOverwrite((string)replay_secondBF1.Deserialize(secondFile1), ghost2);
+            JsonUtility.FromJsonOverwrite((string)replay_secondBF1.Deserialize(replay_secondFile1), ghost2);
 
             // close the file
-            secondFile1.Close();
+            replay_secondFile1.Close();
 
         }
 
@@ -387,7 +387,7 @@ public class ReplaySaveManager : MonoBehaviour
         FileStream replay_secondFile2 = File.Create(Application.persistentDataPath + "/Profile2/Replays/Replay_SecondSavedData2.sdat");
 
         // pass in ghost object and save public variables
-        var json = JsonUtility.ToJson(ghost2);
+        var json = JsonUtility.ToJson(ghost);
 
         // serializes the data to binary format in a json file
         replay_secondBF2.Serialize(replay_secondFile2, json);
@@ -412,10 +412,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF2 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/Profile2/Replays/Replay_SecondSavedData2.sdat")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile2/Replays/Replay_SavedData2.sdat")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream secondFile2 = File.Open(Application.persistentDataPath + "/Profile2/Replays/Replay_SecondSavedData2.sdat", FileMode.Open);
+            FileStream secondFile2 = File.Open(Application.persistentDataPath + "/Profile2/Replays/Replay_SavedData2.sdat", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_secondBF2.Deserialize(secondFile2), ghost2);
@@ -553,7 +553,7 @@ public class ReplaySaveManager : MonoBehaviour
         FileStream replay_secondFile3 = File.Create(Application.persistentDataPath + "/Profile3/Replays/Replay_SecondSavedData3.sdat");
 
         // pass in ghost object and save public variables
-        var json = JsonUtility.ToJson(ghost2);
+        var json = JsonUtility.ToJson(ghost);
 
         // serializes the data to binary format in a json file
         replay_secondBF3.Serialize(replay_secondFile3, json);
@@ -578,10 +578,10 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF3 = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if (File.Exists(Application.persistentDataPath + "/Profile3/Replays/Replay_SecondSavedData3.sdat")) {
+        if (File.Exists(Application.persistentDataPath + "/Profile3/Replays/Replay_SavedData3.sdat")) {
 
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream secondFile3 = File.Open(Application.persistentDataPath + "/Profile3/Replays/Replay_SecondSavedData3.sdat", FileMode.Open);
+            FileStream secondFile3 = File.Open(Application.persistentDataPath + "/Profile3/Replays/Replay_SavedData3.sdat", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_secondBF3.Deserialize(secondFile3), ghost2);

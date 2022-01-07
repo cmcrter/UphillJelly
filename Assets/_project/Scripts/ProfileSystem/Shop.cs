@@ -88,6 +88,13 @@ public class Shop : MonoBehaviour
     // current character price text
     public Text CurrentCharacterPriceText;
 
+    //
+    //
+    //
+    public ReplaySaveManager replaySaveManager;
+    //
+    //
+    //
     
     #endregion
 
@@ -177,7 +184,6 @@ public class Shop : MonoBehaviour
         }
 
         
-
 
     }
 
@@ -456,7 +462,79 @@ public class Shop : MonoBehaviour
 
     }
 
+    public void lookatsaves() {
 
+        //
+        //
+        //
+
+        Debug.Log("1");
+
+        if (b_player.isSave1 == true) {
+
+            //
+            replaySaveManager.LoadReplay1();
+
+            //
+            replaySaveManager.LoadSecondReplay1();
+
+            Debug.Log("2");
+
+        }
+
+        if (b_player.isSave2 == true) {
+
+            //
+            replaySaveManager.LoadReplay2();
+
+            Debug.Log("3");
+
+            //
+            //b_player.ghostSO2.timeStamp = b_player.ghostSO1.timeStamp;
+
+            //
+            //b_player.ghostSO2.position = b_player.ghostSO1.position;
+
+            //
+            //b_player.ghostSO2.rotation = b_player.ghostSO1.rotation;
+
+        }
+
+        if (b_player.isSave3 == true) {
+
+            //
+            replaySaveManager.LoadReplay3();
+
+            //
+            //b_player.ghostSO2.timeStamp = b_player.ghostSO1.timeStamp;
+
+            //
+            //b_player.ghostSO2.position = b_player.ghostSO1.position;
+
+            //
+            //b_player.ghostSO2.rotation = b_player.ghostSO1.rotation;
+
+        }
+
+        Debug.Log("4");
+
+        //
+        //b_player.ghostSO2.timeStamp = b_player.ghostSO1.timeStamp;
+
+        //
+        //b_player.ghostSO2.position = b_player.ghostSO1.position;
+
+        //
+        //b_player.ghostSO2.rotation = b_player.ghostSO1.rotation;
+
+        Debug.Log("5");
+
+        //
+        //
+        //
+
+    }
+    
 
 
     #endregion
