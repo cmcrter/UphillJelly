@@ -1384,7 +1384,7 @@ MonoBehaviour:
   aerialState:
     hasRan: 0
     AerialDrag: 0.1
-    adjustGroundSmoothness: 2
+    adjustGroundSmoothness: 3
   groundedState:
     hasRan: 0
     testPressDownObject: {fileID: 5370616682765242826}
@@ -1432,6 +1432,7 @@ MonoBehaviour:
   nextToWallRun:
     currentWallRide: {fileID: 0}
     dotProductWithWall: 0
+    wallSpeed: 0.3
     cooldownDuration: 0.5
   grindBelow:
     splineCurrentlyGrindingOn: {fileID: 0}
@@ -1455,20 +1456,20 @@ MonoBehaviour:
   inputHandler: {fileID: 110903324889457856}
   frontWheelPos: {fileID: 950876112857626104}
   backWheelPos: {fileID: 6617951465868245079}
-  AdditionalGravityAmount: 8
+  AdditionalGravityAmount: 6
   bAddAdditionalGravity: 1
   turnSpeedCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.50128174
-      inSlope: 1.711812
-      outSlope: 1.711812
+      value: 0.6201782
+      inSlope: 1.3781182
+      outSlope: 1.3781182
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.02675059
+      outWeight: 0.029643588
     - serializedVersion: 3
       time: 1
       value: 1
@@ -1481,7 +1482,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  turnClamp: 0.55
+  turnClamp: 0.8
 --- !u!114 &6587126617156609396
 MonoBehaviour:
   m_ObjectHideFlags: 0

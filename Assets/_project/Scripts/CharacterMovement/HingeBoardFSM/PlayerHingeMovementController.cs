@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 29/11/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 04/01/22
+// Date Last Edited: 07/01/22
 // Brief: A prototype character controller using a board made of 2 RBs with 2 Joints used
 //////////////////////////////////////////////////////////// 
 
@@ -148,7 +148,7 @@ namespace L7Games.Movement
                 else
                 {
                     //If it's a reasonable adjustment
-                    if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 7.5f)
+                    if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 15f)
                     {
                         groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright));
                     }
@@ -244,6 +244,7 @@ namespace L7Games.Movement
             if(bAddAdditionalGravity)
             {
                 fRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
+                bRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
             }
         }
         #endregion

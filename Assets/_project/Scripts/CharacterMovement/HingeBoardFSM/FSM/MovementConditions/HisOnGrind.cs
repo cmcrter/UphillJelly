@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 25/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 25/10/21
+// Date Last Edited: 07/01/22
 // Brief: This is the condition to see if the player starts grinding or not
 //////////////////////////////////////////////////////////// 
 
@@ -114,12 +114,13 @@ namespace L7Games.Movement
         {
             while(splineCurrentlyGrindingOn)
             {
-                if(inputHandler.StartGrindHeld && CoyoteCoroutine == null && movementRB.velocity.magnitude > 0.5f)
-                {
-                    float timeAlongGrind;
-                    Vector3 point = splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind);
-                    grindDotProduct = Vector3.Dot(movementRB.velocity.normalized, splineCurrentlyGrindingOn.GetDirection(timeAlongGrind));
+                //Put here for testing, could be moved to under the next if
+                float timeAlongGrind;
+                Vector3 point = splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind);
+                grindDotProduct = Vector3.Dot(movementRB.velocity.normalized, splineCurrentlyGrindingOn.GetDirection(timeAlongGrind));
 
+                if(inputHandler.StartGrindHeld && CoyoteCoroutine == null && movementRB.velocity.magnitude > 1f)
+                {
                     if(grindDotProduct < -angleAllowance || grindDotProduct > angleAllowance)
                     {
                         ButtonPressed = true;
