@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 22/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 04/01/22
+// Date Last Edited: 07/01/22
 // Brief: The state that the player is in when they're on the ground
 //////////////////////////////////////////////////////////// 
 
@@ -192,7 +192,8 @@ namespace L7Games.Movement
             StopJumpTimerCoroutine();
             StopPushTimerCoroutine();
 
-            bPressingDown = false;
+            UnPressDown();            
+
             parentController.playerCamera.bMovingBackwards = false;
             hasRan = false;
         }
@@ -201,9 +202,6 @@ namespace L7Games.Movement
 
         private void UpdatePositionAndRotation(float dT)
         {
-            movementRB.transform.up = Vector3.up;
-            followRB.transform.up = Vector3.up;
-
             if(jumpCoroutine == null) 
             {
                 //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)
