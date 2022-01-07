@@ -190,7 +190,7 @@ namespace L7Games.Movement
 
             groundedState.InitialiseState(this, fRB, bRB, groundBelow, grindBelow);
             aerialState.InitialiseState(this, fRB, bRB, groundBelow, nextToWallRun, grindBelow);
-            wallRideState.InitialiseState(this, fRB, nextToWallRun, groundBelow);
+            wallRideState.InitialiseState(this, fRB, bRB, nextToWallRun, groundBelow);
             grindingState.InitialiseState(this, fRB, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(aerialState);

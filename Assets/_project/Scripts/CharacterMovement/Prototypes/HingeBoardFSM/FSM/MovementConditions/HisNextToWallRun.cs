@@ -22,6 +22,7 @@ namespace L7Games.Movement
 
         public WallRideTriggerable currentWallRide;
         public float dotProductWithWall;
+        public float wallSpeed = 0.3f;
 
         private PlayerHingeMovementController parentController;
         private Rigidbody movementRB;
@@ -51,6 +52,7 @@ namespace L7Games.Movement
         public void CheckWall(WallRideTriggerable wallRide)
         {
             currentWallRide = wallRide;
+            wallSpeed = wallRide.GetWallSpeed();
 
             //Getting the dot product with the wall to see if it's grindable
             dotProductWithWall = Vector3.Dot(parentController.transform.forward, wallRide.transform.right);

@@ -1149,6 +1149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallRideWall: {fileID: 0}
   CoyoteTime: 0
+  wallSpeed: 0.3
 --- !u!65 &187549005
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5300,7 +5301,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh471178
+  m_Name: pb_Mesh361992
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6403,6 +6404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallRideWall: {fileID: 0}
   CoyoteTime: 0
+  wallSpeed: 0.3
 --- !u!1 &1873024937
 GameObject:
   m_ObjectHideFlags: 0
@@ -10105,6 +10107,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432487499}
     m_Modifications:
+    - target: {fileID: 5055103341206589462, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
+      propertyPath: wallSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5055103341206589482, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
       propertyPath: m_RootOrder
       value: 0

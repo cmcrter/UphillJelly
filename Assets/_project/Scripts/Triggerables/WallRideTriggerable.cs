@@ -28,6 +28,8 @@ namespace L7Games.Triggerables
         private Transform wallRideWall;
         [SerializeField]
         private float CoyoteTime;
+        [SerializeField]
+        private float wallSpeed = 0.3f;
 
         #endregion
 
@@ -36,6 +38,15 @@ namespace L7Games.Triggerables
         private void Awake()
         {
             wallRideWall = wallRideWall ?? transform;
+        }
+
+        #endregion
+
+        #region
+
+        public float GetWallSpeed()
+        {
+            return wallSpeed;
         }
 
         #endregion

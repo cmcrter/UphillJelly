@@ -20,7 +20,9 @@ namespace L7Games.Movement
     {
         private PlayerHingeMovementController playerMovement;
         private PlayerInput pInput;
-        private Rigidbody rb;
+        private Rigidbody fRB;
+        private Rigidbody bRB;
+
         [NonSerialized] private HisNextToWallRun nextToWallRun;
         [NonSerialized] private HisGroundBelow nextToGround;
 
@@ -42,11 +44,12 @@ namespace L7Games.Movement
 
         }
 
-        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody playerRB, HisNextToWallRun wallRun, HisGroundBelow groundBelow)
+        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody frontRB, Rigidbody backRB, HisNextToWallRun wallRun, HisGroundBelow groundBelow)
         {
             playerMovement = controllerParent;
             pInput = controllerParent.input;
-            rb = playerRB;
+            fRB = frontRB;
+            bRB = backRB;
             nextToWallRun = wallRun;
             nextToGround = groundBelow;
         }
@@ -69,13 +72,13 @@ namespace L7Games.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            playerMovement.transform.position = rb.transform.position;
+            //playerMovement.transform.position = fRB.transform.position;
         }
 
         public override void PhysicsTick(float dT)
         {
             //Pushing the player along the wall
-            rb.MovePosition(rb.transform.position + (wallForward * rideSpeed));
+            fRB.MovePosition(fRB.transform.position + (wallForward * rideSpeed));
         }
 
         public override void OnStateEnter()
@@ -84,14 +87,18 @@ namespace L7Games.Movement
 
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
+            rideSpeed = nextToWallRun.wallSpeed;
 
             playerMovement.transform.forward = wallForward;
             playerMovement.AlignWheels();
             playerMovement.ResetWheelPos();
 
-            rb.isKinematic = true;
-            rb.velocity = Vector3.zero;
-            
+            fRB.isKinematic = true;
+            fRB.velocity = Vector3.zero;
+
+            bRB.isKinematic = true;
+            bRB.velocity = Vector3.zero;
+
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
             hasRan = true;
@@ -107,8 +114,14 @@ namespace L7Games.Movement
 
             nextToWallRun.StartCooldown();
 
-            rb.isKinematic = false;
+            fRB.isKinematic = false;
+            bRB.isKinematic = false;
             hasRan = false;
+        }
+
+        public void SetRideSpeed(float newRideSpeed)
+        {
+            rideSpeed = newRideSpeed;
         }
 
         #endregion
@@ -128,7 +141,9 @@ namespace L7Games.Movement
                 yield return null;
             }
 
-            rb.isKinematic = false;
+            fRB.isKinematic = false;
+            bRB.isKinematic = false;
+
             Co_CoyoteCoroutine = null;
         }
 
