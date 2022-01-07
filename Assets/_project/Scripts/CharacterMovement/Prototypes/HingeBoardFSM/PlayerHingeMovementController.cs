@@ -141,14 +141,14 @@ namespace L7Games.Movement
 
                 float angle = Vector3.Angle(upright, transform.up);
 
-                //If it's a reasonable adjustment
-                if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 7.5f)
+                if(bAerial)
                 {
-                    if(bAerial)
-                    {
-                        groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, upright)), smoothness * Time.deltaTime);
-                    }
-                    else
+                    groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, upright)), smoothness * Time.deltaTime);
+                }
+                else
+                {
+                    //If it's a reasonable adjustment
+                    if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 7.5f)
                     {
                         groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright));
                     }

@@ -69,13 +69,13 @@ namespace L7Games.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            //Pushing the player along the wall
-            rb.MovePosition(rb.transform.position + (wallForward * rideSpeed));
+            playerMovement.transform.position = rb.transform.position;
         }
 
         public override void PhysicsTick(float dT)
         {
-            playerMovement.transform.position = rb.transform.position;
+            //Pushing the player along the wall
+            rb.MovePosition(rb.transform.position + (wallForward * rideSpeed));
         }
 
         public override void OnStateEnter()
