@@ -263,16 +263,22 @@ namespace L7Games.Movement
 
         private void PressDown()
         {
-            movementRB.centerOfMass += new Vector3(0, -0.25f, 0);
-            testPressDownObject.position += new Vector3(0, -0.3f, 0);
-            bPressingDown = true;
+            if(!bPressingDown)
+            {
+                movementRB.centerOfMass += new Vector3(0, -0.25f, 0);
+                testPressDownObject.position += new Vector3(0, -0.3f, 0);
+                bPressingDown = true;
+            }
         }
 
         private void UnPressDown()
         {
-            movementRB.centerOfMass += new Vector3(0, 0.25f, 0);
-            testPressDownObject.position += new Vector3(0, 0.3f, 0);
-            bPressingDown = false;
+            if(bPressingDown)
+            {
+                movementRB.centerOfMass += new Vector3(0, 0.25f, 0);
+                testPressDownObject.position += new Vector3(0, 0.3f, 0);
+                bPressingDown = false;
+            }
         }
 
         private void Jump()

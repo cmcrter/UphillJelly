@@ -148,7 +148,7 @@ namespace L7Games.Movement
                 else
                 {
                     //If it's a reasonable adjustment
-                    if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 7.5f)
+                    if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 15f)
                     {
                         groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright));
                     }
