@@ -69,7 +69,7 @@ namespace L7Games.Movement
         private Coroutine turningCo;
         private Timer turningTimer;
         public AnimationCurve turnSpeedCurve;
-        public float turnClamp = 0.55f;
+        public float turnClamp = 0.575f;
 
         #endregion
 
@@ -77,16 +77,25 @@ namespace L7Games.Movement
 
         public override void ResetPlayer()
         {
+            Time.timeScale = 0;
+
             fRB.isKinematic = false;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
 
-            boardObject.transform.rotation = initialRot;
-            transform.rotation = initialRot;
+            bRB.isKinematic = false;
 
-            fRB.transform.position = initalPos;
+            bRB.angularVelocity = Vector3.zero;
+            bRB.velocity = Vector3.zero;
+
+            transform.rotation = initialRot;
             transform.position = initalPos;
+
+            ResetWheelPos();
+            AlignWheels();
+
+            Time.timeScale = 1;
         }
 
         public override void ResetPlayer(Transform point)

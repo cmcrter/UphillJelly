@@ -82,16 +82,15 @@ namespace L7Games.Movement
         {
             pInput.SwitchCurrentActionMap("WallRiding");
 
-            rb.isKinematic = true;
-            rb.velocity = Vector3.zero;
-
-            playerMovement.ResetWheelPos();
-            playerMovement.AlignWheels();
-
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
 
             playerMovement.transform.forward = wallForward;
+            playerMovement.AlignWheels();
+            playerMovement.ResetWheelPos();
+
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
             
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 

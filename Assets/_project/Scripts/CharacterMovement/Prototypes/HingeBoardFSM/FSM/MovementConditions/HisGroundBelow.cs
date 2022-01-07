@@ -28,7 +28,7 @@ namespace L7Games.Movement
         private Transform backRaycastPointTransform;
 
         [SerializeField]
-        private float groundDist = 0.09f;
+        private float groundDist = 1.69f;
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace L7Games.Movement
         public override bool isConditionTrue() 
         {
             //Checking if anything is below it
-            if(Physics.Raycast(frontraycastPointTransform.position, -Vector3.up, out RaycastHit hit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(frontraycastPointTransform.position, -Vector3.up, out RaycastHit hit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
@@ -63,7 +63,7 @@ namespace L7Games.Movement
                 FrontGroundHit = hit;
             }
 
-            if(Physics.Raycast(backRaycastPointTransform.position, -Vector3.up, out RaycastHit backHit, 25f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(backRaycastPointTransform.position, -Vector3.up, out RaycastHit backHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Could use backhit to help smoothing with the board against the ground
                 //Player is about to hit a ramp
