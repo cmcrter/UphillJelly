@@ -3584,8 +3584,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6587126617156609406, guid: c49642d14f405704381462b1390931ca, type: 3}
+      propertyPath: turnClamp
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587126617156609406, guid: c49642d14f405704381462b1390931ca, type: 3}
       propertyPath: wallRideState.rideSpeed
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587126617156609406, guid: c49642d14f405704381462b1390931ca, type: 3}
+      propertyPath: groundedState.constantForce
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587126617156609406, guid: c49642d14f405704381462b1390931ca, type: 3}
+      propertyPath: groundedState.bConstantForce
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6587126617156609406, guid: c49642d14f405704381462b1390931ca, type: 3}
       propertyPath: groundedState.testPressDownObject
