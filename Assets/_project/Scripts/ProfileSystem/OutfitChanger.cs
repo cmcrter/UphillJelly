@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 15/11/21
+// Date Last Edited: 08/01/22
 // Brief: A script to control the outfit system
 //////////////////////////////////////////////////////////// 
 

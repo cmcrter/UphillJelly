@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 15/11/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 15/11/21
+// Date Last Edited: 08/01/22
 // Brief: A script to load the character materials in game
 //////////////////////////////////////////////////////////// 
 
@@ -14,10 +14,10 @@ using UnityEngine;
 public class LoadCustomizablesInGame : MonoBehaviour
 {
 
-    //
+    // reference to the character
     public GameObject Character;
 
-    //
+    // reference to the outfit changer
     public OutfitChanger outfitChanger;
 
     //

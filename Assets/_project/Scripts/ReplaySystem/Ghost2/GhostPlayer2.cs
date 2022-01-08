@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 30/09/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/11/21
+// Date Last Edited: 08/01/22
 // Brief: Script in charge of controlling the ghost of the player with the movement and positioning
 //////////////////////////////////////////////////////////// 
 
@@ -64,37 +64,7 @@ using UnityEngine.InputSystem;
 
             }
 
-            /*
-            // key triggers for recording the ghost without going in the inspector
-            if (Keyboard.current.kKey.isPressed) {
 
-                ghost.isRecording = true;
-                ghost.isReplaying = false;
-
-                if (Debug.isDebugBuild) {
-
-                    Debug.Log("Recording");
-
-                }
-
-
-            }
-
-            // key triggers for replaying the ghost without going in the inspector
-            if (Keyboard.current.lKey.isPressed) {
-
-                ghost.isRecording = false;
-                ghost.isReplaying = true;
-
-                if (Debug.isDebugBuild) {
-
-                    Debug.Log("Replaying");
-
-                }
-
-
-            }
-            */
         }
         #endregion
 
@@ -164,13 +134,12 @@ using UnityEngine.InputSystem;
 
             }
 
-            //Debug.Log("SetTheGhostTransform");
+
         }
 
 
         #endregion
     }
 
-//}
 
 

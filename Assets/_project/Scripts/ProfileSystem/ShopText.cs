@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 20/11/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 22/11/21
+// Date Last Edited: 08/01/22
 // Brief: A script to control the text for all of the profiles
 //////////////////////////////////////////////////////////// 
 
@@ -17,7 +17,7 @@ using System.IO;
 public class ShopText : MonoBehaviour
 {
 
-    //
+    // Shop Reference
     public Shop shop;
 
     // Reference to the b_Player
@@ -58,12 +58,12 @@ public class ShopText : MonoBehaviour
         // if a directory doesn't exists for "/replay_save/replay_data"
         if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays")) {
 
-            //
+            // if the replay folder does not exist, clear the ghost 2 data
             b_player.ghostSO2.ResetGhostData();
 
         }
 
-        //
+        // set the player 1 to true
         b_player.isSave1 = true;
 
         // set the second play button to false
@@ -79,7 +79,7 @@ public class ShopText : MonoBehaviour
         // load player 1 data
         b_player.LoadPlayer1();
 
-        //
+        // save the second replay for the first save
         b_player.SavePlayer1Second();
 
     }
@@ -90,12 +90,12 @@ public class ShopText : MonoBehaviour
         // if a directory doesn't exists for "/replay_save/replay_data"
         if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays")) {
 
-            //
+            // if the replay folder does not exist, clear the ghost 2 data
             b_player.ghostSO2.ResetGhostData();
 
         }
 
-        //
+        // set the player 2 to true
         b_player.isSave2 = true;
 
         // set the first play button to false
@@ -110,7 +110,7 @@ public class ShopText : MonoBehaviour
         // load player 1 data
         b_player.LoadPlayer2();
 
-        //
+        // save the second replay for the second save
         b_player.SavePlayer2Second();
 
     }
@@ -121,12 +121,12 @@ public class ShopText : MonoBehaviour
         // if a directory doesn't exists for "/replay_save/replay_data"
         if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays")) {
 
-            //
+            // if the replay folder does not exist, clear the ghost 2 data
             b_player.ghostSO2.ResetGhostData();
 
         }
 
-        //
+        // set the player 3 to true
         b_player.isSave3 = true;
 
         // set the first play button to false
@@ -143,7 +143,7 @@ public class ShopText : MonoBehaviour
         // load player 1 data
         b_player.LoadPlayer3();
 
-        //
+        // save the second replay for the third save
         b_player.SavePlayer3Second();
 
     }
@@ -210,7 +210,6 @@ public class ShopText : MonoBehaviour
         // If the current hat is not one that is bought then don't start the game
         if (!shop.IsHatBought[shop.CurrentHatSelectedInt]) {
 
-            //
             Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
 
             return;
@@ -220,7 +219,6 @@ public class ShopText : MonoBehaviour
         // If the current hat is not one that is bought then don't start the game
         if (!shop.IsCharacterBought[shop.CurrentCharacterSelectedInt]) {
 
-            //
             Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
 
             return;
@@ -241,7 +239,6 @@ public class ShopText : MonoBehaviour
         // If the current hat is not one that is bought then don't start the game
         if (!shop.IsHatBought[shop.CurrentHatSelectedInt]) {
 
-            //
             Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
 
             return;
@@ -251,7 +248,6 @@ public class ShopText : MonoBehaviour
         // If the current hat is not one that is bought then don't start the game
         if (!shop.IsCharacterBought[shop.CurrentCharacterSelectedInt]) {
 
-            //
             Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
 
             return;
@@ -272,7 +268,6 @@ public class ShopText : MonoBehaviour
         // If the current hat is not one that is bought then don't start the game
         if (!shop.IsHatBought[shop.CurrentHatSelectedInt]) {
 
-            //
             Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
 
             return;
@@ -282,7 +277,6 @@ public class ShopText : MonoBehaviour
         // If the current hat is not one that is bought then don't start the game
         if (!shop.IsCharacterBought[shop.CurrentCharacterSelectedInt]) {
 
-            //
             Debug.Log("DOES NOT OWN ALL CURRENTLY ACTIVE ITEMS");
 
             return;

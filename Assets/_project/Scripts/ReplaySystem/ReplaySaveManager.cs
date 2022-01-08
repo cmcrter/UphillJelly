@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 04/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/11/21
+// Date Last Edited: 08/01/22
 // Brief: Script to store the data of the ghosts poisition and rotation 
 //////////////////////////////////////////////////////////// 
 
@@ -63,32 +63,6 @@ public class ReplaySaveManager : MonoBehaviour
     #endregion
 
     #region Methods
-
-    //
-    public void HideReplay1() {
-
-        //
-        Ghost1character.SetActive(false);
-
-    }
-
-    //
-    public void HideReplay2() {
-
-        //
-        Ghost2character.SetActive(false);
-
-    }
-
-
-
-
-    public void SaveReplay1Button() {
-
-        //
-        SaveReplay1();
-
-    }
 
     // bool for if there is a save file
     public bool IsReplaySaveFile1() {
@@ -428,17 +402,6 @@ public class ReplaySaveManager : MonoBehaviour
         Debug.Log("Loaded Second Save 2");
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

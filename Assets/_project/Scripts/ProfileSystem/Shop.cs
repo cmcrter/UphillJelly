@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 25/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/11/21
+// Date Last Edited: 08/01/22
 // Brief: A script to control the shop and all transactions
 //////////////////////////////////////////////////////////// 
 
@@ -17,13 +17,13 @@ public class Shop : MonoBehaviour
 
     #region Variables
 
-    //
+    // gameobject panel for sure you want to buy hat
     public GameObject SureYouWantToBuyHat;
 
-    //
+    // gameobject panel for sure you want to buy character
     public GameObject SureYouWantToBuyCharacter;
 
-    //
+    // reference to the b_player
     public b_Player b_player;
 
     // Outfitchanger reference
@@ -187,34 +187,34 @@ public class Shop : MonoBehaviour
 
     }
 
-    //
+    // sure you want to buy hat method
     public void SureWantToBuyHat() {
 
-        //
+        // set sure you want to buy hat panel to true
         SureYouWantToBuyHat.SetActive(true);
 
     }
 
-    //
+    // sure you want to buy character method
     public void SureWantToBuyCharacter() {
 
-        //
+        // set sure you want to buy character panel to true
         SureYouWantToBuyCharacter.SetActive(true);
 
     }
 
-    //
+    // hide sure you want to buy hat method
     public void HideHatBuyPanel() {
 
-        //
+        // set sure you want to buy hat panel to false
         SureYouWantToBuyHat.SetActive(false);
 
     }
 
-    //
+    // hide sure you want to buy character method
     public void HideCharacterBuyPanel() {
 
-        //
+        // set sure you want to buy character panel to false
         SureYouWantToBuyCharacter.SetActive(false);
 
     }
@@ -238,7 +238,7 @@ public class Shop : MonoBehaviour
     // buy the current hat
     public void BuyCurrentHat() {
 
-        //
+        // sure you want to buy hat panel to false
         SureYouWantToBuyHat.SetActive(false);
 
         // if the player does not have enough currency for the hat
@@ -265,32 +265,32 @@ public class Shop : MonoBehaviour
             Debug.Log("BoughtHat");
 
             // Add in save after every purchase
-            //
+            // if the current save is profile 1
             if (b_player.isSave1 == true) {
 
                 Debug.Log("SAVED1");
 
-                //
+                // save the player 1
                 b_player.SavePlayer1();
 
             }
 
-            //
+            // if the current save is profile 2
             if (b_player.isSave2 == true) {
 
                 Debug.Log("SAVED2");
 
-                //
+                // save the player 2
                 b_player.SavePlayer2();
 
             }
 
-            //
+            // if the current save is profile 3
             if (b_player.isSave3 == true) {
 
                 Debug.Log("SAVED3");
 
-                //
+                // save the player 3
                 b_player.SavePlayer3();
 
             }
@@ -378,32 +378,32 @@ public class Shop : MonoBehaviour
             Debug.Log("BoughtCharacter");
 
             // Add in save after every purchase
-            //
+            // if the current save is profile 1
             if (b_player.isSave1 == true) {
 
                 Debug.Log("SAVED1");
 
-                //
+                // save the player 1
                 b_player.SavePlayer1();
 
             }
 
-            //
+            // if the current save is profile 2
             if (b_player.isSave2 == true) {
 
                 Debug.Log("SAVED2");
 
-                //
+                // save the player 2
                 b_player.SavePlayer2();
 
             }
 
-            //
+            // if the current save is profile 3
             if (b_player.isSave3 == true) {
 
                 Debug.Log("SAVED3");
 
-                //
+                // save the player 3
                 b_player.SavePlayer3();
 
             }
@@ -462,20 +462,22 @@ public class Shop : MonoBehaviour
 
     }
 
+    // method to save the replays (before game complete)
     public void lookatsaves() {
 
         //
+        // Where is this method caled?
+        // is it needed?
+        // why am i not loading the second save 2 and 3?
         //
         //
-
-        Debug.Log("1");
 
         if (b_player.isSave1 == true) {
 
-            //
+            // load the replay 1
             replaySaveManager.LoadReplay1();
 
-            //
+            // load the second replay 1
             replaySaveManager.LoadSecondReplay1();
 
             Debug.Log("2");
@@ -487,17 +489,6 @@ public class Shop : MonoBehaviour
             //
             replaySaveManager.LoadReplay2();
 
-            Debug.Log("3");
-
-            //
-            //b_player.ghostSO2.timeStamp = b_player.ghostSO1.timeStamp;
-
-            //
-            //b_player.ghostSO2.position = b_player.ghostSO1.position;
-
-            //
-            //b_player.ghostSO2.rotation = b_player.ghostSO1.rotation;
-
         }
 
         if (b_player.isSave3 == true) {
@@ -505,33 +496,9 @@ public class Shop : MonoBehaviour
             //
             replaySaveManager.LoadReplay3();
 
-            //
-            //b_player.ghostSO2.timeStamp = b_player.ghostSO1.timeStamp;
-
-            //
-            //b_player.ghostSO2.position = b_player.ghostSO1.position;
-
-            //
-            //b_player.ghostSO2.rotation = b_player.ghostSO1.rotation;
-
         }
 
-        Debug.Log("4");
 
-        //
-        //b_player.ghostSO2.timeStamp = b_player.ghostSO1.timeStamp;
-
-        //
-        //b_player.ghostSO2.position = b_player.ghostSO1.position;
-
-        //
-        //b_player.ghostSO2.rotation = b_player.ghostSO1.rotation;
-
-        Debug.Log("5");
-
-        //
-        //
-        //
 
     }
     

@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 29/09/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/11/21
+// Date Last Edited: 08/01/22
 // Brief:   Ghost replay script which controls the temporary movement of a test character as well as recording and replaying 
 //          the characters movement and rotation to act as a "Ghost"
 //////////////////////////////////////////////////////////// 
@@ -80,10 +80,6 @@ public class GhostRecorder : MonoBehaviour
             // print debug log
             if (Debug.isDebugBuild) {
 
-                // transform hasnt changed
-                //Debug.Log("Transform hasnt changed");
-
-                // Removed ^^^ because it was being constantly called
 
             }
 

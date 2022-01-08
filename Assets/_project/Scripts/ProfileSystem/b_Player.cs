@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 15/11/21
+// Date Last Edited: 08/01/22
 // Brief: A script to call the functions to save and load the player
 //////////////////////////////////////////////////////////// 
 
@@ -19,27 +19,28 @@ public class b_Player : MonoBehaviour
 
     #region Variables
 
+    // replay save manager
     public ReplaySaveManager replaySaveManager;
 
-    //
+    // ghost SO 1
     public Ghost ghostSO1;
 
-    //
+    // ghost SO 2
     public Ghost2 ghostSO2;
 
-    //
+    // is save 1
     public bool isSave1;
 
-    //
+    // is save 2
     public bool isSave2;
 
-    //
+    // is save 3
     public bool isSave3;
 
-    //
+    // CC script
     public CC changeCamera;
 
-    //
+    // load customizables in game
     public LoadCustomizablesInGame loadCustomizablesInGame;
 
     // reference to the ReplaySaveManager
@@ -79,40 +80,44 @@ public class b_Player : MonoBehaviour
 
     #region Methods
 
+    //
+    // Not needed???
     public void TESTTEST1() {
 
         //
         SavePlayer1();
 
     }
+    //
+    //
 
     //
     public void Start() {
 
-        //
+        // set ghost 1 recording to false
         ghostSO1.isRecording = false;
 
-        //
+        // set ghost 1 replaying to false
         ghostSO1.isReplaying = false;
 
 
-        //
+        // set ghost 2 replaying to false
         ghostSO2.isReplaying = false;
 
-        //
+        // set ghost 2 recording to false
         ghostSO2.isRecording = false;
 
 
-        //
+        // is save 1 = false
         isSave1 = false;
 
-        //
+        // is save 2 = false
         isSave2 = false;
 
-        //
+        // is save 3 = false
         isSave3 = false;
 
-        //
+        // reset ghost 1 data
         ghostSO1.ResetGhostData();
 
     }
@@ -133,7 +138,7 @@ public class b_Player : MonoBehaviour
     // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
     public void TestPressed1Update() {
 
-        //
+        // set ghost 1 and ghost 2 recording and replaing to false
         ghostSO1.isRecording = false;
         ghostSO1.isReplaying = false;
 
@@ -145,16 +150,16 @@ public class b_Player : MonoBehaviour
         // Save replay 1 as replay 2
         SavePlayer1();
 
-        //
+        // set the ghost 2 timestamp to the ghost 1 timestamp
         ghostSO2.timeStamp = ghostSO1.timeStamp;
 
-        //
+        // set the ghost 2 position to the ghost 1 position
         ghostSO2.position = ghostSO1.position;
 
-        //
+        // set the ghost 2 rotation to the ghost 1 rotation
         ghostSO2.rotation = ghostSO1.rotation;
 
-        //
+        // save the second replay for player 1
         SavePlayer1Second();
 
         Debug.Log("Saved Replay 1's");
@@ -164,7 +169,7 @@ public class b_Player : MonoBehaviour
     // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
     public void TestPressed2Update() {
 
-        //
+        // set ghost 1 and ghost 2 recording and replaing to false
         ghostSO1.isRecording = false;
         ghostSO1.isReplaying = false;
 
@@ -176,16 +181,16 @@ public class b_Player : MonoBehaviour
         // Save replay 1 as replay 2
         SavePlayer2();
 
-        //
+        // set the ghost 2 timestamp to the ghost 1 timestamp
         ghostSO2.timeStamp = ghostSO1.timeStamp;
 
-        //
+        // set the ghost 2 position to the ghost 1 position
         ghostSO2.position = ghostSO1.position;
 
-        //
+        // set the ghost 2 rotation to the ghost 1 rotation
         ghostSO2.rotation = ghostSO1.rotation;
 
-        //
+        // save the second replay for player 2
         SavePlayer2Second();
 
         Debug.Log("Saved Replay 2's");
@@ -195,7 +200,7 @@ public class b_Player : MonoBehaviour
     // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
     public void TestPressed3Update() {
 
-        //
+        // set ghost 1 and ghost 2 recording and replaing to false
         ghostSO1.isRecording = false;
         ghostSO1.isReplaying = false;
 
@@ -207,103 +212,22 @@ public class b_Player : MonoBehaviour
         // Save replay 1 as replay 2
         SavePlayer3();
 
-        //
+        // set the ghost 2 timestamp to the ghost 1 timestamp
         ghostSO2.timeStamp = ghostSO1.timeStamp;
 
-        //
+        // set the ghost 2 position to the ghost 1 position
         ghostSO2.position = ghostSO1.position;
 
-        //
+        // set the ghost 2 rotation to the ghost 1 rotation
         ghostSO2.rotation = ghostSO1.rotation;
 
-        //
+        // save the second replay for player 3
         SavePlayer3Second();
 
         Debug.Log("Saved Replay 3's");
 
     }
 
-    /*
-    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
-    public void TestPressed2Update() {
-
-        //
-        ghostSO1.isRecording = false;
-
-        //
-        ghostSO2.isReplaying = false;
-
-        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
-        // Ghost 2 replays best time 
-        //
-        // Save replay 1 as replay 2
-        //
-        SavePlayer2();
-
-        //
-        ghostSO2.timeStamp = ghostSO1.timeStamp;
-
-        //
-        ghostSO2.position = ghostSO1.position;
-
-        //
-        ghostSO2.rotation = ghostSO1.rotation;
-
-        //
-        SavePlayer2Second();
-
-        Debug.Log("22222222");
-
-    }
-
-    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
-    public void TestPressed3Update() {
-
-        //
-        ghostSO1.isRecording = false;
-
-        //
-        ghostSO2.isReplaying = false;
-
-        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
-        // Ghost 2 replays best time 
-        //
-        // Save replay 1 as replay 2
-        //
-        SavePlayer3();
-
-        //
-        ghostSO2.timeStamp = ghostSO1.timeStamp;
-
-        //
-        ghostSO2.position = ghostSO1.position;
-
-        //
-        ghostSO2.rotation = ghostSO1.rotation;
-
-        //
-        SavePlayer3Second();
-
-        Debug.Log("3333333333");
-
-    }
-    */
-
-
-    /*
-    //
-    public void TestPressed2() {
-
-        //
-        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
-        // Ghost 2 replays best time 
-        //
-        // 
-        //
-        SavePlayer1();
-
-    }
-    */
 
     // Load the player1
     public void LoadPlayer1() {
@@ -543,9 +467,6 @@ public class b_Player : MonoBehaviour
     // Save the player1's second ghost replay
     public void SavePlayer1Second() {
 
-        // save the player 1 and pass through the shop and outfitchanger
-        //b_SaveSystem.SavePlayer1(shop, outfitChanger);
-
         // save the replay 1 through the ghost save manager
         replayGhostSaveManager.SaveSecondReplay1();
 
@@ -570,9 +491,6 @@ public class b_Player : MonoBehaviour
     // Save the player2
     public void SavePlayer2Second() {
 
-        // save the player 2 and pass through the shop and outfitchanger
-        //b_SaveSystem.SavePlayer2(shop, outfitChanger);
-
         // save the replay 2 through the ghost save manager
         replayGhostSaveManager.SaveSecondReplay2();
 
@@ -596,9 +514,6 @@ public class b_Player : MonoBehaviour
     // Save the player3
     public void SavePlayer3Second() {
 
-        // save the player 3 and pass through the shop and outfitchanger
-        //b_SaveSystem.SavePlayer3(shop, outfitChanger);
-
         // save the replay 3 through the ghost save manager
         replayGhostSaveManager.SaveSecondReplay3();
 
@@ -610,15 +525,17 @@ public class b_Player : MonoBehaviour
     // play button 1 pressed
     public void PlayPlayer1() {
 
-        //
+        // reset ghost data 2
         ghostSO2.ResetGhostData();
 
         // Load the first second replay for ghost 2
         replayGhostSaveManager.LoadSecondReplay1();
 
+        // set the ghost 1 to recording = true and replaying = false
         ghostSO1.isRecording = true;
         ghostSO1.isReplaying = false;
 
+        // set the ghost 2 to recording = false and replaying = true
         ghostSO2.isRecording = false;
         ghostSO2.isReplaying = true;
 
@@ -630,15 +547,17 @@ public class b_Player : MonoBehaviour
     // play button 2 pressed
     public void PlayPlayer2() {
 
-        //
+        // reset ghost data 2
         ghostSO2.ResetGhostData();
 
         // Load the first second replay for ghost 2
         replayGhostSaveManager.LoadSecondReplay2();
 
+        // set the ghost 1 to recording = true and replaying = false
         ghostSO1.isRecording = true;
         ghostSO1.isReplaying = false;
 
+        // set the ghost 2 to recording = false and replaying = true
         ghostSO2.isRecording = false;
         ghostSO2.isReplaying = true;
 
@@ -650,15 +569,17 @@ public class b_Player : MonoBehaviour
     // play button 3 pressed
     public void PlayPlayer3() {
 
-        //
+        // reset ghost data 2
         ghostSO2.ResetGhostData();
 
         // Load the first second replay for ghost 2
         replayGhostSaveManager.LoadSecondReplay3();
 
+        // set the ghost 1 to recording = true and replaying = false
         ghostSO1.isRecording = true;
         ghostSO1.isReplaying = false;
 
+        // set the ghost 2 to recording = false and replaying = true
         ghostSO2.isRecording = false;
         ghostSO2.isReplaying = true;
 
