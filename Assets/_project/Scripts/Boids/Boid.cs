@@ -12,9 +12,13 @@ using UnityEngine;
 
 namespace L7Games.Boids
 {
-    public class Boids : MonoBehaviour
+    /// <summary>
+    /// Class for general functionality of all boids
+    /// </summary>
+    public class Boid : MonoBehaviour
     {
-        //private Vector3 currentVelocity;
+        [SerializeField] [Tooltip("The layer mask ")]
+        protected static LayerMask boidsLayerMask;
 
         /// <summary>
         /// Returns a velocity that is either pushing towards or away from a point
@@ -27,7 +31,7 @@ namespace L7Games.Boids
         /// <returns>A velocity that is either pushing towards or away from a point</returns>
         protected static Vector3 GetSeekOrFleeForce(bool isSeeking, float maxSpeed, Vector3 targetPosition, Vector3 agentPosition, Vector3 currentVelocity)
         {
-            Vector3 targetDirection  = isSeeking ? Vector3.Normalize(targetPosition - agentPosition) : Vector3.Normalize(targetPosition - agentPosition);
+            Vector3 targetDirection = isSeeking ? Vector3.Normalize(targetPosition - agentPosition) : Vector3.Normalize(targetPosition - agentPosition);
             Vector3 newVelocity = targetDirection * maxSpeed;
             return newVelocity - currentVelocity;
         }
@@ -43,6 +47,24 @@ namespace L7Games.Boids
         protected static Vector3 GetSeekForce(float maxSpeed, Vector3 targetPosition, Vector3 agentPosition, Vector3 currentVelocity)
         {
             return GetSeekOrFleeForce(true, maxSpeed, targetPosition, agentPosition, currentVelocity);
+        }
+
+        /// <summary>
+        /// Returns a velocity that is either pushing towards or away from a point
+        /// </summary>
+        /// <param name="isSeeking">If the force is pushing towards the point, otherwise it will being pushing away</param>
+        /// <param name="maxSpeed">The max speed the new velocity is allowed</param>
+        /// <param name="arrivalRadius">Distance</param>
+        /// <param name="targetPosition">The point to push either towards or away from</param>
+        /// <param name="agentPosition">The current position of the boid agent</param>
+        /// <param name="currentVelocity">The current velocity of the boid agent</param>
+        /// <returns>A velocity that is either pushing towards or away from a point</returns>
+        protected static Vector3 GetSeekForceWithArrival(bool isSeeking, float arrivalRadius, float maxSpeed, Vector3 targetPosition, Vector3 agentPosition, Vector3 currentVelocity)
+        {
+            Vector3 targetDirection = isSeeking ? Vector3.Normalize(targetPosition - agentPosition) : Vector3.Normalize(targetPosition - agentPosition);
+            Vector3 newVelocity = targetDirection * maxSpeed;
+            newVelocity = Vector3.Min(targetDirection * Vector3.Distance(agentPosition, targetPosition) / arrivalRadius, newVelocity);
+            return newVelocity - currentVelocity;
         }
 
         /// <summary>
@@ -104,6 +126,43 @@ namespace L7Games.Boids
         protected static Vector3 GetEvadeForce(float maxSpeed, Vector3 targetPosition, Vector3 targetVelocity, Vector3 agentPosition, Vector3 currentVelocity)
         {
             return GetFleeForce(maxSpeed, targetPosition + targetVelocity, agentPosition, currentVelocity);
+        }
+
+        /// <summary>
+        /// Returns a force used to avoid colliders
+        /// </summary>
+        /// <param name="maxSpeed">The max speed the new velocity is allowed</param>
+        /// <param name="avoidenceDistance">The distance forward that will be check for collisions</param>
+        /// <param name="agentTransform">The transform for the boid agent</param>
+        /// <param name="currentVelocity">The current velocity that the agent is moving</param>
+        /// <param name="halfExtents">Half the extents of the cube to cast to check for collisions</param>
+        /// <returns>A force used to avoid colliders</returns>
+        protected static Vector3 GetAvoidenceForce(float maxSpeed, float avoidenceDistance, Transform agentTransform, Vector3 currentVelocity, Vector3 halfExtents)
+        {
+            Vector3 hitForce = Vector3.zero;
+            RaycastHit[] hits = Physics.BoxCastAll(agentTransform.position, halfExtents, currentVelocity.normalized, agentTransform.rotation,  avoidenceDistance);
+            for (int i = 0; i < hits.Length; ++i)
+            {
+                // Get the multiplier for the distance away based on the max distance
+                float distanceMultiplier = Vector3.Distance(agentTransform.position, hits[i].point) / avoidenceDistance;
+                hitForce += hits[i].normal * (maxSpeed * distanceMultiplier); 
+            }
+
+            return Vector3.ClampMagnitude(hitForce, maxSpeed) - currentVelocity;
+        }
+
+        protected static List<Boid> GetNeighbouringBoids(float radius, Vector3 agentPosition)
+        {
+            List<Boid> boids = new List<Boid>();
+            Collider[] colliders = Physics.OverlapSphere(agentPosition, radius, boidsLayerMask);
+            for (int i = 0; i < colliders.Length; ++i)
+            {
+                if (colliders[i].TryGetComponent<Boid>(out Boid boid))
+                {
+                    boids.Add(boid);
+                }
+            }
+            return boids;
         }
     }
 }
