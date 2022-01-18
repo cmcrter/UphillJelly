@@ -164,6 +164,17 @@ namespace L7Games.Boids
             }
             return boids;
         }
+
+
+        //protected static Vector3 GetContainmentBoxColliderForce(float maxSpeed, float avodienceDistance, BoxCollider colliderTested, Vector3 agentPosition, Vector3 currentVelocity)
+        //{
+        //    // Check if the end of the ray is already inside the collider
+        //    if (colliderTested.bounds.Contains(agentPosition + currentVelocity.normalized * avodienceDistance))
+        //    {
+
+        //    }
+            
+        //}
     }
 }
 
