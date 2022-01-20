@@ -50,7 +50,7 @@ public class Replay_Collectable : MonoBehaviour
 
 
         // if the ghost collides with this collectable
-        if (col.gameObject.tag == "Ghost") {
+        if (col.gameObject.tag == "Ghost ") {
 
             // set the child object to active
             childCollectableObject.SetActive(true);
