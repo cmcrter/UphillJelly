@@ -3,8 +3,8 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 15/11/21
-// Brief: A script to control the outfit system
+// Date Last Edited: 22/01/22
+// Brief: 
 //////////////////////////////////////////////////////////// 
 
 using System.Collections;
@@ -43,13 +43,15 @@ public class b_PlayerData
     // current character int
     public int icurrentCharacterint;
 
+    //
+    public List<string> scoreBoardEntryNames;
 
+    //
+    public List<int> scoreBoardEntryScores;
 
     #endregion
 
     #region Methods
-
-
 
     // Contructor to tell the PlayerData where to get the data from
     public b_PlayerData(Shop shopData, OutfitChanger outfitChangerData) {
@@ -79,10 +81,15 @@ public class b_PlayerData
         icurrentCharacterint = outfitChangerData.currentCharacterint;
 
 
+        //
+        //scoreBoardEntryNames = sBED.entryName.ToString();
+
+        //
+        //scoreBoardEntryScores = sBED.entryScore;
+
     }
 
     #endregion
-
 
 
 }
