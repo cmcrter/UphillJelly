@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SplineTraffic : MonoBehaviour
 {
+    // TODO: Change the prefabs and weights to a structure that contains the prefab, weight and its upwards offset
+
     #region Public Fields
     /// <summary>
     /// How fast the object will move along the SplineSequence 
@@ -11,7 +13,6 @@ public class SplineTraffic : MonoBehaviour
     [SerializeField]
     [Tooltip("How fast the object will move along the SplineSequence")]
     private float speed = 1.0f;
-
     #endregion
 
     #region Serialized Private Fields
@@ -37,6 +38,9 @@ public class SplineTraffic : MonoBehaviour
     [SerializeField] [Tooltip("The amount of time between spawning traffic objects")]
     private float timeBetweenSpawns = 1f;
 
+    [SerializeField]
+    private float upwardsOffset = 0f;
+
     [SerializeField] [Tooltip("The prefab that can be spawned to move along the splines")]
     private GameObject[] prefabs;
 
@@ -50,7 +54,7 @@ public class SplineTraffic : MonoBehaviour
     /// </summary>
     [SerializeField]
     [Tooltip("The spline sequence to follow along")]
-    private SplineSequence splineSequence = null;
+    private L7Games.Utility.Splines.SplineWrapper splineInUse = null;
     #endregion
 
     #region Private Variables
@@ -104,6 +108,7 @@ public class SplineTraffic : MonoBehaviour
     {
         if (index < 0 || index >= prefabsWeights.Length)
         {
+            int i;
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
             if (index > 0)
             {
@@ -181,7 +186,7 @@ public class SplineTraffic : MonoBehaviour
         GameObject[] newPrefabArray = new GameObject[newCount];
         float[] newWeightsArray = new float[newCount];
         System.Array.Copy(prefabs, newPrefabArray, Mathf.Min(prefabs.Length, newCount));
-        System.Array.Copy(prefabsWeights, newWeightsArray, Mathf.Min(prefabs.Length, newCount));
+        System.Array.Copy(prefabsWeights, newWeightsArray, Mathf.Min(prefabsWeights.Length, newCount));
         prefabs = newPrefabArray;
         prefabsWeights = newWeightsArray;
     }
@@ -199,7 +204,7 @@ public class SplineTraffic : MonoBehaviour
 
     public void SetNewSeqeunceToFollow(SplineSequence splineSequenceToFollow, int indexToMove, float startT = 0.0f)
     {
-        splineSequence = splineSequenceToFollow;
+        splineInUse = splineSequenceToFollow;
         currentTValues[indexToMove] = startT;
         UpdateTIncrement();
     }
@@ -212,9 +217,9 @@ public class SplineTraffic : MonoBehaviour
     /// </summary>
     private void UpdateTIncrement()
     {
-        if (splineSequence != null)
+        if (splineInUse != null)
         {
-            tIncrementPerSecond = speed / splineSequence.totalLength;
+            tIncrementPerSecond = speed / splineInUse.GetTotalLength();
         }
     }
 
@@ -225,13 +230,14 @@ public class SplineTraffic : MonoBehaviour
             return;
         }
 
-        if (currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond < 1)
+        float newTChange = Time.deltaTime * tIncrementPerSecond;
+        if (currentTValues[indexMoved] + newTChange < 1)
         {
             // Clamping it at the max value and min values of a unit interval
 
             // Check the length of the next increment
-            Vector3 nextPoint = splineSequence.GetLengthBasedPoint(currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond);
-            Vector3 currentPoint = splineSequence.GetLengthBasedPoint(currentTValues[indexMoved]);
+            Vector3 nextPoint = splineInUse.GetPointAtTime(currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond);
+            Vector3 currentPoint = splineInUse.GetPointAtTime(currentTValues[indexMoved]);
             Vector3 velocity = nextPoint - currentPoint;
 
 
@@ -240,11 +246,12 @@ public class SplineTraffic : MonoBehaviour
             float currentDistanceChange = velocity.magnitude;
 
             float desiredChange = desiredDistance / currentDistanceChange;
-            currentTValues[indexMoved] = Mathf.Clamp01(currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
+            newTChange = Time.deltaTime * tIncrementPerSecond * desiredChange;
+            currentTValues[indexMoved] = Mathf.Clamp01(currentTValues[indexMoved] + newTChange); // add length to this calculation
         }
         else
         {
-            currentTValues[indexMoved] = Mathf.Clamp01(currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond); // add length to this calculation
+            currentTValues[indexMoved] = Mathf.Clamp01(currentTValues[indexMoved] + newTChange); // add length to this calculation
         }
 
         // Destroy the object when it reaches the end
@@ -261,9 +268,9 @@ public class SplineTraffic : MonoBehaviour
         }
 
         // Setting the required position values to given time
-        if (splineSequence != null)
+        if (splineInUse != null)
         {
-            Vector3 targetPosition = splineSequence.GetLengthBasedPoint(currentTValues[indexMoved]);
+            Vector3 targetPosition = splineInUse.GetPointAtTime(currentTValues[indexMoved]);
             if (!followX)
             {
                 targetPosition.x = gameObjectsMoved[indexMoved].transform.position.x;
@@ -276,15 +283,19 @@ public class SplineTraffic : MonoBehaviour
             {
                 targetPosition.z = gameObjectsMoved[indexMoved].transform.position.z;
             }
-            gameObjectsMoved[indexMoved].transform.LookAt(targetPosition);
+            //gameObjectsMoved[indexMoved].transform.forward = splineInUse.GetDirection(currentTValues[indexMoved], newTChange);
+            Vector3 startPosition = gameObjectsMoved[indexMoved].transform.position;
             gameObjectsMoved[indexMoved].transform.position = targetPosition;
+            gameObjectsMoved[indexMoved].transform.position += gameObjectsMoved[indexMoved].transform.up * upwardsOffset;
+            Vector3 endPosition = gameObjectsMoved[indexMoved].transform.position;
+            gameObjectsMoved[indexMoved].transform.forward = Vector3.Normalize( endPosition - startPosition);
         }
         else
         {
             Debug.LogError("SplineSequence not assigned when referenced in Spline Mover update function", gameObject);
         }
 
-        transform.forward = splineSequence.GetDirection(currentTValues[indexMoved], 0.01f);
+        transform.forward = splineInUse.GetDirection(currentTValues[indexMoved], 0.01f);
     }
 
     private GameObject SpawnObject()
@@ -293,7 +304,7 @@ public class SplineTraffic : MonoBehaviour
         int randomValue = Random.Range(0, prefabs.Length);
         Debug.Log(randomValue);
         GameObject returnedObject  = GameObject.Instantiate(prefabs[randomValue]);
-        returnedObject.transform.position = splineSequence.WorldStartPosition;
+        returnedObject.transform.position = splineInUse.WorldStartPosition;
         gameObjectsMoved[nextFreeIndex] = returnedObject;
         currentTValues[nextFreeIndex] = 0f;
         ++nextFreeIndex;
@@ -308,7 +319,7 @@ public class SplineTraffic : MonoBehaviour
     #region Unity Methods
     private void Start()
     {
-        int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt((splineSequence.totalLength / speed) / timeBetweenSpawns) + 1;
+        int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt((splineInUse.GetTotalLength() / speed) / timeBetweenSpawns) + 1;
         gameObjectsMoved = new GameObject[numberOfObjectsThatWillExisitAtOnce];
         currentTValues = new float[numberOfObjectsThatWillExisitAtOnce];
         spawnTimer = new L7Games.Timer(timeBetweenSpawns);
@@ -329,6 +340,14 @@ public class SplineTraffic : MonoBehaviour
             UpdateMovedObject(i);
         }
 
+    }
+
+    private void OnValidate()
+    {
+        if (prefabsWeights.Length != PrefabsAndWeightsCount)
+        {
+            AdjustPrefabsAndWeightsCount(PrefabsAndWeightsCount);
+        }
     }
 
     //private IEnumerator waitDebug(float seconds)
