@@ -44,10 +44,9 @@ public class b_PlayerData
     public int icurrentCharacterint;
 
     //
-    public List<string> scoreBoardEntryNames;
+    //public List<string> scoreBoardEntryNames;
 
-    //
-    public List<int> scoreBoardEntryScores;
+    
 
     #endregion
 
@@ -82,10 +81,9 @@ public class b_PlayerData
 
 
         //
-        //scoreBoardEntryNames = sBED.entryName.ToString();
+        //scoreBoardEntryNames = scoreBoard.entryName.ToString();
 
-        //
-        //scoreBoardEntryScores = sBED.entryScore;
+        
 
     }
 

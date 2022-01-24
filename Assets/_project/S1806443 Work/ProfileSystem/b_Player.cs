@@ -63,6 +63,9 @@ public class b_Player : MonoBehaviour
     // reference to the shop script
     public Shop shop;
 
+    //
+    //public SleepyCat.ScoreBoardSavedData scoreBoardSavedData;
+
     // int for the current hat gameobject
     public int CurrentGameObjectInt;
 
