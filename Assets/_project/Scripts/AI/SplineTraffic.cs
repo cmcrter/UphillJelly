@@ -4,62 +4,67 @@ using UnityEngine;
 
 public class SplineTraffic : MonoBehaviour
 {
-    // TODO: Change the prefabs and weights to a structure that contains the prefab, weight and its upwards offset
-
+    #region Structures
+    /// <summary>
+    /// A structure holding information about a prefab and its weighting for spawning and it upwards positioning offset
+    /// </summary>
     [System.Serializable]
     public struct SpawnablePrefab
     {
+        /// <summary>
+        /// The prefab to instantiate
+        /// </summary>
         public GameObject prefab;
+        /// <summary>
+        /// How much it is weight towards spawn this object 
+        /// </summary>
         public float spawnWeight;
+        /// <summary>
+        /// The upwards offset 
+        /// </summary>
         public float upwardsOffset;
     }
 
+    /// <summary>
+    /// A structure holding information 
+    /// </summary>
     private struct MovingObject
     {
+        /// <summary>
+        /// The GameObject that is being moved
+        /// </summary>
         public GameObject gameObjectMoving;
+        /// <summary>
+        /// How far above the spline point it should be moved in its upwards directions
+        /// </summary>
         public float upwardsOffset;
     }
-
-    #region Public Fields
-    /// <summary>
-    /// How fast the object will move along the SplineSequence 
-    /// </summary>
-    [SerializeField]
-    [Tooltip("How fast the object will move along the SplineSequence")]
-    private float speed = 1.0f;
     #endregion
 
     #region Serialized Private Fields
-    /// <summary>
-    /// If the object should follow the x position of the spline
-    /// </summary>
     [SerializeField]
     [Tooltip("If the object should follow the x position of the spline")]
     private bool followX = false;
-    /// <summary>
-    /// If the object should follow the y position of the spline
-    /// </summary>
     [SerializeField]
     [Tooltip("If the object should follow the y position of the spline")]
     private bool followY = false;
-    /// <summary>
-    /// If the object should follow the z position of the spline
-    /// </summary>
     [SerializeField]
     [Tooltip("If the object should follow the z position of the spline")]
     private bool followZ = false;
 
-    [SerializeField] [Tooltip("The amount of time between spawning traffic objects")]
+    [SerializeField]
+    [Tooltip("How fast the object will move along the spline")]
+    private float speed = 1.0f;
+    [SerializeField] 
+    [Tooltip("The amount of time between spawning traffic objects")]
     private float timeBetweenSpawns = 1f;
 
-    [SerializeField] [Tooltip("The prefabs that can be spawned to move along the splines")]
+    [SerializeField] 
+    [Tooltip("The prefabs that can be spawned to move along the splines")]
     private SpawnablePrefab[] spawnablePrefabs;
 
-    /// <summary>
-    /// The SplineSequence to follow along
-    /// </summary>
     [SerializeField]
-    [Tooltip("The spline sequence to follow along")]
+    [Tooltip("The spline wrapper to follow along")]
     private L7Games.Utility.Splines.SplineWrapper splineInUse = null;
     #endregion
 
@@ -68,18 +73,24 @@ public class SplineTraffic : MonoBehaviour
     /// The unit interval for how far along the spline sequence it is
     /// </summary>
     private float[] currentTValues;
-
-    private MovingObject[] objectsMoved;
-
-
-
-    private int nextFreeIndex = 0;
-
     /// <summary>
     /// How much the unit interval to position along the spline increases every frame
     /// </summary>
     private float tIncrementPerSecond = Mathf.Infinity;
 
+    /// <summary>
+    /// The next index in the objects moved array that is free to spawn a new object 
+    /// </summary>
+    private int nextFreeIndex = 0;
+
+    /// <summary>
+    /// The object that are currently being moved along the spline
+    /// </summary>
+    private MovingObject[] objectsMoved;
+
+    /// <summary>
+    /// The timer tracking how long until the next object can be spawned
+    /// </summary>
     private L7Games.Timer spawnTimer;
     #endregion
 
@@ -100,6 +111,9 @@ public class SplineTraffic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// The number of spawn-able prefab
+    /// </summary>
     public int SpawnablePrefabsCount 
     {
         get
@@ -114,6 +128,11 @@ public class SplineTraffic : MonoBehaviour
     #endregion
 
     #region Public Functions
+    /// <summary>
+    /// Returns the prefab weighting for a spawn able prefab at the given index
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public float GetPrefabWeightAtIndex(int index)
     {
         if (index < 0 || index >= spawnablePrefabs.Length)
