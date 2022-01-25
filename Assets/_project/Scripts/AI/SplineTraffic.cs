@@ -6,6 +6,20 @@ public class SplineTraffic : MonoBehaviour
 {
     // TODO: Change the prefabs and weights to a structure that contains the prefab, weight and its upwards offset
 
+    [System.Serializable]
+    public struct SpawnablePrefab
+    {
+        public GameObject prefab;
+        public float spawnWeight;
+        public float upwardsOffset;
+    }
+
+    private struct MovingObject
+    {
+        public GameObject gameObjectMoving;
+        public float upwardsOffset;
+    }
+
     #region Public Fields
     /// <summary>
     /// How fast the object will move along the SplineSequence 
@@ -38,16 +52,8 @@ public class SplineTraffic : MonoBehaviour
     [SerializeField] [Tooltip("The amount of time between spawning traffic objects")]
     private float timeBetweenSpawns = 1f;
 
-    [SerializeField]
-    private float upwardsOffset = 0f;
-
-    [SerializeField] [Tooltip("The prefab that can be spawned to move along the splines")]
-    private GameObject[] prefabs;
-
-
-    [SerializeField]
-    [Tooltip("The prefab that can be spawned to move along the splines")]
-    private float[] prefabsWeights;
+    [SerializeField] [Tooltip("The prefabs that can be spawned to move along the splines")]
+    private SpawnablePrefab[] spawnablePrefabs;
 
     /// <summary>
     /// The SplineSequence to follow along
@@ -63,7 +69,7 @@ public class SplineTraffic : MonoBehaviour
     /// </summary>
     private float[] currentTValues;
 
-    private GameObject[] gameObjectsMoved;
+    private MovingObject[] objectsMoved;
 
 
 
@@ -94,11 +100,15 @@ public class SplineTraffic : MonoBehaviour
         }
     }
 
-    public int PrefabsAndWeightsCount 
+    public int SpawnablePrefabsCount 
     {
         get
         {
-            return prefabs.Length;
+            if (spawnablePrefabs == null)
+            {
+                spawnablePrefabs = new SpawnablePrefab[0];
+            }
+            return spawnablePrefabs.Length;
         }
     }
     #endregion
@@ -106,7 +116,7 @@ public class SplineTraffic : MonoBehaviour
     #region Public Functions
     public float GetPrefabWeightAtIndex(int index)
     {
-        if (index < 0 || index >= prefabsWeights.Length)
+        if (index < 0 || index >= spawnablePrefabs.Length)
         {
             int i;
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
@@ -121,12 +131,12 @@ public class SplineTraffic : MonoBehaviour
             return 0f;
             #endif
         }
-        return prefabsWeights[index];
+        return spawnablePrefabs[index].spawnWeight;
     }
 
     public void SetPrefabWeightAtIndex(int index, float newValue)
     {
-        if (index < 0 || index >= prefabsWeights.Length)
+        if (index < 0 || index >= spawnablePrefabs.Length)
         {
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
             if (index > 0)
@@ -140,12 +150,12 @@ public class SplineTraffic : MonoBehaviour
             #endif
             return;
         }
-        prefabsWeights[index] = newValue;
+        spawnablePrefabs[index].spawnWeight = newValue;
     }
 
     public GameObject GetPrefabAtIndex(int index)
     {
-        if (index < 0 || index >= prefabs.Length)
+        if (index < 0 || index >= spawnablePrefabs.Length)
         {
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
             if (index > 0)
@@ -159,12 +169,12 @@ public class SplineTraffic : MonoBehaviour
             #endif
             return null;
         }
-        return prefabs[index];
+        return spawnablePrefabs[index].prefab;
     }
 
     public void SetPrefabAtIndex(int index, GameObject newPrefab)
     {
-        if (index < 0 || index >= prefabs.Length)
+        if (index < 0 || index >= spawnablePrefabs.Length)
         {
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
             if (index > 0)
@@ -178,17 +188,14 @@ public class SplineTraffic : MonoBehaviour
             return;
             #endif
         }
-        prefabs[index] = newPrefab;
+        spawnablePrefabs[index].prefab = newPrefab;
     }
 
     public void AdjustPrefabsAndWeightsCount(int newCount)
     {
-        GameObject[] newPrefabArray = new GameObject[newCount];
-        float[] newWeightsArray = new float[newCount];
-        System.Array.Copy(prefabs, newPrefabArray, Mathf.Min(prefabs.Length, newCount));
-        System.Array.Copy(prefabsWeights, newWeightsArray, Mathf.Min(prefabsWeights.Length, newCount));
-        prefabs = newPrefabArray;
-        prefabsWeights = newWeightsArray;
+        SpawnablePrefab[] newPrefabArray = new SpawnablePrefab[newCount];
+        System.Array.Copy(spawnablePrefabs, newPrefabArray, Mathf.Min(spawnablePrefabs.Length, newCount));
+        spawnablePrefabs = newPrefabArray;
     }
 
     /// <summary>
@@ -225,7 +232,12 @@ public class SplineTraffic : MonoBehaviour
 
     private void UpdateMovedObject(int indexMoved)
     {
-        if (gameObjectsMoved[indexMoved] == null)
+        if (objectsMoved == null)
+        {
+            return;
+        }
+
+        if (objectsMoved[indexMoved].gameObjectMoving == null)
         {
             return;
         }
@@ -262,7 +274,7 @@ public class SplineTraffic : MonoBehaviour
             if (currentTValues[indexMoved] == 1f)
             {
                 currentTValues[indexMoved] = 0f;
-                GameObject.Destroy(gameObjectsMoved[indexMoved]);
+                GameObject.Destroy(objectsMoved[indexMoved].gameObjectMoving);
                 return;
             }
         }
@@ -273,46 +285,66 @@ public class SplineTraffic : MonoBehaviour
             Vector3 targetPosition = splineInUse.GetPointAtTime(currentTValues[indexMoved]);
             if (!followX)
             {
-                targetPosition.x = gameObjectsMoved[indexMoved].transform.position.x;
+                targetPosition.x = objectsMoved[indexMoved].gameObjectMoving.transform.position.x;
             }
             if (!followY)
             {
-                targetPosition.y = gameObjectsMoved[indexMoved].transform.position.y;
+                targetPosition.y = objectsMoved[indexMoved].gameObjectMoving.transform.position.y;
             }
             if (!followZ)
             {
-                targetPosition.z = gameObjectsMoved[indexMoved].transform.position.z;
+                targetPosition.z = objectsMoved[indexMoved].gameObjectMoving.transform.position.z;
             }
             //gameObjectsMoved[indexMoved].transform.forward = splineInUse.GetDirection(currentTValues[indexMoved], newTChange);
-            Vector3 startPosition = gameObjectsMoved[indexMoved].transform.position;
-            gameObjectsMoved[indexMoved].transform.position = targetPosition;
-            gameObjectsMoved[indexMoved].transform.position += gameObjectsMoved[indexMoved].transform.up * upwardsOffset;
-            Vector3 endPosition = gameObjectsMoved[indexMoved].transform.position;
-            gameObjectsMoved[indexMoved].transform.forward = Vector3.Normalize( endPosition - startPosition);
+            objectsMoved[indexMoved].gameObjectMoving.transform.position = targetPosition;
+            objectsMoved[indexMoved].gameObjectMoving.transform.position += objectsMoved[indexMoved].gameObjectMoving.transform.up * objectsMoved[indexMoved].upwardsOffset;
+            objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(newTChange);
         }
         else
         {
             Debug.LogError("SplineSequence not assigned when referenced in Spline Mover update function", gameObject);
         }
 
-        transform.forward = splineInUse.GetDirection(currentTValues[indexMoved], 0.01f);
+        //transform.forward = splineInUse.GetDirection(currentTValues[indexMoved], 0.01f);
     }
 
     private GameObject SpawnObject()
     {
         spawnTimer = new L7Games.Timer(timeBetweenSpawns);
-        int randomValue = Random.Range(0, prefabs.Length);
+        int randomValue = GetWeightedPrefabIndexToSpawn();
         Debug.Log(randomValue);
-        GameObject returnedObject  = GameObject.Instantiate(prefabs[randomValue]);
+        GameObject returnedObject  = GameObject.Instantiate(spawnablePrefabs[randomValue].prefab);
         returnedObject.transform.position = splineInUse.WorldStartPosition;
-        gameObjectsMoved[nextFreeIndex] = returnedObject;
+        objectsMoved[nextFreeIndex].gameObjectMoving = returnedObject;
+        objectsMoved[nextFreeIndex].upwardsOffset = spawnablePrefabs[randomValue].upwardsOffset;
         currentTValues[nextFreeIndex] = 0f;
         ++nextFreeIndex;
-        if (nextFreeIndex == gameObjectsMoved.Length)
+        if (nextFreeIndex == objectsMoved.Length)
         {
             nextFreeIndex = 0;
         }
         return returnedObject;
+    }
+
+    private int GetWeightedPrefabIndexToSpawn()
+    {
+        float currentLowerBounds = 0f;
+
+        float weightsTotals = 0f;
+        for (int i = 0; i < spawnablePrefabs.Length; ++i)
+        {
+            weightsTotals += spawnablePrefabs[i].spawnWeight;
+        }
+        float randomValue = Random.Range(0.0f, weightsTotals);
+        for (int i = 0; i < spawnablePrefabs.Length; ++i)
+        {
+            if (randomValue <= currentLowerBounds + spawnablePrefabs[i].spawnWeight)
+            {
+                return i;
+            }
+            currentLowerBounds += spawnablePrefabs[i].spawnWeight;
+        }
+        return spawnablePrefabs.Length - 1;
     }
     #endregion
 
@@ -320,7 +352,7 @@ public class SplineTraffic : MonoBehaviour
     private void Start()
     {
         int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt((splineInUse.GetTotalLength() / speed) / timeBetweenSpawns) + 1;
-        gameObjectsMoved = new GameObject[numberOfObjectsThatWillExisitAtOnce];
+        objectsMoved = new MovingObject[numberOfObjectsThatWillExisitAtOnce];
         currentTValues = new float[numberOfObjectsThatWillExisitAtOnce];
         spawnTimer = new L7Games.Timer(timeBetweenSpawns);
         spawnTimer.isActive = true;
@@ -335,7 +367,7 @@ public class SplineTraffic : MonoBehaviour
             SpawnObject();
         }
         UpdateTIncrement();
-        for (int i = 0; i < gameObjectsMoved.Length; ++i)
+        for (int i = 0; i < objectsMoved.Length; ++i)
         {
             UpdateMovedObject(i);
         }
@@ -344,10 +376,6 @@ public class SplineTraffic : MonoBehaviour
 
     private void OnValidate()
     {
-        if (prefabsWeights.Length != PrefabsAndWeightsCount)
-        {
-            AdjustPrefabsAndWeightsCount(PrefabsAndWeightsCount);
-        }
     }
 
     //private IEnumerator waitDebug(float seconds)

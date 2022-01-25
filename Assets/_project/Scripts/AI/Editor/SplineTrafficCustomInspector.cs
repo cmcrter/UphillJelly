@@ -30,7 +30,7 @@ namespace L7Games.CustomInspectors
         private SerializedProperty followZ;
         private SerializedProperty timeBetweenSpawns;
         private SerializedProperty splineInUse;
-        private SerializedProperty upwardsOffset;
+        private SerializedProperty spawnablePrefabs;
 
         SerializedProperty speed;
 
@@ -49,7 +49,7 @@ namespace L7Games.CustomInspectors
             followZ = serializedObject.FindProperty("followZ");
             timeBetweenSpawns = serializedObject.FindProperty("timeBetweenSpawns");
             splineInUse = serializedObject.FindProperty("splineInUse");
-            upwardsOffset = serializedObject.FindProperty("upwardsOffset");
+            spawnablePrefabs = serializedObject.FindProperty("spawnablePrefabs");
         }
 
         public override void OnInspectorGUI()
@@ -65,51 +65,38 @@ namespace L7Games.CustomInspectors
             EditorGUILayout.PropertyField(followZ);
             EditorGUILayout.PropertyField(timeBetweenSpawns);
             EditorGUILayout.PropertyField(splineInUse);
-            EditorGUILayout.PropertyField(upwardsOffset);
-            int newCount = EditorGUILayout.IntField(splineTrafficComponent.PrefabsAndWeightsCount);
-            if (newCount != splineTrafficComponent.PrefabsAndWeightsCount)
+
+            EditorGUILayout.Space();
+
+            int newCount = EditorGUILayout.IntField("Spawnable Prefabs Count", splineTrafficComponent.SpawnablePrefabsCount);
+            if (newCount != splineTrafficComponent.SpawnablePrefabsCount)
             {
                 splineTrafficComponent.AdjustPrefabsAndWeightsCount(newCount);
             }
             float totalWeight = 0f;
-            for (int i = 0; i < splineTrafficComponent.PrefabsAndWeightsCount; ++i)
+            for (int i = 0; i < splineTrafficComponent.SpawnablePrefabsCount; ++i)
             {
                 totalWeight += splineTrafficComponent.GetPrefabWeightAtIndex(i);
             }
-            if (showPrefabsArray = EditorGUILayout.Foldout(showPrefabsArray, "Prefabs"))
+
+
+
+            if (showPrefabsArray = EditorGUILayout.Foldout(showPrefabsArray, "Spawnable Prefabs"))
             {
-                if (totalWeight == 0f && splineTrafficComponent.PrefabsAndWeightsCount > 0)
+                ++EditorGUI.indentLevel;
+                for (int i = 0; i < spawnablePrefabs.arraySize; ++i)
                 {
-                    splineTrafficComponent.SetPrefabWeightAtIndex(0, 1f);
+                    SerializedProperty property = spawnablePrefabs.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(property);
+                    ++EditorGUI.indentLevel;
+                    EditorGUILayout.LabelField("Spawn Chance: " + (splineTrafficComponent.GetPrefabWeightAtIndex(i) / totalWeight * 100f) + "%".ToString(), GUILayout.Width(150f));
+                    --EditorGUI.indentLevel;
                 }
-
-                for (int i = 0; i < splineTrafficComponent.PrefabsAndWeightsCount; ++i)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("Prefab " + i.ToString(), GUILayout.MaxWidth(75f));
-                    GameObject newGameObject = (GameObject)EditorGUILayout.ObjectField(splineTrafficComponent.GetPrefabAtIndex(i), typeof(GameObject), false);
-                    EditorGUILayout.EndHorizontal();
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("Weight", GUILayout.MaxWidth(75f));
-                    float newWeight = EditorGUILayout.FloatField(splineTrafficComponent.GetPrefabWeightAtIndex(i));
-                    EditorGUILayout.EndHorizontal();
-                    EditorGUILayout.LabelField("Spawn Chance: " + (splineTrafficComponent.GetPrefabWeightAtIndex(i) / totalWeight * 100f).ToString(), GUILayout.Width(125f));
-                    EditorGUILayout.EndHorizontal();
-
-                    if (newGameObject != splineTrafficComponent.GetPrefabAtIndex(i))
-                    {
-                        splineTrafficComponent.SetPrefabAtIndex(i, newGameObject);
-                    }
-                    if (newWeight != splineTrafficComponent.GetPrefabWeightAtIndex(i))
-                    {
-                        splineTrafficComponent.SetPrefabWeightAtIndex(i, newWeight);
-                    }
-                }
+                --EditorGUI.indentLevel;
             }
             if (GUILayout.Button("Adjust Total Weight To 1"))
             {
-                for (int i = 0; i < splineTrafficComponent.PrefabsAndWeightsCount; ++i)
+                for (int i = 0; i < splineTrafficComponent.SpawnablePrefabsCount; ++i)
                 {
                     splineTrafficComponent.SetPrefabWeightAtIndex(i, splineTrafficComponent.GetPrefabWeightAtIndex(i) / totalWeight);
                 }
