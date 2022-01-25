@@ -9,9 +9,11 @@ namespace SleepyCat
     {
 
         //
+        [SerializeField]
         public string playerName;
 
         //
+        [SerializeField]
         public float score;
 
         //

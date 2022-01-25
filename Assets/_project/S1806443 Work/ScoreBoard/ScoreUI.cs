@@ -24,6 +24,26 @@ namespace SleepyCat
             scoreManager.AddScore(new Score("Test2", 20));
 
             //
+            scoreManager.AddScore(new Score("Test3", 30));
+
+            //
+            scoreManager.AddScore(new Score("Test4", 40));
+
+            //
+            scoreManager.AddScore(new Score("Test5", 50));
+
+            //
+            scoreManager.AddScore(new Score("Test6", 60));
+
+            //
+            scoreManager.AddScore(new Score("Test7", 70));
+
+            //
+            scoreManager.AddScore(new Score("Test8", 80));
+
+            Debug.Log("AddedStartingScores");
+
+            //
             var scores = scoreManager.GetHighScores().ToArray();
 
             //
@@ -36,7 +56,7 @@ namespace SleepyCat
                 row.rank.text = (i + 1).ToString();
 
                 //
-                row.playerName.text = scores[i].name;
+                row.playerName.text = scores[i].playerName;
 
                 //
                 row.score.text = scores[i].score.ToString();

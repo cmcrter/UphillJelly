@@ -12,6 +12,10 @@ namespace SleepyCat
         private ScoreData sd;
 
         //
+        [SerializeField]
+        public List<Score> VisualisedScores;
+
+        //
         private void Awake() {
 
             //
@@ -29,11 +33,20 @@ namespace SleepyCat
 
         //
         //
-        [ContextMenu("Add Test Entry")]
-        public void AddScore(Score score) {
+        [ContextMenu("Add Entry")]
+        public void AddScore(SleepyCat.Score score) {
 
             //
             sd.scores.Add(score);
+
+        }
+
+        //
+        [ContextMenu("Add Test Entry")]
+        public void AddScoreTest(SleepyCat.Score testscore) {
+
+            //
+            sd.scores.Add(testscore);
 
         }
 

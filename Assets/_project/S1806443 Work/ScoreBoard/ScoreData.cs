@@ -17,7 +17,10 @@ namespace SleepyCat
             //
             scores = new List<Score>();
 
+            Debug.Log(scores.ToArray());
+
         }
+
 
     }
 }
