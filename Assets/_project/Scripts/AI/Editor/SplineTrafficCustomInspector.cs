@@ -56,6 +56,7 @@ namespace L7Games.CustomInspectors
         /// </summary>
         private SplineTraffic splineTrafficComponent;
         #endregion
+
         #region Unity Methods
         private void OnEnable()
         {
@@ -97,7 +98,7 @@ namespace L7Games.CustomInspectors
             int newCount = EditorGUILayout.IntField("Spawnable Prefabs Count", splineTrafficComponent.SpawnablePrefabsCount);
             if (newCount != splineTrafficComponent.SpawnablePrefabsCount)
             {
-                splineTrafficComponent.AdjustPrefabsAndWeightsCount(newCount);
+                splineTrafficComponent.AdjustSpawnablePrefabsCount(newCount);
             }
             // Add up the total weights of all the spawnable prefabs for later
             float totalWeight = 0f;
