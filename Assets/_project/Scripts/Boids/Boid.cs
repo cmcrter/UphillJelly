@@ -31,7 +31,7 @@ namespace L7Games.Boids
         /// <returns>A velocity that is either pushing towards or away from a point</returns>
         protected static Vector3 GetSeekOrFleeForce(bool isSeeking, float maxSpeed, Vector3 targetPosition, Vector3 agentPosition, Vector3 currentVelocity)
         {
-            Vector3 targetDirection = isSeeking ? Vector3.Normalize(targetPosition - agentPosition) : Vector3.Normalize(targetPosition - agentPosition);
+            Vector3 targetDirection = isSeeking ? Vector3.Normalize(targetPosition - agentPosition) : Vector3.Normalize(agentPosition - targetPosition);
             Vector3 newVelocity = targetDirection * maxSpeed;
             return newVelocity - currentVelocity;
         }
@@ -94,10 +94,12 @@ namespace L7Games.Boids
         {
             // Get the wander point around the agent
             Vector3 pointOnSphere = Random.onUnitSphere * wanderSphereRadius;
-            Vector3 jitteredPoint = Random.onUnitSphere * jitterRadius;
+            Vector3 jitteredPoint = pointOnSphere * jitterRadius;
             Vector3 scaledJitteredPoint = jitteredPoint.normalized * wanderSphereRadius;
+            Debug.Log(agentPosition + jitteredPoint + currentVelocity.normalized * forwardDistance);
             // Move the wander point forwards relative to the agent by a given amount and seek towards the point
-            return GetSeekForce(maxSpeed, jitteredPoint + currentVelocity.normalized * forwardDistance, agentPosition, currentVelocity); 
+            return GetSeekForce(maxSpeed, agentPosition + jitteredPoint + (currentVelocity.normalized * forwardDistance), agentPosition, currentVelocity);
+
         }
 
         /// <summary>
