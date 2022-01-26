@@ -67,6 +67,8 @@ namespace L7Games.Movement
         private Quaternion initialRot;
         private Quaternion lastRot = Quaternion.identity;
         private Coroutine turningCo;
+        private Coroutine AirturningCo;
+
         private Timer turningTimer;
         public AnimationCurve turnSpeedCurve;
         public float turnClamp = 0.575f;
@@ -285,9 +287,44 @@ namespace L7Games.Movement
             }
         }
 
+        public void StartAirInfluenctCoroutine()
+        {
+            StopAirInfluenctCoroutine();
+            AirturningCo = StartCoroutine(Co_AirInfluence());
+        }
+
+        public void StopAirInfluenctCoroutine()
+        {
+            if(AirturningCo != null)
+            {
+                StopCoroutine(Co_AirInfluence());
+            }
+        }
+
         #endregion
 
         #region Private Methods
+
+        private IEnumerator Co_AirInfluence()
+        {
+            bool InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
+            Timer influenceTimer = new Timer(5.0f);
+
+            while (influenceTimer.isActive)
+            {
+                if(InfluenceDir)
+                {
+                    fRB.AddForce(-transform.right * 10f, ForceMode.Impulse);
+                }
+                else if (inputHandler.TurningAxis != 0 )
+                {
+                    fRB.AddForce(transform.right * 10f, ForceMode.Impulse);
+                }
+
+                influenceTimer.Tick(Time.deltaTime);
+                yield return null;
+            }            
+        }
 
         private IEnumerator Co_TurnAngle()
         {

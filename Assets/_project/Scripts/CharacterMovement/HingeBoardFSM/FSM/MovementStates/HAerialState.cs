@@ -104,17 +104,17 @@ namespace L7Games.Movement
                 }
 
                 //Need some way of making the skateboard feel more stable in the air and just generally nicer
-                if(inputHandler.TurningAxis < 0)
-                {
-                    //Turn Left
-                    parentController.transform.Rotate(new Vector3(0, 1f, 0));
-                }
+                //if(inputHandler.TurningAxis < 0)
+                //{
+                //    //Turn Left
+                //    parentController.transform.Rotate(new Vector3(0, 1f, 0));
+                //}
 
-                if(inputHandler.TurningAxis > 0)
-                {
-                    //Turn Right
-                    parentController.transform.Rotate(new Vector3(0, -1f, 0));
-                }
+                //if(inputHandler.TurningAxis > 0)
+                //{
+                //    //Turn Right
+                //    parentController.transform.Rotate(new Vector3(0, -1f, 0));
+                //}
             }
         }
 
@@ -135,6 +135,7 @@ namespace L7Games.Movement
 
         public override void OnStateExit()
         {
+            parentController.StopAirInfluenctCoroutine();
             hasRan = false;
         }
     }
