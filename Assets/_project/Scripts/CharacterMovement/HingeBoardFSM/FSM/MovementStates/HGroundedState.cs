@@ -209,8 +209,6 @@ namespace L7Games.Movement
                 float dotAngle = Vector3.Dot(movementRB.velocity.normalized, playerTransform.forward.normalized);
                 float absDotAngle = Mathf.Abs(dotAngle);
 
-                parentController.ResetWheelPos();
-
                 //Moving almost directly backwards
                 if(dotAngle < -0.98f)
                 {
