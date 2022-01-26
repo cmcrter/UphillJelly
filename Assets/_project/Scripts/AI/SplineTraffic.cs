@@ -4,76 +4,112 @@ using UnityEngine;
 
 public class SplineTraffic : MonoBehaviour
 {
-    #region Public Fields
+    #region Structures
     /// <summary>
-    /// How fast the object will move along the SplineSequence 
+    /// A structure holding information about a prefab and its weighting for spawning and it upwards positioning offset
     /// </summary>
-    [SerializeField]
-    [Tooltip("How fast the object will move along the SplineSequence")]
-    private float speed = 1.0f;
+    [System.Serializable]
+    public struct SpawnablePrefab
+    {
+        /// <summary>
+        /// The prefab to instantiate
+        /// </summary>
+        public GameObject prefab;
+        /// <summary>
+        /// How much it is weight towards spawn this object 
+        /// </summary>
+        public float spawnWeight;
+        /// <summary>
+        /// The upwards offset 
+        /// </summary>
+        public float upwardsOffset;
+    }
 
+    /// <summary>
+    /// A structure holding information 
+    /// </summary>
+    private struct MovingObject
+    {
+        /// <summary>
+        /// The GameObject that is being moved
+        /// </summary>
+        public GameObject gameObjectMoving;
+        /// <summary>
+        /// The unit interval for how far along the spline sequence it is
+        /// </summary>
+        public float currentTValue;
+        /// <summary>
+        /// How far above the spline point it should be moved in its upwards directions
+        /// </summary>
+        public float upwardsOffset;
+    }
     #endregion
 
     #region Serialized Private Fields
-    /// <summary>
-    /// If the object should follow the x position of the spline
-    /// </summary>
     [SerializeField]
     [Tooltip("If the object should follow the x position of the spline")]
     private bool followX = false;
-    /// <summary>
-    /// If the object should follow the y position of the spline
-    /// </summary>
     [SerializeField]
     [Tooltip("If the object should follow the y position of the spline")]
     private bool followY = false;
-    /// <summary>
-    /// If the object should follow the z position of the spline
-    /// </summary>
     [SerializeField]
     [Tooltip("If the object should follow the z position of the spline")]
     private bool followZ = false;
 
-    [SerializeField] [Tooltip("The amount of time between spawning traffic objects")]
+    [SerializeField]
+    [Tooltip("How fast the object will move along the spline")]
+    private float speed = 1.0f;
+    [SerializeField] 
+    [Tooltip("The amount of time between spawning traffic objects")]
     private float timeBetweenSpawns = 1f;
 
-    [SerializeField] [Tooltip("The prefab that can be spawned to move along the splines")]
-    private GameObject[] prefabs;
-
+    [SerializeField] 
+    [Tooltip("The prefabs that can be spawned to move along the splines")]
+    private SpawnablePrefab[] spawnablePrefabs;
 
     [SerializeField]
-    [Tooltip("The prefab that can be spawned to move along the splines")]
-    private float[] prefabsWeights;
-
-    /// <summary>
-    /// The SplineSequence to follow along
-    /// </summary>
-    [SerializeField]
-    [Tooltip("The spline sequence to follow along")]
-    private SplineSequence splineSequence = null;
+    [Tooltip("The spline wrapper to follow along")]
+    private L7Games.Utility.Splines.SplineWrapper splineInUse = null;
     #endregion
 
     #region Private Variables
-    /// <summary>
-    /// The unit interval for how far along the spline sequence it is
-    /// </summary>
-    private float[] currentTValues;
-
-    private GameObject[] gameObjectsMoved;
-
-
-
-    private int nextFreeIndex = 0;
-
     /// <summary>
     /// How much the unit interval to position along the spline increases every frame
     /// </summary>
     private float tIncrementPerSecond = Mathf.Infinity;
 
+    /// <summary>
+    /// The next index in the objects moved array that is free to spawn a new object 
+    /// </summary>
+    private int nextFreeIndex = 0;
+
+    /// <summary>
+    /// The object that are currently being moved along the spline
+    /// </summary>
+    private MovingObject[] objectsMoved;
+
+    /// <summary>
+    /// The timer tracking how long until the next object can be spawned
+    /// </summary>
     private L7Games.Timer spawnTimer;
     #endregion
 
     #region Public Properties
+    /// <summary>
+    /// The number of spawn-able prefab
+    /// </summary>
+    public int SpawnablePrefabsCount 
+    {
+        get
+        {
+            if (spawnablePrefabs == null)
+            {
+                spawnablePrefabs = new SpawnablePrefab[0];
+            }
+            return spawnablePrefabs.Length;
+        }
+    }
+
     /// <summary>
     /// How fast the object will move along the SplineSequence (property accessor)
     /// </summary>
@@ -89,21 +125,19 @@ public class SplineTraffic : MonoBehaviour
             UpdateTIncrement();
         }
     }
-
-    public int PrefabsAndWeightsCount 
-    {
-        get
-        {
-            return prefabs.Length;
-        }
-    }
     #endregion
 
     #region Public Functions
+    /// <summary>
+    /// Returns the prefab weighting for a spawn able prefab at the given index of the spawn-able prefabs array
+    /// </summary>
+    /// <param name="index">The index of the prefab to get the weighting of</param>
+    /// <returns>The prefab weighting for a spawn able prefab at the given index of the spawn-able prefabs array</returns>
     public float GetPrefabWeightAtIndex(int index)
     {
-        if (index < 0 || index >= prefabsWeights.Length)
+        if (index < 0 || index >= spawnablePrefabs.Length)
         {
+            int i;
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
             if (index > 0)
             {
@@ -116,31 +150,17 @@ public class SplineTraffic : MonoBehaviour
             return 0f;
             #endif
         }
-        return prefabsWeights[index];
+        return spawnablePrefabs[index].spawnWeight;
     }
 
-    public void SetPrefabWeightAtIndex(int index, float newValue)
-    {
-        if (index < 0 || index >= prefabsWeights.Length)
-        {
-            #if UNITY_EDITOR || DEVELOPEMENT_BUILD
-            if (index > 0)
-            {
-                Debug.LogError("Negative Index given to GetPrefabWeightAtIndex Function", this);
-            }
-            else
-            {
-                Debug.LogError("Index greater or equal to the Prefab weight array length given to GetPrefabWeightAtIndex Function", this);
-            }
-            #endif
-            return;
-        }
-        prefabsWeights[index] = newValue;
-    }
-
+    /// <summary>
+    /// Returns the prefab GameObject at the given index of the spawn-able prefabs array
+    /// </summary>
+    /// <param name="index">The index of the spawn-able prefabs array to get the prefab from</param>
+    /// <returns>the prefab GameObject at the given index of the spawn-able prefabs array</returns>
     public GameObject GetPrefabAtIndex(int index)
     {
-        if (index < 0 || index >= prefabs.Length)
+        if (index < 0 || index >= spawnablePrefabs.Length)
         {
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
             if (index > 0)
@@ -154,12 +174,37 @@ public class SplineTraffic : MonoBehaviour
             #endif
             return null;
         }
-        return prefabs[index];
+        return spawnablePrefabs[index].prefab;
     }
 
+    /// <summary>
+    /// Adjust the currentTValue based on it moving over by a given number of seconds
+    /// </summary>
+    /// <param name="seconds">The number of seconds to offset the position based on</param>
+    public void AddPositionBySeconds(float seconds, int indexToMove)
+    {
+        UpdateTIncrement();
+        objectsMoved[indexToMove].currentTValue += tIncrementPerSecond * seconds;
+    }
+    /// <summary>
+    /// Adjust the size of the spawn able prefabs array, copying any elements that fit into the new size
+    /// </summary>
+    /// <param name="newCount">The new number of element the spawn-able prefab array should be</param>
+    public void AdjustSpawnablePrefabsCount(int newCount)
+    {
+        SpawnablePrefab[] newPrefabArray = new SpawnablePrefab[newCount];
+        System.Array.Copy(spawnablePrefabs, newPrefabArray, Mathf.Min(spawnablePrefabs.Length, newCount));
+        spawnablePrefabs = newPrefabArray;
+    }
+
+    /// <summary>
+    /// Set GameObject prefab at index of the spawn-able prefabs array
+    /// </summary>
+    /// <param name="index">The index to change the game object array of</param>
+    /// <param name="newPrefab">The new prefab to change to</param>
     public void SetPrefabAtIndex(int index, GameObject newPrefab)
     {
-        if (index < 0 || index >= prefabs.Length)
+        if (index < 0 || index >= spawnablePrefabs.Length)
         {
             #if UNITY_EDITOR || DEVELOPEMENT_BUILD
             if (index > 0)
@@ -173,65 +218,110 @@ public class SplineTraffic : MonoBehaviour
             return;
             #endif
         }
-        prefabs[index] = newPrefab;
-    }
-
-    public void AdjustPrefabsAndWeightsCount(int newCount)
-    {
-        GameObject[] newPrefabArray = new GameObject[newCount];
-        float[] newWeightsArray = new float[newCount];
-        System.Array.Copy(prefabs, newPrefabArray, Mathf.Min(prefabs.Length, newCount));
-        System.Array.Copy(prefabsWeights, newWeightsArray, Mathf.Min(prefabs.Length, newCount));
-        prefabs = newPrefabArray;
-        prefabsWeights = newWeightsArray;
+        spawnablePrefabs[index].prefab = newPrefab;
     }
 
     /// <summary>
-    /// Adjust the currentTValue based on it moving over by a given number of seconds
+    /// Set the prefab spawning weight at the given index to the given value
     /// </summary>
-    /// <param name="seconds">The number of seconds to offset the position based on</param>
-    public void AddPositionBySeconds(float seconds, int indexToMove)
+    /// <param name="index">The index of the prefab to adjust the spawning weight of</param>
+    /// <param name="newValue">The new value to set the new weight too</param>
+    public void SetPrefabWeightAtIndex(int index, float newValue)
     {
-        UpdateTIncrement();
-        Debug.Log("Time Delay: " + seconds.ToString());
-        currentTValues[indexToMove] += tIncrementPerSecond * seconds;
+        if (index < 0 || index >= spawnablePrefabs.Length)
+        {
+        #if UNITY_EDITOR || DEVELOPEMENT_BUILD
+            if (index > 0)
+            {
+                Debug.LogError("Negative Index given to GetPrefabWeightAtIndex Function", this);
+            }
+            else
+            {
+                Debug.LogError("Index greater or equal to the Prefab weight array length given to GetPrefabWeightAtIndex Function", this);
+            }
+        #endif
+            return;
+        }
+        spawnablePrefabs[index].spawnWeight = newValue;
     }
-
-    public void SetNewSeqeunceToFollow(SplineSequence splineSequenceToFollow, int indexToMove, float startT = 0.0f)
-    {
-        splineSequence = splineSequenceToFollow;
-        currentTValues[indexToMove] = startT;
-        UpdateTIncrement();
-    }
-
     #endregion
 
     #region Private Functions
     /// <summary>
-    /// Adjusts the tIncrementPerSecond based on speed and the splineSequence's total length
+    /// Spawn a weighted randomly selected object to move along the spline
     /// </summary>
-    private void UpdateTIncrement()
+    /// <returns>The game object instantiated during the spawn</returns>
+    private GameObject SpawnObject()
     {
-        if (splineSequence != null)
+        // Reset timer
+        spawnTimer = new L7Games.Timer(timeBetweenSpawns);
+        // Select and spawn random prefab
+        int randomValue = GetWeightedPrefabIndexToSpawn();
+        GameObject returnedObject  = GameObject.Instantiate(spawnablePrefabs[randomValue].prefab);
+        returnedObject.transform.position = splineInUse.WorldStartPosition;
+        
+        // Add it to the moved objects
+        objectsMoved[nextFreeIndex].gameObjectMoving = returnedObject;
+        objectsMoved[nextFreeIndex].upwardsOffset = spawnablePrefabs[randomValue].upwardsOffset;
+
+        // Reset the object position
+        objectsMoved[nextFreeIndex].currentTValue = 0f;
+        ++nextFreeIndex;
+        if (nextFreeIndex == objectsMoved.Length)
         {
-            tIncrementPerSecond = speed / splineSequence.totalLength;
+            nextFreeIndex = 0;
         }
+        return returnedObject;
     }
 
+    /// <summary>
+    /// Returns a random index from the spawn able object array, taking into account the weighting into selection
+    /// </summary>
+    /// <returns>A random index from the spawn able object array, taking into account the weighting into selection</returns>
+    private int GetWeightedPrefabIndexToSpawn()
+    {
+        float currentLowerBounds = 0f;
+
+        float weightsTotals = 0f;
+        for (int i = 0; i < spawnablePrefabs.Length; ++i)
+        {
+            weightsTotals += spawnablePrefabs[i].spawnWeight;
+        }
+        float randomValue = Random.Range(0.0f, weightsTotals);
+        for (int i = 0; i < spawnablePrefabs.Length; ++i)
+        {
+            if (randomValue <= currentLowerBounds + spawnablePrefabs[i].spawnWeight)
+            {
+                return i;
+            }
+            currentLowerBounds += spawnablePrefabs[i].spawnWeight;
+        }
+        return spawnablePrefabs.Length - 1;
+    }
+
+    /// <summary>
+    /// Updates for a single object moving along the spline
+    /// </summary>
+    /// <param name="indexMoved">The index of the object to move along the spline</param>
     private void UpdateMovedObject(int indexMoved)
     {
-        if (gameObjectsMoved[indexMoved] == null)
+        // The object or objects don't exist then there is nothing to move
+        if (objectsMoved == null)
         {
             return;
         }
 
-        if (currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond < 1)
+        if (objectsMoved[indexMoved].gameObjectMoving == null)
         {
-            // Clamping it at the max value and min values of a unit interval
+            return;
+        }
 
+        float newTChange = Time.deltaTime * tIncrementPerSecond;
+        if (objectsMoved[indexMoved].currentTValue + newTChange < 1)
+        {
             // Check the length of the next increment
-            Vector3 nextPoint = splineSequence.GetLengthBasedPoint(currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond);
-            Vector3 currentPoint = splineSequence.GetLengthBasedPoint(currentTValues[indexMoved]);
+            Vector3 nextPoint = splineInUse.GetPointAtTime(objectsMoved[indexMoved].currentTValue + Time.deltaTime * tIncrementPerSecond);
+            Vector3 currentPoint = splineInUse.GetPointAtTime(objectsMoved[indexMoved].currentTValue);
             Vector3 velocity = nextPoint - currentPoint;
 
 
@@ -239,78 +329,72 @@ public class SplineTraffic : MonoBehaviour
             float desiredDistance = speed * Time.deltaTime;
             float currentDistanceChange = velocity.magnitude;
 
+            // adjust how far it actually moves based on it current speed
             float desiredChange = desiredDistance / currentDistanceChange;
-            currentTValues[indexMoved] = Mathf.Clamp01(currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
+            newTChange = Time.deltaTime * tIncrementPerSecond * desiredChange;
+            objectsMoved[indexMoved].currentTValue = Mathf.Clamp01(objectsMoved[indexMoved].currentTValue + newTChange); // add length to this calculation
         }
         else
         {
-            currentTValues[indexMoved] = Mathf.Clamp01(currentTValues[indexMoved] + Time.deltaTime * tIncrementPerSecond); // add length to this calculation
+            objectsMoved[indexMoved].currentTValue = Mathf.Clamp01(objectsMoved[indexMoved].currentTValue + newTChange); // add length to this calculation
         }
 
-        // Destroy the object when it reaches the end
-
-
+        // Destroy the object if it reached the end of the spline
         if (tIncrementPerSecond > 0f)
         {
-            if (currentTValues[indexMoved] == 1f)
+            if (objectsMoved[indexMoved].currentTValue == 1f)
             {
-                currentTValues[indexMoved] = 0f;
-                GameObject.Destroy(gameObjectsMoved[indexMoved]);
+                objectsMoved[indexMoved].currentTValue = 0f;
+                GameObject.Destroy(objectsMoved[indexMoved].gameObjectMoving);
                 return;
             }
         }
 
-        // Setting the required position values to given time
-        if (splineSequence != null)
+        // Setting the required position and forward values to calculated time
+        if (splineInUse != null)
         {
-            Vector3 targetPosition = splineSequence.GetLengthBasedPoint(currentTValues[indexMoved]);
+            Vector3 targetPosition = splineInUse.GetPointAtTime(objectsMoved[indexMoved].currentTValue);
             if (!followX)
             {
-                targetPosition.x = gameObjectsMoved[indexMoved].transform.position.x;
+                targetPosition.x = objectsMoved[indexMoved].gameObjectMoving.transform.position.x;
             }
             if (!followY)
             {
-                targetPosition.y = gameObjectsMoved[indexMoved].transform.position.y;
+                targetPosition.y = objectsMoved[indexMoved].gameObjectMoving.transform.position.y;
             }
             if (!followZ)
             {
-                targetPosition.z = gameObjectsMoved[indexMoved].transform.position.z;
+                targetPosition.z = objectsMoved[indexMoved].gameObjectMoving.transform.position.z;
             }
-            gameObjectsMoved[indexMoved].transform.LookAt(targetPosition);
-            gameObjectsMoved[indexMoved].transform.position = targetPosition;
+
+            objectsMoved[indexMoved].gameObjectMoving.transform.position = targetPosition;
+            objectsMoved[indexMoved].gameObjectMoving.transform.position += objectsMoved[indexMoved].gameObjectMoving.transform.up * objectsMoved[indexMoved].upwardsOffset;
+            objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(newTChange);
         }
         else
         {
             Debug.LogError("SplineSequence not assigned when referenced in Spline Mover update function", gameObject);
         }
-
-        transform.forward = splineSequence.GetDirection(currentTValues[indexMoved], 0.01f);
     }
-
-    private GameObject SpawnObject()
+    /// <summary>
+    /// Adjusts the tIncrementPerSecond based on speed and the splineSequence's total length
+    /// </summary>
+    private void UpdateTIncrement()
     {
-        spawnTimer = new L7Games.Timer(timeBetweenSpawns);
-        int randomValue = Random.Range(0, prefabs.Length);
-        Debug.Log(randomValue);
-        GameObject returnedObject  = GameObject.Instantiate(prefabs[randomValue]);
-        returnedObject.transform.position = splineSequence.WorldStartPosition;
-        gameObjectsMoved[nextFreeIndex] = returnedObject;
-        currentTValues[nextFreeIndex] = 0f;
-        ++nextFreeIndex;
-        if (nextFreeIndex == gameObjectsMoved.Length)
+        if (splineInUse != null)
         {
-            nextFreeIndex = 0;
+            tIncrementPerSecond = speed / splineInUse.GetTotalLength();
         }
-        return returnedObject;
     }
     #endregion
 
     #region Unity Methods
     private void Start()
     {
-        int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt((splineSequence.totalLength / speed) / timeBetweenSpawns) + 1;
-        gameObjectsMoved = new GameObject[numberOfObjectsThatWillExisitAtOnce];
-        currentTValues = new float[numberOfObjectsThatWillExisitAtOnce];
+        // Set up the object pool to allow for all object that will exist along the spline at once
+        int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt((splineInUse.GetTotalLength() / speed) / timeBetweenSpawns) + 1;
+        objectsMoved = new MovingObject[numberOfObjectsThatWillExisitAtOnce];
+        // Start the spawn timer 
         spawnTimer = new L7Games.Timer(timeBetweenSpawns);
         spawnTimer.isActive = true;
     }
@@ -324,38 +408,11 @@ public class SplineTraffic : MonoBehaviour
             SpawnObject();
         }
         UpdateTIncrement();
-        for (int i = 0; i < gameObjectsMoved.Length; ++i)
+        for (int i = 0; i < objectsMoved.Length; ++i)
         {
             UpdateMovedObject(i);
         }
 
     }
-
-    //private IEnumerator waitDebug(float seconds)
-    //{
-
-    //    yield return new WaitForSeconds(10.0f);
-    //    UpdateTIncrement();
-    //    Debug.Log("Time Delay: " + seconds.ToString());
-    //    currentTValue += tIncrementPerSecond * seconds;
-    //    currentTValue = Mathf.Clamp01(currentTValue);
-    //    if (loop)
-    //    {
-    //        if (tIncrementPerSecond > 0f)
-    //        {
-    //            if (currentTValue == 1f)
-    //            {
-    //                currentTValue = 0f;
-    //            }
-    //        }
-    //        else if (tIncrementPerSecond < 0f)
-    //        {
-    //            if (currentTValue == 0f)
-    //            {
-    //                currentTValue = 1f;
-    //            }
-    //        }
-    //    }
-    //}
     #endregion
 }
