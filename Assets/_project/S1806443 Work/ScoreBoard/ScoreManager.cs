@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////
+// File: ScoreManager.cs
+// Author: Jack Peedle
+// Date Created: 20/01/21
+// Last Edited By: Jack Peedle
+// Date Last Edited: 27/01/22
+// Brief: 
+//////////////////////////////////////////////////////////// 
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,7 +43,7 @@ namespace SleepyCat
         //
         //
         [ContextMenu("Add Entry")]
-        public void AddScore(SleepyCat.Score score) {
+        public void AddScore(Score score) {
 
             //
             sd.scores.Add(score);
@@ -43,7 +52,7 @@ namespace SleepyCat
 
         //
         [ContextMenu("Add Test Entry")]
-        public void AddScoreTest(SleepyCat.Score testscore) {
+        public void AddScoreTest(Score testscore) {
 
             //
             sd.scores.Add(testscore);

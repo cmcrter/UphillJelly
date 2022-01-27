@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////
+// File: RowUI.cs
+// Author: Jack Peedle
+// Date Created: 20/01/21-
+// Last Edited By: Jack Peedle
+// Date Last Edited: 27/01/22
+// Brief: 
+//////////////////////////////////////////////////////////// 
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +19,10 @@ namespace SleepyCat
     {
 
         //
+        //public Image playerLeaderboardImage;
+        //
+
+        //
         public Text rank;
 
         //
@@ -18,19 +31,15 @@ namespace SleepyCat
         //
         public Text score;
 
+        //
+        public Text timeCompleted;
 
-        // Start is called before the first frame update
-        void Start(){
+        //
+        public Text KOs;
 
-            
-
-        }
-
-        // Update is called once per frame
-        void Update(){
+        //
+        public Button replayLeaderboardButton;
 
 
-        
-        }
     }
 }
