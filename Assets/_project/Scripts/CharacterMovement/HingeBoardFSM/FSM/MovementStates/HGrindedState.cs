@@ -137,6 +137,8 @@ namespace L7Games.Movement
             //Let the condition know to reset
             onGrind.playerExitedGrind();
 
+            parentController.StartAirInfluenctCoroutine();
+
             timeAlongGrind = 0;
             bTravelBackwards = false;
             bForceExit = false;

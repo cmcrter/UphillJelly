@@ -67,6 +67,8 @@ namespace L7Games.Movement
         private Quaternion initialRot;
         private Quaternion lastRot = Quaternion.identity;
         private Coroutine turningCo;
+        private Coroutine AirturningCo;
+
         private Timer turningTimer;
         public AnimationCurve turnSpeedCurve;
         public float turnClamp = 0.575f;
@@ -131,12 +133,15 @@ namespace L7Games.Movement
             if(groundBelow.FrontGroundHit.collider && groundBelow.BackGroundHit.collider)
             {
                 Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
+                upright = (groundBelow.FrontGroundHit.normal + groundBelow.BackGroundHit.normal) * 0.5f;
 
                 if(Debug.isDebugBuild)
                 {
                     Debug.DrawRay(bRB.transform.position, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized, Color.green);
                     Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
                     Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
+                    Debug.DrawRay(groundBelow.FrontGroundHit.point, groundBelow.FrontGroundHit.normal, Color.cyan);
+                    Debug.DrawRay(groundBelow.BackGroundHit.point, groundBelow.BackGroundHit.normal, Color.cyan);
                 }
 
                 float angle = Vector3.Angle(upright, transform.up);
@@ -160,7 +165,7 @@ namespace L7Games.Movement
             headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
 
             transform.rotation = groundQuat;
-
+            
             if(!bAerial)
             {
                 transform.rotation = transform.rotation * headingDelta;
@@ -285,9 +290,48 @@ namespace L7Games.Movement
             }
         }
 
+        public void StartAirInfluenctCoroutine()
+        {
+            StopAirInfluenctCoroutine();
+            AirturningCo = StartCoroutine(Co_AirInfluence());
+        }
+
+        public void StopAirInfluenctCoroutine()
+        {
+            if(AirturningCo != null)
+            {
+                StopCoroutine(Co_AirInfluence());
+            }
+        }
+
         #endregion
 
         #region Private Methods
+
+        private IEnumerator Co_AirInfluence()
+        {
+            bool InfluenceDir;
+            Timer influenceTimer = new Timer(5.0f);
+
+            while (influenceTimer.isActive)
+            {
+                InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
+
+                if(InfluenceDir)
+                {
+                    fRB.AddForce(-transform.right * 10f, ForceMode.Impulse);
+                }
+                else if (inputHandler.TurningAxis != 0 )
+                {
+                    fRB.AddForce(transform.right * 10f, ForceMode.Impulse);
+                }
+
+                influenceTimer.Tick(Time.deltaTime);
+                yield return null;
+            }
+
+            AirturningCo = null;
+        }
 
         private IEnumerator Co_TurnAngle()
         {
