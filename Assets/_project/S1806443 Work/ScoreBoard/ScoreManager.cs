@@ -17,12 +17,14 @@ namespace SleepyCat
     public class ScoreManager : MonoBehaviour
     {
 
+        /*
+
         //
         private ScoreData sd;
 
         //
-        [SerializeField]
-        public List<Score> VisualisedScores;
+        //[SerializeField]
+        //public List<Score> VisualisedScores;
 
         //
         private void Awake() {
@@ -36,7 +38,7 @@ namespace SleepyCat
         public IEnumerable<Score> GetHighScores() {
 
             //
-            return sd.scores.OrderByDescending(x => x.score);
+            return sd.scores.OrderByDescending(x => x.scores);
 
         }
 
@@ -50,15 +52,7 @@ namespace SleepyCat
 
         }
 
-        //
-        [ContextMenu("Add Test Entry")]
-        public void AddScoreTest(Score testscore) {
-
-            //
-            sd.scores.Add(testscore);
-
-        }
-
+        */
 
     }
 }

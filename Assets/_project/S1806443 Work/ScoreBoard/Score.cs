@@ -17,13 +17,15 @@ namespace SleepyCat
     public class Score : MonoBehaviour
     {
 
+        /*
+
         //
         [SerializeField]
         public string playerName;
 
         //
         [SerializeField]
-        public int score;
+        public List<int> score;
 
         //
         [SerializeField]
@@ -33,15 +35,26 @@ namespace SleepyCat
         [SerializeField]
         public int KOs;
 
+        
+        // List of the saved hat ints to save
+        //[SerializeField]
+        //public List<int> iSavedScores = new List<int>(); // SAVED
+
         //
-        public Score(string playerName, int score, int timeCompleted, int KOs) {
+        public Score(string playerName, List<int> score, int timeCompleted, int KOs) {
 
 
             //
-            this.playerName = playerName;
+            //this.playerName = playerName;
 
             //
             this.score = score;
+
+            //
+            //iSavedScores.Add(score);
+
+            //
+            Debug.Log(score);
 
             //
             this.timeCompleted = timeCompleted;
@@ -50,6 +63,8 @@ namespace SleepyCat
             this.KOs = KOs;
 
         }
+
+        */
 
     }
 }

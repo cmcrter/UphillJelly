@@ -18,6 +18,11 @@ namespace SleepyCat
     public class ScoreUI : MonoBehaviour
     {
 
+        /*
+
+        //
+        public Score score;
+
         //
         public RowUI rowUI;
 
@@ -80,7 +85,7 @@ namespace SleepyCat
             playerScore = tempScoreSystem.PlayerScore;
 
             //  
-            scoreManager.AddScore(new Score(playerInputName.text, 10, 100, 6));
+            scoreManager.AddScore(new Score(playerInputName.text, score.score, score.timeCompleted, score.KOs));
 
 
             Debug.Log("AddedStartingScores");
@@ -112,6 +117,8 @@ namespace SleepyCat
             }
 
         }
+
+        */
 
     }
 }

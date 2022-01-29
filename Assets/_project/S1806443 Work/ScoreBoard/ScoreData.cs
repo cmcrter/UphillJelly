@@ -17,20 +17,23 @@ namespace SleepyCat
     public class ScoreData
     {
 
+        /*
+
         //
         [SerializeField]
-        public List<Score> scores;
+        public List<int> scores;
 
         //
         public ScoreData() {
 
             //
-            scores = new List<Score>();
+            scores = new List<int>();
 
             Debug.Log(scores.ToArray());
 
         }
         
+        */
         
     }
 

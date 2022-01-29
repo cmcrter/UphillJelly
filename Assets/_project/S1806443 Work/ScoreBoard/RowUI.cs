@@ -18,6 +18,8 @@ namespace SleepyCat
     public class RowUI : MonoBehaviour
     {
 
+        /*
+
         //
         //public Image playerLeaderboardImage;
         //
@@ -40,6 +42,6 @@ namespace SleepyCat
         //
         public Button replayLeaderboardButton;
 
-
+        */
     }
 }

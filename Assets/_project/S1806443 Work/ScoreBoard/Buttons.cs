@@ -6,8 +6,16 @@ namespace SleepyCat
 {
     public class Buttons : MonoBehaviour{
 
+        /*
+
         //
         public Score score;
+
+        //
+        public ScoreData scoreData;
+
+        //
+        public SavedScoreData savedScoreData;
 
         //
         public void SaveLeaderBoard() {
@@ -26,7 +34,13 @@ namespace SleepyCat
             //
             SaveScoreBoard.LoadScoreBoard();
 
+            //
+            Debug.Log(savedScoreData.SAVED);
+
+
         }
+
+        */
 
     }
 }

@@ -18,6 +18,8 @@ namespace SleepyCat
 {
     public static class SaveScoreBoard{
 
+        /*
+
         //
         public static void SaveLeaderBoard(Score score) {
 
@@ -88,6 +90,8 @@ namespace SleepyCat
 
 
         }
+
+        */
 
     }
 }
