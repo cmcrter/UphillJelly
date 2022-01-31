@@ -66,6 +66,8 @@ public class SplineTraffic : MonoBehaviour
     [Tooltip("The amount of time between spawning traffic objects")]
     private float timeBetweenSpawns = 1f;
 
+    private float angleChangeAllowence = 100f;
+
     [SerializeField] 
     [Tooltip("The prefabs that can be spawned to move along the splines")]
     private SpawnablePrefab[] spawnablePrefabs;
@@ -380,9 +382,24 @@ public class SplineTraffic : MonoBehaviour
                 targetPosition.z = objectsMoved[indexMoved].gameObjectMoving.transform.position.z;
             }
 
+
+
             objectsMoved[indexMoved].gameObjectMoving.transform.position = targetPosition;
             objectsMoved[indexMoved].gameObjectMoving.transform.position += objectsMoved[indexMoved].gameObjectMoving.transform.up * objectsMoved[indexMoved].upwardsOffset;
-            objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue,newTChange);
+            // Check if the new forward is too far from the old forward
+            Quaternion oldRotation = Quaternion.LookRotation(objectsMoved[indexMoved].gameObjectMoving.transform.forward, objectsMoved[indexMoved].gameObjectMoving.transform.up);
+            Quaternion newRotation = Quaternion.LookRotation(splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue, newTChange), objectsMoved[indexMoved].gameObjectMoving.transform.up);
+            float newAngleChange = Quaternion.Angle(Quaternion.LookRotation(objectsMoved[indexMoved].gameObjectMoving.transform.forward, objectsMoved[indexMoved].gameObjectMoving.transform.up),
+                Quaternion.LookRotation(splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue, newTChange), objectsMoved[indexMoved].gameObjectMoving.transform.up));
+
+            if (newAngleChange > angleChangeAllowence * Time.deltaTime)
+            {
+                objectsMoved[indexMoved].gameObjectMoving.transform.rotation = Quaternion.Lerp(oldRotation, newRotation, (angleChangeAllowence * Time.deltaTime) / newAngleChange);
+            }
+            else
+            {
+                objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue, newTChange);
+            }
         }
         else
         {
@@ -421,6 +438,7 @@ public class SplineTraffic : MonoBehaviour
                     if (TrySpawnObject(out int index))
                     {
                         objectsMoved[index].currentTValue = tValue;
+                        objectsMoved[index].gameObjectMoving.transform.forward = splineInUse.GetDirection(objectsMoved[index].currentTValue);
                     }
                     else
                     {
