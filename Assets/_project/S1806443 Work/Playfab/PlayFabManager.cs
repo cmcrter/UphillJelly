@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
-using Newtonsoft.Json;
+using TMPro;
 using UnityEngine.UI;
 
 namespace SleepyCat
@@ -25,6 +25,18 @@ namespace SleepyCat
 
         //
         public Transform rowsParent;
+
+        //
+        public int score;
+
+        //
+        public int time;
+
+        //
+        public int KOs;
+
+        //
+        //public TMP_InputField playerName;
 
         //
         void Start() {
@@ -70,7 +82,21 @@ namespace SleepyCat
         }
 
         //
-        public void SendLeaderBoard(int score) {
+        public void SendLeaderBoards() {
+
+            //
+            SendScoreLeaderBoard(score);
+
+            //
+            SendTimeLeaderBoard(time);
+
+            //
+            SendKOsLeaderBoard(KOs);
+
+        }
+
+        //
+        public void SendScoreLeaderBoard(int score) {
 
             //
             var request = new UpdatePlayerStatisticsRequest {
@@ -85,11 +111,12 @@ namespace SleepyCat
                         StatisticName = "Score",
 
                         //
-                        Value = score
+                        Value = score,
 
                     }
 
                 }
+
 
             };
 
@@ -97,6 +124,69 @@ namespace SleepyCat
             PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
 
         }
+
+        //
+        public void SendTimeLeaderBoard(int time) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "Time",
+
+                        //
+                        Value = time,
+
+                    }
+
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+
+        //
+        public void SendKOsLeaderBoard(int KOs) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "KOs",
+
+                        //
+                        Value = KOs,
+
+                    }
+
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+
 
         //
         void OnLeaderBoardUpdate(UpdatePlayerStatisticsResult result) {
@@ -110,22 +200,52 @@ namespace SleepyCat
         public void GetLeaderBoard() {
 
             //
-            var request = new GetLeaderboardRequest {
+            var Scorerequest = new GetLeaderboardRequest {
 
                 //
                 StatisticName = "Score",
                 StartPosition = 0 //,
-                //MaxResultsCount = 10
+                //MaxResultsCount = 3,
 
             };
 
             //
-            PlayFabClientAPI.GetLeaderboard(request, OnLeaderBoardGet, OnError);
+            var Timerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "Time",
+                StartPosition = 0 //,
+                //MaxResultsCount = 3,
+
+            };
+
+            //
+            var KOsrequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "KOs",
+                StartPosition = 0 //,
+                //MaxResultsCount = 3,
+
+            };
+
+
+
+            //
+            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError);
 
         }
 
         //
         void OnLeaderBoardGet(GetLeaderboardResult result) {
+
+            Debug.Log("TTTTTTTTTTTTTTTTTTTTT");
 
             // for each row in the leaderboard
             foreach (Transform item in rowsParent) {
@@ -148,13 +268,19 @@ namespace SleepyCat
                 texts[0].text = (item.Position + 1).ToString();
 
                 //
-                texts[1].text = item.PlayFabId;
+                texts[1].text = item.PlayFabId; //playerName.text + "(" + THIS +")";
 
                 //
-                texts[2].text = item.StatValue.ToString();
+                texts[2].text = score.ToString();
 
                 //
-                Debug.Log(string.Format("RANK: {0} | ID: {1} | VALUE: {2}", item.Position, item.PlayFabId, item.StatValue));
+                texts[3].text = time.ToString();
+
+                //
+                texts[4].text = KOs.ToString();
+
+                //
+                Debug.Log(string.Format("RANK: {0} | ID: {1} | VALUE: {2} | VALUE: {3} | VALUE: {4}", item.Position, item.PlayFabId, score, time, KOs)); //item.StatValue
 
                 // debug position, ID and score for each item
                 //Debug.Log(item.Position + "" + item.PlayFabId + "" + item.StatValue);
