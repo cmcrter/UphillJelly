@@ -369,7 +369,7 @@ public class SplineTraffic : MonoBehaviour
 
             objectsMoved[indexMoved].gameObjectMoving.transform.position = targetPosition;
             objectsMoved[indexMoved].gameObjectMoving.transform.position += objectsMoved[indexMoved].gameObjectMoving.transform.up * objectsMoved[indexMoved].upwardsOffset;
-            objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(newTChange);
+            objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue,newTChange);
         }
         else
         {
