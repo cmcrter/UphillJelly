@@ -9,6 +9,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MainMenuNavigation : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class MainMenuNavigation : MonoBehaviour
     private GameObject camera;
     [SerializeField]
     private MainMenuPoint currentPoint;
+    [SerializeField]
+    private PlayerInput playerInput;
 
     private Coroutine coLerp;
     private Coroutine coIdle;
@@ -48,8 +51,20 @@ public class MainMenuNavigation : MonoBehaviour
 
         instance = this;
 
+        playerInput = playerInput ?? GetComponent<PlayerInput>();
+
         //Setting the state to be the inspectors current one
         GoToState(currentPoint);
+    }
+
+    private void OnEnable()
+    {
+        playerInput.actions["Navigate"].performed += Navigate;
+    }
+
+    private void OnDisable()
+    {
+        playerInput.actions["Navigate"].performed -= Navigate;
     }
 
     #endregion
@@ -65,28 +80,41 @@ public class MainMenuNavigation : MonoBehaviour
     /// <summary>
     /// Controls pressed to go between sections
     /// </summary>
-    public void RightPressed()
+    public void Navigate(InputAction.CallbackContext callbackContext)
     {
         if(coLerp != null)
             return;
-    }
 
-    public void LeftPressed()
-    {
-        if(coLerp != null)
-            return;
-    }
+        Vector2 v = callbackContext.action.ReadValue<Vector2>();
 
-    public void UpPressed()
-    {
-        if(coLerp != null)
-            return;
-    }
-
-    public void DownPressed()
-    {
-        if(coLerp != null)
-            return;
+        //Getting whether it's left or right and going to there
+        if(Mathf.Abs(v.x) != Mathf.Abs(v.y))
+        {
+            //Since only x or y can be not 0 here, this logic makes sense
+            if(v.x != 0)
+            {
+                if(v.x < 0)
+                {
+                    Debug.Log("Left", this);
+                    //left
+                }
+                else
+                {
+                    Debug.Log("Right", this);
+                    //right
+                }
+            }
+            else if(v.y < 0)
+            {
+                Debug.Log("Down", this);
+                //down
+            }
+            else
+            {
+                Debug.Log("Up", this);
+                //up
+            }
+        }
     }
 
     #endregion
