@@ -18,7 +18,7 @@ public class MainMenuNavigation : MonoBehaviour
     static MainMenuNavigation instance;
 
     [SerializeField]
-    private GameObject camera;
+    private GameObject _camera;
     [SerializeField]
     private MainMenuPoint currentPoint;
     [SerializeField]
@@ -151,10 +151,10 @@ public class MainMenuNavigation : MonoBehaviour
         float amountToMove = (currentPoint.transform.position - nextPoint.transform.position).magnitude;
         float speedToMove = amountToMove / transitionTime;
 
-        while(camera.transform.position != nextPoint.transform.position && camera.transform.rotation != nextPoint.transform.rotation)
+        while(_camera.transform.position != nextPoint.transform.position && _camera.transform.rotation != nextPoint.transform.rotation)
         {
-            camera.transform.position = Vector3.Lerp(camera.transform.position, nextPoint.transform.position, Time.deltaTime * speedToMove);
-            camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, nextPoint.transform.rotation, Time.deltaTime * speedToMove);
+            _camera.transform.position = Vector3.Lerp(_camera.transform.position, nextPoint.transform.position, Time.deltaTime * speedToMove);
+            _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, nextPoint.transform.rotation, Time.deltaTime * speedToMove);
             yield return null;
         }
 
@@ -196,7 +196,7 @@ public class MainMenuNavigation : MonoBehaviour
             else
             {
                 //We use Lerp to smoothly transiton from our current position to the next.
-                camera.transform.position = Vector3.Lerp(camera.transform.position, targetPosition, (timeToMove / movementDecay) * Time.deltaTime);
+                _camera.transform.position = Vector3.Lerp(_camera.transform.position, targetPosition, (timeToMove / movementDecay) * Time.deltaTime);
                 movementTime -= Time.deltaTime;
             }
 
