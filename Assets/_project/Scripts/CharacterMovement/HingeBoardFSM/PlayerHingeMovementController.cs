@@ -133,7 +133,6 @@ namespace L7Games.Movement
             if(groundBelow.FrontGroundHit.collider && groundBelow.BackGroundHit.collider)
             {
                 Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
-                upright = (groundBelow.FrontGroundHit.normal + groundBelow.BackGroundHit.normal) * 0.5f;
 
                 if(Debug.isDebugBuild)
                 {
@@ -153,7 +152,7 @@ namespace L7Games.Movement
                 else
                 {
                     //If it's a reasonable adjustment
-                    if(angle < 30f && Vector3.Distance(groundBelow.FrontGroundHit.point, groundBelow.BackGroundHit.point) < 15f)
+                    if(angle < 30f)
                     {
                         groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright));
                     }
@@ -206,12 +205,14 @@ namespace L7Games.Movement
         {
             groundedState.RegisterInputs();
             grindingState.RegisterInputs();
+            wallRideState.RegisterInputs();
         }
 
         private void OnDisable()
         {
             groundedState.UnRegisterInputs();
             grindingState.UnRegisterInputs();
+            wallRideState.UnRegisterInputs();
         }
 
         private void Start()
@@ -286,7 +287,7 @@ namespace L7Games.Movement
         {
             if(turningCo != null) 
             {
-                StopCoroutine(Co_TurnAngle());
+                StopCoroutine(turningCo);
             }
         }
 
@@ -300,7 +301,7 @@ namespace L7Games.Movement
         {
             if(AirturningCo != null)
             {
-                StopCoroutine(Co_AirInfluence());
+                StopCoroutine(AirturningCo);
             }
         }
 
@@ -316,14 +317,15 @@ namespace L7Games.Movement
             while (influenceTimer.isActive)
             {
                 InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
+                Debug.Log("Influence Up", this);
 
                 if(InfluenceDir)
                 {
-                    fRB.AddForce(-transform.right * 10f, ForceMode.Impulse);
+                    fRB.AddForce(-transform.right * 5f, ForceMode.Impulse);
                 }
                 else if (inputHandler.TurningAxis != 0 )
                 {
-                    fRB.AddForce(transform.right * 10f, ForceMode.Impulse);
+                    fRB.AddForce(transform.right * 5f, ForceMode.Impulse);
                 }
 
                 influenceTimer.Tick(Time.deltaTime);
