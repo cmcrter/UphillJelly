@@ -421,8 +421,6 @@ public class SplineTraffic : MonoBehaviour
     #region Unity Methods
     private void Start()
     {
-        preSpawnObjects = true;
-
         // Set up the object pool to allow for all object that will exist along the spline at once
         int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt(splineInUse.GetTotalLength() / speed / timeBetweenSpawns) + 1;
         objectsMoved = new MovingObject[numberOfObjectsThatWillExisitAtOnce];
