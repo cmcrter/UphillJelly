@@ -21,6 +21,9 @@ namespace SleepyCat
     {
 
         //
+        public TempScoreSystem tempScoreSystem;
+
+        //
         public GameObject rowPrefab;
 
         //
@@ -78,6 +81,14 @@ namespace SleepyCat
 
             //
             Debug.Log(error.GenerateErrorReport());
+
+        }
+
+        //
+        public void SetScore() {
+
+            //
+            score = tempScoreSystem.PlayerScore;
 
         }
 

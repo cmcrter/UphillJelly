@@ -17,6 +17,12 @@ namespace SleepyCat
     {
 
         //
+        public b_Player b_player;
+
+        //
+        public PlayFabManager playfabManager;
+
+        //
         public GameObject savePlayerNamePanel;
 
         //
@@ -35,6 +41,12 @@ namespace SleepyCat
 
             // if the ghost collides with this collectable
             if (col.gameObject.tag == "Player") {
+
+                //
+                b_player.SaveFinalValues();
+
+                //
+                playfabManager.SetScore();
 
                 //
                 leaderboardPanel.SetActive(true);

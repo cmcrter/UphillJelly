@@ -139,98 +139,101 @@ public class b_Player : MonoBehaviour
     }
 
     // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
-    public void TestPressed1Update() {
+    public void SaveFinalValues() {
 
-        // set ghost 1 and ghost 2 recording and replaing to false
-        ghostSO1.isRecording = false;
-        ghostSO1.isReplaying = false;
+        if (isSave1) {
 
-        ghostSO2.isRecording = false;
-        ghostSO2.isReplaying = false;
+            // set ghost 1 and ghost 2 recording and replaing to false
+            ghostSO1.isRecording = false;
+            ghostSO1.isReplaying = false;
 
-        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
-        // Ghost 2 replays best time 
-        // Save replay 1 as replay 2
-        SavePlayer1();
+            ghostSO2.isRecording = false;
+            ghostSO2.isReplaying = false;
 
-        // set the ghost 2 timestamp to the ghost 1 timestamp
-        ghostSO2.timeStamp = ghostSO1.timeStamp;
+            // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+            // Ghost 2 replays best time 
+            // Save replay 1 as replay 2
+            SavePlayer1();
 
-        // set the ghost 2 position to the ghost 1 position
-        ghostSO2.position = ghostSO1.position;
+            // set the ghost 2 timestamp to the ghost 1 timestamp
+            ghostSO2.timeStamp = ghostSO1.timeStamp;
 
-        // set the ghost 2 rotation to the ghost 1 rotation
-        ghostSO2.rotation = ghostSO1.rotation;
+            // set the ghost 2 position to the ghost 1 position
+            ghostSO2.position = ghostSO1.position;
 
-        // save the second replay for player 1
-        SavePlayer1Second();
+            // set the ghost 2 rotation to the ghost 1 rotation
+            ghostSO2.rotation = ghostSO1.rotation;
 
-        Debug.Log("Saved Replay 1's");
+            // save the second replay for player 1
+            SavePlayer1Second();
+
+            Debug.Log("Saved Replay 1's");
+
+        }
+
+        //
+        if (isSave2) {
+
+            // set ghost 1 and ghost 2 recording and replaing to false
+            ghostSO1.isRecording = false;
+            ghostSO1.isReplaying = false;
+
+            ghostSO2.isRecording = false;
+            ghostSO2.isReplaying = false;
+
+            // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+            // Ghost 2 replays best time 
+            // Save replay 1 as replay 2
+            SavePlayer2();
+
+            // set the ghost 2 timestamp to the ghost 1 timestamp
+            ghostSO2.timeStamp = ghostSO1.timeStamp;
+
+            // set the ghost 2 position to the ghost 1 position
+            ghostSO2.position = ghostSO1.position;
+
+            // set the ghost 2 rotation to the ghost 1 rotation
+            ghostSO2.rotation = ghostSO1.rotation;
+
+            // save the second replay for player 2
+            SavePlayer2Second();
+
+            Debug.Log("Saved Replay 2's");
+
+        }
+
+        if (isSave3) {
+
+            // set ghost 1 and ghost 2 recording and replaing to false
+            ghostSO1.isRecording = false;
+            ghostSO1.isReplaying = false;
+
+            ghostSO2.isRecording = false;
+            ghostSO2.isReplaying = false;
+
+            // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
+            // Ghost 2 replays best time 
+            // Save replay 1 as replay 2
+            SavePlayer3();
+
+            // set the ghost 2 timestamp to the ghost 1 timestamp
+            ghostSO2.timeStamp = ghostSO1.timeStamp;
+
+            // set the ghost 2 position to the ghost 1 position
+            ghostSO2.position = ghostSO1.position;
+
+            // set the ghost 2 rotation to the ghost 1 rotation
+            ghostSO2.rotation = ghostSO1.rotation;
+
+            // save the second replay for player 3
+            SavePlayer3Second();
+
+            Debug.Log("Saved Replay 3's");
+
+        }
+        
 
     }
-
-    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
-    public void TestPressed2Update() {
-
-        // set ghost 1 and ghost 2 recording and replaing to false
-        ghostSO1.isRecording = false;
-        ghostSO1.isReplaying = false;
-
-        ghostSO2.isRecording = false;
-        ghostSO2.isReplaying = false;
-
-        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
-        // Ghost 2 replays best time 
-        // Save replay 1 as replay 2
-        SavePlayer2();
-
-        // set the ghost 2 timestamp to the ghost 1 timestamp
-        ghostSO2.timeStamp = ghostSO1.timeStamp;
-
-        // set the ghost 2 position to the ghost 1 position
-        ghostSO2.position = ghostSO1.position;
-
-        // set the ghost 2 rotation to the ghost 1 rotation
-        ghostSO2.rotation = ghostSO1.rotation;
-
-        // save the second replay for player 2
-        SavePlayer2Second();
-
-        Debug.Log("Saved Replay 2's");
-
-    }
-
-    // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
-    public void TestPressed3Update() {
-
-        // set ghost 1 and ghost 2 recording and replaing to false
-        ghostSO1.isRecording = false;
-        ghostSO1.isReplaying = false;
-
-        ghostSO2.isRecording = false;
-        ghostSO2.isReplaying = false;
-
-        // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
-        // Ghost 2 replays best time 
-        // Save replay 1 as replay 2
-        SavePlayer3();
-
-        // set the ghost 2 timestamp to the ghost 1 timestamp
-        ghostSO2.timeStamp = ghostSO1.timeStamp;
-
-        // set the ghost 2 position to the ghost 1 position
-        ghostSO2.position = ghostSO1.position;
-
-        // set the ghost 2 rotation to the ghost 1 rotation
-        ghostSO2.rotation = ghostSO1.rotation;
-
-        // save the second replay for player 3
-        SavePlayer3Second();
-
-        Debug.Log("Saved Replay 3's");
-
-    }
-
 
     // Load the player1
     public void LoadPlayer1() {
