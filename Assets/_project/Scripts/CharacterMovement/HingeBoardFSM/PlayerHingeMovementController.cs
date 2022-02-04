@@ -130,31 +130,52 @@ namespace L7Games.Movement
             Quaternion headingDelta = Quaternion.identity;
             Quaternion groundQuat = transform.rotation;
 
-            if(groundBelow.FrontGroundHit.collider && groundBelow.BackGroundHit.collider)
+            if (groundBelow.FrontRightGroundHit.collider && groundBelow.BackRightGroundHit.collider)
             {
-                Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized);
+                Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontRightGroundHit.point - groundBelow.BackRightGroundHit.point).normalized);
 
-                if(Debug.isDebugBuild)
+                // Calculate the roll
+                // Find the angles between the width raycasts
+                float frontAngle = CalculateSignedSlopeAngle(groundBelow.FrontLeftGroundHit.point, groundBelow.FrontRightGroundHit.point, Vector3.up);
+                float backAngle = CalculateSignedSlopeAngle(groundBelow.BackLeftGroundHit.point, groundBelow.BackRightGroundHit.point, Vector3.up);
+                // Use the largest unsigned value
+                float unsignedFrontAngle = frontAngle < 0f ? frontAngle * -1f : frontAngle;
+                float unsignedBackAngle = backAngle < 0f ? backAngle * -1f : backAngle;
+                float roll = unsignedFrontAngle > unsignedBackAngle ? frontAngle : backAngle;
+
+                // Calculate the pitch
+                // Find the angles between the length raycasts
+                float leftAngle = CalculateSignedSlopeAngle(groundBelow.FrontLeftGroundHit.point, groundBelow.BackLeftGroundHit.point, Vector3.up);
+                //linesToDraw.Add(new LineToDraw(frontLeftHit.point, backLeftHit.point, Color.white));
+                float rightAngle = CalculateSignedSlopeAngle(groundBelow.FrontRightGroundHit.point, groundBelow.BackRightGroundHit.point, Vector3.up);
+                //linesToDraw.Add(new LineToDraw(frontRightHit.point, backRightHit.point, Color.white));
+                // Use the smallest unsigned value
+                float unsignedLeftAngle = leftAngle < 0f ? leftAngle * -1f : leftAngle;
+                float unsignedRightAngle = rightAngle < 0f ? rightAngle * -1f : rightAngle;
+                float pitch = unsignedLeftAngle > unsignedRightAngle ? leftAngle : rightAngle;
+                Quaternion newRotation = Quaternion.Euler(new Vector3(pitch, transform.rotation.eulerAngles.y, roll));
+
+                if (Debug.isDebugBuild)
                 {
-                    Debug.DrawRay(bRB.transform.position, -(groundBelow.FrontGroundHit.point - groundBelow.BackGroundHit.point).normalized, Color.green);
+                    Debug.DrawRay(bRB.transform.position, -(groundBelow.FrontRightGroundHit.point - groundBelow.BackRightGroundHit.point).normalized, Color.green);
                     Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
                     Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
-                    Debug.DrawRay(groundBelow.FrontGroundHit.point, groundBelow.FrontGroundHit.normal, Color.cyan);
-                    Debug.DrawRay(groundBelow.BackGroundHit.point, groundBelow.BackGroundHit.normal, Color.cyan);
+                    Debug.DrawRay(groundBelow.FrontRightGroundHit.point, groundBelow.FrontRightGroundHit.normal, Color.cyan);
+                    Debug.DrawRay(groundBelow.BackRightGroundHit.point, groundBelow.BackRightGroundHit.normal, Color.cyan);
                 }
 
-                float angle = Vector3.Angle(upright, transform.up);
+                float angle = Quaternion.Angle(newRotation, Quaternion.LookRotation(transform.forward, transform.up).normalized);
 
                 if(bAerial)
                 {
-                    groundQuat = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, upright)), smoothness * Time.deltaTime);
+                    groundQuat = Quaternion.Lerp(transform.rotation, newRotation, smoothness * Time.deltaTime);
                 }
                 else
                 {
                     //If it's a reasonable adjustment
-                    if(angle < 30f)
+                    if (angle < 30f)
                     {
-                        groundQuat = Quaternion.LookRotation(Vector3.Cross(transform.right, upright));
+                        groundQuat = newRotation;
                     }
                 }
             }
@@ -394,6 +415,14 @@ namespace L7Games.Movement
             turningCo = null;
         }
 
+
+        private float CalculateSignedSlopeAngle(Vector3 startingPoint, Vector3 endPoint, Vector3 flatPlaneNormal)
+        {
+            Vector3 slopeVector = endPoint - startingPoint;
+            Vector3 flatVector = Vector3.ProjectOnPlane(slopeVector, flatPlaneNormal).normalized;
+            Vector3 rightFlatVector = Vector3.Cross(flatVector, flatPlaneNormal).normalized;
+            return Vector3.SignedAngle(flatVector, slopeVector, rightFlatVector);
+        }
         #endregion
     }
 }

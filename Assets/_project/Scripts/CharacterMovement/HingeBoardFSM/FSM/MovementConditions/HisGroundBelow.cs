@@ -19,13 +19,19 @@ namespace L7Games.Movement
         #region Variables
 
         public LayerMask playerMask;
-        public RaycastHit FrontGroundHit;
-        public RaycastHit BackGroundHit;
+        public RaycastHit FrontLeftGroundHit;
+        public RaycastHit FrontRightGroundHit;
+        public RaycastHit BackLeftGroundHit;
+        public RaycastHit BackRightGroundHit;
 
         [SerializeField]
-        private Transform frontraycastPointTransform;
+        private Transform frontLeftRaycastPointTransform;
         [SerializeField]
-        private Transform backRaycastPointTransform;
+        private Transform frontRightRaycastPointTransform;
+        [SerializeField]
+        private Transform backLeftRaycastPointTransform;
+        [SerializeField]
+        private Transform backRightRaycastPointTransform;
 
         [SerializeField]
         private float groundDist = 1.69f;
@@ -46,32 +52,65 @@ namespace L7Games.Movement
         public override bool isConditionTrue() 
         {
             //Checking if anything is below it
-            if(Physics.Raycast(frontraycastPointTransform.position, -Vector3.up, out RaycastHit hit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(frontLeftRaycastPointTransform.position, -Vector3.up, out RaycastHit hit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
                 {
                     //Debug.Log("Hit: " + hit.transform.name);
                     //Debug.Log(hit.transform.name + " " + hit.normal);
-                    Debug.DrawLine(frontraycastPointTransform.position, frontraycastPointTransform.position + (-Vector3.up * groundDist), Color.magenta);
-                    Debug.DrawLine(backRaycastPointTransform.position, backRaycastPointTransform.position + (-Vector3.up * groundDist), Color.magenta);
+                    Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-Vector3.up * groundDist), Color.magenta);
 
                     //Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
                     //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
                 }
 
-                FrontGroundHit = hit;
+                FrontLeftGroundHit = hit;
             }
 
-            if(Physics.Raycast(backRaycastPointTransform.position, -Vector3.up, out RaycastHit backHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            //Checking if anything is below it
+            if (Physics.Raycast(frontRightRaycastPointTransform.position, -Vector3.up, out RaycastHit hit2, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            {
+                //Any debugging stuff needed
+                if (Debug.isDebugBuild)
+                {
+                    //Debug.Log("Hit: " + hit.transform.name);
+                    //Debug.Log(hit.transform.name + " " + hit.normal);
+                    Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-Vector3.up * groundDist), Color.magenta);
+
+                    //Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
+                    //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
+                }
+
+                FrontRightGroundHit = hit2;
+            }
+
+            //Checking if anything is below it
+            if (Physics.Raycast(backLeftRaycastPointTransform.position, -Vector3.up, out RaycastHit hit3, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            {
+                //Any debugging stuff needed
+                if (Debug.isDebugBuild)
+                {
+                    //Debug.Log("Hit: " + hit.transform.name);
+                    //Debug.Log(hit.transform.name + " " + hit.normal);
+                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-Vector3.up * groundDist), Color.magenta);
+
+                    //Debug.DrawLine(transform.position, transform.position + (-transform.up * 1f), Color.blue);
+                    //Debug.DrawRay(rb.position + rb.centerOfMass, rb.transform.forward, Color.cyan);
+                }
+
+                BackLeftGroundHit = hit3;
+            }
+
+            if (Physics.Raycast(backRightRaycastPointTransform.position, -Vector3.up, out RaycastHit backHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
             {
                 //Could use backhit to help smoothing with the board against the ground
                 //Player is about to hit a ramp
-                BackGroundHit = backHit;
+                BackRightGroundHit = backHit;
             }
 
             //This hit may still be used for smoothing when the player is in the air
-            if(BackGroundHit.distance <= groundDist || FrontGroundHit.distance <= groundDist)
+            if(FrontLeftGroundHit.distance <= groundDist || FrontRightGroundHit.distance <= groundDist || BackLeftGroundHit.distance <= groundDist || BackRightGroundHit.distance <= groundDist)
             {
                 return true;
             }
