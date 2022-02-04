@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 02/02/22
 // Last Edited By: Charles Carter
-// Date Last Edited: 02/02/22
+// Date Last Edited: 04/02/22
 // Brief: The general going between menu points (as a general state machine)
 //////////////////////////////////////////////////////////// 
 
@@ -18,7 +18,9 @@ public class MainMenuNavigation : MonoBehaviour
     static MainMenuNavigation instance;
 
     [SerializeField]
-    private GameObject _camera;
+    private GameObject cameraParent;
+    [SerializeField]
+    private Camera _camera;
     [SerializeField]
     private MainMenuPoint currentPoint;
     [SerializeField]
@@ -31,6 +33,11 @@ public class MainMenuNavigation : MonoBehaviour
     private float transitionTime = 2f;
 
     //Idle Variables
+    //A gameobject for the camera to look at whilst swaying
+    [SerializeField]
+    private GameObject RotationObject;
+    [SerializeField]
+    private Vector3 initialRotLocalPos;
     [SerializeField]
     private float idleSwayAmount = 1.25f;
     [SerializeField]
@@ -55,16 +62,20 @@ public class MainMenuNavigation : MonoBehaviour
 
         //Setting the state to be the inspectors current one
         GoToState(currentPoint);
+
+        initialRotLocalPos = RotationObject.transform.localPosition;
     }
 
     private void OnEnable()
     {
         playerInput.actions["Navigate"].performed += Navigate;
+        playerInput.actions["Cancel"].performed += Cancel;
     }
 
     private void OnDisable()
     {
         playerInput.actions["Navigate"].performed -= Navigate;
+        playerInput.actions["Cancel"].performed -= Cancel;
     }
 
     #endregion
@@ -95,25 +106,51 @@ public class MainMenuNavigation : MonoBehaviour
             {
                 if(v.x < 0)
                 {
-                    Debug.Log("Left", this);
+                    //Debug.Log("Left", this);
                     //left
+                    if(currentPoint.LeftPoint != null)
+                    {
+                        Debug.Log(currentPoint.LeftPoint.name);
+                        GoToState(currentPoint.LeftPoint);
+                    }
                 }
                 else
                 {
-                    Debug.Log("Right", this);
+                    //Debug.Log("Right", this);
                     //right
+                    if(currentPoint.RightPoint != null)
+                    {
+                        Debug.Log(currentPoint.RightPoint.name);
+                        GoToState(currentPoint.RightPoint);
+                    }
                 }
             }
             else if(v.y < 0)
             {
-                Debug.Log("Down", this);
+                //Debug.Log("Down", this);
                 //down
+                if(currentPoint.DownPoint != null)
+                {
+                    GoToState(currentPoint.DownPoint);
+                }
             }
             else
             {
-                Debug.Log("Up", this);
+                //Debug.Log("Up", this);
                 //up
+                if(currentPoint.UpPoint != null)
+                {
+                    GoToState(currentPoint.UpPoint);
+                }
             }
+        }
+    }
+
+    public void Cancel(InputAction.CallbackContext callbackContext)
+    {
+        if(currentPoint.BackPoint != null)
+        {
+            GoToState(currentPoint.BackPoint);
         }
     }
 
@@ -141,6 +178,14 @@ public class MainMenuNavigation : MonoBehaviour
 
     private IEnumerator Co_LerpToPoint(MainMenuPoint nextPoint)
     {
+        if(nextPoint == null)
+        {
+            Debug.LogError("No Next Point Here", this);
+            StopLerpToPoint();
+            coLerp = null;
+            yield return null;
+        }
+
         nextPoint.gameObject.SetActive(true);
 
         if(currentPoint != nextPoint)
@@ -151,10 +196,10 @@ public class MainMenuNavigation : MonoBehaviour
         float amountToMove = (currentPoint.transform.position - nextPoint.transform.position).magnitude;
         float speedToMove = amountToMove / transitionTime;
 
-        while(_camera.transform.position != nextPoint.transform.position && _camera.transform.rotation != nextPoint.transform.rotation)
+        while(cameraParent.transform.position != nextPoint.transform.position && cameraParent.transform.rotation != nextPoint.transform.rotation)
         {
-            _camera.transform.position = Vector3.Lerp(_camera.transform.position, nextPoint.transform.position, Time.deltaTime * speedToMove);
-            _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, nextPoint.transform.rotation, Time.deltaTime * speedToMove);
+            cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position, nextPoint.transform.position, Time.deltaTime * speedToMove);
+            cameraParent.transform.rotation = Quaternion.Lerp(cameraParent.transform.rotation, nextPoint.transform.rotation, Time.deltaTime * speedToMove);
             yield return null;
         }
 
@@ -184,6 +229,9 @@ public class MainMenuNavigation : MonoBehaviour
     {
         float movementTime = 0f;
         Vector3 targetPosition = new Vector3();
+        Vector3 rotTargetPosition = new Vector3();
+
+        Vector3 rotInitialPos = RotationObject.transform.position;
 
         while(gameObject.activeSelf)
         {
@@ -191,12 +239,16 @@ public class MainMenuNavigation : MonoBehaviour
             if(movementTime <= 0)
             {
                 targetPosition = currentPoint.transform.position + Random.insideUnitSphere * idleSwayAmount;
+                rotTargetPosition = rotInitialPos + Random.insideUnitSphere * (idleSwayAmount * 5);
                 movementTime = timeToMove;
             }
             else
             {
                 //We use Lerp to smoothly transiton from our current position to the next.
                 _camera.transform.position = Vector3.Lerp(_camera.transform.position, targetPosition, (timeToMove / movementDecay) * Time.deltaTime);
+                RotationObject.transform.position = Vector3.Lerp(RotationObject.transform.position, rotTargetPosition, (timeToMove / movementDecay) * Time.deltaTime);
+
+                _camera.transform.LookAt(RotationObject.transform);
                 movementTime -= Time.deltaTime;
             }
 

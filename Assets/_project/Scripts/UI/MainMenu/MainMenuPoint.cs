@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 02/02/22
 // Last Edited By: Charles Carter
-// Date Last Edited: 02/02/22
+// Date Last Edited: 04/02/22
 // Brief: The point at which the camera looks at for specific menu options (used as a reference for the state machine too)
 //////////////////////////////////////////////////////////// 
 
@@ -20,6 +20,10 @@ public class MainMenuPoint : MonoBehaviour
     [SerializeField]
     List<GameObject> objectsToShow;
 
+    //Point to go back to on cancel
+    public MainMenuPoint BackPoint;
+
+    //Points to navigate to (Buttons may also do this themselves)
     public MainMenuPoint LeftPoint;
     public MainMenuPoint RightPoint;
     public MainMenuPoint UpPoint;
