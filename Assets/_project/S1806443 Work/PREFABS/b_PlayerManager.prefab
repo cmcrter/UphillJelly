@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6226514804018325393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6226514804018325395}
+  - component: {fileID: 6226514804018325394}
+  m_Layer: 0
+  m_Name: b_PlayerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6226514804018325395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226514804018325393}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.4427892, y: -0.3940298, z: -0.71074694}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6226514804018325394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226514804018325393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea8a8714bf4d2240a27346cbd648796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  replaySaveManager: {fileID: 5698360513040386006, guid: fed1660b2770cc6468be540bc62331f1, type: 3}
+  ghostSO1: {fileID: 11400000, guid: ef4c4b59d7524f147ab7df2d5ed06d57, type: 2}
+  ghostSO2: {fileID: 11400000, guid: c12dd2e2f17f3db43a2aa479722bc45d, type: 2}
+  isSave1: 0
+  isSave2: 0
+  isSave3: 0
+  changeCamera: {fileID: 5121472101195540637, guid: 208ff85029c397a44a72088bdaeded7c, type: 3}
+  loadCustomizablesInGame: {fileID: 2726824879047212301, guid: 0ce2462deacf03a4aaa805c7a621ef9c, type: 3}
+  replayGhostSaveManager: {fileID: 5698360513040386006, guid: fed1660b2770cc6468be540bc62331f1, type: 3}
+  HatBoughtBools: 
+  CharacterBoughtBools: 
+  hatBoughtInts: 
+  outfitChanger: {fileID: 0}
+  shop: {fileID: 9097779830629303194, guid: 6154d104111d85a43a6840753bb0bdf2, type: 3}
+  CurrentGameObjectInt: 0
+  CurrentGameObjectMaterialInt: 0
+  CharacterMaterialInt: 0
+  Currency: 0

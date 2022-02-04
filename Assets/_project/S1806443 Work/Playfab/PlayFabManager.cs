@@ -30,6 +30,9 @@ namespace SleepyCat
         public Transform rowsParent;
 
         //
+        public TMP_InputField TMPPlayerName;
+
+        //
         public int score;
 
         //
@@ -39,7 +42,11 @@ namespace SleepyCat
         public int KOs;
 
         //
-        //public TMP_InputField playerName;
+        public GameObject SubmittedNameImage;
+
+        //
+        public GameObject SubmitNameButtonGameObject;
+
 
         //
         void Start() {
@@ -56,7 +63,16 @@ namespace SleepyCat
             var request = new LoginWithCustomIDRequest {
 
                 // make a new account with a custom ID
-                CustomId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true
+                CustomId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true,
+
+                //
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams {
+
+                    //
+                    GetPlayerProfile = true
+
+                }
+                //
 
             };
 
@@ -71,6 +87,43 @@ namespace SleepyCat
             //
             Debug.Log("Successful login / account create!");
 
+            //
+            string name = null;
+
+            //
+            if (result.InfoResultPayload.PlayerProfile != null)
+                //
+                name = result.InfoResultPayload.PlayerProfile.DisplayName;
+
+        }
+
+        //
+        public void SubmitNameButton() {
+
+            //
+            var request = new UpdateUserTitleDisplayNameRequest {
+
+                //
+                DisplayName = TMPPlayerName.text,
+
+            };
+
+            PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
+
+            //
+            SubmittedNameImage.SetActive(false);
+
+            //
+            SubmitNameButtonGameObject.SetActive(false);
+
+        }
+
+        //
+        public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result) {
+
+            //
+            Debug.Log("Updated Display Name");
+
         }
 
         //
@@ -84,16 +137,22 @@ namespace SleepyCat
 
         }
 
+
         //
         public void SetScore() {
 
             //
             score = tempScoreSystem.PlayerScore;
 
+            //
+            time = Mathf.RoundToInt(tempScoreSystem.PlayerTime);
+
         }
 
         //
         public void SendLeaderBoards() {
+
+
 
             //
             SendScoreLeaderBoard(score);
@@ -105,6 +164,38 @@ namespace SleepyCat
             SendKOsLeaderBoard(KOs);
 
         }
+
+        /*
+        //
+        public void SendPlayerNameLeaderBoard(Text playerName) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "playerName",
+
+                        //
+                        Value = playerName,
+
+                    }
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+        */
 
         //
         public void SendScoreLeaderBoard(int score) {
@@ -153,6 +244,9 @@ namespace SleepyCat
 
                         //
                         Value = time,
+
+                        //
+                        
 
                     }
 
@@ -210,6 +304,18 @@ namespace SleepyCat
         //
         public void GetLeaderBoard() {
 
+            /*
+            //
+            var Namerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "playerName",
+                StartPosition = 0 //,
+                //MaxResultsCount = 3,
+
+            };
+            */
+
             //
             var Scorerequest = new GetLeaderboardRequest {
 
@@ -225,7 +331,7 @@ namespace SleepyCat
 
                 //
                 StatisticName = "Time",
-                StartPosition = 0 //,
+                //StartPosition = 0 //,
                 //MaxResultsCount = 3,
 
             };
@@ -279,7 +385,7 @@ namespace SleepyCat
                 texts[0].text = (item.Position + 1).ToString();
 
                 //
-                texts[1].text = item.PlayFabId; //playerName.text + "(" + THIS +")";
+                texts[1].text = TMPPlayerName.text; //+ item.PlayFabId; //playerName.text + "(" + THIS +")";
 
                 //
                 texts[2].text = score.ToString();
@@ -291,7 +397,7 @@ namespace SleepyCat
                 texts[4].text = KOs.ToString();
 
                 //
-                Debug.Log(string.Format("RANK: {0} | ID: {1} | VALUE: {2} | VALUE: {3} | VALUE: {4}", item.Position, item.PlayFabId, score, time, KOs)); //item.StatValue
+                Debug.Log(string.Format("RANK: {0} | Text: {1} | VALUE: {2} | VALUE: {3} | VALUE: {4}", item.Position, item.DisplayName, score, time, KOs)); //item.StatValue
 
                 // debug position, ID and score for each item
                 //Debug.Log(item.Position + "" + item.PlayFabId + "" + item.StatValue);

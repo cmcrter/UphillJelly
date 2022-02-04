@@ -29,6 +29,9 @@ namespace SleepyCat
         public GameObject leaderboardPanel;
 
         //
+        public TempScoreSystem tempScoreSystem;
+
+        //
         public void Start() {
 
             //
@@ -50,6 +53,9 @@ namespace SleepyCat
 
                 //
                 leaderboardPanel.SetActive(true);
+
+                //
+                tempScoreSystem.TimerActive = false;
 
             }
 
