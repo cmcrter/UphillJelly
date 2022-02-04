@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8095747668398669790}
   - component: {fileID: 5185336458605916283}
   - component: {fileID: 6922863036948972721}
-  - component: {fileID: 8634358028928009726}
+  - component: {fileID: 8818557721869195981}
   m_Layer: 0
   m_Name: Tribuilding01
   m_TagString: Untagged
@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8868167318915065188}
-  m_LocalRotation: {x: -0.000000015043806, y: -0.895378, z: -0.000000015854281, w: -0.44530708}
-  m_LocalPosition: {x: 182.96, y: -23.05, z: 104.53}
+  m_LocalRotation: {x: 1.0165751e-15, y: 1, z: -0.000000021855694, w: 0.00000004371139}
+  m_LocalPosition: {x: 112.98, y: -9.32, z: 54.26558}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 487.114, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5185336458605916283
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -83,8 +83,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8634358028928009726
-BoxCollider:
+--- !u!64 &8818557721869195981
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,6 +93,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6.282609, y: 15.258856, z: 7.6365614}
-  m_Center: {x: 1.392441, y: 0.0000019073486, z: 0.7734738}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6692104281992852643, guid: 7a8e75ecbd0661b4c8622adb5ca2d73f, type: 3}
