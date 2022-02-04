@@ -131,6 +131,15 @@ namespace L7Games.Utility.Splines
             worldStartPoint = transform.TransformPoint(spline.StartPosition);
             worldEndPoint = transform.TransformPoint(spline.EndPosition);
         }
+        public override Vector3 GetDirection(float t)
+        {
+            return worldEndPoint - worldStartPoint;
+        }
+
+        public override Vector3 GetDirection(float t, float stepDistance)
+        {
+            return worldEndPoint - worldStartPoint;
+        }
         #endregion
         #endregion
     }
