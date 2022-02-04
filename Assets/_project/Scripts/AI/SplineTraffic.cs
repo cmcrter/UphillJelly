@@ -55,6 +55,9 @@ public class SplineTraffic : MonoBehaviour
     [SerializeField]
     [Tooltip("If the object should follow the z position of the spline")]
     private bool followZ = false;
+    [SerializeField]
+    [Tooltip("Spawns a set of GameObjects along the spline as if the spawning has been running for a while")]
+    private bool preSpawnObjects;
 
     [SerializeField]
     [Tooltip("How fast the object will move along the spline")]
@@ -62,6 +65,8 @@ public class SplineTraffic : MonoBehaviour
     [SerializeField] 
     [Tooltip("The amount of time between spawning traffic objects")]
     private float timeBetweenSpawns = 1f;
+
+    private float angleChangeAllowence = 100f;
 
     [SerializeField] 
     [Tooltip("The prefabs that can be spawned to move along the splines")]
@@ -250,28 +255,38 @@ public class SplineTraffic : MonoBehaviour
     /// <summary>
     /// Spawn a weighted randomly selected object to move along the spline
     /// </summary>
-    /// <returns>The game object instantiated during the spawn</returns>
-    private GameObject SpawnObject()
+    /// <returns>The index of the new spawned moving object</returns>
+    private bool TrySpawnObject(out int indexOfSpawn)
     {
+        // Destroy object if it is in use
+        if (objectsMoved[nextFreeIndex].gameObjectMoving != null)
+        {
+            indexOfSpawn = -1;
+            return false;
+        }
         // Reset timer
         spawnTimer = new L7Games.Timer(timeBetweenSpawns);
         // Select and spawn random prefab
         int randomValue = GetWeightedPrefabIndexToSpawn();
         GameObject returnedObject  = GameObject.Instantiate(spawnablePrefabs[randomValue].prefab);
         returnedObject.transform.position = splineInUse.WorldStartPosition;
-        
+
         // Add it to the moved objects
         objectsMoved[nextFreeIndex].gameObjectMoving = returnedObject;
         objectsMoved[nextFreeIndex].upwardsOffset = spawnablePrefabs[randomValue].upwardsOffset;
 
         // Reset the object position
         objectsMoved[nextFreeIndex].currentTValue = 0f;
+        int returnedMovedObjectIndex = nextFreeIndex;
         ++nextFreeIndex;
         if (nextFreeIndex == objectsMoved.Length)
         {
             nextFreeIndex = 0;
         }
-        return returnedObject;
+
+
+        indexOfSpawn = returnedMovedObjectIndex;
+        return true;
     }
 
     /// <summary>
@@ -367,9 +382,24 @@ public class SplineTraffic : MonoBehaviour
                 targetPosition.z = objectsMoved[indexMoved].gameObjectMoving.transform.position.z;
             }
 
+
+
             objectsMoved[indexMoved].gameObjectMoving.transform.position = targetPosition;
             objectsMoved[indexMoved].gameObjectMoving.transform.position += objectsMoved[indexMoved].gameObjectMoving.transform.up * objectsMoved[indexMoved].upwardsOffset;
-            objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue,newTChange);
+            // Check if the new forward is too far from the old forward
+            Quaternion oldRotation = Quaternion.LookRotation(objectsMoved[indexMoved].gameObjectMoving.transform.forward, objectsMoved[indexMoved].gameObjectMoving.transform.up);
+            Quaternion newRotation = Quaternion.LookRotation(splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue, newTChange), objectsMoved[indexMoved].gameObjectMoving.transform.up);
+            float newAngleChange = Quaternion.Angle(Quaternion.LookRotation(objectsMoved[indexMoved].gameObjectMoving.transform.forward, objectsMoved[indexMoved].gameObjectMoving.transform.up),
+                Quaternion.LookRotation(splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue, newTChange), objectsMoved[indexMoved].gameObjectMoving.transform.up));
+
+            if (newAngleChange > angleChangeAllowence * Time.deltaTime)
+            {
+                objectsMoved[indexMoved].gameObjectMoving.transform.rotation = Quaternion.Lerp(oldRotation, newRotation, (angleChangeAllowence * Time.deltaTime) / newAngleChange);
+            }
+            else
+            {
+                objectsMoved[indexMoved].gameObjectMoving.transform.forward = splineInUse.GetDirection(objectsMoved[indexMoved].currentTValue, newTChange);
+            }
         }
         else
         {
@@ -392,8 +422,31 @@ public class SplineTraffic : MonoBehaviour
     private void Start()
     {
         // Set up the object pool to allow for all object that will exist along the spline at once
-        int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt((splineInUse.GetTotalLength() / speed) / timeBetweenSpawns) + 1;
+        int numberOfObjectsThatWillExisitAtOnce = Mathf.CeilToInt(splineInUse.GetTotalLength() / speed / timeBetweenSpawns) + 1;
         objectsMoved = new MovingObject[numberOfObjectsThatWillExisitAtOnce];
+
+        if (preSpawnObjects)
+        {
+            float tDistanceBetweenCars = (speed / splineInUse.GetTotalLength()) * timeBetweenSpawns;
+            for (int i = numberOfObjectsThatWillExisitAtOnce - 1; i > -1; --i)
+            {
+                float tValue = tDistanceBetweenCars * i;
+                if (tValue <= 1f)
+                {
+                    if (TrySpawnObject(out int index))
+                    {
+                        objectsMoved[index].currentTValue = tValue;
+                        objectsMoved[index].gameObjectMoving.transform.forward = splineInUse.GetDirection(objectsMoved[index].currentTValue);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+            }
+        }
+
         // Start the spawn timer 
         spawnTimer = new L7Games.Timer(timeBetweenSpawns);
         spawnTimer.isActive = true;
@@ -405,7 +458,7 @@ public class SplineTraffic : MonoBehaviour
         spawnTimer.Tick(Time.deltaTime);
         if (!spawnTimer.isActive)
         {
-            SpawnObject();
+            TrySpawnObject(out int index);
         }
         UpdateTIncrement();
         for (int i = 0; i < objectsMoved.Length; ++i)

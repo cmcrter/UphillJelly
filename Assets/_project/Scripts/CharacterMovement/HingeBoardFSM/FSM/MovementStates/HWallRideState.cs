@@ -12,6 +12,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
+using L7Games.Input;
 
 namespace L7Games.Movement
 {
@@ -20,6 +21,7 @@ namespace L7Games.Movement
     {
         private PlayerHingeMovementController playerMovement;
         private PlayerInput pInput;
+        private InputHandler inputManager;
         private Rigidbody fRB;
         private Rigidbody bRB;
 
@@ -48,6 +50,7 @@ namespace L7Games.Movement
         {
             playerMovement = controllerParent;
             pInput = controllerParent.input;
+            inputManager = controllerParent.inputHandler;
             fRB = frontRB;
             bRB = backRB;
             nextToWallRun = wallRun;
@@ -67,6 +70,18 @@ namespace L7Games.Movement
             }
 
             return this;
+        }
+
+        public void RegisterInputs()
+        {
+            //Register functions
+            inputManager.wallRidingJumpUpAction += JumpOffWallRide;          
+        }
+
+        public void UnRegisterInputs()
+        {
+            //Unregister functions
+            inputManager.wallRidingJumpUpAction -= JumpOffWallRide;
         }
 
         //Ticking the state along this frame and passing in the deltaTime
@@ -90,6 +105,7 @@ namespace L7Games.Movement
             rideSpeed = nextToWallRun.wallSpeed;
 
             playerMovement.transform.forward = wallForward;
+            playerMovement.transform.right = nextToWallRun.currentWallRide.transform.forward;
             playerMovement.AlignWheels();
             playerMovement.ResetWheelPos();
 
@@ -113,6 +129,7 @@ namespace L7Games.Movement
             }
 
             nextToWallRun.StartCooldown();
+
 
             fRB.isKinematic = false;
             bRB.isKinematic = false;
@@ -145,6 +162,17 @@ namespace L7Games.Movement
             bRB.isKinematic = false;
 
             Co_CoyoteCoroutine = null;
+        }
+
+        private void JumpOffWallRide()
+        {
+            Debug.Log("Jumping off wall ride");
+
+            fRB.isKinematic = false;
+            bRB.isKinematic = false;
+
+            fRB.AddForce((playerMovement.transform.up * 500f) + (playerMovement.transform.right * 950), ForceMode.Impulse);
+            playerMovement.StartAirInfluenctCoroutine();
         }
 
         #endregion

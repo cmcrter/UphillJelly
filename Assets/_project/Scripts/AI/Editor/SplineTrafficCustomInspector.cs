@@ -50,6 +50,10 @@ namespace L7Games.CustomInspectors
         /// The amount of time between spawning traffic objects
         /// </summary>
         private SerializedProperty timeBetweenSpawns;
+        /// <summary>
+        /// The amount of time between spawning traffic objects
+        /// </summary>
+        private SerializedProperty preSpawnObjects;
 
         /// <summary>
         /// The component this is inspecting
@@ -72,6 +76,7 @@ namespace L7Games.CustomInspectors
             timeBetweenSpawns = serializedObject.FindProperty("timeBetweenSpawns");
             splineInUse = serializedObject.FindProperty("splineInUse");
             spawnablePrefabs = serializedObject.FindProperty("spawnablePrefabs");
+            preSpawnObjects = serializedObject.FindProperty("preSpawnObjects");
         }
 
         public override void OnInspectorGUI()
@@ -86,6 +91,8 @@ namespace L7Games.CustomInspectors
             EditorGUILayout.PropertyField(followX);
             EditorGUILayout.PropertyField(followY);
             EditorGUILayout.PropertyField(followZ);
+
+            EditorGUILayout.PropertyField(preSpawnObjects);
 
             EditorGUILayout.PropertyField(speed);
             EditorGUILayout.PropertyField(timeBetweenSpawns);
