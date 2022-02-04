@@ -49,31 +49,31 @@ namespace L7Games.Movement
 
             // Calculate the roll
             // Find the angles between the width raycasts
-            float frontAngle = CalculateSignedSlopeAngle(frontRightHit.point, frontLeftHit.point, Vector3.back); //Vector3.SignedAngle(Vector3.right, frontRightHit.point - frontLeftHit.point, Vector3.back);
+            float frontAngle = Vector3.SignedAngle(Vector3.right, frontRightHit.point - frontLeftHit.point, Vector3.forward);
+            //linesToDraw.Add(new LineToDraw(frontRightHit.point, frontLeftHit.point, Color.white));
+            float backAngle = Vector3.SignedAngle(Vector3.right, backRightHit.point - backLeftHit.point, Vector3.forward);
+            //linesToDraw.Add(new LineToDraw(backLeftHit.point, backRightHit.point, Color.white));
+
+            frontAngle = CalculateSignedSlopeAngle(frontLeftHit.point, frontRightHit.point, Vector3.up, true);
             linesToDraw.Add(new LineToDraw(frontRightHit.point, frontLeftHit.point, Color.white));
-            float backAngle = CalculateSignedSlopeAngle(backLeftHit.point, backRightHit.point, Vector3.back);//Vector3.SignedAngle(Vector3.right, backRightHit.point - backLeftHit.point, Vector3.back);
+            backAngle = CalculateSignedSlopeAngle(backLeftHit.point, backRightHit.point, Vector3.up, true);
             linesToDraw.Add(new LineToDraw(backLeftHit.point, backRightHit.point, Color.white));
-            // Use the smallest unsigned value
+            // Use the largest unsigned value
             float unsignedFrontAngle = frontAngle < 0f ? frontAngle * -1f : frontAngle;
             float unsignedBackAngle = backAngle < 0f ? backAngle * -1f : backAngle;
-
-            float roll = unsignedFrontAngle < unsignedBackAngle ? frontAngle : backAngle;
+            float roll = unsignedFrontAngle > unsignedBackAngle ? frontAngle : backAngle;
 
             // Calculate the pitch
-            // Find the angles between the width raycasts
-            float leftAngle = CalculateSignedSlopeAngle(frontLeftHit.point, backLeftHit.point, Vector3.up);
-            linesToDraw.Add(new LineToDraw(frontLeftHit.point, backLeftHit.point, Color.white));
-            float rightAngle = CalculateSignedSlopeAngle(frontRightHit.point, backRightHit.point, Vector3.up);
-            linesToDraw.Add(new LineToDraw(frontRightHit.point, backRightHit.point, Color.white));
+            // Find the angles between the length raycasts
+            float leftAngle = CalculateSignedSlopeAngle(frontLeftHit.point, backLeftHit.point, Vector3.up, false);
+            //linesToDraw.Add(new LineToDraw(frontLeftHit.point, backLeftHit.point, Color.white));
+            float rightAngle = CalculateSignedSlopeAngle(frontRightHit.point, backRightHit.point, Vector3.up, false);
+            //linesToDraw.Add(new LineToDraw(frontRightHit.point, backRightHit.point, Color.white));
             // Use the smallest unsigned value
             float unsignedLeftAngle = leftAngle < 0f ? leftAngle * -1f : leftAngle;
             float unsignedRightAngle = rightAngle < 0f ? rightAngle * -1f : rightAngle;
-            // Use the smallest
-            float pitch = unsignedLeftAngle < unsignedRightAngle ? leftAngle : rightAngle;
+            float pitch = unsignedLeftAngle > unsignedRightAngle ? leftAngle : rightAngle;
             transform.rotation = Quaternion.Euler(new Vector3(pitch, transform.rotation.eulerAngles.y, roll));
-
-            Debug.Log(frontAngle);
-            Debug.Log(backAngle);
             // Fronts
         }
 
@@ -91,13 +91,20 @@ namespace L7Games.Movement
             linesToDraw.Clear();
         }
 
-        private float CalculateSignedSlopeAngle(Vector3 startingPoint, Vector3 endPoint, Vector3 flatPlaneNormal)
+        private float CalculateSignedSlopeAngle(Vector3 startingPoint, Vector3 endPoint, Vector3 flatPlaneNormal, bool drawLines)
         {
             Vector3 slopeVector = endPoint - startingPoint;
             Vector3 flatVector = Vector3.ProjectOnPlane(slopeVector, flatPlaneNormal).normalized;
-            linesToDraw.Add(new LineToDraw(startingPoint, startingPoint + flatVector, Color.green));
+            if (drawLines)
+            {
+                linesToDraw.Add(new LineToDraw(startingPoint, startingPoint + flatVector, Color.green));
+            }
+
             Vector3 rightFlatVector = Vector3.Cross(flatVector, flatPlaneNormal).normalized;
-            linesToDraw.Add(new LineToDraw(startingPoint, startingPoint + rightFlatVector, Color.red));
+            if (drawLines)
+            {
+                linesToDraw.Add(new LineToDraw(startingPoint, startingPoint + rightFlatVector, Color.red));
+            }
             return  Vector3.SignedAngle(flatVector, slopeVector, rightFlatVector);
         }
     }
