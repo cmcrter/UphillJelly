@@ -21,6 +21,9 @@ namespace SleepyCat
     {
 
         //
+        public ReplaySaveManager replaySaveManager;
+
+        //
         public TempScoreSystem tempScoreSystem;
 
         //
@@ -152,22 +155,39 @@ namespace SleepyCat
         //
         public void SendLeaderBoards() {
 
+            if (replaySaveManager.isMapTutorial) {
+
+                //
+                SendTutorialScoreLeaderBoard(score);
+
+                //
+                SendTutorialTimeLeaderBoard(time);
+
+                //
+                SendTutorialKOsLeaderBoard(KOs);
+
+            }
+
+            if (replaySaveManager.isMapCity) {
+
+                //
+                SendCityScoreLeaderBoard(score);
+
+                //
+                SendCityTimeLeaderBoard(time);
+
+                //
+                SendCityKOsLeaderBoard(KOs);
+
+            }
 
 
-            //
-            SendScoreLeaderBoard(score);
-
-            //
-            SendTimeLeaderBoard(time);
-
-            //
-            SendKOsLeaderBoard(KOs);
 
         }
 
-        /*
+
         //
-        public void SendPlayerNameLeaderBoard(Text playerName) {
+        public void SendTutorialScoreLeaderBoard(int score) {
 
             //
             var request = new UpdatePlayerStatisticsRequest {
@@ -179,38 +199,7 @@ namespace SleepyCat
                     new StatisticUpdate {
 
                         //
-                        StatisticName = "playerName",
-
-                        //
-                        Value = playerName,
-
-                    }
-
-                }
-
-
-            };
-
-            //
-            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
-        }
-        */
-
-        //
-        public void SendScoreLeaderBoard(int score) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "Score",
+                        StatisticName = "Tutorial_Score",
 
                         //
                         Value = score,
@@ -228,7 +217,7 @@ namespace SleepyCat
         }
 
         //
-        public void SendTimeLeaderBoard(int time) {
+        public void SendCityScoreLeaderBoard(int score) {
 
             //
             var request = new UpdatePlayerStatisticsRequest {
@@ -240,13 +229,40 @@ namespace SleepyCat
                     new StatisticUpdate {
 
                         //
-                        StatisticName = "Time",
+                        StatisticName = "City_Score",
+
+                        //
+                        Value = score,
+
+                    }
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+
+        //
+        public void SendTutorialTimeLeaderBoard(int time) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "Tutorial_Time",
 
                         //
                         Value = time,
-
-                        //
-                        
 
                     }
 
@@ -262,7 +278,7 @@ namespace SleepyCat
         }
 
         //
-        public void SendKOsLeaderBoard(int KOs) {
+        public void SendCityTimeLeaderBoard(int time) {
 
             //
             var request = new UpdatePlayerStatisticsRequest {
@@ -274,7 +290,69 @@ namespace SleepyCat
                     new StatisticUpdate {
 
                         //
-                        StatisticName = "KOs",
+                        StatisticName = "City_Time",
+
+                        //
+                        Value = time,
+
+                    }
+
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+
+        //
+        public void SendTutorialKOsLeaderBoard(int KOs) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "Tutorial_KOs",
+
+                        //
+                        Value = KOs,
+
+                    }
+
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+
+        //
+        public void SendCityKOsLeaderBoard(int KOs) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "City_KOs",
 
                         //
                         Value = KOs,
@@ -304,58 +382,91 @@ namespace SleepyCat
         //
         public void GetLeaderBoard() {
 
-            /*
-            //
-            var Namerequest = new GetLeaderboardRequest {
+            if (replaySaveManager.isMapTutorial) {
 
                 //
-                StatisticName = "playerName",
-                StartPosition = 0 //,
-                //MaxResultsCount = 3,
+                var TutorialScorerequest = new GetLeaderboardRequest {
 
-            };
-            */
+                    //
+                    StatisticName = "Tutorial_Score",
+                    StartPosition = 0 //,
+                                      //MaxResultsCount = 3,
 
-            //
-            var Scorerequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "Score",
-                StartPosition = 0 //,
-                //MaxResultsCount = 3,
-
-            };
-
-            //
-            var Timerequest = new GetLeaderboardRequest {
+                };
 
                 //
-                StatisticName = "Time",
-                //StartPosition = 0 //,
-                //MaxResultsCount = 3,
+                var TutorialTimerequest = new GetLeaderboardRequest {
 
-            };
+                    //
+                    StatisticName = "Tutorial_Time",
+                    //StartPosition = 0 //,
+                    //MaxResultsCount = 3,
 
-            //
-            var KOsrequest = new GetLeaderboardRequest {
+                };
 
                 //
-                StatisticName = "KOs",
-                StartPosition = 0 //,
-                //MaxResultsCount = 3,
+                var TutorialKOsrequest = new GetLeaderboardRequest {
 
-            };
+                    //
+                    StatisticName = "Tutorial_KOs",
+                    StartPosition = 0 //,
+                                      //MaxResultsCount = 3,
 
+                };
 
+                //
+                PlayFabClientAPI.GetLeaderboard(TutorialScorerequest, OnLeaderBoardGet, OnError);
 
-            //
-            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError);
+                //
+                PlayFabClientAPI.GetLeaderboard(TutorialTimerequest, OnLeaderBoardGet, OnError);
 
-            //
-            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError);
+                //
+                PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
 
-            //
-            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError);
+            }
+
+            if (replaySaveManager.isMapCity) {
+
+                //
+                var CityScorerequest = new GetLeaderboardRequest {
+
+                    //
+                    StatisticName = "City_Score",
+                    StartPosition = 0 //,
+                                      //MaxResultsCount = 3,
+
+                };
+
+                //
+                var CityTimerequest = new GetLeaderboardRequest {
+
+                    //
+                    StatisticName = "City_Time",
+                    //StartPosition = 0 //,
+                    //MaxResultsCount = 3,
+
+                };
+
+                //
+                var CityKOsrequest = new GetLeaderboardRequest {
+
+                    //
+                    StatisticName = "City_KOs",
+                    StartPosition = 0 //,
+                                      //MaxResultsCount = 3,
+
+                };
+
+                //
+                PlayFabClientAPI.GetLeaderboard(CityScorerequest, OnLeaderBoardGet, OnError);
+
+                //
+                PlayFabClientAPI.GetLeaderboard(CityTimerequest, OnLeaderBoardGet, OnError);
+
+                //
+                PlayFabClientAPI.GetLeaderboard(CityKOsrequest, OnLeaderBoardGet, OnError);
+
+            }
 
         }
 
