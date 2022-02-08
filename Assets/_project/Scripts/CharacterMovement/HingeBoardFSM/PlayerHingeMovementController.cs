@@ -130,14 +130,33 @@ namespace L7Games.Movement
             Quaternion headingDelta = Quaternion.identity;
             Quaternion groundQuat = transform.rotation;
 
-            if (groundBelow.FrontRightGroundHit.collider && groundBelow.BackRightGroundHit.collider)
+            // Check which ray-casts should be used by getting the angle distance between the normals
+            RaycastHit frontLeftHitToUse = groundBelow.FrontLeftGroundHitLocalDown;
+            RaycastHit frontRightHitToUse = groundBelow.FrontRightGroundHitLocalDown;
+            RaycastHit backLeftHitToUse = groundBelow.BackLeftGroundHitLocalDown;
+            RaycastHit backRightHitToUse = groundBelow.BackRightGroundHitLocalDown;
+
+            float localLeftAngle = Vector3.Angle(groundBelow.FrontLeftGroundHitLocalDown.normal, groundBelow.BackLeftGroundHitLocalDown.normal);
+            float localRightAngle = Vector3.Angle(groundBelow.FrontRightGroundHitLocalDown.normal, groundBelow.BackRightGroundHitLocalDown.normal);
+            float greatestLocalAngle = localLeftAngle > localRightAngle ? localLeftAngle : localRightAngle;
+
+            if (bAerial)
             {
-                Vector3 upright = Vector3.Cross(transform.right, -(groundBelow.FrontRightGroundHit.point - groundBelow.BackRightGroundHit.point).normalized);
+                frontLeftHitToUse =     groundBelow.FrontLeftGroundHitWorldDown;
+                frontRightHitToUse =    groundBelow.FrontRightGroundHitWorldDown;
+                backLeftHitToUse =      groundBelow.BackLeftGroundHitWorldDown;
+                backRightHitToUse =     groundBelow.BackRightGroundHitWorldDown;
+            }
+
+
+            if (frontRightHitToUse.collider && backRightHitToUse.collider)
+            {
+                Vector3 upright = Vector3.Cross(transform.right, -(frontRightHitToUse.point - backRightHitToUse.point).normalized);
 
                 // Calculate the roll
                 // Find the angles between the width raycasts
-                float frontAngle = CalculateSignedSlopeAngle(groundBelow.FrontLeftGroundHit.point, groundBelow.FrontRightGroundHit.point, Vector3.up);
-                float backAngle = CalculateSignedSlopeAngle(groundBelow.BackLeftGroundHit.point, groundBelow.BackRightGroundHit.point, Vector3.up);
+                float frontAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, frontRightHitToUse.point, Vector3.up);
+                float backAngle = CalculateSignedSlopeAngle(backLeftHitToUse.point, backRightHitToUse.point, Vector3.up);
                 // Use the largest unsigned value
                 float unsignedFrontAngle = frontAngle < 0f ? frontAngle * -1f : frontAngle;
                 float unsignedBackAngle = backAngle < 0f ? backAngle * -1f : backAngle;
@@ -145,9 +164,9 @@ namespace L7Games.Movement
 
                 // Calculate the pitch
                 // Find the angles between the length raycasts
-                float leftAngle = CalculateSignedSlopeAngle(groundBelow.FrontLeftGroundHit.point, groundBelow.BackLeftGroundHit.point, Vector3.up);
+                float leftAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, backLeftHitToUse.point, Vector3.up);
                 //linesToDraw.Add(new LineToDraw(frontLeftHit.point, backLeftHit.point, Color.white));
-                float rightAngle = CalculateSignedSlopeAngle(groundBelow.FrontRightGroundHit.point, groundBelow.BackRightGroundHit.point, Vector3.up);
+                float rightAngle = CalculateSignedSlopeAngle(frontRightHitToUse.point, backRightHitToUse.point, Vector3.up);
                 //linesToDraw.Add(new LineToDraw(frontRightHit.point, backRightHit.point, Color.white));
                 // Use the smallest unsigned value
                 float unsignedLeftAngle = leftAngle < 0f ? leftAngle * -1f : leftAngle;
@@ -157,11 +176,11 @@ namespace L7Games.Movement
 
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawRay(bRB.transform.position, -(groundBelow.FrontRightGroundHit.point - groundBelow.BackRightGroundHit.point).normalized, Color.green);
+                    Debug.DrawRay(bRB.transform.position, -(frontRightHitToUse.point - backRightHitToUse.point).normalized, Color.green);
                     Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
                     Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
-                    Debug.DrawRay(groundBelow.FrontRightGroundHit.point, groundBelow.FrontRightGroundHit.normal, Color.cyan);
-                    Debug.DrawRay(groundBelow.BackRightGroundHit.point, groundBelow.BackRightGroundHit.normal, Color.cyan);
+                    Debug.DrawRay(frontRightHitToUse.point, frontRightHitToUse.normal, Color.cyan);
+                    Debug.DrawRay(backRightHitToUse.point, backRightHitToUse.normal, Color.cyan);
                 }
 
                 float angle = Quaternion.Angle(newRotation, Quaternion.LookRotation(transform.forward, transform.up).normalized);
@@ -238,6 +257,8 @@ namespace L7Games.Movement
 
         private void Start()
         {
+
+
             initalPos = transform.position;
             initialRot = transform.rotation;
             fRB.transform.parent = null;
@@ -248,6 +269,15 @@ namespace L7Games.Movement
 
         private void Update()
         {
+            if (UnityEngine.InputSystem.Keyboard.current.yKey.isPressed)
+            {
+                Time.timeScale -= 0.1f * Time.unscaledDeltaTime;
+            }
+            else if (UnityEngine.InputSystem.Keyboard.current.uKey.isPressed)
+            {
+                Time.timeScale += 0.1f * Time.unscaledDeltaTime;
+            }
+
             playerStateMachine.RunMachine(Time.deltaTime);
 
             if (Keyboard.current != null)
