@@ -184,6 +184,26 @@ using L7Games.Utility.Splines;
     {
         UpdateSplines();
     }
+
+    public override Vector3 GetDirection(float t)
+    {
+        int index = GetIndexOfSplineAtT(t, out float splineTValue);
+        if (index > -1)
+        {
+            return containedSplines[index].GetDirection(splineTValue);
+        }
+        return base.GetDirection(t);
+    }
+
+    public override Vector3 GetDirection(float t, float stepDistance)
+    {
+        int index = GetIndexOfSplineAtT(t, out float splineTValue);
+        if (index > -1)
+        {
+            return containedSplines[index].GetDirection(splineTValue, stepDistance);
+        }
+        return base.GetDirection(t, stepDistance);
+    }
     #endregion
 
     /// <summary>
@@ -193,6 +213,91 @@ using L7Games.Utility.Splines;
     public int GetNumberOfSplines()
     {
         return containedSplines.Count;
+    }
+
+    public int GetIndexOfSplineAtT(float t)
+    {
+        // Ensuring t is a unit interval
+        t = Mathf.Clamp01(t);
+
+        // Using t to find the length along the spline sequence to aim for
+        float targetLength = totalLength * t;
+
+        for (int index = 0; index < containedSplines.Count; ++index)
+        {
+            if (containedSplines[index] != null)
+            {
+                float sectionDistance = containedSplines[index].GetTotalLength();
+                // Checking if the target length shorter than this spline
+                if (targetLength - sectionDistance < 0f)
+                {
+                    return index;
+                }
+                // Otherwise remove of the length of the section from the target length
+                else
+                {
+                    targetLength -= sectionDistance;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("A spline was null when getting length based point", gameObject);
+            }
+        }
+        // Return the end point of the last spline if the target length was not within any of the splines
+        if (containedSplines.Count > 0)
+        {
+            return containedSplines.Count - 1;
+        }
+        else
+        {
+            Debug.LogError("SplineSequence contained no splines when GetLengthBasedPoint was called", gameObject);
+            return -1;
+        }
+    }
+
+    public int GetIndexOfSplineAtT(float t, out float tOnSpline)
+    {
+        // Ensuring t is a unit interval
+        t = Mathf.Clamp01(t);
+
+        // Using t to find the length along the spline sequence to aim for
+        float targetLength = totalLength * t;
+
+        for (int index = 0; index < containedSplines.Count; ++index)
+        {
+            if (containedSplines[index] != null)
+            {
+                float sectionDistance = containedSplines[index].GetTotalLength();
+                // Checking if the target length shorter than this spline
+                if (targetLength - sectionDistance < 0f)
+                {
+                    tOnSpline = targetLength / sectionDistance;
+                    return index; 
+                }
+                // Otherwise remove of the length of the section from the target length
+                else
+                {
+                    targetLength -= sectionDistance;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("A spline was null when getting length based point", gameObject);
+            }
+        }
+        // Return the end point of the last spline if the target length was not within any of the splines
+        if (containedSplines.Count > 0)
+        {
+            tOnSpline = 1f;
+            return containedSplines.Count - 1;
+        }
+        else
+        {
+            Debug.LogError("SplineSequence contained no splines when GetLengthBasedPoint was called", gameObject);
+            tOnSpline = -1f;
+            return -1;
+        }
     }
 
     /// <summary>
