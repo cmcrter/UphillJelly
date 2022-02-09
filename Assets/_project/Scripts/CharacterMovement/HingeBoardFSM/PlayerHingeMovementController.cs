@@ -58,6 +58,8 @@ namespace L7Games.Movement
         private Transform frontWheelPos;
         [SerializeField]
         private Transform backWheelPos;
+        [SerializeField]
+        private GameObject characterModel;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
@@ -278,6 +280,11 @@ namespace L7Games.Movement
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
 
+            else if (UnityEngine.InputSystem.Keyboard.current.oKey.isPressed)
+            {
+                WipeOut(fRB.velocity);
+            }
+
             playerStateMachine.RunMachine(Time.deltaTime);
 
             if (Keyboard.current != null)
@@ -302,6 +309,14 @@ namespace L7Games.Movement
             {
                 fRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
                 bRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.relativeVelocity.magnitude > 20f)
+            {
+                WipeOut(collision.relativeVelocity);
             }
         }
         #endregion
@@ -354,6 +369,23 @@ namespace L7Games.Movement
             {
                 StopCoroutine(AirturningCo);
             }
+        }
+
+        public void WipeOut(Vector3 currentVelocity)
+        {
+            characterModel.transform.parent = null;
+            Rigidbody[] rigidbodiesToEnable = characterModel.GetComponentsInChildren<Rigidbody>();
+            for (int i = 0; i < rigidbodiesToEnable.Length; ++i)
+            {
+                rigidbodiesToEnable[i].isKinematic = false;
+            }
+            Collider[] collidersToEnable = characterModel.GetComponentsInChildren<Collider>();
+            for (int i = 0; i < rigidbodiesToEnable.Length; ++i)
+            {
+                collidersToEnable[i].enabled = true;
+            }
+            playerCamera.target = characterModel.transform;
+            rigidbodiesToEnable[0].AddForce(currentVelocity, ForceMode.Impulse);
         }
 
         #endregion
