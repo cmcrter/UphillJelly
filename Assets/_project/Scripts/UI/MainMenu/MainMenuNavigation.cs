@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenuNavigation : MonoBehaviour
 {
@@ -51,10 +52,10 @@ public class MainMenuNavigation : MonoBehaviour
 
     [Header("Options Variables")]
     public AudioMixer audioMixer;
-    public Dropdown resolutionDropdown;
-    public Dropdown qualityDropdown;
-    public Dropdown textureDropdown;
-    public Dropdown aaDropdown;
+    public TMP_Dropdown resolutionDropdown;
+    public TMP_Dropdown qualityDropdown;
+    public TMP_Dropdown textureDropdown;
+    public TMP_Dropdown aaDropdown;
     public Slider volumeSlider;
     private float currentVolume;
     Resolution[] resolutions;
@@ -107,6 +108,7 @@ public class MainMenuNavigation : MonoBehaviour
 
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.RefreshShownValue();
+        SetResolution(currentResolutionIndex);
     }
 
     private void OnEnable()
