@@ -18,6 +18,26 @@ namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
+        public struct Bones
+        {
+            public Vector3 position;
+            public Quaternion rotation;
+            public Vector3 scale;
+            public GameObject gameObject;
+            public Collider collider;
+            public Rigidbody rigidbody;
+
+            public Bones(Vector3 position, Quaternion rotation, Vector3 scale, GameObject gameObject, Collider collider, Rigidbody rigidbody)
+            {
+                this.position = position;
+                this.rotation = rotation;
+                this.scale = scale;
+                this.gameObject = gameObject;
+                this.collider = collider;
+                this.rigidbody = rigidbody;
+            }
+        }
+
         #region Variables
 
         [Header("State Machine")]
@@ -75,6 +95,12 @@ namespace L7Games.Movement
         public AnimationCurve turnSpeedCurve;
         public float turnClamp = 0.575f;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public HumanoidCollisionHandler humanoidCollision;
+
+        System.Collections.Generic.List<Bones> characterInitalBones;
         #endregion
 
         #region Public Methods
@@ -95,6 +121,8 @@ namespace L7Games.Movement
 
             transform.rotation = initialRot;
             transform.position = initalPos;
+
+            ResetRagdollToCharacter();
 
             ResetWheelPos();
             AlignWheels();
@@ -118,6 +146,8 @@ namespace L7Games.Movement
 
             transform.rotation = point.rotation;
             transform.position = point.position;
+
+            ResetRagdollToCharacter();
 
             ResetWheelPos();
             AlignWheels();
@@ -248,25 +278,31 @@ namespace L7Games.Movement
             groundedState.RegisterInputs();
             grindingState.RegisterInputs();
             wallRideState.RegisterInputs();
+
+            humanoidCollision.lethalCollisionDetected += HumanoidCollision_lethalCollisionDetected;
         }
+
+
 
         private void OnDisable()
         {
             groundedState.UnRegisterInputs();
             grindingState.UnRegisterInputs();
             wallRideState.UnRegisterInputs();
+
+            humanoidCollision.lethalCollisionDetected -= HumanoidCollision_lethalCollisionDetected;
         }
 
         private void Start()
         {
-
-
             initalPos = transform.position;
             initialRot = transform.rotation;
             fRB.transform.parent = null;
 
             //Setting up model position
             playerModel.transform.position = new Vector3(boardObject.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), boardObject.transform.position.z);
+
+            characterInitalBones = GetBonesFromObject(characterModel);
         }
 
         private void Update()
@@ -314,14 +350,15 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.relativeVelocity.magnitude > 20f)
-            {
-                WipeOut(collision.relativeVelocity);
-            }
+            //if (collision.relativeVelocity.magnitude > 20f)
+            //{
+            //    WipeOut(collision.relativeVelocity);
+            //}
         }
         #endregion
 
         #region Public Methods
+
 
         //A few utility functions
         public override void MoveToPosition(Vector3 positionToMoveTo)
@@ -374,18 +411,23 @@ namespace L7Games.Movement
         public void WipeOut(Vector3 currentVelocity)
         {
             characterModel.transform.parent = null;
-            Rigidbody[] rigidbodiesToEnable = characterModel.GetComponentsInChildren<Rigidbody>();
-            for (int i = 0; i < rigidbodiesToEnable.Length; ++i)
+            for (int i = 0; i < characterInitalBones.Count; ++i)
             {
-                rigidbodiesToEnable[i].isKinematic = false;
+                if (!characterInitalBones[i].gameObject.CompareTag("WipeOutCollider"))
+                {
+                    if (characterInitalBones[i].collider != null)
+                    {
+                        characterInitalBones[i].collider.enabled = true;
+                    }
+                    if (characterInitalBones[i].rigidbody != null)
+                    {
+                        characterInitalBones[i].rigidbody.isKinematic = false;
+                        characterInitalBones[i].rigidbody.AddForce(currentVelocity * 0.4f, ForceMode.Impulse);
+                    }
+                }
             }
-            Collider[] collidersToEnable = characterModel.GetComponentsInChildren<Collider>();
-            for (int i = 0; i < rigidbodiesToEnable.Length; ++i)
-            {
-                collidersToEnable[i].enabled = true;
-            }
-            playerCamera.target = characterModel.transform;
-            rigidbodiesToEnable[0].AddForce(currentVelocity, ForceMode.Impulse);
+            playerCamera.target = characterModel.GetComponentInChildren<Rigidbody>().transform;
+            //rigidbodiesToEnable[0].AddForce(currentVelocity, ForceMode.Impulse);
         }
 
         #endregion
@@ -484,6 +526,66 @@ namespace L7Games.Movement
             Vector3 flatVector = Vector3.ProjectOnPlane(slopeVector, flatPlaneNormal).normalized;
             Vector3 rightFlatVector = Vector3.Cross(flatVector, flatPlaneNormal).normalized;
             return Vector3.SignedAngle(flatVector, slopeVector, rightFlatVector);
+        }
+
+        private void HumanoidCollision_lethalCollisionDetected(Vector3 direction)
+        {
+            if (fRB.velocity.magnitude > 0f)
+            {
+                WipeOut(fRB.velocity);
+            }
+        }
+
+        private void ResetRagdollToCharacter()
+        {
+            characterModel.transform.parent = playerModel.transform;
+
+            // Get the bones in current state
+            System.Collections.Generic.List<Bones> characterBones = GetBonesFromObject(characterModel);
+            // Get the bones in current state
+            System.Collections.Generic.List<Bones> intialBones = new System.Collections.Generic.List<Bones>(characterInitalBones);
+            // rest positions
+            for (int i = 0; i < characterBones.Count; ++i)
+            {
+                for (int j = 0; j < intialBones.Count; ++j)
+                {
+                    if (characterBones[i].gameObject == intialBones[j].gameObject)
+                    {   
+                        if (!characterBones[i].gameObject.CompareTag("WipeOutCollider"))
+                        {
+                            if (characterBones[i].collider != null)
+                            {
+                                characterBones[i].collider.enabled = false;
+                            }
+                            if (characterBones[i].rigidbody != null)
+                            {
+                                characterBones[i].rigidbody.isKinematic = true;
+                            }
+                        }
+                        characterBones[i].gameObject.transform.localPosition = intialBones[j].position;
+                        characterBones[i].gameObject.transform.localRotation = intialBones[j].rotation;
+                        characterBones[i].gameObject.transform.localScale = intialBones[j].scale;
+                        intialBones.RemoveAt(j);
+                        break;
+                    }
+
+                }
+            }
+
+            // Get a list of all the bones
+            playerCamera.target = boardObject.transform;
+        }
+
+        private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
+        {
+            System.Collections.Generic.List<Bones> characterBones = new System.Collections.Generic.List<Bones>();
+            characterBones.Add(new Bones(currentObject.transform.localPosition, currentObject.transform.localRotation, currentObject.transform.localScale,
+                currentObject, currentObject.GetComponent<Collider>(), currentObject.GetComponent<Rigidbody>()));
+            for (int i = 0; i < currentObject.transform.childCount; ++i)
+            {
+                characterBones.AddRange(GetBonesFromObject(currentObject.transform.GetChild(i).gameObject));
+            }
+            return characterBones;
         }
         #endregion
     }

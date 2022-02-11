@@ -1,9 +1,9 @@
 //================================================================================================================================================================================================================================================================================================================================================
-// File: HumanoidCollisionHandler.cs
-// Author: Matthew Mason
-// Date Created: 09/02/22
-// Last Edited By: Matthew Mason
-// Date Last Edited: 09/02/22
+// File:                HumanoidCollisionHandler.cs
+// Author:              Matthew Mason
+// Date Created:        09/02/22
+// Last Edited By:      Matthew Mason
+// Date Last Edited:    11/02/22
 // Brief: Used to detected collisions against the humanoid portion of the controller
 //================================================================================================================================================================================================================================================================================================================================================
 
@@ -19,20 +19,19 @@ public class HumanoidCollisionHandler : MonoBehaviour
     /// </summary>
     public event System.Action<Vector3> lethalCollisionDetected;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if (lethalCollisionDetected != null)
+        {
+            // Get the average diection of the collsion
+            Vector3 avaerageDirection = Vector3.zero;
+            ContactPoint[] contactPoints = new ContactPoint[0];
+            int numberOfContacts = collision.GetContacts(contactPoints);
+            for (int i = 0; i < numberOfContacts; ++i)
+            {
+                avaerageDirection += (contactPoints[i].point - contactPoints[i].thisCollider.transform.position).normalized;
+            }
+            lethalCollisionDetected(avaerageDirection.normalized);
+        }
     }
 }
