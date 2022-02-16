@@ -22,6 +22,9 @@ public class MainMenuPoint : MonoBehaviour
     //Point to go back to on cancel
     public MainMenuPoint BackPoint;
 
+    //Starting element for controller
+    public GameObject FirstSelected;
+
     //Points to navigate to (Buttons may also do this themselves)
     public MainMenuPoint LeftPoint;
     public MainMenuPoint RightPoint;
@@ -63,6 +66,12 @@ public class MainMenuPoint : MonoBehaviour
     #endregion
 
     #region Public Methods
+
+    public void ControllerOnItem()
+    {
+        
+    }
+
     #endregion
 
     #region Private Methods

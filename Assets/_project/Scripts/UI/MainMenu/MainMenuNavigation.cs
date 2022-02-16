@@ -14,6 +14,7 @@ using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class MainMenuNavigation : MonoBehaviour
 {
@@ -30,6 +31,9 @@ public class MainMenuNavigation : MonoBehaviour
     private MainMenuPoint currentPoint;
     [SerializeField]
     private PlayerInput playerInput;
+
+    [SerializeField]
+    private EventSystem eventSystem;
 
     private Coroutine coLerp;
     private Coroutine coIdle;
@@ -328,6 +332,11 @@ public class MainMenuNavigation : MonoBehaviour
 
         //Updating the state variable
         currentPoint = nextPoint;
+
+        if(eventSystem != null)
+        {
+            eventSystem.SetSelectedGameObject(currentPoint.FirstSelected);
+        }
 
         //Starting to Idle
         StartIdle();
