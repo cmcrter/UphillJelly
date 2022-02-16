@@ -1492,6 +1492,7 @@ MonoBehaviour:
   inputHandler: {fileID: 110903324889457856}
   frontWheelPos: {fileID: 950876112857626104}
   backWheelPos: {fileID: 6617951465868245079}
+  characterModel: {fileID: 2484446047872260302}
   AdditionalGravityAmount: 6
   bAddAdditionalGravity: 1
   turnSpeedCurve:
@@ -1519,6 +1520,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   turnClamp: 0.8
+  humanoidCollision: {fileID: 0}
+  ragDollPrefab: {fileID: 7367362300741080145, guid: 7bc384b3643dc5345b68ffbf5bd47544, type: 3}
 --- !u!114 &6587126617156609396
 MonoBehaviour:
   m_ObjectHideFlags: 0
