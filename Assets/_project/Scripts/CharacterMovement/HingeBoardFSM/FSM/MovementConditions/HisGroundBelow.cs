@@ -162,7 +162,7 @@ namespace L7Games.Movement
             }
 
             //This hit may still be used for smoothing when the player is in the air
-            if (FrontLeftGroundHitLocalDown.distance <= groundDist || FrontRightGroundHitLocalDown.distance <= groundDist || BackLeftGroundHitLocalDown.distance <= groundDist || BackRightGroundHitLocalDown.distance <= groundDist)
+            if (FrontLeftGroundHitWorldDown.distance <= groundDist || FrontRightGroundHitWorldDown.distance <= groundDist || BackLeftGroundHitWorldDown.distance <= groundDist || BackRightGroundHitWorldDown.distance <= groundDist)
             {
                 return true;
             }

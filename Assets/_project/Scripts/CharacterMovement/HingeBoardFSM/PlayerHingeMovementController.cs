@@ -18,6 +18,26 @@ namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
+        public struct Bones
+        {
+            public Vector3 position;
+            public Quaternion rotation;
+            public Vector3 scale;
+            public GameObject gameObject;
+            //public Collider collider;
+            //public Rigidbody rigidbody;
+
+            public Bones(Vector3 position, Quaternion rotation, Vector3 scale, GameObject gameObject)//, Collider collider)//, Rigidbody rigidbody)
+            {
+                this.position = position;
+                this.rotation = rotation;
+                this.scale = scale;
+                this.gameObject = gameObject;
+                //this.collider = collider;
+                //this.rigidbody = rigidbody;
+            }
+        }
+
         #region Variables
 
         [Header("State Machine")]
@@ -58,6 +78,8 @@ namespace L7Games.Movement
         private Transform frontWheelPos;
         [SerializeField]
         private Transform backWheelPos;
+        [SerializeField]
+        private GameObject characterModel;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
@@ -73,6 +95,14 @@ namespace L7Games.Movement
         public AnimationCurve turnSpeedCurve;
         public float turnClamp = 0.575f;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public HumanoidCollisionHandler humanoidCollision;
+
+        public GameObject ragDollPrefab;
+
+        System.Collections.Generic.List<Bones> characterInitalBones;
         #endregion
 
         #region Public Methods
@@ -93,6 +123,8 @@ namespace L7Games.Movement
 
             transform.rotation = initialRot;
             transform.position = initalPos;
+
+            ResetRagdollToCharacter();
 
             ResetWheelPos();
             AlignWheels();
@@ -116,6 +148,8 @@ namespace L7Games.Movement
 
             transform.rotation = point.rotation;
             transform.position = point.position;
+
+            ResetRagdollToCharacter();
 
             ResetWheelPos();
             AlignWheels();
@@ -248,6 +282,8 @@ namespace L7Games.Movement
             wallRideState.RegisterInputs();
         }
 
+
+
         private void OnDisable()
         {
             groundedState.UnRegisterInputs();
@@ -257,14 +293,14 @@ namespace L7Games.Movement
 
         private void Start()
         {
-
-
             initalPos = transform.position;
             initialRot = transform.rotation;
             fRB.transform.parent = null;
 
             //Setting up model position
             playerModel.transform.position = new Vector3(boardObject.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), boardObject.transform.position.z);
+
+            characterInitalBones = GetBonesFromObject(characterModel);
         }
 
         private void Update()
@@ -276,6 +312,15 @@ namespace L7Games.Movement
             else if (UnityEngine.InputSystem.Keyboard.current.uKey.isPressed)
             {
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
+            }
+
+            else if (UnityEngine.InputSystem.Keyboard.current.oKey.IsActuated())
+            {
+                if (characterModel.activeSelf)
+                {
+                    WipeOut(fRB.velocity);
+                }
+
             }
 
             playerStateMachine.RunMachine(Time.deltaTime);
@@ -304,9 +349,22 @@ namespace L7Games.Movement
                 bRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
             }
         }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            for (int i = 0; i < collision.contactCount; ++i)
+            {
+                if (collision.contacts[i].thisCollider.CompareTag("BodyWipeOutCollider"))
+                {
+                    WipeOut(fRB.velocity);
+                }
+            }
+
+        }
         #endregion
 
         #region Public Methods
+
 
         //A few utility functions
         public override void MoveToPosition(Vector3 positionToMoveTo)
@@ -354,6 +412,40 @@ namespace L7Games.Movement
             {
                 StopCoroutine(AirturningCo);
             }
+        }
+
+        public void WipeOut(Vector3 currentVelocity)
+        {
+            for (int i = 0; i < characterInitalBones.Count; ++i)
+            {
+                if (!characterInitalBones[i].gameObject.CompareTag("WipeOutCollider"))
+                {
+                    // Spawn the ragdoll
+                    GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
+                    // If there is a root or main rigid body then take that into account, otherwise not a problem
+                    Rigidbody mainBody = ragdoll.GetComponent<Rigidbody>();
+                    if (mainBody != null)
+                    {
+                        mainBody.AddForce(currentVelocity, ForceMode.Impulse);
+                    }
+                    Rigidbody[] boneBodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+                    foreach (Rigidbody body in boneBodies)
+                    {
+                        body.AddForce(currentVelocity, ForceMode.Impulse);
+                    }
+
+                    // Set the camera to follow the rag doll
+                    if (mainBody != null)
+                    {
+                        playerCamera.target = mainBody.transform;
+                    }
+                    else if (boneBodies.Length > 0)
+                    {
+                        playerCamera.target = boneBodies[0].transform;
+                    }
+                }
+            }
+            characterModel.SetActive(false);
         }
 
         #endregion
@@ -452,6 +544,96 @@ namespace L7Games.Movement
             Vector3 flatVector = Vector3.ProjectOnPlane(slopeVector, flatPlaneNormal).normalized;
             Vector3 rightFlatVector = Vector3.Cross(flatVector, flatPlaneNormal).normalized;
             return Vector3.SignedAngle(flatVector, slopeVector, rightFlatVector);
+        }
+
+        private void HumanoidCollision_lethalCollisionDetected(Vector3 direction)
+        {
+            if (fRB.velocity.magnitude > 0f)
+            {
+                WipeOut(fRB.velocity);
+            }
+        }
+
+        private void ResetRagdollToCharacter()
+        {
+            //characterModel.transform.parent = playerModel.transform;
+
+            // TODO: Needs to do something to kill the already spawned rag Doll probably through events
+
+            characterModel.SetActive(true);
+
+            //// Get the bones in current state
+            //System.Collections.Generic.List<Bones> characterBones = GetBonesFromObject(characterModel);
+            //// Get the bones in current state
+            //System.Collections.Generic.List<Bones> intialBones = new System.Collections.Generic.List<Bones>(characterInitalBones);
+            //// rest positions
+            //for (int i = 0; i < characterBones.Count; ++i)
+            //{
+            //    for (int j = 0; j < intialBones.Count; ++j)
+            //    {
+            //        if (characterBones[i].gameObject == intialBones[j].gameObject)
+            //        {   
+            //            if (!characterBones[i].gameObject.CompareTag("WipeOutCollider"))
+            //            {
+            //                if (characterBones[i].collider != null)
+            //                {
+            //                    characterBones[i].collider.enabled = false;
+            //                }
+            //                Rigidbody boneRigidbody = characterBones[i].gameObject.GetComponent<Rigidbody>();
+            //                if (boneRigidbody != null)
+            //                {
+            //                    Destroy(boneRigidbody);
+            //                }
+            //            }
+            //            characterBones[i].gameObject.transform.localPosition = intialBones[j].position;
+            //            characterBones[i].gameObject.transform.localRotation = intialBones[j].rotation;
+            //            characterBones[i].gameObject.transform.localScale = intialBones[j].scale;
+            //            intialBones.RemoveAt(j);
+            //            break;
+            //        }
+
+            //    }
+            //}
+
+            // Get a list of all the bones
+            playerCamera.target = boardObject.transform;
+        }
+
+        private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
+        {
+            System.Collections.Generic.List<Bones> characterBones = new System.Collections.Generic.List<Bones>();
+            if (currentObject.CompareTag("Bone"))
+            {
+                characterBones.Add(new Bones(currentObject.transform.localPosition, currentObject.transform.localRotation, currentObject.transform.localScale, currentObject));
+            }
+            for (int i = 0; i < currentObject.transform.childCount; ++i)
+            {
+                characterBones.AddRange(GetBonesFromObject(currentObject.transform.GetChild(i).gameObject));
+            }
+            return characterBones;
+        }
+
+        private GameObject ReplaceWithRagdoll(GameObject ragDollPrefab)
+        {
+            GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
+            // A rag-doll should have identical bones to the player character so the position of the bone should be the same
+            // Differing hierarchies will have a cause position to spawn incorrectly
+            System.Collections.Generic.List<Bones> characterBones = GetBonesFromObject(characterModel);
+            System.Collections.Generic.List<Bones> ragdollBones = GetBonesFromObject(ragDoll);
+            // Bones should be equal or something has probably gone wrong
+            #if UNITY_EDITOR || DEBUG
+            if (characterBones.Count == ragdollBones.Count)
+            {
+                Debug.LogWarning("Character and rag-doll bones are not equal");
+            }
+            #endif
+            for (int i = 0; i < characterBones.Count && i < ragdollBones.Count; ++i)
+            {
+                ragdollBones[i].gameObject.transform.localPosition = characterBones[i].position;
+                ragdollBones[i].gameObject.transform.localRotation = characterBones[i].rotation;
+                ragdollBones[i].gameObject.transform.localScale = characterBones[i].scale;
+            }
+            return ragDoll;
         }
         #endregion
     }
