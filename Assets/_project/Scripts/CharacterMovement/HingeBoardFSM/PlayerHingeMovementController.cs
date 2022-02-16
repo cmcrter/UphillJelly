@@ -51,8 +51,6 @@ namespace L7Games.Movement
         //Back Rigidbody
         [SerializeField]
         private Rigidbody bRB;
-        [SerializeField]
-        private Rigidbody characterRB;
 
         public SphereCollider ballMovement;
         public PlayerInput input;
@@ -87,8 +85,6 @@ namespace L7Games.Movement
         public GameObject ragDollPrefab;
 
         public RagdollDataContainer ragdollDataContainer;
-
-        public float wipeOutForceMultiplier;
 
         //System.Collections.Generic.List<Bones> characterInitalBones;
         #endregion
@@ -306,7 +302,7 @@ namespace L7Games.Movement
             {
                 if (characterModel.activeSelf)
                 {
-                    WipeOut(characterRB.velocity);
+                    WipeOut(fRB.velocity);
                 }
 
             }
@@ -342,12 +338,9 @@ namespace L7Games.Movement
         {
             for (int i = 0; i < collision.contactCount; ++i)
             {
-                if (collision.contacts[i].thisCollider.TryGetComponent<CharacterCollider>(out CharacterCollider characterCollider))
+                if (collision.contacts[i].thisCollider.CompareTag("BodyWipeOutCollider"))
                 {
-                    if (fRB.velocity.magnitude > characterCollider.requiredVelocityToWipeOut)
-                    {
-                        WipeOut(characterRB.velocity);
-                    }
+                    WipeOut(fRB.velocity);
                 }
             }
 
@@ -418,7 +411,7 @@ namespace L7Games.Movement
             Rigidbody[] boneBodies = ragdoll.GetComponentsInChildren<Rigidbody>();
             foreach (Rigidbody body in boneBodies)
             {
-                body.AddForce(currentVelocity * wipeOutForceMultiplier, ForceMode.Impulse);
+                body.AddForce(currentVelocity, ForceMode.Impulse);
             }
 
             // Set the camera to follow the rag doll
@@ -535,7 +528,7 @@ namespace L7Games.Movement
         {
             if (fRB.velocity.magnitude > 0f)
             {
-                WipeOut(characterRB.velocity);
+                WipeOut(fRB.velocity);
             }
         }
 
