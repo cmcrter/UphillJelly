@@ -10411,6 +10411,7 @@ MonoBehaviour:
   _camera: {fileID: 1631196268411387756}
   currentPoint: {fileID: 1631196270102969495}
   playerInput: {fileID: 1631196268159917613}
+  eventSystem: {fileID: 0}
   transitionTime: 0.5
   RotationObject: {fileID: 1631196269704770213}
   initialRotLocalPos: {x: 0, y: 0, z: 60}
@@ -11338,7 +11339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -11435,6 +11436,7 @@ MonoBehaviour:
   objectsToShow:
   - {fileID: 1631196269473086326}
   BackPoint: {fileID: 1631196270102969495}
+  FirstSelected: {fileID: 0}
   LeftPoint: {fileID: 0}
   RightPoint: {fileID: 1631196269032570178}
   UpPoint: {fileID: 0}
@@ -15699,6 +15701,7 @@ MonoBehaviour:
   objectsToShow:
   - {fileID: 1631196268332857003}
   BackPoint: {fileID: 1631196270102969495}
+  FirstSelected: {fileID: 1631196268332857003}
   LeftPoint: {fileID: 1631196268320365467}
   RightPoint: {fileID: 0}
   UpPoint: {fileID: 0}
@@ -16206,6 +16209,7 @@ MonoBehaviour:
   objectsToShow:
   - {fileID: 1631196269967191457}
   BackPoint: {fileID: 0}
+  FirstSelected: {fileID: 1631196269967191457}
   LeftPoint: {fileID: 1631196269727415195}
   RightPoint: {fileID: 0}
   UpPoint: {fileID: 0}
@@ -18040,10 +18044,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 1631196268766385027}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -18216,6 +18220,7 @@ MonoBehaviour:
   objectsToShow:
   - {fileID: 1631196269712300574}
   BackPoint: {fileID: 0}
+  FirstSelected: {fileID: 1631196269712300574}
   LeftPoint: {fileID: 1631196270102969495}
   RightPoint: {fileID: 1631196269204219465}
   UpPoint: {fileID: 0}
@@ -20379,6 +20384,7 @@ MonoBehaviour:
   objectsToShow:
   - {fileID: 1631196268310501700}
   BackPoint: {fileID: 0}
+  FirstSelected: {fileID: 1631196268310501700}
   LeftPoint: {fileID: 0}
   RightPoint: {fileID: 1631196269727415195}
   UpPoint: {fileID: 0}
