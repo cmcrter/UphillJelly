@@ -18,25 +18,7 @@ namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
-        public struct Bones
-        {
-            public Vector3 position;
-            public Quaternion rotation;
-            public Vector3 scale;
-            public GameObject gameObject;
-            //public Collider collider;
-            //public Rigidbody rigidbody;
 
-            public Bones(Vector3 position, Quaternion rotation, Vector3 scale, GameObject gameObject)//, Collider collider)//, Rigidbody rigidbody)
-            {
-                this.position = position;
-                this.rotation = rotation;
-                this.scale = scale;
-                this.gameObject = gameObject;
-                //this.collider = collider;
-                //this.rigidbody = rigidbody;
-            }
-        }
 
         #region Variables
 
@@ -102,7 +84,9 @@ namespace L7Games.Movement
 
         public GameObject ragDollPrefab;
 
-        System.Collections.Generic.List<Bones> characterInitalBones;
+        public RagdollDataContainer ragdollDataContainer;
+
+        //System.Collections.Generic.List<Bones> characterInitalBones;
         #endregion
 
         #region Public Methods
@@ -300,7 +284,7 @@ namespace L7Games.Movement
             //Setting up model position
             playerModel.transform.position = new Vector3(boardObject.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), boardObject.transform.position.z);
 
-            characterInitalBones = GetBonesFromObject(characterModel);
+            //characterInitalBones = GetBonesFromObject(characterModel);
         }
 
         private void Update()
@@ -416,34 +400,28 @@ namespace L7Games.Movement
 
         public void WipeOut(Vector3 currentVelocity)
         {
-            for (int i = 0; i < characterInitalBones.Count; ++i)
+            // Spawn the ragdoll
+            GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
+            // If there is a root or main rigid body then take that into account, otherwise not a problem
+            Rigidbody mainBody = ragdoll.GetComponent<Rigidbody>();
+            if (mainBody != null)
             {
-                if (!characterInitalBones[i].gameObject.CompareTag("WipeOutCollider"))
-                {
-                    // Spawn the ragdoll
-                    GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
-                    // If there is a root or main rigid body then take that into account, otherwise not a problem
-                    Rigidbody mainBody = ragdoll.GetComponent<Rigidbody>();
-                    if (mainBody != null)
-                    {
-                        mainBody.AddForce(currentVelocity, ForceMode.Impulse);
-                    }
-                    Rigidbody[] boneBodies = ragdoll.GetComponentsInChildren<Rigidbody>();
-                    foreach (Rigidbody body in boneBodies)
-                    {
-                        body.AddForce(currentVelocity, ForceMode.Impulse);
-                    }
+                mainBody.AddForce(currentVelocity, ForceMode.Impulse);
+            }
+            Rigidbody[] boneBodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+            foreach (Rigidbody body in boneBodies)
+            {
+                body.AddForce(currentVelocity, ForceMode.Impulse);
+            }
 
-                    // Set the camera to follow the rag doll
-                    if (mainBody != null)
-                    {
-                        playerCamera.target = mainBody.transform;
-                    }
-                    else if (boneBodies.Length > 0)
-                    {
-                        playerCamera.target = boneBodies[0].transform;
-                    }
-                }
+            // Set the camera to follow the rag doll
+            if (mainBody != null)
+            {
+                playerCamera.target = mainBody.transform;
+            }
+            else if (boneBodies.Length > 0)
+            {
+                playerCamera.target = boneBodies[0].transform;
             }
             characterModel.SetActive(false);
         }
@@ -599,39 +577,28 @@ namespace L7Games.Movement
             playerCamera.target = boardObject.transform;
         }
 
-        private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
-        {
-            System.Collections.Generic.List<Bones> characterBones = new System.Collections.Generic.List<Bones>();
-            if (currentObject.CompareTag("Bone"))
-            {
-                characterBones.Add(new Bones(currentObject.transform.localPosition, currentObject.transform.localRotation, currentObject.transform.localScale, currentObject));
-            }
-            for (int i = 0; i < currentObject.transform.childCount; ++i)
-            {
-                characterBones.AddRange(GetBonesFromObject(currentObject.transform.GetChild(i).gameObject));
-            }
-            return characterBones;
-        }
+        //private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
+        //{
+        //    System.Collections.Generic.List<Bones> characterBones = new System.Collections.Generic.List<Bones>();
+        //    if (currentObject.CompareTag("Bone"))
+        //    {
+        //        characterBones.Add(new Bones(currentObject.transform.localPosition, currentObject.transform.localRotation, currentObject.transform.localScale, currentObject));
+        //    }
+        //    for (int i = 0; i < currentObject.transform.childCount; ++i)
+        //    {
+        //        characterBones.AddRange(GetBonesFromObject(currentObject.transform.GetChild(i).gameObject));
+        //    }
+        //    return characterBones;
+        //}
 
         private GameObject ReplaceWithRagdoll(GameObject ragDollPrefab)
         {
+            // Spawn the rag-doll
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
-            // A rag-doll should have identical bones to the player character so the position of the bone should be the same
-            // Differing hierarchies will have a cause position to spawn incorrectly
-            System.Collections.Generic.List<Bones> characterBones = GetBonesFromObject(characterModel);
-            System.Collections.Generic.List<Bones> ragdollBones = GetBonesFromObject(ragDoll);
-            // Bones should be equal or something has probably gone wrong
-            #if UNITY_EDITOR || DEBUG
-            if (characterBones.Count == ragdollBones.Count)
+            // Gets it's bone container
+            if (ragDoll.TryGetComponent<RagdollDataContainer>(out RagdollDataContainer spawnedRagdollDataContainer))
             {
-                Debug.LogWarning("Character and rag-doll bones are not equal");
-            }
-            #endif
-            for (int i = 0; i < characterBones.Count && i < ragdollBones.Count; ++i)
-            {
-                ragdollBones[i].gameObject.transform.localPosition = characterBones[i].position;
-                ragdollBones[i].gameObject.transform.localRotation = characterBones[i].rotation;
-                ragdollBones[i].gameObject.transform.localScale = characterBones[i].scale;
+                spawnedRagdollDataContainer.CopyRagdollBonesPositions(ragdollDataContainer);
             }
             return ragDoll;
         }
