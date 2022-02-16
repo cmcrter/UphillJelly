@@ -95,7 +95,7 @@ namespace L7Games.Movement
         public override void PhysicsTick(float dT)
         {
             //Giving a minimum distance before the turning is effective
-            if(groundedCondition.BackGroundHit.distance > 5f && groundedCondition.FrontGroundHit.distance > 5f)
+            if(groundedCondition.BackRightGroundHitLocalDown.distance > 5f && groundedCondition.FrontRightGroundHitLocalDown.distance > 5f)
             {
                 if(Debug.isDebugBuild)
                 {

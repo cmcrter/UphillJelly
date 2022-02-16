@@ -34,6 +34,16 @@ public class TempScoreSystem : MonoBehaviour
     public Text GhostScoreText;
 
 
+    // int for the ghost score
+    public float PlayerTime;
+
+    // text object for the ghost text
+    public Text TimeValueText;
+
+    //
+    public bool TimerActive = false;
+
+
 
     // Start is called before the first frame update
     public void Start()
@@ -41,6 +51,9 @@ public class TempScoreSystem : MonoBehaviour
         // set both scores to 0 on game start
         PlayerScore = 0;
         GhostScore = 0;
+        PlayerTime = 0;
+
+        //TimerActive = true;
 
     }
 
@@ -62,11 +75,25 @@ public class TempScoreSystem : MonoBehaviour
 
     private void Update() {
 
+        if (TimerActive) {
+
+            //
+            PlayerTime += Time.deltaTime;
+
+        } else if (!TimerActive) {
+
+            //
+            //do nothing
+
+        }
+
         // set the player score to the player score text + "Player Score : "
         PlayerScoreText.text = "Player Score : " + PlayerScore;
 
         // set the ghost score to the ghost score text + "Ghost Score : "
         GhostScoreText.text = "Ghost Score : " + GhostScore;
+
+        TimeValueText.text = "Time : " + PlayerTime;
 
     }
 

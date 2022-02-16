@@ -51,6 +51,9 @@ public class ShopText : MonoBehaviour
     // button for starting the game3
     public GameObject PlayButton3;
 
+    //
+    public TempScoreSystem tempScoreSystem;
+
 
     // first button pressed
     public void ButtonPressed1() {
@@ -82,6 +85,7 @@ public class ShopText : MonoBehaviour
         // save the second replay for the first save
         b_player.SavePlayer1Second();
 
+
     }
 
     // second button pressed
@@ -112,6 +116,7 @@ public class ShopText : MonoBehaviour
 
         // save the second replay for the second save
         b_player.SavePlayer2Second();
+
 
     }
 
@@ -145,6 +150,7 @@ public class ShopText : MonoBehaviour
 
         // save the second replay for the third save
         b_player.SavePlayer3Second();
+
 
     }
 
@@ -231,6 +237,9 @@ public class ShopText : MonoBehaviour
         // play 1
         b_player.PlayPlayer1();
 
+        //
+        tempScoreSystem.TimerActive = true;
+
     }
 
     // press play button 2
@@ -260,6 +269,9 @@ public class ShopText : MonoBehaviour
         // play 2
         b_player.PlayPlayer2();
 
+        //
+        tempScoreSystem.TimerActive = true;
+
     }
 
     // press play button 3
@@ -288,6 +300,9 @@ public class ShopText : MonoBehaviour
 
         // play 3
         b_player.PlayPlayer3();
+
+        //
+        tempScoreSystem.TimerActive = true;
 
     }
 
