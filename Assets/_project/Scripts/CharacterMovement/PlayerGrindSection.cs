@@ -8,14 +8,17 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using SleepyCat.Utility.Splines;
+using L7Games.Utility.Splines;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public class PlayerGrindSection : MonoBehaviour
     {
         [SerializeField]
         private PlayerMovementController movementController;
+
+        [SerializeField]
+        private PlayerHingeMovementController movementHingeController;
 
         private void OnTriggerEnter(Collider other) 
         {
@@ -23,15 +26,22 @@ namespace SleepyCat.Movement
 
             if(other.transform.parent != null)
             {
-                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController && other.transform.parent.TryGetComponent(out GrindDetails grindCustomizable))
+                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown) && other.transform.parent.TryGetComponent(out GrindDetails grindCustomizable))
                 {
                     if(Debug.isDebugBuild)
                     {
                         //Debug.Log("Player going to grind");
                     }
 
-                    //Telling the grind condition that the player wants to start grinding
-                    movementController.grindBelow.playerEnteredGrind(splineToGrindDown, grindCustomizable);
+                    if(movementController)
+                    {
+                        //Telling the grind condition that the player wants to start grinding
+                        movementController.grindBelow.playerEnteredGrind(splineToGrindDown, grindCustomizable);
+                    }
+                    else if(movementHingeController)
+                    {
+                        movementHingeController.grindBelow.playerEnteredGrind(splineToGrindDown, grindCustomizable);
+                    }
                 }
             }  
         }
@@ -40,15 +50,22 @@ namespace SleepyCat.Movement
         {
             if(other.transform.parent)
             {
-                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown) && movementController)
+                if(other.transform.parent.TryGetComponent(out SplineWrapper splineToGrindDown))
                 {
                     if(Debug.isDebugBuild)
                     {
                         //Debug.Log("Player going off grind");
                     }
 
-                    //Telling the grind condition that the player wants to start grinding
-                    movementController.grindBelow.PlayerLeftGrindArea(splineToGrindDown);
+                    if(movementController)
+                    {
+                        //Telling the grind condition that the player wants to start grinding
+                        movementController.grindBelow.PlayerLeftGrindArea(splineToGrindDown);
+                    }
+                    else if(movementHingeController)
+                    {
+                        movementHingeController.grindBelow.PlayerLeftGrindArea(splineToGrindDown);
+                    }
                 }
 
             }

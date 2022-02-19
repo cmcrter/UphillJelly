@@ -7,9 +7,9 @@
 // Brief: A state in the traffic light based FSM unit testing
 //////////////////////////////////////////////////////////// 
 
-using SleepyCat.Utility.StateMachine;
+using L7Games.Utility.StateMachine;
 
-namespace SleepyCat.Tests
+namespace L7Games.Tests
 {
     public class GreenLight : State
     {

@@ -8,9 +8,9 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using SleepyCat.Movement;
+using L7Games.Movement;
 
-namespace SleepyCat.Triggerables
+namespace L7Games.Triggerables
 {
     public class WallRideTriggerable : MonoBehaviour, ITriggerable
     {
@@ -28,6 +28,8 @@ namespace SleepyCat.Triggerables
         private Transform wallRideWall;
         [SerializeField]
         private float CoyoteTime;
+        [SerializeField]
+        private float wallSpeed = 0.3f;
 
         #endregion
 
@@ -36,6 +38,15 @@ namespace SleepyCat.Triggerables
         private void Awake()
         {
             wallRideWall = wallRideWall ?? transform;
+        }
+
+        #endregion
+
+        #region
+
+        public float GetWallSpeed()
+        {
+            return wallSpeed;
         }
 
         #endregion

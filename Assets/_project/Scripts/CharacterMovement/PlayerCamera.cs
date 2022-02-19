@@ -9,7 +9,7 @@
 
 using UnityEngine;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public class PlayerCamera : MonoBehaviour
 	{
@@ -25,6 +25,8 @@ namespace SleepyCat.Movement
 		public bool FollowY = true;
 		public bool FollowZ = true;
 
+		public bool bMovingBackwards = false;
+
         #endregion
 
         #region Unity Methods
@@ -39,7 +41,14 @@ namespace SleepyCat.Movement
 		{
 			if (FollowRotation)
 			{
-				offset = ( -target.forward.normalized * followDist ) + new Vector3(0, 1f, 0);
+				if(!bMovingBackwards)
+				{
+					offset = (-target.forward.normalized * followDist) + new Vector3(0, 1f, 0);
+				}
+				else
+				{
+					offset = (target.forward.normalized * followDist) + new Vector3(0, 1f, 0);
+				}
 			}
 
 			Vector3 speed = Vector3.zero;

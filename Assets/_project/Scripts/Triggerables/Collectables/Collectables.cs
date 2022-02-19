@@ -7,10 +7,10 @@
 // Brief: An abstract script so that money/ secret items can be interacted with the same way
 //////////////////////////////////////////////////////////// 
 
-using SleepyCat.Movement;
+using L7Games.Movement;
 using UnityEngine;
 
-namespace SleepyCat.Triggerables.Collectables
+namespace L7Games.Triggerables.Collectables
 {
     public abstract class Collectables : MonoBehaviour, ITriggerable
     {

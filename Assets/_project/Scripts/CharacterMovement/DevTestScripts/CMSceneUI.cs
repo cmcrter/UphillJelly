@@ -3,20 +3,19 @@
 // Author: Charles Carter
 // Date Created: 04/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 22/10/21
+// Date Last Edited: 04/01/22
 // Brief: A script for using UI and inspector to test out the character controller in the Character Movement test scene
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
+using L7Games.Movement;
 
-namespace SleepyCat.DevScripts
+namespace L7Games.DevScripts
 {
     public class CMSceneUI : MonoBehaviour
     {
         public Movement.PlayerController characterController;
-
         public Rigidbody CharacterRB;
-
         public GameObject goControlUI;
 
         #region Public Methods

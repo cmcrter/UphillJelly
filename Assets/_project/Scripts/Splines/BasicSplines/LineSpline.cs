@@ -2,7 +2,7 @@
 // Name:                LineSpline.cs
 // Author:              Matthew Mason
 // Date Created:        25-Mar-2020
-// Date Last Modified:  05-Oct-2021
+// Date Last Modified:  16-Nov-2021
 // Brief:               A spline that is a line between 2 points
 //============================================================================================================================================================================================================================================================================
 
@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat.Utility.Splines
+namespace L7Games.Utility.Splines
 {
     /// <summary>
     /// A spline that is a line between 2 points
@@ -61,10 +61,17 @@ namespace SleepyCat.Utility.Splines
         {
             return Vector3.Distance(startPoint, endPoint);
         }
-
         public override Vector3 GetPointAtTime(float t)
         {
             return Vector3.Lerp(startPoint, endPoint, t);
+        }
+        public override Vector3 GetDirection(float t)
+        {
+            return (endPoint - startPoint).normalized;
+        }
+        public override Vector3 GetDirection(float t, float stepDistance)
+        {
+            return (endPoint - startPoint).normalized;
         }
         #endregion
         #endregion

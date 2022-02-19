@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat.ScriptableObjects.Input
+namespace L7Games.ScriptableObjects.Input
 {
     [CreateAssetMenu(fileName = "AnaglogueStickPattern", menuName = "ScriptableObject/AnalogueStickPattern")]
     public class AnalogueStickPattern : ScriptableObject

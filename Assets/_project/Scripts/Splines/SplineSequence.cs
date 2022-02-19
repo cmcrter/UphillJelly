@@ -9,7 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SleepyCat.Utility.Splines;
+using L7Games.Utility.Splines;
 
     /// <summary>
     /// A component for getting a sequence of splines and lerping through them
@@ -58,7 +58,7 @@ using SleepyCat.Utility.Splines;
             {
                 if (containedSplines[containedSplines.Count - 1] != null)
                 {
-                    containedSplines[containedSplines.Count - 1].WorldEndPosition = transform.TransformPoint(value);
+                    containedSplines[containedSplines.Count - 1].SetWorldEndPointAndUpdateLocal(transform.TransformPoint(value));
                 }
             }
         }
@@ -82,7 +82,7 @@ using SleepyCat.Utility.Splines;
             {
                 if (containedSplines[0] != null)
                 {
-                    containedSplines[0].WorldStartPosition = transform.TransformPoint(value);
+                    containedSplines[containedSplines.Count - 1].SetWorldStartPointWithoutLocal(transform.TransformPoint(value));
                 }
             }
         }
@@ -100,16 +100,6 @@ using SleepyCat.Utility.Splines;
             }
             return transform.position;
         }
-        set
-        {
-            if (containedSplines.Count > 0)
-            {
-                if (containedSplines[containedSplines.Count - 1] != null)
-                {
-                    containedSplines[containedSplines.Count - 1].WorldEndPosition = value;
-                }
-            }
-        }
     }
     public override Vector3 WorldStartPosition
     {
@@ -123,16 +113,6 @@ using SleepyCat.Utility.Splines;
                 }
             }
             return transform.position;
-        }
-        set
-        {
-            if (containedSplines.Count > 0)
-            {
-                if (containedSplines[0] != null)
-                {
-                    containedSplines[0].WorldStartPosition = value;
-                }
-            }
         }
     }
     #endregion
@@ -178,10 +158,51 @@ using SleepyCat.Utility.Splines;
             containedSplines[0].SetWorldStartPointAndUpdateLocal(startPoint);
         }
     }
+    public override void SetWorldEndPointWithoutLocal(Vector3 endPoint)
+    {
+        if (containedSplines.Count > 0)
+        {
+            if (containedSplines[0] != null)
+            {
+                containedSplines[0].SetWorldEndPointWithoutLocal(endPoint);
+            }
+        }
+    }
+
+    public override void SetWorldStartPointWithoutLocal(Vector3 startPoint)
+    {
+        if (containedSplines.Count > 0)
+        {
+            if (containedSplines[0] != null)
+            {
+                containedSplines[0].SetWorldStartPointWithoutLocal(startPoint);
+            }
+        }
+    }
 
     public override void UpdateWorldPositions()
     {
         UpdateSplines();
+    }
+
+    public override Vector3 GetDirection(float t)
+    {
+        int index = GetIndexOfSplineAtT(t, out float splineTValue);
+        if (index > -1)
+        {
+            return containedSplines[index].GetDirection(splineTValue);
+        }
+        return base.GetDirection(t);
+    }
+
+    public override Vector3 GetDirection(float t, float stepDistance)
+    {
+        int index = GetIndexOfSplineAtT(t, out float splineTValue);
+        if (index > -1)
+        {
+            return containedSplines[index].GetDirection(splineTValue, stepDistance);
+        }
+        return base.GetDirection(t, stepDistance);
     }
     #endregion
 
@@ -192,6 +213,91 @@ using SleepyCat.Utility.Splines;
     public int GetNumberOfSplines()
     {
         return containedSplines.Count;
+    }
+
+    public int GetIndexOfSplineAtT(float t)
+    {
+        // Ensuring t is a unit interval
+        t = Mathf.Clamp01(t);
+
+        // Using t to find the length along the spline sequence to aim for
+        float targetLength = totalLength * t;
+
+        for (int index = 0; index < containedSplines.Count; ++index)
+        {
+            if (containedSplines[index] != null)
+            {
+                float sectionDistance = containedSplines[index].GetTotalLength();
+                // Checking if the target length shorter than this spline
+                if (targetLength - sectionDistance < 0f)
+                {
+                    return index;
+                }
+                // Otherwise remove of the length of the section from the target length
+                else
+                {
+                    targetLength -= sectionDistance;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("A spline was null when getting length based point", gameObject);
+            }
+        }
+        // Return the end point of the last spline if the target length was not within any of the splines
+        if (containedSplines.Count > 0)
+        {
+            return containedSplines.Count - 1;
+        }
+        else
+        {
+            Debug.LogError("SplineSequence contained no splines when GetLengthBasedPoint was called", gameObject);
+            return -1;
+        }
+    }
+
+    public int GetIndexOfSplineAtT(float t, out float tOnSpline)
+    {
+        // Ensuring t is a unit interval
+        t = Mathf.Clamp01(t);
+
+        // Using t to find the length along the spline sequence to aim for
+        float targetLength = totalLength * t;
+
+        for (int index = 0; index < containedSplines.Count; ++index)
+        {
+            if (containedSplines[index] != null)
+            {
+                float sectionDistance = containedSplines[index].GetTotalLength();
+                // Checking if the target length shorter than this spline
+                if (targetLength - sectionDistance < 0f)
+                {
+                    tOnSpline = targetLength / sectionDistance;
+                    return index; 
+                }
+                // Otherwise remove of the length of the section from the target length
+                else
+                {
+                    targetLength -= sectionDistance;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("A spline was null when getting length based point", gameObject);
+            }
+        }
+        // Return the end point of the last spline if the target length was not within any of the splines
+        if (containedSplines.Count > 0)
+        {
+            tOnSpline = 1f;
+            return containedSplines.Count - 1;
+        }
+        else
+        {
+            Debug.LogError("SplineSequence contained no splines when GetLengthBasedPoint was called", gameObject);
+            tOnSpline = -1f;
+            return -1;
+        }
     }
 
     /// <summary>
@@ -340,5 +446,7 @@ using SleepyCat.Utility.Splines;
     {
         UpdateSplines();
     }
+
+
     #endregion
 }

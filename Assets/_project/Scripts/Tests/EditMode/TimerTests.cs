@@ -11,7 +11,7 @@ using System.Collections;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
-namespace SleepyCat.Tests
+namespace L7Games.Tests
 {
     public class TimerTests
     {

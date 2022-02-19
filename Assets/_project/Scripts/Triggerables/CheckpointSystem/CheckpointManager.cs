@@ -9,11 +9,11 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using SleepyCat.Movement;
+using L7Games.Movement;
 
 using UnityEngine.InputSystem;
 
-namespace SleepyCat.Triggerables.CheckpointSystem
+namespace L7Games.Triggerables.CheckpointSystem
 {
     /// <summary>
     /// A script in charge of managing the checkpoints and the player entry of them
@@ -91,12 +91,12 @@ namespace SleepyCat.Triggerables.CheckpointSystem
             if (playersCurrentCheckpoints.TryGetValue(playerToMove, out Checkpoint playerLastCheckpoint))
             {
                 Transform spawnTransform = playerLastCheckpoint.SpawnTransform;
-                playerToMove.MoveToPosition(spawnTransform.position);
+                playerToMove.ResetPlayer(spawnTransform);
             }
             else
             {
                 Transform spawnTransform = defaultCheckpoint.SpawnTransform;
-                playerToMove.MoveToPosition(spawnTransform.position);
+                playerToMove.ResetPlayer(spawnTransform);
             }
         }
         #endregion

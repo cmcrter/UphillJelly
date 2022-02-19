@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat.Utility.Splines
+namespace L7Games.Utility.Splines
 {
     /// <summary>
     /// SplineWrapper that controls and contains a line spline
@@ -65,20 +65,12 @@ namespace SleepyCat.Utility.Splines
             {
                 return worldEndPoint;
             }
-            set
-            {
-                worldEndPoint = value;
-            }
         }
         public override Vector3 WorldStartPosition
         {
             get
             {
                 return worldStartPoint;
-            }
-            set
-            {
-                worldStartPoint = value;
             }
         }
         #endregion
@@ -122,6 +114,14 @@ namespace SleepyCat.Utility.Splines
             worldStartPoint = startPoint;
             spline.StartPosition = transform.InverseTransformPoint(startPoint);
         }
+        public override void SetWorldEndPointWithoutLocal(Vector3 endPoint)
+        {
+            worldEndPoint = endPoint;
+        }
+        public override void SetWorldStartPointWithoutLocal(Vector3 startPoint)
+        {
+            worldStartPoint = startPoint;
+        }
         public override void UpdateWorldPositions()
         {
             if (spline == null)
@@ -130,6 +130,15 @@ namespace SleepyCat.Utility.Splines
             }
             worldStartPoint = transform.TransformPoint(spline.StartPosition);
             worldEndPoint = transform.TransformPoint(spline.EndPosition);
+        }
+        public override Vector3 GetDirection(float t)
+        {
+            return worldEndPoint - worldStartPoint;
+        }
+
+        public override Vector3 GetDirection(float t, float stepDistance)
+        {
+            return worldEndPoint - worldStartPoint;
         }
         #endregion
         #endregion

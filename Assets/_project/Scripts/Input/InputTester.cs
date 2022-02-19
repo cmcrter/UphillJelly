@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat.Input
+namespace L7Games.Input
 {
     public class InputTester : MonoBehaviour
     {

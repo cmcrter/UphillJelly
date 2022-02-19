@@ -8,9 +8,9 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using SleepyCat.Movement;
+using L7Games.Movement;
 
-namespace SleepyCat
+namespace L7Games
 {
     public interface ITriggerable
     {

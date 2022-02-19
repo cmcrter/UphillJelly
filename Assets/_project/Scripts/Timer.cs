@@ -9,7 +9,7 @@
 
 using System;
 
-namespace SleepyCat
+namespace L7Games
 {
     //A class not attached to unity to handle the timer float
     [Serializable]

@@ -7,9 +7,9 @@
 // Brief: A simple condition for the traffic light based FSM unit test to use
 //////////////////////////////////////////////////////////// 
 
-using SleepyCat.Utility.StateMachine;
+using L7Games.Utility.StateMachine;
 
-namespace SleepyCat.Tests
+namespace L7Games.Tests
 {
     public class isGreaterThanZero : Condition
     {

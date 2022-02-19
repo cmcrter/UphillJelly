@@ -10,10 +10,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SleepyCat.Movement;
-using SleepyCat.Triggerables.CheckpointSystem;
+using L7Games.Movement;
+using L7Games.Triggerables.CheckpointSystem;
 
-namespace SleepyCat.Triggerables
+namespace L7Games.Triggerables
 {
     /// <summary>
     /// A triggerable that makes the player enter the fail state when they enter the trigger (either falling off the board to just quickly teleporting back)

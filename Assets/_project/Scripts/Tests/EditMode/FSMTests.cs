@@ -8,9 +8,9 @@
 //////////////////////////////////////////////////////////// 
 
 using NUnit.Framework;
-using SleepyCat.Utility.StateMachine;
+using L7Games.Utility.StateMachine;
 
-namespace SleepyCat.Tests
+namespace L7Games.Tests
 {
     public class FSMTests
     {

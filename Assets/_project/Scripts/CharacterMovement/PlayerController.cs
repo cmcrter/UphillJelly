@@ -8,15 +8,20 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using SleepyCat.Triggerables;
+using L7Games.Triggerables;
 
-namespace SleepyCat.Movement
+namespace L7Games.Movement
 {
     public abstract class PlayerController : MonoBehaviour
     {
         public virtual void ResetPlayer()
         {
         
+        }
+
+        public virtual void ResetPlayer(Transform point)
+        {
+
         }
 
         public virtual void MoveToPosition(Vector3 positionToMoveTo)
