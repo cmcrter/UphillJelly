@@ -18,8 +18,6 @@ namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
-
-
         #region Variables
 
         [Header("State Machine")]
@@ -77,17 +75,15 @@ namespace L7Games.Movement
         public AnimationCurve turnSpeedCurve;
         public float turnClamp = 0.575f;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public HumanoidCollisionHandler humanoidCollision;
+        [Tooltip("The prefab that is spawned to replace this as a ragdoll Ragdoll used prefab used")]
+        [SerializeField]
+        private GameObject ragDollPrefab;
 
-        public GameObject ragDollPrefab;
-
+        [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
-
-        //System.Collections.Generic.List<Bones> characterInitalBones;
         #endregion
+
+
 
         #region Public Methods
 
@@ -108,12 +104,15 @@ namespace L7Games.Movement
             transform.rotation = initialRot;
             transform.position = initalPos;
 
-            ResetRagdollToCharacter();
+            characterModel.SetActive(true);
+            playerCamera.target = boardObject.transform;
 
             ResetWheelPos();
             AlignWheels();
 
             Time.timeScale = 1;
+
+            CallOnRespawn();
         }
 
         public override void ResetPlayer(Transform point)
@@ -133,12 +132,15 @@ namespace L7Games.Movement
             transform.rotation = point.rotation;
             transform.position = point.position;
 
-            ResetRagdollToCharacter();
+            characterModel.SetActive(true);
+            playerCamera.target = boardObject.transform;
 
             ResetWheelPos();
             AlignWheels();
 
             Time.timeScale = 1;
+
+            CallOnRespawn();
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
@@ -534,47 +536,7 @@ namespace L7Games.Movement
 
         private void ResetRagdollToCharacter()
         {
-            //characterModel.transform.parent = playerModel.transform;
 
-            // TODO: Needs to do something to kill the already spawned rag Doll probably through events
-
-            characterModel.SetActive(true);
-
-            //// Get the bones in current state
-            //System.Collections.Generic.List<Bones> characterBones = GetBonesFromObject(characterModel);
-            //// Get the bones in current state
-            //System.Collections.Generic.List<Bones> intialBones = new System.Collections.Generic.List<Bones>(characterInitalBones);
-            //// rest positions
-            //for (int i = 0; i < characterBones.Count; ++i)
-            //{
-            //    for (int j = 0; j < intialBones.Count; ++j)
-            //    {
-            //        if (characterBones[i].gameObject == intialBones[j].gameObject)
-            //        {   
-            //            if (!characterBones[i].gameObject.CompareTag("WipeOutCollider"))
-            //            {
-            //                if (characterBones[i].collider != null)
-            //                {
-            //                    characterBones[i].collider.enabled = false;
-            //                }
-            //                Rigidbody boneRigidbody = characterBones[i].gameObject.GetComponent<Rigidbody>();
-            //                if (boneRigidbody != null)
-            //                {
-            //                    Destroy(boneRigidbody);
-            //                }
-            //            }
-            //            characterBones[i].gameObject.transform.localPosition = intialBones[j].position;
-            //            characterBones[i].gameObject.transform.localRotation = intialBones[j].rotation;
-            //            characterBones[i].gameObject.transform.localScale = intialBones[j].scale;
-            //            intialBones.RemoveAt(j);
-            //            break;
-            //        }
-
-            //    }
-            //}
-
-            // Get a list of all the bones
-            playerCamera.target = boardObject.transform;
         }
 
         //private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
@@ -595,11 +557,11 @@ namespace L7Games.Movement
         {
             // Spawn the rag-doll
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
-            // Gets it's bone container
-            if (ragDoll.TryGetComponent<RagdollDataContainer>(out RagdollDataContainer spawnedRagdollDataContainer))
+            if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
-                spawnedRagdollDataContainer.CopyRagdollBonesPositions(ragdollDataContainer);
+                spawnedRagdoll.Initalise(this, ragdollDataContainer);
             }
+
             return ragDoll;
         }
         #endregion

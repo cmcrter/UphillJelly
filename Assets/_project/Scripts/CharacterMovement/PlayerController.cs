@@ -14,6 +14,15 @@ namespace L7Games.Movement
 {
     public abstract class PlayerController : MonoBehaviour
     {
+        #region Public Events
+        /// <summary>
+        /// Called when the player re spawns
+        /// </summary>
+        public event System.Action onRespawn;
+        #endregion
+
+
+
         public virtual void ResetPlayer()
         {
         
@@ -38,5 +47,15 @@ namespace L7Games.Movement
         {
 
         }
+
+        #region Protected Methods
+        protected void CallOnRespawn()
+        {
+            if (onRespawn != null)
+            {
+                onRespawn();
+            }
+        }
+        #endregion
     }
 }
