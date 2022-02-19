@@ -92,6 +92,8 @@ public class OutfitChanger : MonoBehaviour
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
+        LoadedCustomizables1();
+
     }
 
     // Loaded customizables 1
@@ -105,7 +107,7 @@ public class OutfitChanger : MonoBehaviour
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
         // load the current character material that has been saved
-        playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+        playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint]; 
 
         // set the players hat to the current hat
         playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];

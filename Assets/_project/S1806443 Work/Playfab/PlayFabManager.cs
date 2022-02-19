@@ -50,6 +50,9 @@ namespace SleepyCat
         //
         public GameObject SubmitNameButtonGameObject;
 
+        //
+        public GameObject NotConnectedToInternetPanel;
+
 
         //
         void Start() {
@@ -60,7 +63,7 @@ namespace SleepyCat
         }
 
         // Login
-        void Login() {
+        public void Login() {
 
             // Login request
             var request = new LoginWithCustomIDRequest {
@@ -75,7 +78,7 @@ namespace SleepyCat
                     GetPlayerProfile = true
 
                 }
-                //
+                
 
             };
 
@@ -97,6 +100,7 @@ namespace SleepyCat
             if (result.InfoResultPayload.PlayerProfile != null)
                 //
                 name = result.InfoResultPayload.PlayerProfile.DisplayName;
+
 
         }
 
@@ -131,6 +135,7 @@ namespace SleepyCat
 
         //
         void OnError(PlayFabError error) {
+
 
             //
             Debug.Log("Error login / Creating Account");
@@ -422,6 +427,7 @@ namespace SleepyCat
 
                 //
                 PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
+
 
             }
 

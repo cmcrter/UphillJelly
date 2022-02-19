@@ -15,11 +15,33 @@ public class LoadCustomizablesInGame : MonoBehaviour
 {
 
     // reference to the character
-    public GameObject Character;
+    public SkinnedMeshRenderer CharacterMesh;
 
     // reference to the outfit changer
     public OutfitChanger outfitChanger;
 
+    //
+    public b_Player b_player;
+
+    //
+    public void Start() {
+
+        /*
+        // load the current character material that has been saved
+        Character.GetComponent<MeshRenderer>().material = outfitChanger.gameObjectCharacterMaterialOptions
+            [outfitChanger.currentCharacterint];
+        */
+
+        outfitChanger.LoadedCustomizables1();
+
+        b_player.LoadPlayer1();
+
+        CharacterMesh.GetComponent<SkinnedMeshRenderer>().material = 
+            outfitChanger.gameObjectCharacterMaterialOptions[outfitChanger.currentCharacterint];
+
+    }
+
+    /*
     //
     public void ChangeCatMesh() {
 
@@ -28,5 +50,6 @@ public class LoadCustomizablesInGame : MonoBehaviour
             [outfitChanger.currentCharacterint];
 
     }
+    */
 
 }

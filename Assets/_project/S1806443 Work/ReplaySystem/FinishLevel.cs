@@ -32,6 +32,9 @@ namespace SleepyCat
         public TempScoreSystem tempScoreSystem;
 
         //
+        public GameObject wantToSaveScores;
+
+        //
         public void Start() {
 
             //
@@ -46,18 +49,43 @@ namespace SleepyCat
             if (col.gameObject.tag == "Player") {
 
                 //
-                b_player.SaveFinalValues();
-
-                //
-                playfabManager.SetScore();
-
-                //
-                leaderboardPanel.SetActive(true);
-
-                //
-                tempScoreSystem.TimerActive = false;
+                wantToSaveScores.SetActive(true);
 
             }
+
+        }
+
+        //
+        public void SaveLeaderboardValues() {
+
+            //
+            leaderboardPanel.SetActive(true);
+
+            //
+            b_player.SaveFinalValues();
+
+            //
+            playfabManager.SetScore();
+
+            //
+            tempScoreSystem.TimerActive = false;
+            
+            //
+            // ADD THIS IN
+            //
+            // b_Player.SaveFinalValues();
+            //
+
+            //
+            wantToSaveScores.SetActive(false);
+
+        }
+
+        //
+        public void DontSaveLeaderboardValues() {
+
+            //
+            //Do Something
 
         }
 
