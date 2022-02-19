@@ -32,13 +32,13 @@ public class ShopText : MonoBehaviour
     [Header("Starting Menu Buttons")]
 
     // first button text
-    public Text LoadProfile1Text;
+    public TMP_Text LoadProfile1Text;
 
     // second button text
-    public Text LoadProfile2Text;
+    public TMP_Text LoadProfile2Text;
 
     // third button text
-    public Text LoadProfile3Text;
+    public TMP_Text LoadProfile3Text;
 
     [Header("Play Buttons")]
 
@@ -54,6 +54,8 @@ public class ShopText : MonoBehaviour
     //
     public TempScoreSystem tempScoreSystem;
 
+    //
+    LoadCustomizablesInGame loadCustomizablesInGame;
 
     // first button pressed
     public void ButtonPressed1() {
@@ -65,6 +67,45 @@ public class ShopText : MonoBehaviour
             b_player.ghostSO2.ResetGhostData();
 
         }
+
+        #region CheckCurrent(isSave1)
+
+        // if no directory exists
+        if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
+
+            // create a directory for "/CurrentProfile"
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile1");
+
+        }
+
+        // if Profile 2 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 3 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        #endregion
+
+        //
+        //File.Create(Application.persistentDataPath + "/CurrentProfile/CurrentProfile1");
+
+
 
         // set the player 1 to true
         b_player.isSave1 = true;
@@ -99,6 +140,44 @@ public class ShopText : MonoBehaviour
 
         }
 
+        #region CheckCurrent(isSave2)
+
+        // if no directory exists
+        if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+            // create a directory for "/CurrentProfile"
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile2");
+
+        }
+
+        // if Profile 1 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 3 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        #endregion
+
+
+        
+
+
         // set the player 2 to true
         b_player.isSave2 = true;
 
@@ -130,6 +209,45 @@ public class ShopText : MonoBehaviour
             b_player.ghostSO2.ResetGhostData();
 
         }
+
+        #region CheckCurrent(isSave3)
+
+        // if no directory exists
+        if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+            // create a directory for "/CurrentProfile"
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile3");
+
+        }
+
+        // if Profile 1 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 3 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        #endregion
+
+        //
+        //File.Create(Application.persistentDataPath + "/CurrentProfile/CurrentProfile3.sdat");
+
+
 
         // set the player 3 to true
         b_player.isSave3 = true;
@@ -233,6 +351,10 @@ public class ShopText : MonoBehaviour
 
         // Load all of the data from the first player
         b_player.LoadPlayer1();
+
+        loadCustomizablesInGame.CHI = shop.CurrentHatSelectedInt;
+
+        loadCustomizablesInGame.CCM = shop.CurrentCharacterSelectedInt;
 
         // play 1
         b_player.PlayPlayer1();

@@ -84,6 +84,7 @@ public class Shop : MonoBehaviour
     // List of the character materials and gameobjects as ints to save
     public List<int> iSavedCharacterInts = new List<int>(); // SAVED
 
+    
 
     // current character price text
     public Text CurrentCharacterPriceText;
