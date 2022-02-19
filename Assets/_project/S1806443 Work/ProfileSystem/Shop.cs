@@ -466,7 +466,7 @@ public class Shop : MonoBehaviour
     public void lookatsaves() {
 
         //
-        // Where is this method called?
+        // Where is this method caled?
         // is it needed?
         // why am i not loading the second save 2 and 3?
         //
@@ -502,6 +502,7 @@ public class Shop : MonoBehaviour
 
     }
     
+
 
     #endregion
 

@@ -234,14 +234,11 @@ public class ShopText : MonoBehaviour
         // Load all of the data from the first player
         b_player.LoadPlayer1();
 
-        //
-        b_player.SavePlayer1();
-
         // play 1
-        //b_player.PlayPlayer1();
+        b_player.PlayPlayer1();
 
         //
-        //tempScoreSystem.TimerActive = true;
+        tempScoreSystem.TimerActive = true;
 
     }
 
@@ -269,14 +266,11 @@ public class ShopText : MonoBehaviour
         // Load all of the data from the second player
         b_player.LoadPlayer2();
 
-        //
-        b_player.SavePlayer2();
-
         // play 2
-        //b_player.PlayPlayer2();
+        b_player.PlayPlayer2();
 
         //
-        //tempScoreSystem.TimerActive = true;
+        tempScoreSystem.TimerActive = true;
 
     }
 
@@ -304,14 +298,11 @@ public class ShopText : MonoBehaviour
         // Load all of the data from the third player
         b_player.LoadPlayer3();
 
-        //
-        b_player.SavePlayer3();
-
         // play 3
-        //b_player.PlayPlayer3();
+        b_player.PlayPlayer3();
 
         //
-        //tempScoreSystem.TimerActive = true;
+        tempScoreSystem.TimerActive = true;
 
     }
 
