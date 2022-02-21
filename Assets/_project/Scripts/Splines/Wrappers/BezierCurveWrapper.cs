@@ -275,7 +275,7 @@ namespace L7Games.Utility.Splines
                 controlPoint = spline.GetControlPointAt(index);
                 return true;
             }
-            controlPoint = Vector3.zero;
+            controlPoint = spline.FirstControlPoint;
             return false;
         }
         /// <summary>
@@ -291,7 +291,7 @@ namespace L7Games.Utility.Splines
                 controlPoint = worldControlPoints[index];
                 return true;
             }
-            controlPoint = Vector3.zero;
+            controlPoint = worldControlPoints[0];
             return false;
         }
         #endregion

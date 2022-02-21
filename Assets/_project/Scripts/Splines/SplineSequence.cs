@@ -50,7 +50,12 @@ using L7Games.Utility.Splines;
                     return transform.InverseTransformPoint(containedSplines[containedSplines.Count - 1].WorldEndPosition);
                 }
             }
-            return Vector3.zero;
+            #if DEBUG || UNITY_EDITOR
+            Debug.LogError("Contained spline had no end position when referenced in LocalEndPosition");
+            #endif
+            // This should not happen, so make it something really noticeable
+            return new Vector3(100f, 0f, 0f);
+
         }
         set
         {
@@ -74,7 +79,11 @@ using L7Games.Utility.Splines;
                     return transform.InverseTransformPoint(containedSplines[0].WorldStartPosition);
                 }
             }
-            return Vector3.zero;
+            #if DEBUG || UNITY_EDITOR
+            Debug.LogError("Contained spline had no start position when referenced in LocalStartPosition");
+            #endif
+            // This should not happen, so make it something really noticeable
+            return new Vector3(0f, 100f, 0f);
         }
         set
         {
@@ -336,8 +345,11 @@ using L7Games.Utility.Splines;
         }
         else
         {
-            Debug.Log("A spline at index " + index.ToString() + " was null when referenced in GetPoint method", gameObject);
-            return Vector3.zero;
+            #if DEBUG || UNITY_EDITOR
+            Debug.LogError("A spline at index " + index.ToString() + " was null when referenced in GetPoint method", gameObject);
+            #endif
+            // This should not happen, so make it something really noticeable
+            return new Vector3(0f, 0f, 100f);
         }
     }
 
@@ -383,7 +395,8 @@ using L7Games.Utility.Splines;
         else
         {
             Debug.LogError("SplineSequence contained no splines when GetLengthBasedPoint was called", gameObject);
-            return Vector3.zero;
+            // Make it a strange value so it is identifiable  in build
+            return new Vector3(100f, 100f, 100f);
         }
     }
     #endregion
@@ -394,6 +407,14 @@ using L7Games.Utility.Splines;
     /// </summary>
     private void UpdateSplines()
     {
+        for (int i = 0; i < containedSplines.Count; ++i)
+        {
+            if (containedSplines[i] != null)
+            {
+                containedSplines[i].UpdateWorldPositions();
+            }
+
+        }
         if (connectEnds)
         {
             if (containedSplines.Count > 1)
@@ -435,7 +456,7 @@ using L7Games.Utility.Splines;
             }
             else
             {
-                Debug.LogWarning("A spline was null when updating distance", gameObject);
+                Debug.LogError("A spline was null when updating distance", gameObject);
             }
         }
     }
