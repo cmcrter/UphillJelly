@@ -5,8 +5,11 @@ using UnityEngine;
 
 namespace L7Games
 {
-    public class CharacterCollider : MonoBehaviour
+    public class WipeOutCollider : MonoBehaviour
     {
+        public float forceRequiredToWipeOut;
+
+
         // Start is called before the first frame update
         void Start()
         {
