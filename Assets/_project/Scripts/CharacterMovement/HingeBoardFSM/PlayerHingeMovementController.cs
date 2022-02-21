@@ -12,6 +12,7 @@ using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
 using L7Games.Triggerables;
+using L7Games;
 using System.Collections;
 
 namespace L7Games.Movement
@@ -309,7 +310,10 @@ namespace L7Games.Movement
 
             }
 
-            playerStateMachine.RunMachine(Time.deltaTime);
+            if (characterModel.activeSelf)
+            {
+                playerStateMachine.RunMachine(Time.deltaTime);
+            }
 
             if (Keyboard.current != null)
             {
@@ -327,7 +331,10 @@ namespace L7Games.Movement
 
         private void FixedUpdate()
         {
-            playerStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+            if (characterModel.activeSelf)
+            {
+                playerStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+            }
 
             if(bAddAdditionalGravity)
             {
@@ -340,12 +347,16 @@ namespace L7Games.Movement
         {
             for (int i = 0; i < collision.contactCount; ++i)
             {
-                if (collision.contacts[i].thisCollider.CompareTag("BodyWipeOutCollider"))
+                if (collision.contacts[i].thisCollider.gameObject.TryGetComponent(out WipeOutCollider characterCollider))
                 {
-                    WipeOut(fRB.velocity);
+                    //    if (fRB.velocity.magnitude > characterCollider.forceRequiredToWipeOut)
+                    //    {
+                    //        WipeOut(fRB.velocity);
+                    //        break;
+                    //    }
+                    //}
                 }
             }
-
         }
         #endregion
 
