@@ -383,6 +383,12 @@ namespace L7Games.Movement
                         force *= 2f;
                     }
 
+                    // Force is effected by the characters angle away from up
+                    float angleFromUp = Vector3.Angle(Vector3.up, playerTransform.forward);
+                    force *= angleFromUp / 90f;
+
+                    Debug.Log("Push force" + force);
+
                     movementRB.AddForce(force, ForceMode.Impulse);
                 }
              

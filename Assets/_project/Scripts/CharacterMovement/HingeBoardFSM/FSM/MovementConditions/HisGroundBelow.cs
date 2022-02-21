@@ -41,6 +41,9 @@ namespace L7Games.Movement
         [SerializeField]
         private float groundDist = 1.69f;
 
+        [SerializeField]
+        [Tooltip("The distance to the ground used if the local rotation raycasts are hitting something that could be ground")]
+        private float localTransformExtendGroundDist;
         #endregion
 
         #region Public Methods
@@ -161,8 +164,15 @@ namespace L7Games.Movement
                 BackRightGroundHitWorldDown = worldHit;
             }
 
+            // If the local rotation raycast are touching ground then increase the distance the ground downwards check is allowed
+            float worldDownGroundCheckDistance = groundDist;
+            if (FrontLeftGroundHitLocalDown.distance <= groundDist || FrontRightGroundHitLocalDown.distance <= groundDist || BackLeftGroundHitLocalDown.distance <= groundDist || BackRightGroundHitLocalDown.distance <= groundDist)
+            {
+                worldDownGroundCheckDistance = localTransformExtendGroundDist;
+            }
+
             //This hit may still be used for smoothing when the player is in the air
-            if (FrontLeftGroundHitWorldDown.distance <= groundDist || FrontRightGroundHitWorldDown.distance <= groundDist || BackLeftGroundHitWorldDown.distance <= groundDist || BackRightGroundHitWorldDown.distance <= groundDist)
+            if (FrontLeftGroundHitWorldDown.distance <= worldDownGroundCheckDistance || FrontRightGroundHitWorldDown.distance <= worldDownGroundCheckDistance || BackLeftGroundHitWorldDown.distance <= worldDownGroundCheckDistance || BackRightGroundHitWorldDown.distance <= worldDownGroundCheckDistance)
             {
                 return true;
             }

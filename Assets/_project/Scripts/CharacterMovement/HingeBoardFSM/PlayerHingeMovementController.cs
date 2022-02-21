@@ -84,8 +84,6 @@ namespace L7Games.Movement
         public RagdollDataContainer ragdollDataContainer;
         #endregion
 
-
-
         #region Public Methods
 
         public override void ResetPlayer()
@@ -345,18 +343,21 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            for (int i = 0; i < collision.contactCount; ++i)
+            if (characterModel.activeSelf)
             {
-                if (collision.contacts[i].thisCollider.gameObject.TryGetComponent(out WipeOutCollider characterCollider))
+                for (int i = 0; i < collision.contactCount; ++i)
                 {
-                    //    if (fRB.velocity.magnitude > characterCollider.forceRequiredToWipeOut)
-                    //    {
-                    //        WipeOut(fRB.velocity);
-                    //        break;
-                    //    }
-                    //}
+                    if (collision.contacts[i].thisCollider.gameObject.TryGetComponent(out WipeOutCollider characterCollider))
+                    {
+                        if (fRB.velocity.magnitude > characterCollider.forceRequiredToWipeOut)
+                        {
+                            WipeOut(fRB.velocity);
+                            break;
+                        }
+                    }
                 }
             }
+
         }
         #endregion
 
