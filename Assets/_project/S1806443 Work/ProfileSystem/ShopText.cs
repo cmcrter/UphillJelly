@@ -17,6 +17,9 @@ using System.IO;
 public class ShopText : MonoBehaviour
 {
 
+    //
+    public OutfitChanger outfitChanger;
+
     // Shop Reference
     public Shop shop;
 
@@ -126,7 +129,7 @@ public class ShopText : MonoBehaviour
         // save the second replay for the first save
         b_player.SavePlayer1Second();
 
-
+        
     }
 
     // second button pressed
@@ -352,15 +355,20 @@ public class ShopText : MonoBehaviour
         // Load all of the data from the first player
         b_player.LoadPlayer1();
 
-        loadCustomizablesInGame.CHI = shop.CurrentHatSelectedInt;
+        //loadCustomizablesInGame.CHI = shop.CurrentHatSelectedInt;
 
-        loadCustomizablesInGame.CCM = shop.CurrentCharacterSelectedInt;
+        //loadCustomizablesInGame.CCM = shop.CurrentCharacterSelectedInt;
 
         // play 1
         b_player.PlayPlayer1();
 
         //
         tempScoreSystem.TimerActive = true;
+
+        // Save the static ints in Shop
+        outfitChanger.SaveStaticInts();
+
+        Debug.Log("88888888888");
 
     }
 
@@ -394,6 +402,9 @@ public class ShopText : MonoBehaviour
         //
         tempScoreSystem.TimerActive = true;
 
+        // Save the static ints in Shop
+        outfitChanger.SaveStaticInts();
+
     }
 
     // press play button 3
@@ -425,6 +436,9 @@ public class ShopText : MonoBehaviour
 
         //
         tempScoreSystem.TimerActive = true;
+
+        // Save the static ints in Shop
+        outfitChanger.SaveStaticInts();
 
     }
 

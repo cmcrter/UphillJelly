@@ -63,6 +63,14 @@ public class Shop : MonoBehaviour
     // current character selected as an int
     public int CurrentCharacterSelectedInt;
 
+    //
+    [SerializeField]
+    public static int LastHatInt;
+
+    //
+    [SerializeField]
+    public static int LastCharacterInt;
+
 
     // current hat price as an int
     public int CurrentHatPriceInt;
@@ -101,23 +109,29 @@ public class Shop : MonoBehaviour
 
     #region Methods
 
+    
+
     // On start
     public void Start() {
+
+        
 
         // set the currency to 500
         Currency = 500;
 
-        // set the current hat to 4 (No hat)
-        CurrentHatSelectedInt = 4;
-
-        // set the current character to 2(one of the middle materials)
-        CurrentCharacterSelectedInt = 2;
+        
 
 
     }
 
     // on update
     public void Update() {
+
+        //Debug.Log(LastCharacterInt);
+        //Debug.Log(LastHatInt);
+
+        
+
 
         // set the currency text to "Currency : £ " + currency int
         currencyText.text = "Currency : £ " + Currency;

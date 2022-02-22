@@ -62,16 +62,24 @@ public class OutfitChanger : MonoBehaviour
 
 
     // current int for the hats
-    public int currentGOint = 0;
+    public int currentGOint;
 
     // current int for the hat material 
-    public int currentGOMaterialint = 0;
+    public int currentGOMaterialint;
 
     // current character int
-    public int currentCharacterint = 0;
+    public int currentCharacterint;
 
+    //
+    [SerializeField]
+    public int LastHatInt;
 
+    //
+    [SerializeField]
+    public int LastCharacterInt;
 
+    public int thischarint;
+    public int thishatint;
 
     #endregion
 
@@ -92,6 +100,56 @@ public class OutfitChanger : MonoBehaviour
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
+
+    }
+
+    public void Update() {
+
+        LastCharacterInt = currentCharacterint;
+
+        LastHatInt = currentGOint;
+
+        thischarint = LastCharacterInt;
+
+        thishatint = LastHatInt;
+
+    }
+
+    //
+    public void SaveStaticInts() {
+
+        Debug.Log("FGFGFGFGFGFGFGFGF");
+
+        
+
+        //
+        //LastCharacterInt = shopScript.CurrentCharacterSelectedInt;
+        //Debug.Log(shopScript.CurrentCharacterSelectedInt);
+
+        //
+        //LastHatInt = shopScript.CurrentHatSelectedInt;
+        //Debug.Log(shopScript.CurrentHatSelectedInt);
+
+
+
+
+        //
+        //currentCharacterint = LastCharacterInt;
+
+        //
+        //currentGOint = LastHatInt;
+
+        //
+        //currentGOMaterialint = LastHatInt;
+
+        // set the current hat to 4 (No hat)
+        //CurrentHatSelectedInt = LastHatInt;
+        //Debug.Log(LastHatInt);
+
+        // set the current character to 2(one of the middle materials)
+        //CurrentCharacterSelectedInt = LastCharacterInt;
+        //Debug.Log(LastCharacterInt);
+
     }
 
     // Loaded customizables 1
@@ -100,6 +158,7 @@ public class OutfitChanger : MonoBehaviour
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
 
+        
 
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
