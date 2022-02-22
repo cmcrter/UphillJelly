@@ -55,6 +55,10 @@ namespace L7Games.Triggerables.CheckpointSystem
         {
             if (defaultCheckpoint != null)
             {
+                if (playersCurrentCheckpoints == null)
+                {
+                    RegisterAllPlayers();
+                }
                 foreach (PlayerController player in FindObjectsOfType<PlayerController>())
                 {
                     playersCurrentCheckpoints.Add(player, defaultCheckpoint);
@@ -110,6 +114,14 @@ namespace L7Games.Triggerables.CheckpointSystem
         private void RegisterPlayersCurrentCheckpoint(PlayerController playerEntering, Checkpoint checkpointEntered)
         {
             playersCurrentCheckpoints[playerEntering] = checkpointEntered;
+        }
+
+        private void RegisterAllPlayers()
+        {
+            foreach (PlayerController player in FindObjectsOfType<PlayerController>())
+            {
+                playersCurrentCheckpoints.Add(player, defaultCheckpoint);
+            }
         }
         #endregion
     }

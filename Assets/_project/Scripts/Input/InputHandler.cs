@@ -90,6 +90,11 @@ namespace L7Games.Input
         public bool StartGrindHeld { get; private set; } = false;
 
         /// <summary>
+        /// If the WipeOutReset key is held down
+        /// </summary>
+        public bool WipeOutResetHeld { get; private set; } = false;
+
+        /// <summary>
         /// The axis value for the balance actions
         /// </summary>
         public float BalanceAxis { get; private set; } = 0f;
@@ -189,6 +194,21 @@ namespace L7Games.Input
         /// Called when the start grind input action has been start
         /// </summary>
         public event System.Action startGrindUpdate;
+        #endregion
+
+        #region Player Action
+        /// <summary>
+        /// Called when the Wipe out or reset action has been ended
+        /// </summary>
+        public event System.Action wipeoutResetEnded;
+        /// <summary>
+        /// Called when the Wipe out or reset action has been start
+        /// </summary>
+        public event System.Action wipeoutResetStarted;
+        /// <summary>
+        /// Called when the Wipe out or reset action has been start
+        /// </summary>
+        public event System.Action wipeoutResetUpdate;
         #endregion
 
         /// <summary>
@@ -495,6 +515,34 @@ namespace L7Games.Input
         }
         #endregion
 
+        #region Start Grind Action
+        /// <summary>
+        /// Called when the player performs the WipeOutReset action
+        /// </summary>
+        /// <param name="callbackContext">start grind action's CallbackContext</param>
+        private void WipeOutResetAction_Performed(InputAction.CallbackContext callbackContext)
+        {
+            WipeOutResetHeld = true;
+            if (wipeoutResetStarted != null)
+            {
+                wipeoutResetStarted();
+            }
+        }
+
+        /// <summary>
+        /// Called when the WipeOutReset action is canceled
+        /// </summary>
+        /// <param name="callbackContext">The brake action's CallbackContext</param>
+        private void WipeOutReset_Canceled(InputAction.CallbackContext callbackContext)
+        {
+            WipeOutResetHeld = false;
+            if (wipeoutResetEnded != null)
+            {
+                wipeoutResetEnded();
+            }
+        }
+        #endregion
+
         #region Turning Action
         /// <summary>
         /// Called when the player cancels the turn action to cancel out the turning axis value
@@ -552,6 +600,9 @@ namespace L7Games.Input
             playerInput.actions["Aerial_StartGrind"].performed += StartGrindAction_Performed;
             playerInput.actions["Aerial_StartGrind"].canceled += StartGrindAction_Canceled;
 
+            playerInput.actions["Aerial_WipeOutReset"].performed += WipeOutResetAction_Performed;
+            playerInput.actions["Aerial_WipeOutReset"].canceled +=  WipeOutReset_Canceled;
+
             playerInput.actions["Aerial_TestInput_0"].performed += TestInput0_performed;
             playerInput.actions["Aerial_TestInput_0"].canceled += TestInput0_Canceled;
 
@@ -591,6 +642,9 @@ namespace L7Games.Input
             playerInput.actions["Grinding_Turning"].canceled += TurningAction_Canceled;
 
             playerInput.actions["Grinding_JumpUp"].performed += GrindingJumpUpAction_Performed;
+
+            playerInput.actions["Grinding_WipeOutReset"].performed +=   WipeOutResetAction_Performed;
+            playerInput.actions["Grinding_WipeOutReset"].canceled += WipeOutReset_Canceled;
         }
         /// <summary>
         /// Bind to all the events to the grounded actions
@@ -622,6 +676,9 @@ namespace L7Games.Input
 
             playerInput.actions["Grounded_KeyboardRightTurn"].performed += TurningActionRightTurn_Performed;
             playerInput.actions["Grounded_KeyboardRightTurn"].canceled  += TurningActionRightTurn_Canceled;
+
+            playerInput.actions["Grounded_WipeOutReset"].performed += WipeOutResetAction_Performed;
+            playerInput.actions["Grounded_WipeOutReset"].canceled += WipeOutReset_Canceled;
         }
         /// <summary>
         /// Bind to all the events to the wall riding actions
@@ -632,6 +689,9 @@ namespace L7Games.Input
 
             playerInput.actions["WallRiding_Turning"].performed += TurningAction_Peformed;
             playerInput.actions["WallRiding_Turning"].canceled += TurningAction_Canceled;
+
+            playerInput.actions["WallRiding_WipeOutReset"].performed += WipeOutResetAction_Performed;
+            playerInput.actions["WallRiding_WipeOutReset"].canceled += WipeOutReset_Canceled;
         }
         /// <summary>
         /// Unbind to all the events to the aerial actions
@@ -643,6 +703,10 @@ namespace L7Games.Input
 
             playerInput.actions["Aerial_StartGrind"].performed -= StartGrindAction_Performed;
             playerInput.actions["Aerial_StartGrind"].canceled -= StartGrindAction_Canceled;
+
+            playerInput.actions["Aerial_WipeOutReset"].performed    -= WipeOutResetAction_Performed;
+            playerInput.actions["Aerial_WipeOutReset"].canceled     -= WipeOutReset_Canceled;
+
         }
         /// <summary>
         /// Unbind to all the events to the grinding actions
@@ -653,6 +717,9 @@ namespace L7Games.Input
             playerInput.actions["Grinding_Turning"].canceled -= TurningAction_Canceled;
 
             playerInput.actions["Grinding_JumpUp"].performed -= GrindingJumpUpAction_Performed;
+
+            playerInput.actions["Grinding_WipeOutReset"].performed  -= WipeOutResetAction_Performed;
+            playerInput.actions["Grinding_WipeOutReset"].canceled   -= WipeOutReset_Canceled;
         }
         /// <summary>
         /// Unbind to all the events to the grounded actions
@@ -678,6 +745,9 @@ namespace L7Games.Input
 
             playerInput.actions["Grounded_StartGrind"].performed -= StartGrindAction_Performed;
             playerInput.actions["Grounded_StartGrind"].canceled -= StartGrindAction_Canceled;
+
+            playerInput.actions["Grounded_WipeOutReset"].performed  -= WipeOutResetAction_Performed;
+            playerInput.actions["Grounded_WipeOutReset"].canceled   -= WipeOutReset_Canceled;
         }
         /// <summary>
         /// Unbind to all the events to the wall riding actions
@@ -686,6 +756,9 @@ namespace L7Games.Input
         {
             playerInput.actions["WallRiding_Turning"].performed -= TurningAction_Peformed;
             playerInput.actions["WallRiding_Turning"].canceled -= TurningAction_Canceled;
+
+            playerInput.actions["WallRiding_WipeOutReset"].performed    -= WipeOutResetAction_Performed;
+            playerInput.actions["WallRiding_WipeOutReset"].canceled     -= WipeOutReset_Canceled;
         }
         #endregion
         /// <summary>

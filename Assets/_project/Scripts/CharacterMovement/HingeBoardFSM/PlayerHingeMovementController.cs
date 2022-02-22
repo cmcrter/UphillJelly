@@ -12,6 +12,7 @@ using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
 using L7Games.Triggerables;
+using L7Games.Triggerables.CheckpointSystem;
 using L7Games;
 using System.Collections;
 
@@ -82,6 +83,8 @@ namespace L7Games.Movement
 
         [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
+
+        public CheckpointManager checkpointManager;
         #endregion
 
         #region Public Methods
@@ -265,6 +268,8 @@ namespace L7Games.Movement
             groundedState.RegisterInputs();
             grindingState.RegisterInputs();
             wallRideState.RegisterInputs();
+
+            inputHandler.wipeoutResetStarted += WipeOutResetPressed;
         }
 
 
@@ -274,6 +279,8 @@ namespace L7Games.Movement
             groundedState.UnRegisterInputs();
             grindingState.UnRegisterInputs();
             wallRideState.UnRegisterInputs();
+
+            inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
         }
 
         private void Start()
@@ -286,6 +293,11 @@ namespace L7Games.Movement
             playerModel.transform.position = new Vector3(boardObject.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), boardObject.transform.position.z);
 
             //characterInitalBones = GetBonesFromObject(characterModel);
+
+            if (checkpointManager == null)
+            {
+                checkpointManager = FindObjectOfType<CheckpointManager>();
+            }
         }
 
         private void Update()
@@ -299,14 +311,7 @@ namespace L7Games.Movement
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
 
-            else if (UnityEngine.InputSystem.Keyboard.current.oKey.IsActuated())
-            {
-                if (characterModel.activeSelf)
-                {
-                    WipeOut(fRB.velocity);
-                }
 
-            }
 
             if (characterModel.activeSelf)
             {
@@ -321,7 +326,7 @@ namespace L7Games.Movement
                 }
             }
 
-            if(inputHandler.TurningAxis != 0 && turningCo == null)
+            if (inputHandler.TurningAxis != 0 && turningCo == null)
             {
                 turningCo = StartCoroutine(Co_TurnAngle());
             }
@@ -575,6 +580,21 @@ namespace L7Games.Movement
             }
 
             return ragDoll;
+        }
+
+        private void WipeOutResetPressed()
+        {
+            if (characterModel.activeSelf)
+            {
+                WipeOut(fRB.velocity);
+            }
+            else
+            {
+                if (checkpointManager != null)
+                {
+                    checkpointManager.MovePlayerToTheirLastCheckPoint(this);
+                }
+            }
         }
         #endregion
     }
