@@ -16,28 +16,78 @@ public class LoadCustomizablesInGame : MonoBehaviour
 {
 
     // reference to the character
-    public SkinnedMeshRenderer CharacterMesh;
+    //public SkinnedMeshRenderer CharacterMesh;
 
     // reference to the outfit changer
     public OutfitChanger outfitChanger;
 
     //
+    public Shop shop;
+
+    //
     public b_Player b_player;
 
     //
-    public int CCM;
+    public ReplaySaveManager replaySaveManager;
+
+    [Header("Fluctuating Ints")]
+    
 
     //
-    public int CHI;
+    public int CurrentPlayerCharacter;
+
+    //
+    public int CurrentGhostCharacter;
+
+    //
+    public int CurrentPlayerHat;
+
+    //
+    public int CurrentGhostHat;
+
+
+    //
+    //public SkinnedMeshRenderer PlayableMesh;
+
+
 
     //
     public void Start() {
 
         //
         LoadTheCustomizables();
+        /*
+        //
+        if (replaySaveManager.isMapTutorial) {
+
+            //
+            outfitChanger.currentCharacterint = shop.CurrentCharacterSelectedInt;
+
+            // load the current character material that has been saved
+            outfitChanger.characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material 
+                = outfitChanger.gameObjectCharacterMaterialOptions[shop.CurrentCharacterSelectedInt];
+
+        }
+
+        //
+        if (replaySaveManager.isMapCity) {
+
+            //
+
+        }
+
+        //
+        if (!replaySaveManager.isMapTutorial || !replaySaveManager.isMapCity) {
+
+            //
+            return;
+
+        }
+        */
 
     }
 
+    
     //
     public void LoadTheCustomizables() {
 
@@ -78,6 +128,25 @@ public class LoadCustomizablesInGame : MonoBehaviour
     }
 
     //
+    public void LoadInts() {
+
+        //
+        CurrentPlayerCharacter = shop.CurrentCharacterSelectedInt;
+
+        //
+        CurrentGhostCharacter = shop.CurrentCharacterSelectedInt;
+
+
+        //
+        CurrentPlayerHat = shop.CurrentHatSelectedInt;
+
+        //
+        CurrentGhostHat = shop.CurrentHatSelectedInt;
+
+    }
+
+    /*
+    //
     public void ChangeCatMesh() {
 
         // load the current character material that has been saved
@@ -85,5 +154,7 @@ public class LoadCustomizablesInGame : MonoBehaviour
             [outfitChanger.currentCharacterint];
 
     }
+    */
+
 
 }

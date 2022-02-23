@@ -4830,7 +4830,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 340821021569287881}
-        m_TargetAssemblyTypeName: ShopText, Scripts
+        m_TargetAssemblyTypeName: ShopText, Assembly-CSharp
         m_MethodName: PressPlayButton1
         m_Mode: 1
         m_Arguments:
@@ -5359,6 +5359,7 @@ MonoBehaviour:
   PlayButton2: {fileID: 340821020593935604}
   PlayButton3: {fileID: 340821022101630886}
   tempScoreSystem: {fileID: 0}
+  loadCustomizablesInGame: {fileID: 340821021612150829}
 --- !u!4 &340821021569287882
 Transform:
   m_ObjectHideFlags: 0
@@ -5402,7 +5403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ea8a8714bf4d2240a27346cbd648796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  replaySaveManager: {fileID: 0}
+  replaySaveManager: {fileID: 5698360513040386006, guid: fed1660b2770cc6468be540bc62331f1, type: 3}
   ghostSO1: {fileID: 11400000, guid: ef4c4b59d7524f147ab7df2d5ed06d57, type: 2}
   ghostSO2: {fileID: 11400000, guid: c12dd2e2f17f3db43a2aa479722bc45d, type: 2}
   isSave1: 0
@@ -5410,7 +5411,7 @@ MonoBehaviour:
   isSave3: 0
   changeCamera: {fileID: 0}
   loadCustomizablesInGame: {fileID: 340821021612150829}
-  replayGhostSaveManager: {fileID: 0}
+  replayGhostSaveManager: {fileID: 5698360513040386006, guid: fed1660b2770cc6468be540bc62331f1, type: 3}
   HatBoughtBools: 
   CharacterBoughtBools: 
   hatBoughtInts: 
@@ -5652,11 +5653,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 045b8a25f8551394aadb4c9773278686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterMesh: {fileID: 0}
   outfitChanger: {fileID: 6013952650304028627}
-  b_player: {fileID: 0}
-  CCM: 0
-  CHI: 0
+  shop: {fileID: 340821021978977642}
+  b_player: {fileID: 340821021575515474}
+  CurrentPlayerCharacter: 0
+  CurrentGhostCharacter: 0
+  CurrentPlayerHat: 0
+  CurrentGhostHat: 0
 --- !u!1 &340821021621415043
 GameObject:
   m_ObjectHideFlags: 0
@@ -20717,10 +20720,6 @@ MonoBehaviour:
   currentGOint: 0
   currentGOMaterialint: 0
   currentCharacterint: 0
-  LastHatInt: 0
-  LastCharacterInt: 0
-  thischarint: 0
-  thishatint: 0
 --- !u!33 &2405999506305332926
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -21249,10 +21248,6 @@ MonoBehaviour:
   currentGOint: 0
   currentGOMaterialint: 0
   currentCharacterint: 0
-  LastHatInt: 0
-  LastCharacterInt: 0
-  thischarint: 0
-  thishatint: 0
 --- !u!33 &6013952650304028638
 MeshFilter:
   m_ObjectHideFlags: 0

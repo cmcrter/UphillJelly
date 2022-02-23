@@ -58,7 +58,7 @@ public class ShopText : MonoBehaviour
     public TempScoreSystem tempScoreSystem;
 
     //
-    LoadCustomizablesInGame loadCustomizablesInGame;
+    public LoadCustomizablesInGame loadCustomizablesInGame;
 
     // first button pressed
     public void ButtonPressed1() {
@@ -129,7 +129,9 @@ public class ShopText : MonoBehaviour
         // save the second replay for the first save
         b_player.SavePlayer1Second();
 
-        
+        //
+        loadCustomizablesInGame.LoadInts();
+
     }
 
     // second button pressed
@@ -199,6 +201,8 @@ public class ShopText : MonoBehaviour
         // save the second replay for the second save
         b_player.SavePlayer2Second();
 
+        //
+        loadCustomizablesInGame.LoadInts();
 
     }
 
@@ -272,6 +276,8 @@ public class ShopText : MonoBehaviour
         // save the second replay for the third save
         b_player.SavePlayer3Second();
 
+        //
+        loadCustomizablesInGame.LoadInts();
 
     }
 
@@ -352,12 +358,20 @@ public class ShopText : MonoBehaviour
 
         }
 
+        //
+        loadCustomizablesInGame.LoadInts();
+
+        //
+        b_player.SavePlayer1();
+
         // Load all of the data from the first player
         b_player.LoadPlayer1();
 
         //loadCustomizablesInGame.CHI = shop.CurrentHatSelectedInt;
 
-        //loadCustomizablesInGame.CCM = shop.CurrentCharacterSelectedInt;
+        
+
+        
 
         // play 1
         b_player.PlayPlayer1();
@@ -366,7 +380,7 @@ public class ShopText : MonoBehaviour
         tempScoreSystem.TimerActive = true;
 
         // Save the static ints in Shop
-        outfitChanger.SaveStaticInts();
+        //outfitChanger.SaveStaticInts();
 
         Debug.Log("88888888888");
 
@@ -393,8 +407,16 @@ public class ShopText : MonoBehaviour
 
         }
 
+        //
+        loadCustomizablesInGame.LoadInts();
+
+        //
+        b_player.SavePlayer2();
+
         // Load all of the data from the second player
         b_player.LoadPlayer2();
+
+        
 
         // play 2
         b_player.PlayPlayer2();
@@ -403,7 +425,7 @@ public class ShopText : MonoBehaviour
         tempScoreSystem.TimerActive = true;
 
         // Save the static ints in Shop
-        outfitChanger.SaveStaticInts();
+        //outfitChanger.SaveStaticInts();
 
     }
 
@@ -428,8 +450,15 @@ public class ShopText : MonoBehaviour
 
         }
 
+        //
+        loadCustomizablesInGame.LoadInts();
+
+        //
+        b_player.SavePlayer3();
+
         // Load all of the data from the third player
         b_player.LoadPlayer3();
+
 
         // play 3
         b_player.PlayPlayer3();
@@ -438,7 +467,7 @@ public class ShopText : MonoBehaviour
         tempScoreSystem.TimerActive = true;
 
         // Save the static ints in Shop
-        outfitChanger.SaveStaticInts();
+        //outfitChanger.SaveStaticInts();
 
     }
 
