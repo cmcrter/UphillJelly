@@ -99,6 +99,7 @@ namespace L7Games.Movement
         public override void OnStateEnter()
         {
             pInput.SwitchCurrentActionMap("WallRiding");
+            playerMovement.characterAnimator.SetBool("wallriding", true);
 
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
@@ -133,6 +134,8 @@ namespace L7Games.Movement
 
             fRB.isKinematic = false;
             bRB.isKinematic = false;
+
+            playerMovement.characterAnimator.SetBool("wallriding", false);
             hasRan = false;
         }
 

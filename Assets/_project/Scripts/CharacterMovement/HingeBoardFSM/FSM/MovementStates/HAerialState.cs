@@ -121,6 +121,7 @@ namespace L7Games.Movement
         public override void OnStateEnter()
         {
             pInput.SwitchCurrentActionMap("Aerial");
+            parentController.characterAnimator.SetBool("aerial", true);
 
             parentController.ResetWheelPos();
             parentController.AlignWheels();
@@ -136,6 +137,8 @@ namespace L7Games.Movement
         public override void OnStateExit()
         {
             parentController.StopAirInfluenctCoroutine();
+            parentController.characterAnimator.SetBool("aerial", false);
+
             hasRan = false;
         }
     }

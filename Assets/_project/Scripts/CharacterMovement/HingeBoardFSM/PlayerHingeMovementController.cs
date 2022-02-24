@@ -51,10 +51,12 @@ namespace L7Games.Movement
         //Back Rigidbody
         [SerializeField]
         private Rigidbody bRB;
+        [SerializeField]
+        private Rigidbody ModelRB;
 
-        public SphereCollider ballMovement;
         public PlayerInput input;
         public InputHandler inputHandler;
+        public Animator characterAnimator;
 
         [SerializeField]
         private Transform frontWheelPos;
@@ -257,7 +259,7 @@ namespace L7Games.Movement
             groundedState.InitialiseState(this, fRB, bRB, groundBelow, grindBelow);
             aerialState.InitialiseState(this, fRB, bRB, groundBelow, nextToWallRun, grindBelow);
             wallRideState.InitialiseState(this, fRB, bRB, nextToWallRun, groundBelow);
-            grindingState.InitialiseState(this, fRB, grindBelow);
+            grindingState.InitialiseState(this, fRB, bRB, ModelRB, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(aerialState);
         }
@@ -289,15 +291,15 @@ namespace L7Games.Movement
             initialRot = transform.rotation;
             fRB.transform.parent = null;
 
-            //Setting up model position
-            playerModel.transform.position = new Vector3(boardObject.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), boardObject.transform.position.z);
-
             //characterInitalBones = GetBonesFromObject(characterModel);
 
             if (checkpointManager == null)
             {
                 checkpointManager = FindObjectOfType<CheckpointManager>();
             }
+
+            characterAnimator.SetFloat("crouchingFloat", -1);
+            characterAnimator.SetFloat("turnValue", 0);
         }
 
         private void Update()
@@ -310,8 +312,6 @@ namespace L7Games.Movement
             {
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
-
-
 
             if (characterModel.activeSelf)
             {
@@ -329,6 +329,11 @@ namespace L7Games.Movement
             if (inputHandler.TurningAxis != 0 && turningCo == null)
             {
                 turningCo = StartCoroutine(Co_TurnAngle());
+            }
+
+            if(AirturningCo != null || groundedState.hasRan)
+            {
+                characterAnimator.SetFloat("turnValue", currentTurnInput / turnClamp);
             }
         }
 
@@ -372,7 +377,7 @@ namespace L7Games.Movement
         //A few utility functions
         public override void MoveToPosition(Vector3 positionToMoveTo)
         {
-            ballMovement.transform.position = positionToMoveTo;
+            
         }
 
         public void ResetWheelPos()
@@ -442,6 +447,8 @@ namespace L7Games.Movement
             {
                 playerCamera.target = boneBodies[0].transform;
             }
+
+            characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
         }
 
