@@ -219,6 +219,7 @@ namespace L7Games.Movement
                     yield return null;
                 }
 
+                currentTrickPercent = 1;
                 //Go to next trick if it's a combo
                 trickCombo.RemoveAt(0);
                          
