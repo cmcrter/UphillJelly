@@ -95,7 +95,7 @@ namespace L7Games.Movement
 
         [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
-
+        public bool bWipeOutLocked = false;
         public CheckpointManager checkpointManager;
         #endregion
 
@@ -380,7 +380,7 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (characterModel.activeSelf)
+            if (characterModel.activeSelf && !bWipeOutLocked)
             {
                 for (int i = 0; i < collision.contactCount; ++i)
                 {

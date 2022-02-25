@@ -7391,7 +7391,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1842923840
 MeshRenderer:
@@ -7455,9 +7455,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bd51c964e35e614cbf91384c942a61c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallRideWall: {fileID: 0}
+  wallRideWall: {fileID: 1842923838}
   CoyoteTime: 0
-  wallSpeed: 0.3
+  wallSpeed: 0.15
 --- !u!1001 &1865303748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11243,8 +11243,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5055103341206589462, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
       propertyPath: wallSpeed
-      value: 0.5
+      value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 5055103341206589462, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
+      propertyPath: wallRideWall
+      value: 
+      objectReference: {fileID: 1417921756}
     - target: {fileID: 5055103341206589482, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -11288,6 +11292,14 @@ PrefabInstance:
     - target: {fileID: 5055103341206589482, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055103341206589483, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055103341206589483, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
+      propertyPath: m_Size.z
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5055103341206589485, guid: ee7666fc156cf5d4e8605646f6f88ec0, type: 3}
       propertyPath: m_Name
