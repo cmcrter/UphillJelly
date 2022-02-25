@@ -511,12 +511,12 @@ namespace L7Games.Movement
                 if(InfluenceDir)
                 {
                     yield return new WaitForFixedUpdate();
-                    fRB.AddForce(-transform.right * 5f, ForceMode.Impulse);
+                    fRB.AddForce(-transform.right * 7.5f, ForceMode.Impulse);
                 }
                 else if (inputHandler.TurningAxis != 0 )
                 {
                     yield return new WaitForFixedUpdate();
-                    fRB.AddForce(transform.right * 5f, ForceMode.Impulse);
+                    fRB.AddForce(transform.right * 7.5f, ForceMode.Impulse);
                 }
 
                 influenceTimer.Tick(Time.deltaTime);
