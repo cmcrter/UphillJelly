@@ -38,7 +38,11 @@ namespace L7Games.Movement
         private float adjustGroundSmoothness = 4f;
 
         private bool wipeOutOnExit = false;
-        private Coroutine trickPlaying;
+        public Coroutine trickPlaying
+        {
+            get;
+            set;
+        }
 
         [SerializeField]
         private AnimationClip[] trickClips;
@@ -153,16 +157,20 @@ namespace L7Games.Movement
             if(trickPlaying != null)
             {
                 parentController.StopCoroutine(trickPlaying);
+                trickPlaying = null;
             }
 
             parentController.StopAirInfluenctCoroutine();
             parentController.characterAnimator.SetBool("aerial", false);
 
-            if(wipeOutOnExit)
+            if(wipeOutOnExit && currentTrickPercent < 0.8f)
             {
                 parentController.WipeOut(movementRB.velocity);
                 wipeOutOnExit = false;
             }
+
+            trickCombo.Clear();
+            currentTrickPercent = 0;
 
             hasRan = false;
         }
