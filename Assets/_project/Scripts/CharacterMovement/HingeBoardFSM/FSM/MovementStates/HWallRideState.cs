@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using Cinemachine;
 
 namespace L7Games.Movement
 {
@@ -38,6 +39,9 @@ namespace L7Games.Movement
         private Vector3 wallForward;
         [SerializeField]
         private float rideSpeed = 0.1f;
+
+        [SerializeField]
+        CinemachineVirtualCamera wallRideCam;
 
         #region Public Methods
 
@@ -105,10 +109,15 @@ namespace L7Games.Movement
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
             rideSpeed = nextToWallRun.wallSpeed;
 
+            playerMovement.camBrain.enabled = false;
+            wallRideCam.enabled = true;
+
             playerMovement.transform.forward = wallForward;
             playerMovement.transform.right = nextToWallRun.currentWallRide.transform.forward;
             playerMovement.AlignWheels();
             playerMovement.ResetWheelPos();
+
+            
 
             fRB.isKinematic = true;
             fRB.velocity = Vector3.zero;
@@ -131,6 +140,8 @@ namespace L7Games.Movement
 
             nextToWallRun.StartCooldown();
 
+            playerMovement.camBrain.enabled = true;
+            wallRideCam.enabled = false;
 
             fRB.isKinematic = false;
             bRB.isKinematic = false;
