@@ -12,6 +12,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace L7Games.Movement
 {
@@ -34,6 +36,16 @@ namespace L7Games.Movement
         public float AerialDrag = 0.05f;
         [SerializeField]
         private float adjustGroundSmoothness = 4f;
+
+        private bool wipeOutOnExit = false;
+        private Coroutine trickPlaying;
+
+        [SerializeField]
+        private AnimationClip[] trickClips;
+        [SerializeField]
+        private float currentTrickPercent;
+        [SerializeField]
+        private List<AnimationClip> trickCombo = new List<AnimationClip>();
 
         public HAerialState()
         {
@@ -58,11 +70,13 @@ namespace L7Games.Movement
         public void RegisterInputs()
         {
             //Register functions
+            inputHandler.trickPressed += Trick;
         }
 
         public void UnRegisterInputs()
         {
             //Unregister functions
+            inputHandler.trickPressed -= Trick;
         }
 
         public override State returnCurrentState()
@@ -136,10 +150,78 @@ namespace L7Games.Movement
 
         public override void OnStateExit()
         {
+            if(trickPlaying != null)
+            {
+                parentController.StopCoroutine(trickPlaying);
+            }
+
             parentController.StopAirInfluenctCoroutine();
             parentController.characterAnimator.SetBool("aerial", false);
 
+            if(wipeOutOnExit)
+            {
+                parentController.WipeOut(movementRB.velocity);
+                wipeOutOnExit = false;
+            }
+
             hasRan = false;
+        }
+
+        private void Trick() 
+        {
+            AnimationClip trick = trickClips[UnityEngine.Random.Range(0, trickClips.Length)];
+
+            if(trickCombo.Count < 2)
+            {
+                if(trickPlaying == null)
+                {
+                    trickCombo.Add(trick);
+                    trickPlaying = parentController.StartCoroutine(Co_TrickPlayed(trick.length));
+                }
+                else
+                {
+                    if(currentTrickPercent > 0.8f || currentTrickPercent < 1)
+                    {
+                        //Add to the combo for when the current animation is done (only if the trick is almost complete)
+                        trickCombo.Add(trick);
+                    }
+                }
+            }
+        }
+
+        private IEnumerator Co_TrickPlayed(float trickLength)
+        {
+            wipeOutOnExit = true;
+            
+            while(trickCombo.Count > 0)
+            {
+                parentController.characterAnimator.Play(trickCombo[0].name);
+                var state = parentController.characterAnimator.GetCurrentAnimatorStateInfo(0);
+                
+                trickLength = trickCombo[0].length * state.speed;
+                currentTrickPercent = 0;
+
+                float currentTrickTimer = 0;
+
+                while(currentTrickTimer < trickLength)
+                {
+                    currentTrickPercent = currentTrickTimer / trickLength;
+                    currentTrickTimer += Time.deltaTime;
+
+                    yield return null;
+                }
+
+                //Go to next trick if it's a combo
+                trickCombo.RemoveAt(0);
+                         
+                yield return null;
+            }
+
+            wipeOutOnExit = false;
+            parentController.characterAnimator.Play("Aerial");
+
+            trickCombo.Clear();
+            trickPlaying = null;
         }
     }
 }

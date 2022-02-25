@@ -15,6 +15,8 @@ using L7Games.Triggerables;
 using L7Games.Triggerables.CheckpointSystem;
 using L7Games;
 using System.Collections;
+using Cinemachine;
+using System.Collections.Generic;
 
 namespace L7Games.Movement
 {
@@ -35,6 +37,8 @@ namespace L7Games.Movement
         public HisOnGrind grindBelow = new HisOnGrind();
 
         public PlayerCamera playerCamera;
+        public CinemachineVirtualCamera camBrain;
+
         public float currentTurnInput;
         [Tooltip("The time before the player is at full turn")]
         public float turnDuration;        
@@ -45,6 +49,10 @@ namespace L7Games.Movement
 
         [SerializeField]
         public GameObject boardObject;
+        [SerializeField]
+        private GameObject boardModel;
+        private Vector3 boardPos;
+
         //Front Rigidbody
         [SerializeField]
         private Rigidbody fRB;
@@ -64,6 +72,8 @@ namespace L7Games.Movement
         private Transform backWheelPos;
         [SerializeField]
         private GameObject characterModel;
+        [SerializeField]
+        private Transform lookAtTransform;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
@@ -108,8 +118,14 @@ namespace L7Games.Movement
             transform.rotation = initialRot;
             transform.position = initalPos;
 
+            boardModel.transform.SetParent(characterModel.transform);
+            boardModel.transform.position = boardPos;
+            boardModel.transform.rotation = Quaternion.identity;
+
             characterModel.SetActive(true);
-            playerCamera.target = boardObject.transform;
+
+            camBrain.LookAt = lookAtTransform;
+            camBrain.Follow = transform;
 
             ResetWheelPos();
             AlignWheels();
@@ -136,8 +152,13 @@ namespace L7Games.Movement
             transform.rotation = point.rotation;
             transform.position = point.position;
 
+            boardModel.transform.SetParent(characterModel.transform);
+            boardModel.transform.position = boardPos;
+            boardModel.transform.rotation = Quaternion.identity;
+
             characterModel.SetActive(true);
-            playerCamera.target = boardObject.transform;
+
+            ResetCameraView();
 
             ResetWheelPos();
             AlignWheels();
@@ -262,6 +283,8 @@ namespace L7Games.Movement
             grindingState.InitialiseState(this, fRB, bRB, ModelRB, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(aerialState);
+
+            camBrain = camBrain ?? FindObjectOfType<CinemachineVirtualCamera>();
         }
 
         //Adding the inputs to the finite state machine
@@ -270,6 +293,7 @@ namespace L7Games.Movement
             groundedState.RegisterInputs();
             grindingState.RegisterInputs();
             wallRideState.RegisterInputs();
+            aerialState.RegisterInputs();
 
             inputHandler.wipeoutResetStarted += WipeOutResetPressed;
         }
@@ -281,6 +305,7 @@ namespace L7Games.Movement
             groundedState.UnRegisterInputs();
             grindingState.UnRegisterInputs();
             wallRideState.UnRegisterInputs();
+            aerialState.UnRegisterInputs();
 
             inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
         }
@@ -290,6 +315,8 @@ namespace L7Games.Movement
             initalPos = transform.position;
             initialRot = transform.rotation;
             fRB.transform.parent = null;
+            boardPos = boardModel.transform.position;
+            boardModel.transform.rotation = Quaternion.identity;
 
             //characterInitalBones = GetBonesFromObject(characterModel);
 
@@ -422,8 +449,20 @@ namespace L7Games.Movement
             }
         }
 
+        public void ResetCameraView()
+        {
+
+            camBrain.LookAt = lookAtTransform;
+            camBrain.Follow = transform;
+        }
+
         public void WipeOut(Vector3 currentVelocity)
         {
+            if(!characterModel.activeSelf)
+            {
+                return;
+            }
+
             // Spawn the ragdoll
             GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
             // If there is a root or main rigid body then take that into account, otherwise not a problem
@@ -441,13 +480,16 @@ namespace L7Games.Movement
             // Set the camera to follow the rag doll
             if (mainBody != null)
             {
-                playerCamera.target = mainBody.transform;
+                camBrain.LookAt = mainBody.transform;
+                camBrain.Follow = mainBody.transform;
             }
             else if (boneBodies.Length > 0)
             {
-                playerCamera.target = boneBodies[0].transform;
+                camBrain.LookAt = boneBodies[0].transform;
+                camBrain.Follow = boneBodies[0].transform;
             }
 
+            boardModel.transform.SetParent(null);
             characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
         }
@@ -468,10 +510,12 @@ namespace L7Games.Movement
 
                 if(InfluenceDir)
                 {
+                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(-transform.right * 5f, ForceMode.Impulse);
                 }
                 else if (inputHandler.TurningAxis != 0 )
                 {
+                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(transform.right * 5f, ForceMode.Impulse);
                 }
 
@@ -603,6 +647,7 @@ namespace L7Games.Movement
                 }
             }
         }
+
         #endregion
     }
 }

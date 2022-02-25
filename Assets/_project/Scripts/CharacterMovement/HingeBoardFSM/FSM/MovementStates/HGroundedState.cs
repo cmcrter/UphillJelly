@@ -52,6 +52,11 @@ namespace L7Games.Movement
             get; private set;
         }
 
+        public Coroutine uncrouchCoroutine
+        {
+            get; private set;
+        }
+
         public Coroutine jumpCoroutine
         {
             get; private set;
@@ -273,13 +278,8 @@ namespace L7Games.Movement
 
         private void UnPressDown()
         {
-            if(bPressingDown)
-            {
-                movementRB.centerOfMass += new Vector3(0, 0.25f, 0);
-                bPressingDown = false;
-
-                parentController.characterAnimator.SetFloat("crouchingFloat", -1);
-            }
+            //There has to be a second to wait if there's a jump
+            StartUnPressDownCoroutine();
         }
 
         private void Jump()
@@ -336,13 +336,28 @@ namespace L7Games.Movement
             jumpCoroutine = null;
         }
 
+        private void StopUnPressDownCoroutine()
+        {
+            if(uncrouchCoroutine != null)
+            {
+                parentController.StopCoroutine(uncrouchCoroutine);
+            }
+
+            uncrouchCoroutine = null;
+        }
+
+        private void StartUnPressDownCoroutine()
+        {
+            uncrouchCoroutine = parentController.StartCoroutine(Co_UnCrouchTimer());
+        }
+
         private IEnumerator Co_JumpTimer(bool isPressingDown)
         {
             //It's technically a new timer on top of the class in use
             jumpTimer = new Timer(jumpTimerDuration);
 
             //Pressing down makes jumping bigger
-            float newjumpSpeed = isPressingDown ? jumpSpeed * 1.5f : jumpSpeed;
+            float newjumpSpeed = isPressingDown ? jumpSpeed * 1.25f : jumpSpeed;
 
             movementRB.AddForce(parentController.transform.up * newjumpSpeed * 1000);
             Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
@@ -403,6 +418,24 @@ namespace L7Games.Movement
             }
 
             pushCoroutine = null;
+        }
+
+        //Uncrouching should take a little bit of time to register a second input (for jump boost)
+        private IEnumerator Co_UnCrouchTimer()
+        {
+            for(float t = 0; t < 0.1f; t += Time.deltaTime)
+            {
+                float newVal = 0 - (1 / 0.1f * t);
+                parentController.characterAnimator.SetFloat("crouchingFloat", newVal);
+                yield return null;
+            }
+
+            if(bPressingDown)
+            {
+                movementRB.centerOfMass += new Vector3(0, 0.25f, 0);
+                bPressingDown = false;
+                parentController.characterAnimator.SetFloat("crouchingFloat", -1);
+            }
         }
 
         #endregion

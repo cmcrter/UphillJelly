@@ -240,6 +240,12 @@ namespace L7Games.Input
         /// </summary>
         public event OneDimensionalAxisAction turningUpdated;
 
+        /// <summary>
+        /// Called when the test trick input action has been start
+        /// </summary>
+        public event System.Action trickPressed;
+
+
         #endregion
 
         #region Unity Methods
@@ -621,16 +627,21 @@ namespace L7Games.Input
         {
             //trickInputBuffer.AddHeldInput(0);
             //Debug.Log("Trick0 performed");
+
+            if(trickPressed != null)
+            {
+                trickPressed();
+            }
         }
 
         private void TestInput1_Canceled(InputAction.CallbackContext obj)
         {
-            trickInputBuffer.FinishHoldingInput(1);
+            //trickInputBuffer.FinishHoldingInput(1);
         }
 
         private void TestInput1_performed(InputAction.CallbackContext obj)
         {
-            trickInputBuffer.AddHeldInput(1);
+            //trickInputBuffer.AddHeldInput(1);
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace L7Games.Movement 
 {
@@ -53,7 +54,6 @@ namespace L7Games.Movement
         private bool bTravelBackwards = false;
         private bool bForceExit = false;
         Vector3 jumpDir;
-
 
         #endregion
 
@@ -97,7 +97,7 @@ namespace L7Games.Movement
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.characterAnimator.SetBool("grinding", true);
 
-            parentController.playerCamera.FollowRotation = true;
+            parentController.camBrain.Follow = parentController.transform;
 
             //Making sure nothing interferes with the movement
             movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.4025f, 0);
@@ -123,7 +123,6 @@ namespace L7Games.Movement
                 currentSplineDir *= -1;
             }
 
-            movementRB.transform.forward = currentSplineDir;
             parentController.transform.forward = currentSplineDir;
 
             hasRan = true;
@@ -132,6 +131,7 @@ namespace L7Games.Movement
         public override void OnStateExit()
         {
             grindVisualiser.transform.parent = parentController.transform;
+            grindVisualiser.transform.localPosition = Vector3.zero;
 
             pos = Vector3.zero;
             currentSplineDir = Vector3.zero;
@@ -144,6 +144,7 @@ namespace L7Games.Movement
 
             parentController.StartAirInfluenctCoroutine();
             parentController.characterAnimator.SetBool("grinding", false);
+            parentController.ResetCameraView();
 
             timeAlongGrind = 0;
             bTravelBackwards = false;
@@ -153,12 +154,9 @@ namespace L7Games.Movement
 
         public override void Tick(float dT)
         {
-            grindVisualiser.position = pos;
-
             if(onGrind.splineCurrentlyGrindingOn != null) 
             {
-                float f = onGrind.splineCurrentlyGrindingOn.GetTotalLength();
-                tIncrementPerSecond = onGrind.grindDetails.DuringGrindForce / f;
+                tIncrementPerSecond = onGrind.grindDetails.DuringGrindForce / onGrind.splineCurrentlyGrindingOn.GetTotalLength();
             }
 
             if(!bTravelBackwards)
@@ -170,14 +168,17 @@ namespace L7Games.Movement
                 BackwardMovement();
             }
 
-            if(!bForceExit)
-            {
-                movementRB.transform.position = grindVisualiser.position;
-            }
+            grindVisualiser.position = pos;
+            parentController.transform.rotation = Quaternion.LookRotation(currentSplineDir, parentController.transform.up);
         }
 
         public override void PhysicsTick(float dT)
         {
+            if(!bForceExit)
+            {
+                movementRB.MovePosition(pos);
+                movementRB.MoveRotation(Quaternion.LookRotation(currentSplineDir, parentController.transform.up));
+            }
         }
 
         public override State returnCurrentState()
@@ -226,6 +227,7 @@ namespace L7Games.Movement
 
             movementRB.useGravity = true;
             movementRB.isKinematic = false;
+            movementRB.detectCollisions = true;
             movementRB.AddForce(((parentController.transform.up * ExitForce.y) + (parentController.transform.forward * ExitForce.z)) * 100, ForceMode.Impulse);
    
             jumpCoroutine = null;
@@ -248,15 +250,14 @@ namespace L7Games.Movement
                 float desiredChange = desiredDistance / currentDistanceChange;
                 timeAlongGrind = Mathf.Clamp01(timeAlongGrind + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
 
+                Vector3 newPos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.45f + 0.0375f, 0);
+
                 //Using the calculated time to position everything correctly
-                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.45f + 0.0375f, 0);
+                pos = newPos;
 
                 if(timeAlongGrind < 0.95f)
                 {
                     currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
-
-                    movementRB.transform.forward = currentSplineDir;
-                    parentController.transform.forward = currentSplineDir;
                 }
             }
             //if it's at the end
@@ -291,16 +292,15 @@ namespace L7Games.Movement
                 float desiredChange = desiredDistance / currentDistanceChange;
                 timeAlongGrind = Mathf.Clamp01(timeAlongGrind - Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
 
+                Vector3 newPos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.45f + 0.0375f, 0);
+
                 //Using the calculated time to position everything correctly
-                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.45f + 0.0375f, 0);
+                pos = newPos;
 
                 if(timeAlongGrind > 0.05f)
                 {
                     currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
                     currentSplineDir *= -1;
-
-                    movementRB.transform.forward = currentSplineDir;
-                    parentController.transform.forward = currentSplineDir;
                 }
             }
             //if it's at the end

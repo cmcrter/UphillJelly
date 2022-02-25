@@ -66,7 +66,8 @@ namespace L7Games.Movement
                 //Any debugging stuff needed
                 if(Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-frontLeftRaycastPointTransform.up * 50f), Color.magenta);
+                    Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-frontLeftRaycastPointTransform.up * hit.distance), Color.red);
+                    //Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-frontLeftRaycastPointTransform.up * 50f), Color.magenta);
                 }
                 FrontLeftGroundHitLocalDown = hit;
             }
@@ -78,8 +79,8 @@ namespace L7Games.Movement
                 //Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
-
+                    Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
+                    //Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
                 }
                 FrontLeftGroundHitWorldDown = worldHit;
             }
@@ -91,7 +92,8 @@ namespace L7Games.Movement
                 //Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-frontRightRaycastPointTransform.up * 50f), Color.magenta);
+                    Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-frontRightRaycastPointTransform.up * hit2.distance), Color.red);
+                    //Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-frontRightRaycastPointTransform.up * 50f), Color.magenta);
                 }
 
                 FrontRightGroundHitLocalDown = hit2;
@@ -104,7 +106,8 @@ namespace L7Games.Movement
                 //Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
+                    Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
+                    //Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
                 }
 
                 FrontRightGroundHitWorldDown = worldHit;
@@ -117,7 +120,8 @@ namespace L7Games.Movement
                 // Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-backLeftRaycastPointTransform.up * 50f), Color.magenta);
+                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-backLeftRaycastPointTransform.up * hit3.distance), Color.red);
+                    //Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-backLeftRaycastPointTransform.up * 50f), Color.magenta);
                 }
 
                 BackLeftGroundHitLocalDown = hit3;
@@ -130,7 +134,8 @@ namespace L7Games.Movement
                 // Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
+                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
+                    //Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
                 }
 
                 BackLeftGroundHitWorldDown = worldHit;
@@ -142,7 +147,8 @@ namespace L7Games.Movement
                 // Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-backRightRaycastPointTransform.up * 50f), Color.magenta);
+                    Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-backRightRaycastPointTransform.up * backHit.distance), Color.red);
+                    //Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-backRightRaycastPointTransform.up * 50f), Color.magenta);
                 }
 
                 //Could use backhit to help smoothing with the board against the ground
@@ -156,7 +162,8 @@ namespace L7Games.Movement
                 // Any debugging stuff needed
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
+                    Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
+                    //Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
                 }
 
                 //Could use backhit to help smoothing with the board against the ground
