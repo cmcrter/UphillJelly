@@ -22,6 +22,8 @@ namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
+        public BooleanMaterialIndicator inAirBooleanMaterialIndicator;
+
         #region Variables
 
         [Header("State Machine")]
@@ -180,10 +182,6 @@ namespace L7Games.Movement
             RaycastHit frontRightHitToUse = groundBelow.FrontRightGroundHitLocalDown;
             RaycastHit backLeftHitToUse = groundBelow.BackLeftGroundHitLocalDown;
             RaycastHit backRightHitToUse = groundBelow.BackRightGroundHitLocalDown;
-
-            float localLeftAngle = Vector3.Angle(groundBelow.FrontLeftGroundHitLocalDown.normal, groundBelow.BackLeftGroundHitLocalDown.normal);
-            float localRightAngle = Vector3.Angle(groundBelow.FrontRightGroundHitLocalDown.normal, groundBelow.BackRightGroundHitLocalDown.normal);
-            float greatestLocalAngle = localLeftAngle > localRightAngle ? localLeftAngle : localRightAngle;
 
             if (bAerial)
             {
@@ -362,6 +360,8 @@ namespace L7Games.Movement
             {
                 characterAnimator.SetFloat("turnValue", currentTurnInput / turnClamp);
             }
+
+            //inAirBooleanMaterialIndicator.materialBoolean = groundBelow.isConditionTrue();
         }
 
         private void FixedUpdate()

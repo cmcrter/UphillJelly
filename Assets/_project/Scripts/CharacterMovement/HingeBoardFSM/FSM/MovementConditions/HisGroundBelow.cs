@@ -17,8 +17,7 @@ namespace L7Games.Movement
     public class HisGroundBelow : Condition
     {
         #region Variables
-
-        public LayerMask playerMask;
+        public LayerMask GroundMask;
         public RaycastHit FrontLeftGroundHitLocalDown;
         public RaycastHit FrontRightGroundHitLocalDown;
         public RaycastHit BackLeftGroundHitLocalDown;
@@ -50,6 +49,7 @@ namespace L7Games.Movement
 
         public HisGroundBelow()
         {
+
         }
 
         public void InitialiseCondition(Transform player)
@@ -61,114 +61,44 @@ namespace L7Games.Movement
         {
             // Front left local
             //Checking if anything is below it
-            if(Physics.Raycast(frontLeftRaycastPointTransform.position, -frontLeftRaycastPointTransform.up, out RaycastHit hit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(frontLeftRaycastPointTransform.position, -frontLeftRaycastPointTransform.up, out RaycastHit raycastHit))
             {
-                //Any debugging stuff needed
-                if(Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-frontLeftRaycastPointTransform.up * hit.distance), Color.red);
-                    //Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-frontLeftRaycastPointTransform.up * 50f), Color.magenta);
-                }
-                FrontLeftGroundHitLocalDown = hit;
+                FrontLeftGroundHitLocalDown = raycastHit;
             }
-
             // Front Left World
-            //Checking if anything is below it
-            if (Physics.Raycast(frontLeftRaycastPointTransform.position, -Vector3.up, out RaycastHit worldHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(frontLeftRaycastPointTransform.position, -Vector3.up, out raycastHit))
             {
-                //Any debugging stuff needed
-                if (Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
-                    //Debug.DrawLine(frontLeftRaycastPointTransform.position, frontLeftRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
-                }
-                FrontLeftGroundHitWorldDown = worldHit;
+                FrontLeftGroundHitWorldDown = raycastHit;
             }
-
             // Front Right Local
-            // Checking if anything is below it
-            if (Physics.Raycast(frontRightRaycastPointTransform.position, -frontRightRaycastPointTransform.up, out RaycastHit hit2, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(frontRightRaycastPointTransform.position, -frontRightRaycastPointTransform.up, out raycastHit))
             {
-                //Any debugging stuff needed
-                if (Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-frontRightRaycastPointTransform.up * hit2.distance), Color.red);
-                    //Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-frontRightRaycastPointTransform.up * 50f), Color.magenta);
-                }
-
-                FrontRightGroundHitLocalDown = hit2;
+                FrontRightGroundHitLocalDown = raycastHit;
             }
-
             // Front Right World
-            // Checking if anything is below it
-            if (Physics.Raycast(frontRightRaycastPointTransform.position, -Vector3.up, out worldHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(frontRightRaycastPointTransform.position, -Vector3.up, out raycastHit))
             {
-                //Any debugging stuff needed
-                if (Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
-                    //Debug.DrawLine(frontRightRaycastPointTransform.position, frontRightRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
-                }
-
-                FrontRightGroundHitWorldDown = worldHit;
+                FrontRightGroundHitWorldDown = raycastHit;
             }
-
             // Back Left Local
-            // Checking if anything is below it
-            if (Physics.Raycast(backLeftRaycastPointTransform.position, -backLeftRaycastPointTransform.up, out RaycastHit hit3, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(backLeftRaycastPointTransform.position, -backLeftRaycastPointTransform.up, out raycastHit))
             {
-                // Any debugging stuff needed
-                if (Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-backLeftRaycastPointTransform.up * hit3.distance), Color.red);
-                    //Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-backLeftRaycastPointTransform.up * 50f), Color.magenta);
-                }
-
-                BackLeftGroundHitLocalDown = hit3;
+                BackLeftGroundHitLocalDown = raycastHit;
             }
-
             // Back Left World
-            // Checking if anything is below it
-            if (Physics.Raycast(backLeftRaycastPointTransform.position, -Vector3.up, out worldHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(backLeftRaycastPointTransform.position, -Vector3.up,  out raycastHit))
             {
-                // Any debugging stuff needed
-                if (Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
-                    //Debug.DrawLine(backLeftRaycastPointTransform.position, backLeftRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
-                }
-
-                BackLeftGroundHitWorldDown = worldHit;
+                BackLeftGroundHitWorldDown = raycastHit;
             }
-
             // Back Right Local
-            if (Physics.Raycast(backRightRaycastPointTransform.position, -backRightRaycastPointTransform.up, out RaycastHit backHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(backRightRaycastPointTransform.position, -backRightRaycastPointTransform.up, out raycastHit))
             {
-                // Any debugging stuff needed
-                if (Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-backRightRaycastPointTransform.up * backHit.distance), Color.red);
-                    //Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-backRightRaycastPointTransform.up * 50f), Color.magenta);
-                }
-
-                //Could use backhit to help smoothing with the board against the ground
-                //Player is about to hit a ramp
-                BackRightGroundHitLocalDown = backHit;
+                BackRightGroundHitLocalDown = raycastHit;
             }
-
             // Back Right World
-            if (Physics.Raycast(backRightRaycastPointTransform.position, -Vector3.up, out worldHit, 50f, ~playerMask, QueryTriggerInteraction.Ignore))
+            if (GroundRaycast(backRightRaycastPointTransform.position, -Vector3.up, out raycastHit))
             {
-                // Any debugging stuff needed
-                if (Debug.isDebugBuild)
-                {
-                    Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-Vector3.up * worldHit.distance), Color.red);
-                    //Debug.DrawLine(backRightRaycastPointTransform.position, backRightRaycastPointTransform.position + (-Vector3.up * 50f), Color.magenta);
-                }
-
-                //Could use backhit to help smoothing with the board against the ground
-                //Player is about to hit a ramp
-                BackRightGroundHitWorldDown = worldHit;
+                BackRightGroundHitWorldDown = raycastHit;
             }
 
             // If the local rotation raycast are touching ground then increase the distance the ground downwards check is allowed
@@ -187,6 +117,29 @@ namespace L7Games.Movement
             return false;         
         }
 
+
+
+        #endregion
+
+        #region Private Methods
+        private bool GroundRaycast(Vector3 position, Vector3 direction, out RaycastHit raycastHit)
+        {
+            if (Physics.Raycast(position, direction, out raycastHit, 50f, GroundMask, QueryTriggerInteraction.Ignore))
+            {
+                //Any debugging stuff needed
+                if (Debug.isDebugBuild)
+                {
+                    Debug.DrawLine(position, position + (-direction * raycastHit.distance), Color.red);
+                }
+
+                // If the hit point normal is more than perpendicular to the world up then it is invalid
+                if (Vector3.Angle(raycastHit.normal, Vector3.up) < 90f)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
     }
 }
