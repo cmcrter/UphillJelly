@@ -12,14 +12,16 @@ using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
 using L7Games.Triggerables;
+using L7Games.Triggerables.CheckpointSystem;
+using L7Games;
 using System.Collections;
+using Cinemachine;
+using System.Collections.Generic;
 
 namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
-
-
         #region Variables
 
         [Header("State Machine")]
@@ -35,6 +37,8 @@ namespace L7Games.Movement
         public HisOnGrind grindBelow = new HisOnGrind();
 
         public PlayerCamera playerCamera;
+        public CinemachineVirtualCamera camBrain;
+
         public float currentTurnInput;
         [Tooltip("The time before the player is at full turn")]
         public float turnDuration;        
@@ -45,16 +49,22 @@ namespace L7Games.Movement
 
         [SerializeField]
         public GameObject boardObject;
+        [SerializeField]
+        private GameObject boardModel;
+        private Vector3 boardPos;
+
         //Front Rigidbody
         [SerializeField]
         private Rigidbody fRB;
         //Back Rigidbody
         [SerializeField]
         private Rigidbody bRB;
+        [SerializeField]
+        private Rigidbody ModelRB;
 
-        public SphereCollider ballMovement;
         public PlayerInput input;
         public InputHandler inputHandler;
+        public Animator characterAnimator;
 
         [SerializeField]
         private Transform frontWheelPos;
@@ -62,6 +72,8 @@ namespace L7Games.Movement
         private Transform backWheelPos;
         [SerializeField]
         private GameObject characterModel;
+        [SerializeField]
+        private Transform lookAtTransform;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
@@ -77,16 +89,14 @@ namespace L7Games.Movement
         public AnimationCurve turnSpeedCurve;
         public float turnClamp = 0.575f;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public HumanoidCollisionHandler humanoidCollision;
+        [Tooltip("The prefab that is spawned to replace this as a ragdoll Ragdoll used prefab used")]
+        [SerializeField]
+        private GameObject ragDollPrefab;
 
-        public GameObject ragDollPrefab;
-
+        [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
-
-        //System.Collections.Generic.List<Bones> characterInitalBones;
+        public bool bWipeOutLocked = false;
+        public CheckpointManager checkpointManager;
         #endregion
 
         #region Public Methods
@@ -108,12 +118,21 @@ namespace L7Games.Movement
             transform.rotation = initialRot;
             transform.position = initalPos;
 
-            ResetRagdollToCharacter();
+            boardModel.transform.SetParent(characterModel.transform);
+            boardModel.transform.position = boardPos;
+            boardModel.transform.rotation = Quaternion.identity;
+
+            characterModel.SetActive(true);
+
+            camBrain.LookAt = lookAtTransform;
+            camBrain.Follow = transform;
 
             ResetWheelPos();
             AlignWheels();
 
             Time.timeScale = 1;
+
+            CallOnRespawn();
         }
 
         public override void ResetPlayer(Transform point)
@@ -133,12 +152,20 @@ namespace L7Games.Movement
             transform.rotation = point.rotation;
             transform.position = point.position;
 
-            ResetRagdollToCharacter();
+            boardModel.transform.SetParent(characterModel.transform);
+            boardModel.transform.position = boardPos;
+            boardModel.transform.rotation = Quaternion.identity;
+
+            characterModel.SetActive(true);
+
+            ResetCameraView();
 
             ResetWheelPos();
             AlignWheels();
 
             Time.timeScale = 1;
+
+            CallOnRespawn();
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
@@ -253,9 +280,11 @@ namespace L7Games.Movement
             groundedState.InitialiseState(this, fRB, bRB, groundBelow, grindBelow);
             aerialState.InitialiseState(this, fRB, bRB, groundBelow, nextToWallRun, grindBelow);
             wallRideState.InitialiseState(this, fRB, bRB, nextToWallRun, groundBelow);
-            grindingState.InitialiseState(this, fRB, grindBelow);
+            grindingState.InitialiseState(this, fRB, bRB, ModelRB, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(aerialState);
+
+            camBrain = camBrain ?? FindObjectOfType<CinemachineVirtualCamera>();
         }
 
         //Adding the inputs to the finite state machine
@@ -264,6 +293,9 @@ namespace L7Games.Movement
             groundedState.RegisterInputs();
             grindingState.RegisterInputs();
             wallRideState.RegisterInputs();
+            aerialState.RegisterInputs();
+
+            inputHandler.wipeoutResetStarted += WipeOutResetPressed;
         }
 
 
@@ -273,6 +305,9 @@ namespace L7Games.Movement
             groundedState.UnRegisterInputs();
             grindingState.UnRegisterInputs();
             wallRideState.UnRegisterInputs();
+            aerialState.UnRegisterInputs();
+
+            inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
         }
 
         private void Start()
@@ -280,11 +315,18 @@ namespace L7Games.Movement
             initalPos = transform.position;
             initialRot = transform.rotation;
             fRB.transform.parent = null;
-
-            //Setting up model position
-            playerModel.transform.position = new Vector3(boardObject.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), boardObject.transform.position.z);
+            boardPos = boardModel.transform.position;
+            boardModel.transform.rotation = Quaternion.identity;
 
             //characterInitalBones = GetBonesFromObject(characterModel);
+
+            if (checkpointManager == null)
+            {
+                checkpointManager = FindObjectOfType<CheckpointManager>();
+            }
+
+            characterAnimator.SetFloat("crouchingFloat", -1);
+            characterAnimator.SetFloat("turnValue", 0);
         }
 
         private void Update()
@@ -298,16 +340,10 @@ namespace L7Games.Movement
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
 
-            else if (UnityEngine.InputSystem.Keyboard.current.oKey.IsActuated())
+            if (characterModel.activeSelf)
             {
-                if (characterModel.activeSelf)
-                {
-                    WipeOut(fRB.velocity);
-                }
-
+                playerStateMachine.RunMachine(Time.deltaTime);
             }
-
-            playerStateMachine.RunMachine(Time.deltaTime);
 
             if (Keyboard.current != null)
             {
@@ -317,15 +353,23 @@ namespace L7Games.Movement
                 }
             }
 
-            if(inputHandler.TurningAxis != 0 && turningCo == null)
+            if (inputHandler.TurningAxis != 0 && turningCo == null)
             {
                 turningCo = StartCoroutine(Co_TurnAngle());
+            }
+
+            if(AirturningCo != null || groundedState.hasRan)
+            {
+                characterAnimator.SetFloat("turnValue", currentTurnInput / turnClamp);
             }
         }
 
         private void FixedUpdate()
         {
-            playerStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+            if (characterModel.activeSelf)
+            {
+                playerStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+            }
 
             if(bAddAdditionalGravity)
             {
@@ -336,11 +380,18 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            for (int i = 0; i < collision.contactCount; ++i)
+            if (characterModel.activeSelf && !bWipeOutLocked)
             {
-                if (collision.contacts[i].thisCollider.CompareTag("BodyWipeOutCollider"))
+                for (int i = 0; i < collision.contactCount; ++i)
                 {
-                    WipeOut(fRB.velocity);
+                    if (collision.contacts[i].thisCollider.gameObject.TryGetComponent(out WipeOutCollider characterCollider))
+                    {
+                        if (fRB.velocity.magnitude > characterCollider.forceRequiredToWipeOut)
+                        {
+                            WipeOut(fRB.velocity);
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -353,7 +404,7 @@ namespace L7Games.Movement
         //A few utility functions
         public override void MoveToPosition(Vector3 positionToMoveTo)
         {
-            ballMovement.transform.position = positionToMoveTo;
+            
         }
 
         public void ResetWheelPos()
@@ -398,8 +449,20 @@ namespace L7Games.Movement
             }
         }
 
+        public void ResetCameraView()
+        {
+
+            camBrain.LookAt = lookAtTransform;
+            camBrain.Follow = transform;
+        }
+
         public void WipeOut(Vector3 currentVelocity)
         {
+            if(!characterModel.activeSelf)
+            {
+                return;
+            }
+
             // Spawn the ragdoll
             GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
             // If there is a root or main rigid body then take that into account, otherwise not a problem
@@ -417,12 +480,17 @@ namespace L7Games.Movement
             // Set the camera to follow the rag doll
             if (mainBody != null)
             {
-                playerCamera.target = mainBody.transform;
+                camBrain.LookAt = mainBody.transform;
+                camBrain.Follow = mainBody.transform;
             }
             else if (boneBodies.Length > 0)
             {
-                playerCamera.target = boneBodies[0].transform;
+                camBrain.LookAt = boneBodies[0].transform;
+                camBrain.Follow = boneBodies[0].transform;
             }
+
+            boardModel.transform.SetParent(null);
+            characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
         }
 
@@ -442,11 +510,13 @@ namespace L7Games.Movement
 
                 if(InfluenceDir)
                 {
-                    fRB.AddForce(-transform.right * 5f, ForceMode.Impulse);
+                    yield return new WaitForFixedUpdate();
+                    fRB.AddForce(-transform.right * 7.5f, ForceMode.Impulse);
                 }
                 else if (inputHandler.TurningAxis != 0 )
                 {
-                    fRB.AddForce(transform.right * 5f, ForceMode.Impulse);
+                    yield return new WaitForFixedUpdate();
+                    fRB.AddForce(transform.right * 7.5f, ForceMode.Impulse);
                 }
 
                 influenceTimer.Tick(Time.deltaTime);
@@ -534,47 +604,7 @@ namespace L7Games.Movement
 
         private void ResetRagdollToCharacter()
         {
-            //characterModel.transform.parent = playerModel.transform;
 
-            // TODO: Needs to do something to kill the already spawned rag Doll probably through events
-
-            characterModel.SetActive(true);
-
-            //// Get the bones in current state
-            //System.Collections.Generic.List<Bones> characterBones = GetBonesFromObject(characterModel);
-            //// Get the bones in current state
-            //System.Collections.Generic.List<Bones> intialBones = new System.Collections.Generic.List<Bones>(characterInitalBones);
-            //// rest positions
-            //for (int i = 0; i < characterBones.Count; ++i)
-            //{
-            //    for (int j = 0; j < intialBones.Count; ++j)
-            //    {
-            //        if (characterBones[i].gameObject == intialBones[j].gameObject)
-            //        {   
-            //            if (!characterBones[i].gameObject.CompareTag("WipeOutCollider"))
-            //            {
-            //                if (characterBones[i].collider != null)
-            //                {
-            //                    characterBones[i].collider.enabled = false;
-            //                }
-            //                Rigidbody boneRigidbody = characterBones[i].gameObject.GetComponent<Rigidbody>();
-            //                if (boneRigidbody != null)
-            //                {
-            //                    Destroy(boneRigidbody);
-            //                }
-            //            }
-            //            characterBones[i].gameObject.transform.localPosition = intialBones[j].position;
-            //            characterBones[i].gameObject.transform.localRotation = intialBones[j].rotation;
-            //            characterBones[i].gameObject.transform.localScale = intialBones[j].scale;
-            //            intialBones.RemoveAt(j);
-            //            break;
-            //        }
-
-            //    }
-            //}
-
-            // Get a list of all the bones
-            playerCamera.target = boardObject.transform;
         }
 
         //private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
@@ -595,13 +625,29 @@ namespace L7Games.Movement
         {
             // Spawn the rag-doll
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
-            // Gets it's bone container
-            if (ragDoll.TryGetComponent<RagdollDataContainer>(out RagdollDataContainer spawnedRagdollDataContainer))
+            if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
-                spawnedRagdollDataContainer.CopyRagdollBonesPositions(ragdollDataContainer);
+                spawnedRagdoll.Initalise(this, ragdollDataContainer);
             }
+
             return ragDoll;
         }
+
+        private void WipeOutResetPressed()
+        {
+            if (characterModel.activeSelf)
+            {
+                WipeOut(fRB.velocity);
+            }
+            else
+            {
+                if (checkpointManager != null)
+                {
+                    checkpointManager.MovePlayerToTheirLastCheckPoint(this);
+                }
+            }
+        }
+
         #endregion
     }
 }

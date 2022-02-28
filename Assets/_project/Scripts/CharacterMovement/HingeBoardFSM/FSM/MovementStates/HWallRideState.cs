@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using Cinemachine;
 
 namespace L7Games.Movement
 {
@@ -38,6 +39,10 @@ namespace L7Games.Movement
         private Vector3 wallForward;
         [SerializeField]
         private float rideSpeed = 0.1f;
+
+        [SerializeField]
+        CinemachineVirtualCamera wallRideCam;
+        bool bJumping;
 
         #region Public Methods
 
@@ -93,21 +98,30 @@ namespace L7Games.Movement
         public override void PhysicsTick(float dT)
         {
             //Pushing the player along the wall
-            fRB.MovePosition(fRB.transform.position + (wallForward * rideSpeed));
+            if(!bJumping)
+            {
+                fRB.MovePosition(fRB.transform.position + (wallForward * rideSpeed));
+            }
         }
 
         public override void OnStateEnter()
         {
             pInput.SwitchCurrentActionMap("WallRiding");
+            playerMovement.characterAnimator.SetBool("wallriding", true);
+            playerMovement.bWipeOutLocked = true;
 
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
+            Debug.Log(nextToWallRun.dotProductWithWall + " " + wallForward);
+
             rideSpeed = nextToWallRun.wallSpeed;
 
-            playerMovement.transform.forward = wallForward;
-            playerMovement.transform.right = nextToWallRun.currentWallRide.transform.forward;
+            playerMovement.camBrain.enabled = false;
+            wallRideCam.enabled = true;
+
+            playerMovement.transform.rotation = Quaternion.LookRotation(wallForward, Vector3.up);
             playerMovement.AlignWheels();
-            playerMovement.ResetWheelPos();
+            playerMovement.ResetWheelPos();           
 
             fRB.isKinematic = true;
             fRB.velocity = Vector3.zero;
@@ -130,9 +144,14 @@ namespace L7Games.Movement
 
             nextToWallRun.StartCooldown();
 
+            playerMovement.camBrain.enabled = true;
+            wallRideCam.enabled = false;
 
             fRB.isKinematic = false;
             bRB.isKinematic = false;
+            bJumping = false;
+
+            playerMovement.characterAnimator.SetBool("wallriding", false);
             hasRan = false;
         }
 
@@ -166,13 +185,21 @@ namespace L7Games.Movement
 
         private void JumpOffWallRide()
         {
-            Debug.Log("Jumping off wall ride");
+            bJumping = true;
+            //Debug.Log("Jumping off wall ride");
 
             fRB.isKinematic = false;
             bRB.isKinematic = false;
 
-            fRB.AddForce((playerMovement.transform.up * 500f) + (playerMovement.transform.right * 950), ForceMode.Impulse);
+            fRB.AddForce((playerMovement.transform.up * 450f) + (nextToWallRun.currentWallRide.transform.forward * 950), ForceMode.Impulse);
             playerMovement.StartAirInfluenctCoroutine();
+            playerMovement.StartCoroutine(WipeOutCooldown());
+        }
+
+        private IEnumerator WipeOutCooldown()
+        {
+            yield return new WaitForSeconds(1.2f);
+            playerMovement.bWipeOutLocked = false;
         }
 
         #endregion
