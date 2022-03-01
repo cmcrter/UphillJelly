@@ -22,10 +22,7 @@ namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
-        public BooleanMaterialIndicator inAirBooleanMaterialIndicator;
-
         #region Variables
-
         [Header("State Machine")]
         public FiniteStateMachine playerStateMachine;
 
