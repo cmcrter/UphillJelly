@@ -225,6 +225,7 @@ namespace L7Games.Movement
             modelRB.interpolation = RigidbodyInterpolation.None;
             backRB.interpolation = RigidbodyInterpolation.None;
 
+            yield return new WaitForFixedUpdate();
             movementRB.useGravity = true;
             movementRB.isKinematic = false;
             movementRB.detectCollisions = true;

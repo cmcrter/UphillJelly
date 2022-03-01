@@ -17,8 +17,11 @@ namespace L7Games.Movement
     public class HisGroundBelow : Condition
     {
         #region Variables
+
+
         public LayerMask GroundMask;
         public RaycastHit FrontLeftGroundHitLocalDown;
+
         public RaycastHit FrontRightGroundHitLocalDown;
         public RaycastHit BackLeftGroundHitLocalDown;
         public RaycastHit BackRightGroundHitLocalDown;
@@ -43,9 +46,21 @@ namespace L7Games.Movement
         [SerializeField]
         [Tooltip("The distance to the ground used if the local rotation raycasts are hitting something that could be ground")]
         private float localTransformExtendGroundDist;
+
+        private bool frontLeftLocalUpToDate;
+        private bool frontLeftWorldUpToDate;
+        private bool frontRightLocalUpToDate;
+        private bool frontRightWorldUpToDate;
+        private bool backLeftLocalUpToDate;
+        private bool backLeftWorldUpToDate;
+        private bool backRightLocalUpToDate;
+        private bool backRightWorldUpToDate;
         #endregion
 
+
         #region Public Methods
+
+
 
         public HisGroundBelow()
         {
@@ -61,55 +76,57 @@ namespace L7Games.Movement
         {
             // Front left local
             //Checking if anything is below it
-            if (GroundRaycast(frontLeftRaycastPointTransform.position, -frontLeftRaycastPointTransform.up, out RaycastHit raycastHit))
+            if (frontLeftLocalUpToDate = GroundRaycast(frontLeftRaycastPointTransform.position, -frontLeftRaycastPointTransform.up, out RaycastHit raycastHit))
             {
                 FrontLeftGroundHitLocalDown = raycastHit;
             }
             // Front Left World
-            if (GroundRaycast(frontLeftRaycastPointTransform.position, -Vector3.up, out raycastHit))
+            if (frontLeftWorldUpToDate = GroundRaycast(frontLeftRaycastPointTransform.position, -Vector3.up, out raycastHit))
             {
                 FrontLeftGroundHitWorldDown = raycastHit;
             }
             // Front Right Local
-            if (GroundRaycast(frontRightRaycastPointTransform.position, -frontRightRaycastPointTransform.up, out raycastHit))
+            if (frontRightLocalUpToDate = GroundRaycast(frontRightRaycastPointTransform.position, -frontRightRaycastPointTransform.up, out raycastHit))
             {
                 FrontRightGroundHitLocalDown = raycastHit;
             }
             // Front Right World
-            if (GroundRaycast(frontRightRaycastPointTransform.position, -Vector3.up, out raycastHit))
+            if (frontRightWorldUpToDate = GroundRaycast(frontRightRaycastPointTransform.position, -Vector3.up, out raycastHit))
             {
                 FrontRightGroundHitWorldDown = raycastHit;
             }
             // Back Left Local
-            if (GroundRaycast(backLeftRaycastPointTransform.position, -backLeftRaycastPointTransform.up, out raycastHit))
+            if (backLeftLocalUpToDate = GroundRaycast(backLeftRaycastPointTransform.position, -backLeftRaycastPointTransform.up, out raycastHit))
             {
                 BackLeftGroundHitLocalDown = raycastHit;
             }
             // Back Left World
-            if (GroundRaycast(backLeftRaycastPointTransform.position, -Vector3.up,  out raycastHit))
+            if (backLeftWorldUpToDate = GroundRaycast(backLeftRaycastPointTransform.position, -Vector3.up,  out raycastHit))
             {
                 BackLeftGroundHitWorldDown = raycastHit;
             }
             // Back Right Local
-            if (GroundRaycast(backRightRaycastPointTransform.position, -backRightRaycastPointTransform.up, out raycastHit))
+            if (backRightLocalUpToDate = GroundRaycast(backRightRaycastPointTransform.position, -backRightRaycastPointTransform.up, out raycastHit))
             {
                 BackRightGroundHitLocalDown = raycastHit;
             }
             // Back Right World
-            if (GroundRaycast(backRightRaycastPointTransform.position, -Vector3.up, out raycastHit))
+            if (backRightWorldUpToDate = GroundRaycast(backRightRaycastPointTransform.position, -Vector3.up, out raycastHit))
             {
                 BackRightGroundHitWorldDown = raycastHit;
             }
 
             // If the local rotation raycast are touching ground then increase the distance the ground downwards check is allowed
             float worldDownGroundCheckDistance = groundDist;
-            if (FrontLeftGroundHitLocalDown.distance <= groundDist || FrontRightGroundHitLocalDown.distance <= groundDist || BackLeftGroundHitLocalDown.distance <= groundDist || BackRightGroundHitLocalDown.distance <= groundDist)
+            if ((FrontLeftGroundHitLocalDown.distance <= groundDist && frontLeftLocalUpToDate) || (FrontRightGroundHitLocalDown.distance <= groundDist && frontRightLocalUpToDate) 
+                || (BackLeftGroundHitLocalDown.distance <= groundDist && backLeftLocalUpToDate) || (BackRightGroundHitLocalDown.distance <= groundDist && backRightLocalUpToDate))
             {
                 worldDownGroundCheckDistance = localTransformExtendGroundDist;
             }
 
             //This hit may still be used for smoothing when the player is in the air
-            if (FrontLeftGroundHitWorldDown.distance <= worldDownGroundCheckDistance || FrontRightGroundHitWorldDown.distance <= worldDownGroundCheckDistance || BackLeftGroundHitWorldDown.distance <= worldDownGroundCheckDistance || BackRightGroundHitWorldDown.distance <= worldDownGroundCheckDistance)
+            if ((FrontLeftGroundHitWorldDown.distance <= worldDownGroundCheckDistance && frontLeftWorldUpToDate)  || (FrontRightGroundHitWorldDown.distance <= worldDownGroundCheckDistance && frontRightWorldUpToDate) 
+                || (BackLeftGroundHitWorldDown.distance <= worldDownGroundCheckDistance && backLeftWorldUpToDate) || (BackRightGroundHitWorldDown.distance <= worldDownGroundCheckDistance && backRightWorldUpToDate))
             {
                 return true;
             }

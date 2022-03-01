@@ -9,6 +9,9 @@ namespace L7Games
     {
         public float forceRequiredToWipeOut;
 
+        public bool effectedByCollisionAngle;
+
+        public bool ignoreVerticalCollisions = false;
 
         // Start is called before the first frame update
         void Start()
