@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////
-// File: 
-// Author: 
-// Date Created: 
-// Last Edited By:
-// Date Last Edited:
-// Brief: 
+// File: CineLockCameraZ
+// Author: Charles Carter
+// Date Created: 01/03/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 02/03/22
+// Brief: An Extension to lock the camera's orientation
 //////////////////////////////////////////////////////////// 
 
 using Cinemachine;
