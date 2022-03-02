@@ -23,7 +23,6 @@ namespace L7Games.Movement
     public class PlayerHingeMovementController : PlayerController
     {
         #region Variables
-
         [Header("State Machine")]
         public FiniteStateMachine playerStateMachine;
 
@@ -41,11 +40,23 @@ namespace L7Games.Movement
 
         public float currentTurnInput;
         [Tooltip("The time before the player is at full turn")]
-        public float turnDuration;        
+        public float turnDuration;
+
+        [Tooltip("The max distance that the hit points of the roll calculating hit points can be from each other whilst still being valid")]
+        public float angleCorrectionRaycastValidHitWidth = 2f;
+        [Tooltip("The max distance that the hit points of the pitch calculating hit points can be from each other whilst still being valid")]
+        public float angleCorrectionRaycastValidHitLength = 2f;
+
+        [Tooltip("The unit interval indicating how close a collision velocity direction must be to the player is going, 1 being the exact same direction, 0 being perpendicular away")]
+        [Range(0f, 1f)]
+        public float collisionDirectionMinValue = 0.8f;
+
+        [Tooltip("The min unit interval value for a collision to be consider vertical from the normalised dot product")]
+        public float verticalCollisionTheshold = 0.75f;
 
         [Header("Player Setup")]
         [SerializeField]
-        private GameObject playerModel;
+        private Transform root;
 
         [SerializeField]
         public GameObject boardObject;
@@ -118,7 +129,7 @@ namespace L7Games.Movement
             transform.rotation = initialRot;
             transform.position = initalPos;
 
-            boardModel.transform.SetParent(characterModel.transform);
+            boardModel.transform.SetParent(root);
             boardModel.transform.position = boardPos;
             boardModel.transform.rotation = Quaternion.identity;
 
@@ -133,6 +144,13 @@ namespace L7Games.Movement
             Time.timeScale = 1;
 
             CallOnRespawn();
+
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
+
+            playerStateMachine.ForceSwitchToState(aerialState);
         }
 
         public override void ResetPlayer(Transform point)
@@ -152,8 +170,8 @@ namespace L7Games.Movement
             transform.rotation = point.rotation;
             transform.position = point.position;
 
-            boardModel.transform.SetParent(characterModel.transform);
-            boardModel.transform.position = boardPos;
+            boardModel.transform.SetParent(root);
+            boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
 
             characterModel.SetActive(true);
@@ -166,6 +184,13 @@ namespace L7Games.Movement
             Time.timeScale = 1;
 
             CallOnRespawn();
+
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
+
+            playerStateMachine.ForceSwitchToState(aerialState);
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
@@ -180,10 +205,6 @@ namespace L7Games.Movement
             RaycastHit frontRightHitToUse = groundBelow.FrontRightGroundHitLocalDown;
             RaycastHit backLeftHitToUse = groundBelow.BackLeftGroundHitLocalDown;
             RaycastHit backRightHitToUse = groundBelow.BackRightGroundHitLocalDown;
-
-            float localLeftAngle = Vector3.Angle(groundBelow.FrontLeftGroundHitLocalDown.normal, groundBelow.BackLeftGroundHitLocalDown.normal);
-            float localRightAngle = Vector3.Angle(groundBelow.FrontRightGroundHitLocalDown.normal, groundBelow.BackRightGroundHitLocalDown.normal);
-            float greatestLocalAngle = localLeftAngle > localRightAngle ? localLeftAngle : localRightAngle;
 
             if (bAerial)
             {
@@ -200,8 +221,25 @@ namespace L7Games.Movement
 
                 // Calculate the roll
                 // Find the angles between the width raycasts
-                float frontAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, frontRightHitToUse.point, Vector3.up);
-                float backAngle = CalculateSignedSlopeAngle(backLeftHitToUse.point, backRightHitToUse.point, Vector3.up);
+                // Check if the smoothing points are a reasonable distance from each other
+                float frontAngle;
+                if (Vector3.Distance(frontLeftHitToUse.point, frontRightHitToUse.point) < angleCorrectionRaycastValidHitWidth)
+                {
+                    frontAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, frontRightHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    frontAngle = 0f;
+                }
+                float backAngle;
+                if (Vector3.Distance(backLeftHitToUse.point, backRightHitToUse.point) < angleCorrectionRaycastValidHitWidth)
+                {
+                    backAngle = CalculateSignedSlopeAngle(backLeftHitToUse.point, backRightHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    backAngle = 0f;
+                }
                 // Use the largest unsigned value
                 float unsignedFrontAngle = frontAngle < 0f ? frontAngle * -1f : frontAngle;
                 float unsignedBackAngle = backAngle < 0f ? backAngle * -1f : backAngle;
@@ -209,10 +247,25 @@ namespace L7Games.Movement
 
                 // Calculate the pitch
                 // Find the angles between the length raycasts
-                float leftAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, backLeftHitToUse.point, Vector3.up);
-                //linesToDraw.Add(new LineToDraw(frontLeftHit.point, backLeftHit.point, Color.white));
-                float rightAngle = CalculateSignedSlopeAngle(frontRightHitToUse.point, backRightHitToUse.point, Vector3.up);
-                //linesToDraw.Add(new LineToDraw(frontRightHit.point, backRightHit.point, Color.white));
+                float leftAngle;
+                if (Vector3.Distance(frontLeftHitToUse.point, backLeftHitToUse.point) < angleCorrectionRaycastValidHitLength)
+                {
+                    leftAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, backLeftHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    leftAngle = 0f;
+                }
+                float rightAngle;
+                if (Vector3.Distance(frontRightHitToUse.point, backRightHitToUse.point) < angleCorrectionRaycastValidHitLength)
+                {
+                    rightAngle = CalculateSignedSlopeAngle(frontRightHitToUse.point, backRightHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    rightAngle = 0f;
+                }
+
                 // Use the smallest unsigned value
                 float unsignedLeftAngle = leftAngle < 0f ? leftAngle * -1f : leftAngle;
                 float unsignedRightAngle = rightAngle < 0f ? rightAngle * -1f : rightAngle;
@@ -296,6 +349,7 @@ namespace L7Games.Movement
             aerialState.RegisterInputs();
 
             inputHandler.wipeoutResetStarted += WipeOutResetPressed;
+            onWipeout += WipeOut;
         }
 
 
@@ -308,6 +362,7 @@ namespace L7Games.Movement
             aerialState.UnRegisterInputs();
 
             inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
+            onWipeout -= WipeOut;
         }
 
         private void Start()
@@ -362,6 +417,8 @@ namespace L7Games.Movement
             {
                 characterAnimator.SetFloat("turnValue", currentTurnInput / turnClamp);
             }
+
+            //inAirBooleanMaterialIndicator.materialBoolean = groundBelow.isConditionTrue();
         }
 
         private void FixedUpdate()
@@ -386,15 +443,39 @@ namespace L7Games.Movement
                 {
                     if (collision.contacts[i].thisCollider.gameObject.TryGetComponent(out WipeOutCollider characterCollider))
                     {
-                        if (fRB.velocity.magnitude > characterCollider.forceRequiredToWipeOut)
+                        // Check if it is not a vertical collision
+                        bool verticalCheck = characterCollider.ignoreVerticalCollisions;
+                        if (!verticalCheck)
                         {
-                            WipeOut(fRB.velocity);
-                            break;
+                            float value = Vector3.Dot(collision.relativeVelocity.normalized, transform.up);
+                            verticalCheck = verticalCollisionTheshold > value;
+                            Debug.Log(value);
+                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + collision.relativeVelocity.normalized, Color.black);
+                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + transform.up, Color.magenta);
+                        }
+
+                        if (verticalCheck)
+                        {
+                            float verticalDot = Vector3.Dot(collision.relativeVelocity.normalized, collision.contacts[i].normal);
+
+                            float scaler = 1.0f;
+                            if (characterCollider.effectedByCollisionAngle)
+                            {
+                                scaler = Vector3.Dot(collision.relativeVelocity.normalized, collision.contacts[i].normal);
+                            }
+                            if (scaler > collisionDirectionMinValue)
+                            {
+
+                                if (collision.relativeVelocity.magnitude > characterCollider.forceRequiredToWipeOut)
+                                {
+                                    CallOnWipeout(-collision.relativeVelocity);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
             }
-
         }
         #endregion
 
@@ -506,7 +587,7 @@ namespace L7Games.Movement
             while (influenceTimer.isActive)
             {
                 InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
-                Debug.Log("Influence Up", this);
+                //Debug.Log("Influence Up", this);
 
                 if(InfluenceDir)
                 {
@@ -598,7 +679,8 @@ namespace L7Games.Movement
         {
             if (fRB.velocity.magnitude > 0f)
             {
-                WipeOut(fRB.velocity);
+
+                CallOnWipeout(fRB.velocity);
             }
         }
 
@@ -637,7 +719,7 @@ namespace L7Games.Movement
         {
             if (characterModel.activeSelf)
             {
-                WipeOut(fRB.velocity);
+                CallOnWipeout(fRB.velocity);
             }
             else
             {

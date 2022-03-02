@@ -136,8 +136,11 @@ namespace L7Games.Movement
             pos = Vector3.zero;
             currentSplineDir = Vector3.zero;
 
-            //The jumping needs the grind details
-            StartJumpCoroutine(onGrind.grindDetails.ExitForce);
+            if(onGrind.grindDetails)
+            {
+                //The jumping needs the grind details
+                StartJumpCoroutine(onGrind.grindDetails.ExitForce);
+            }
 
             //Let the condition know to reset
             onGrind.playerExitedGrind();
@@ -225,6 +228,7 @@ namespace L7Games.Movement
             modelRB.interpolation = RigidbodyInterpolation.None;
             backRB.interpolation = RigidbodyInterpolation.None;
 
+            yield return new WaitForFixedUpdate();
             movementRB.useGravity = true;
             movementRB.isKinematic = false;
             movementRB.detectCollisions = true;

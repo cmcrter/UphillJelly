@@ -19,11 +19,9 @@ namespace L7Games.Movement
         /// Called when the player re spawns
         /// </summary>
         public event System.Action onRespawn;
+        public event System.Action<Vector3> onWipeout;
 
-        
         #endregion
-
-
 
         public virtual void ResetPlayer()
         {
@@ -58,6 +56,15 @@ namespace L7Games.Movement
                 onRespawn();
             }
         }
+
+        public void CallOnWipeout(Vector3 vel)
+        {
+            if(onWipeout != null)
+            {
+                onWipeout(vel);
+            }
+        }
+
         #endregion
     }
 }
