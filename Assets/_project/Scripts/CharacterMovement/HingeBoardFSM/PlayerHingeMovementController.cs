@@ -56,7 +56,7 @@ namespace L7Games.Movement
 
         [Header("Player Setup")]
         [SerializeField]
-        private GameObject playerModel;
+        private Transform root;
 
         [SerializeField]
         public GameObject boardObject;
@@ -129,7 +129,7 @@ namespace L7Games.Movement
             transform.rotation = initialRot;
             transform.position = initalPos;
 
-            boardModel.transform.SetParent(characterModel.transform);
+            boardModel.transform.SetParent(root);
             boardModel.transform.position = boardPos;
             boardModel.transform.rotation = Quaternion.identity;
 
@@ -144,6 +144,13 @@ namespace L7Games.Movement
             Time.timeScale = 1;
 
             CallOnRespawn();
+
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
+
+            playerStateMachine.ForceSwitchToState(aerialState);
         }
 
         public override void ResetPlayer(Transform point)
@@ -163,8 +170,8 @@ namespace L7Games.Movement
             transform.rotation = point.rotation;
             transform.position = point.position;
 
-            boardModel.transform.SetParent(characterModel.transform);
-            boardModel.transform.position = boardPos;
+            boardModel.transform.SetParent(root);
+            boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
 
             characterModel.SetActive(true);
@@ -177,6 +184,13 @@ namespace L7Games.Movement
             Time.timeScale = 1;
 
             CallOnRespawn();
+
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
+
+            playerStateMachine.ForceSwitchToState(aerialState);
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
@@ -571,7 +585,7 @@ namespace L7Games.Movement
             while (influenceTimer.isActive)
             {
                 InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
-                Debug.Log("Influence Up", this);
+                //Debug.Log("Influence Up", this);
 
                 if(InfluenceDir)
                 {
