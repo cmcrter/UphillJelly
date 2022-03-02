@@ -32,7 +32,6 @@ public class CineLockCameraZ : CinemachineExtension
     [SerializeField]
     CinemachineTransposer wipeoutTransp;
 
-
     [SerializeField]
     private float WipeoutGroundThreshold = 4f;
 
@@ -45,13 +44,11 @@ public class CineLockCameraZ : CinemachineExtension
     {
         base.OnEnable();
 
-        movementController.onWipeout += SwitchOnWipeoutCam;
         movementController.onRespawn += SwitchOffWipeoutCam;
     }
 
     private void OnDisable()
     {
-        movementController.onWipeout -= SwitchOnWipeoutCam;
         movementController.onRespawn -= SwitchOffWipeoutCam;
     }
 
@@ -66,14 +63,19 @@ public class CineLockCameraZ : CinemachineExtension
         }
     }
 
+    //Has to run after the event
     public void SwitchOnWipeoutCam(Vector3 vel)
     {
         bWipeOutCamera = true;
         wipeoutCam.enabled = true;
         normalCam.enabled = false;
 
-        wipeoutCam.Follow = movementController.currentRagdoll.transform;
-        wipeoutCam.LookAt = movementController.currentRagdoll.transform;
+        if(movementController.currentRagdoll)
+        {
+            wipeoutCam.Follow = movementController.currentRagdoll.transform;
+            wipeoutCam.LookAt = movementController.currentRagdoll.transform;
+        }
+
         wipeoutTransp = wipeoutCam.GetCinemachineComponent<CinemachineTransposer>();
         wipeoutTransp.m_FollowOffset.y = WipeoutGroundThreshold;
     }

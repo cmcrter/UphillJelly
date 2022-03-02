@@ -100,7 +100,7 @@ namespace L7Games.Movement
             //Pushing the player along the wall
             if(!bJumping)
             {
-                fRB.MovePosition(fRB.transform.position + (wallForward * rideSpeed));
+                fRB.MovePosition(fRB.transform.position + (playerMovement.transform.forward * rideSpeed));
             }
         }
 

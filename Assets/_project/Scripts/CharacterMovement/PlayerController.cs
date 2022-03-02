@@ -21,6 +21,9 @@ namespace L7Games.Movement
         public event System.Action onRespawn;
         public event System.Action<Vector3> onWipeout;
 
+        [SerializeField]
+        private CineLockCameraZ cameraZ;
+
         public bool bWipeOutLocked = false;
 
         #endregion
@@ -64,6 +67,7 @@ namespace L7Games.Movement
             if(onWipeout != null && !bWipeOutLocked)
             {
                 onWipeout(vel);
+                cameraZ.SwitchOnWipeoutCam(Vector3.zero);
             }
         }
 
