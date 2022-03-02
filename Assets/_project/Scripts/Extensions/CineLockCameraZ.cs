@@ -21,36 +21,46 @@ public class CineLockCameraZ : CinemachineExtension
     public float m_ZRotation = 0;
 
     [SerializeField]
-    private PlayerController movementController;
+    private PlayerHingeMovementController movementController;
     private bool bWipeOutCamera = false;
+
+    [SerializeField]
+    CinemachineVirtualCamera normalCam;
+
+    [SerializeField]
+    CinemachineVirtualCamera wipeoutCam;
+    [SerializeField]
+    CinemachineTransposer wipeoutTransp;
+
+
+    [SerializeField]
+    private float WipeoutGroundThreshold = 4f;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     protected override void OnEnable()
     {
         base.OnEnable();
+
         movementController.onWipeout += SwitchOnWipeoutCam;
+        movementController.onRespawn += SwitchOffWipeoutCam;
     }
 
     private void OnDisable()
     {
         movementController.onWipeout -= SwitchOnWipeoutCam;
+        movementController.onRespawn -= SwitchOffWipeoutCam;
     }
 
     protected override void PostPipelineStageCallback(
         CinemachineVirtualCameraBase vcam,
         CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
     {
-
         if(enabled && stage == CinemachineCore.Stage.Finalize)
         {
-            if(!bWipeOutCamera)
-            {
-
-            }
-            else
-            {
-                
-            }
-        
             //Never roll the camera
             state.RawOrientation = Quaternion.Euler(state.RawOrientation.eulerAngles.x, state.RawOrientation.eulerAngles.y, m_ZRotation);
         }
@@ -59,5 +69,19 @@ public class CineLockCameraZ : CinemachineExtension
     public void SwitchOnWipeoutCam(Vector3 vel)
     {
         bWipeOutCamera = true;
+        wipeoutCam.enabled = true;
+        normalCam.enabled = false;
+
+        wipeoutCam.Follow = movementController.currentRagdoll.transform;
+        wipeoutCam.LookAt = movementController.currentRagdoll.transform;
+        wipeoutTransp = wipeoutCam.GetCinemachineComponent<CinemachineTransposer>();
+        wipeoutTransp.m_FollowOffset.y = WipeoutGroundThreshold;
+    }
+
+    public void SwitchOffWipeoutCam()
+    {
+        bWipeOutCamera = false;
+        wipeoutCam.enabled = false;
+        normalCam.enabled = true;
     }
 }
