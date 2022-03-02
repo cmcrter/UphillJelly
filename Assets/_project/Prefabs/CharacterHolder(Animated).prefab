@@ -432,7 +432,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086171951656306901}
   m_LocalRotation: {x: 7.105519e-15, y: -6.7437375e-17, z: 4.7917753e-31, w: 1}
-  m_LocalPosition: {x: -0.6904017, y: -0.049431674, z: 0.0052641486}
+  m_LocalPosition: {x: -0.68, y: -0.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4060754858672369640}
@@ -1535,7 +1535,7 @@ MonoBehaviour:
   m_XDamping: 0.1
   m_YDamping: 0.1
   m_ZDamping: 0
-  m_TargetMovementOnly: 0
+  m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
   m_CameraDistance: 4
@@ -1634,7 +1634,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7792208, y: 1}
+    m_SensorSize: {x: 1.7788104, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2479,6 +2479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6644b66cfd72bf4a9bb6352db0046e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bWipeOutLocked: 0
   aerialState:
     hasRan: 0
     AerialDrag: 0.1
@@ -2600,8 +2601,9 @@ MonoBehaviour:
   turnClamp: 0.8
   ragDollPrefab: {fileID: 4657433874770968513, guid: 8aca706b38b46ec4d9afe02e66e5df8e, type: 3}
   ragdollDataContainer: {fileID: 4268095153265589537}
-  bWipeOutLocked: 0
   checkpointManager: {fileID: 0}
+  playerColliders: []
+  airInfluence: 25
 --- !u!114 &9112553975738110848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3049,7 +3051,7 @@ BoxCollider:
   m_GameObject: {fileID: 9112553976814156467}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.9}
   m_Center: {x: 0, y: 0, z: 0}
