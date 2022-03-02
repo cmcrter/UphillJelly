@@ -349,6 +349,7 @@ namespace L7Games.Movement
             aerialState.RegisterInputs();
 
             inputHandler.wipeoutResetStarted += WipeOutResetPressed;
+            onWipeout += WipeOut;
         }
 
 
@@ -361,6 +362,7 @@ namespace L7Games.Movement
             aerialState.UnRegisterInputs();
 
             inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
+            onWipeout -= WipeOut;
         }
 
         private void Start()
@@ -466,7 +468,7 @@ namespace L7Games.Movement
 
                                 if (collision.relativeVelocity.magnitude > characterCollider.forceRequiredToWipeOut)
                                 {
-                                    WipeOut(-collision.relativeVelocity);
+                                    CallOnWipeout(-collision.relativeVelocity);
                                     break;
                                 }
                             }
@@ -678,7 +680,7 @@ namespace L7Games.Movement
             if (fRB.velocity.magnitude > 0f)
             {
 
-                WipeOut(fRB.velocity);
+                CallOnWipeout(fRB.velocity);
             }
         }
 
@@ -717,7 +719,7 @@ namespace L7Games.Movement
         {
             if (characterModel.activeSelf)
             {
-                WipeOut(fRB.velocity);
+                CallOnWipeout(fRB.velocity);
             }
             else
             {

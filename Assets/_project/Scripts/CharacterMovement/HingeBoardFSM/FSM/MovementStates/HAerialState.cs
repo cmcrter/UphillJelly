@@ -165,7 +165,7 @@ namespace L7Games.Movement
 
             if(wipeOutOnExit && currentTrickPercent < 0.8f)
             {
-                parentController.WipeOut(movementRB.velocity);
+                parentController.CallOnWipeout(movementRB.velocity);
                 wipeOutOnExit = false;
             }
 

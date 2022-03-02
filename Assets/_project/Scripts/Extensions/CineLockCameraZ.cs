@@ -9,6 +9,8 @@
 
 using Cinemachine;
 using UnityEngine;
+using L7Games;
+using L7Games.Movement;
 
 [ExecuteInEditMode]
 [SaveDuringPlay]
@@ -18,13 +20,44 @@ public class CineLockCameraZ : CinemachineExtension
     [Tooltip("Lock the camera's Z rotation to this value")]
     public float m_ZRotation = 0;
 
+    [SerializeField]
+    private PlayerController movementController;
+    private bool bWipeOutCamera = false;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        movementController.onWipeout += SwitchOnWipeoutCam;
+    }
+
+    private void OnDisable()
+    {
+        movementController.onWipeout -= SwitchOnWipeoutCam;
+    }
+
     protected override void PostPipelineStageCallback(
         CinemachineVirtualCameraBase vcam,
         CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
     {
+
         if(enabled && stage == CinemachineCore.Stage.Finalize)
         {
+            if(!bWipeOutCamera)
+            {
+
+            }
+            else
+            {
+                
+            }
+        
+            //Never roll the camera
             state.RawOrientation = Quaternion.Euler(state.RawOrientation.eulerAngles.x, state.RawOrientation.eulerAngles.y, m_ZRotation);
         }
+    }
+
+    public void SwitchOnWipeoutCam(Vector3 vel)
+    {
+        bWipeOutCamera = true;
     }
 }
