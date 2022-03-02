@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 29/11/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 07/01/22
+// Date Last Edited: 02/03/22
 // Brief: A prototype character controller using a board made of 2 RBs with 2 Joints used
 //////////////////////////////////////////////////////////// 
 
@@ -93,7 +93,7 @@ namespace L7Games.Movement
         private Vector3 initalPos;
         private Quaternion initialRot;
         private Quaternion initialRootRotation;
-        private Quaternion lastRot = Quaternion.identity;
+
         private Coroutine turningCo;
         private Coroutine AirturningCo;
 
@@ -107,8 +107,10 @@ namespace L7Games.Movement
 
         [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
-        public bool bWipeOutLocked = false;
         public CheckpointManager checkpointManager;
+
+        [SerializeField]
+        private List<Collider> playerColliders = new List<Collider>();
 
         [SerializeField]
         private float airInfluence = 25f;
@@ -120,7 +122,11 @@ namespace L7Games.Movement
         public override void ResetPlayer()
         {
             bWipeOutLocked = true;
+
             Time.timeScale = 0;
+
+            characterAnimator.Play("grounded");
+            characterAnimator.playbackTime = 1f;
 
             fRB.isKinematic = false;
 
@@ -149,8 +155,6 @@ namespace L7Games.Movement
             ResetWheelPos();
             AlignWheels();
 
-            Time.timeScale = 1;
-
             CallOnRespawn();
 
             groundedState.OnStateExit();
@@ -161,12 +165,16 @@ namespace L7Games.Movement
             playerStateMachine.ForceSwitchToState(aerialState);
 
             bWipeOutLocked = false;
+            Time.timeScale = 1;
         }
 
         public override void ResetPlayer(Transform point)
         {
             bWipeOutLocked = true;
             Time.timeScale = 0;
+
+            characterAnimator.Play("grounded");
+            characterAnimator.playbackTime = 1f;
 
             fRB.isKinematic = false;
 
@@ -194,8 +202,6 @@ namespace L7Games.Movement
             ResetWheelPos();
             AlignWheels();
 
-            Time.timeScale = 1;
-
             CallOnRespawn();
 
             groundedState.OnStateExit();
@@ -205,6 +211,7 @@ namespace L7Games.Movement
 
             playerStateMachine.ForceSwitchToState(aerialState);
 
+            Time.timeScale = 1;
             bWipeOutLocked = false;
         }
 
@@ -367,8 +374,6 @@ namespace L7Games.Movement
             onWipeout += WipeOut;
         }
 
-
-
         private void OnDisable()
         {
             groundedState.UnRegisterInputs();
@@ -453,7 +458,10 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (characterModel.activeSelf && !bWipeOutLocked)
+            if(bWipeOutLocked)
+                return;
+
+            if (characterModel.activeSelf)
             {
                 for (int i = 0; i < collision.contactCount; ++i)
                 {
@@ -548,7 +556,6 @@ namespace L7Games.Movement
 
         public void ResetCameraView()
         {
-
             camBrain.LookAt = lookAtTransform;
             camBrain.Follow = transform;
         }
@@ -736,10 +743,7 @@ namespace L7Games.Movement
         {
             if (characterModel.activeSelf)
             {
-                if(!bWipeOutLocked) 
-                {
-                    CallOnWipeout(fRB.velocity);
-                }
+                CallOnWipeout(fRB.velocity);
             }
             else
             {

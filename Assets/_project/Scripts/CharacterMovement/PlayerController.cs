@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 22/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 22/10/21
+// Date Last Edited: 02/03/22
 // Brief: A script for prototype and current player controllers to inherit from (to keep debugging and test scripts easy)
 //////////////////////////////////////////////////////////// 
 
@@ -20,6 +20,8 @@ namespace L7Games.Movement
         /// </summary>
         public event System.Action onRespawn;
         public event System.Action<Vector3> onWipeout;
+
+        public bool bWipeOutLocked = false;
 
         #endregion
 
@@ -59,7 +61,7 @@ namespace L7Games.Movement
 
         public void CallOnWipeout(Vector3 vel)
         {
-            if(onWipeout != null)
+            if(onWipeout != null && !bWipeOutLocked)
             {
                 onWipeout(vel);
             }
