@@ -92,6 +92,7 @@ namespace L7Games.Movement
 
         private Vector3 initalPos;
         private Quaternion initialRot;
+        private Quaternion initialRootRotation;
         private Quaternion lastRot = Quaternion.identity;
         private Coroutine turningCo;
         private Coroutine AirturningCo;
@@ -108,12 +109,17 @@ namespace L7Games.Movement
         public RagdollDataContainer ragdollDataContainer;
         public bool bWipeOutLocked = false;
         public CheckpointManager checkpointManager;
+
+        [SerializeField]
+        private float airInfluence = 25f;
+
         #endregion
 
         #region Public Methods
 
         public override void ResetPlayer()
         {
+            bWipeOutLocked = true;
             Time.timeScale = 0;
 
             fRB.isKinematic = false;
@@ -126,12 +132,14 @@ namespace L7Games.Movement
             bRB.angularVelocity = Vector3.zero;
             bRB.velocity = Vector3.zero;
 
-            transform.rotation = initialRot;
-            transform.position = initalPos;
+            root.rotation = initialRootRotation;
 
             boardModel.transform.SetParent(root);
             boardModel.transform.position = boardPos;
             boardModel.transform.rotation = Quaternion.identity;
+
+            transform.rotation = initialRot;
+            transform.position = initalPos;
 
             characterModel.SetActive(true);
 
@@ -151,10 +159,13 @@ namespace L7Games.Movement
             wallRideState.OnStateExit();
 
             playerStateMachine.ForceSwitchToState(aerialState);
+
+            bWipeOutLocked = false;
         }
 
         public override void ResetPlayer(Transform point)
         {
+            bWipeOutLocked = true;
             Time.timeScale = 0;
 
             fRB.isKinematic = false;
@@ -167,12 +178,14 @@ namespace L7Games.Movement
             bRB.angularVelocity = Vector3.zero;
             bRB.velocity = Vector3.zero;
 
-            transform.rotation = point.rotation;
-            transform.position = point.position;
+            root.rotation = initialRootRotation;
 
             boardModel.transform.SetParent(root);
             boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
+
+            transform.rotation = point.rotation;
+            transform.position = point.position;
 
             characterModel.SetActive(true);
 
@@ -191,6 +204,8 @@ namespace L7Games.Movement
             wallRideState.OnStateExit();
 
             playerStateMachine.ForceSwitchToState(aerialState);
+
+            bWipeOutLocked = false;
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
@@ -372,6 +387,7 @@ namespace L7Games.Movement
             fRB.transform.parent = null;
             boardPos = boardModel.transform.position;
             boardModel.transform.rotation = Quaternion.identity;
+            initialRootRotation = root.rotation;
 
             //characterInitalBones = GetBonesFromObject(characterModel);
 
@@ -544,6 +560,8 @@ namespace L7Games.Movement
                 return;
             }
 
+            bWipeOutLocked = true;
+
             // Spawn the ragdoll
             GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
             // If there is a root or main rigid body then take that into account, otherwise not a problem
@@ -592,12 +610,12 @@ namespace L7Games.Movement
                 if(InfluenceDir)
                 {
                     yield return new WaitForFixedUpdate();
-                    fRB.AddForce(-transform.right * 7.5f, ForceMode.Impulse);
+                    fRB.AddForce(-transform.right * airInfluence, ForceMode.Impulse);
                 }
                 else if (inputHandler.TurningAxis != 0 )
                 {
                     yield return new WaitForFixedUpdate();
-                    fRB.AddForce(transform.right * 7.5f, ForceMode.Impulse);
+                    fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
                 }
 
                 influenceTimer.Tick(Time.deltaTime);
@@ -679,7 +697,6 @@ namespace L7Games.Movement
         {
             if (fRB.velocity.magnitude > 0f)
             {
-
                 CallOnWipeout(fRB.velocity);
             }
         }
@@ -719,7 +736,10 @@ namespace L7Games.Movement
         {
             if (characterModel.activeSelf)
             {
-                CallOnWipeout(fRB.velocity);
+                if(!bWipeOutLocked) 
+                {
+                    CallOnWipeout(fRB.velocity);
+                }
             }
             else
             {
