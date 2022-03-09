@@ -100,7 +100,7 @@ namespace L7Games.Movement
             //Pushing the player along the wall
             if(!bJumping)
             {
-                fRB.MovePosition(fRB.transform.position + (wallForward * rideSpeed));
+                fRB.MovePosition(fRB.transform.position + (playerMovement.transform.forward * rideSpeed));
             }
         }
 
@@ -191,13 +191,16 @@ namespace L7Games.Movement
             fRB.isKinematic = false;
             bRB.isKinematic = false;
 
-            fRB.AddForce((playerMovement.transform.up * 450f) + (nextToWallRun.currentWallRide.transform.forward * 950), ForceMode.Impulse);
-            playerMovement.StartAirInfluenctCoroutine();
             playerMovement.StartCoroutine(WipeOutCooldown());
+            playerMovement.StartAirInfluenctCoroutine();
         }
 
         private IEnumerator WipeOutCooldown()
         {
+            yield return new WaitForFixedUpdate();
+            fRB.AddForce((playerMovement.transform.up * 450f) + (nextToWallRun.currentWallRide.transform.forward * 950), ForceMode.Impulse);
+
+
             yield return new WaitForSeconds(1.2f);
             playerMovement.bWipeOutLocked = false;
         }

@@ -104,6 +104,7 @@ namespace L7Games.Movement
         [Tooltip("The prefab that is spawned to replace this as a ragdoll Ragdoll used prefab used")]
         [SerializeField]
         private GameObject ragDollPrefab;
+        public GameObject currentRagdoll;
 
         [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
@@ -735,6 +736,8 @@ namespace L7Games.Movement
             {
                 spawnedRagdoll.Initalise(this, ragdollDataContainer);
             }
+
+            currentRagdoll = ragDoll;
 
             return ragDoll;
         }
