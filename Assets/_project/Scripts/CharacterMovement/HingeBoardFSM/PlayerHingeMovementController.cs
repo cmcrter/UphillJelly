@@ -372,7 +372,7 @@ namespace L7Games.Movement
             aerialState.RegisterInputs();
 
             inputHandler.wipeoutResetStarted += WipeOutResetPressed;
-            onWipeout += WipeOut;
+            onWipeout += WipeOutCharacter;
         }
 
         private void OnDisable()
@@ -383,7 +383,7 @@ namespace L7Games.Movement
             aerialState.UnRegisterInputs();
 
             inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
-            onWipeout -= WipeOut;
+            onWipeout -= WipeOutCharacter;
         }
 
         private void Start()
@@ -561,7 +561,7 @@ namespace L7Games.Movement
             camBrain.Follow = transform;
         }
 
-        public void WipeOut(Vector3 currentVelocity)
+        public void WipeOutCharacter(Vector3 currentVelocity)
         {
             if(!characterModel.activeSelf)
             {
@@ -738,7 +738,7 @@ namespace L7Games.Movement
             }
 
             currentRagdoll = ragDoll;
-
+            Debug.Break();
             return ragDoll;
         }
 

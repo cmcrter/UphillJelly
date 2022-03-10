@@ -19,15 +19,19 @@ using L7Games.Movement;
 [RequireComponent(typeof(RagdollDataContainer))]
 public class SpawnedRagdoll : MonoBehaviour
 {
+    #region Private Serialized Fields Variables
+    /// <summary>
+    /// The ragdollData attached to the same ragdoll as this
+    /// </summary>
+    [SerializeField]
+    private RagdollDataContainer ragdollData;
+    #endregion
+
     #region Private Variables
     /// <summary>
     /// The player character control that this ragdoll was spawned from
     /// </summary>
     private PlayerController playerSpawnedFrom;
-    /// <summary>
-    /// The ragdollData attached to the same ragdoll as this
-    /// </summary>
-    private RagdollDataContainer ragdollData;
     #endregion
 
     #region Public Methods
