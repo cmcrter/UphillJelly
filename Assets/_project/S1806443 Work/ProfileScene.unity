@@ -5022,21 +5022,21 @@ MonoBehaviour:
   characterObjectInScene: {fileID: 7739641729039498521}
   playableCharacterObjectInScene: {fileID: 7739641729039498521}
   Ghost2CharacterInScene: {fileID: 3879914699877300835}
-  hatDisplayGameObject: {fileID: 5074508490546417272}
-  playableHatDisplayGameObject: {fileID: 5074508490546417272}
+  hatDisplayGameObject: {fileID: 4186975352651028301}
+  playableHatDisplayGameObject: {fileID: 4186975352651028301}
   Ghost2HatInScene: {fileID: 3879914699704464453}
   gameObjectOptions:
-  - {fileID: 919132149155446097, guid: 8ddf12e142667aa45a6d5748710dd93c, type: 3}
-  - {fileID: 919132149155446097, guid: 7f9dd48886a947044bef65b2d9d36834, type: 3}
-  - {fileID: 919132149155446097, guid: 67f9e91bca8d7d144a281e4d08a291d9, type: 3}
-  - {fileID: 919132149155446097, guid: 7482ab74e686a0144a90df7d9600c410, type: 3}
+  - {fileID: 5906638480496150246, guid: 3440292fe55442d4b9600f607d5e9265, type: 3}
+  - {fileID: 6769333989894529841, guid: da555e3c349d5654e875a33bbe602179, type: 3}
+  - {fileID: 6449225800232774674, guid: b4ee8563328623d4d8a492e413442e2e, type: 3}
+  - {fileID: 2253980022164838619, guid: f1edf596416de8d4e96598677117a019, type: 3}
   - {fileID: 929793877402338641, guid: 941d4efe426a48b429b1fef1b9fc8e75, type: 3}
   - {fileID: 919132149155446097, guid: fe2a4c816ed52204ea12c397e5b769b0, type: 3}
   - {fileID: 919132149155446097, guid: e2d0c69768e8ee1499b4935da3d5155c, type: 3}
   - {fileID: 919132149155446097, guid: 491defbc75189c24abf4b9611ba626b6, type: 3}
-  - {fileID: 919132149155446097, guid: 2f7a447acb083dd4ca8b2a1cc3042a17, type: 3}
-  - {fileID: 919132149155446097, guid: 77d05c9d0a94d604f97d5fb507f46cd8, type: 3}
-  - {fileID: 919132149155446097, guid: 007ecb2bd9d2b024d8215eefca6fe961, type: 3}
+  - {fileID: 5453762924241940251, guid: 4a437cf158a060242b4502ebc05a90ff, type: 3}
+  - {fileID: 4008918839847259187, guid: 2cc7580ce68f463418cf8874196e11f5, type: 3}
+  - {fileID: 975457501681983569, guid: 2c8a40d4c3aec1a47807de043e8ca8a7, type: 3}
   gameObjectMaterialOptions:
   - {fileID: 2100000, guid: 3fea19c62c2e0534eb7f638889698982, type: 2}
   - {fileID: 2100000, guid: 33bc3869645caf9478717a5caf168768, type: 2}
@@ -5225,6 +5225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5051483880461249883}
   - component: {fileID: 5051483880461249882}
+  - component: {fileID: 5051483880461249877}
   m_Layer: 0
   m_Name: LoadCustomizables
   m_TagString: Untagged
@@ -5232,6 +5233,14 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!33 &5051483880461249877
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5051483880461249876}
+  m_Mesh: {fileID: 0}
 --- !u!114 &5051483880461249882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5244,7 +5253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 045b8a25f8551394aadb4c9773278686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outfitChanger: {fileID: 1251040265983239674, guid: d2dd28c10baa62343b6f3e92db39c494, type: 3}
+  outfitChanger: {fileID: 4186975352651028300}
   shop: {fileID: 230770899988435760}
   b_player: {fileID: 6226514804018325394, guid: 2236669557cfd494f8707efab90c97e4, type: 3}
   replaySaveManager: {fileID: 610935011501426497}

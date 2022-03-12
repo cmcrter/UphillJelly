@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Date Last Edited: 12/03/22
 // Brief: A script to control the outfit system
 //////////////////////////////////////////////////////////// 
 
@@ -103,6 +103,7 @@ public class OutfitChanger : MonoBehaviour
 
         // set the current character to 2
         currentCharacterint = 2;
+
 
         if (replaySaveManager.isMapTutorial || replaySaveManager.isMapCity) {
 
@@ -217,10 +218,15 @@ public class OutfitChanger : MonoBehaviour
         Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
 
+        
         hatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
 
+        // GET FROM THE POOL OF HATS (NOT WORKING)
+        hatSelector.GetComponent<MeshFilter>().sharedMesh = gameObjectOptions[currentGOint].GetComponent<MeshFilter>().sharedMesh;
+        // DOES THIS WORK??? ^^^ WORKS
         // set the players material to the current hat material
         hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+
 
         // set the players hat to the current hat
         playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
@@ -253,6 +259,19 @@ public class OutfitChanger : MonoBehaviour
         // load the current character material that has been saved
         playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
+        // load the current character material that has been saved
+        Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+
+
+        hatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        // GET FROM THE POOL OF HATS (NOT WORKING)
+        hatSelector.GetComponent<MeshFilter>().sharedMesh = gameObjectOptions[currentGOint].GetComponent<MeshFilter>().sharedMesh;
+        // DOES THIS WORK??? ^^^ WORKS
+        // set the players material to the current hat material
+        hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+
 
         // set the players hat to the current hat
         playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
@@ -260,8 +279,8 @@ public class OutfitChanger : MonoBehaviour
         // set the players material to the current hat material
         playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
 
-        // load the current character material that has been saved
-        Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+
 
         // set the players hat to the current hat
         Ghost2HatInScene.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
@@ -283,6 +302,19 @@ public class OutfitChanger : MonoBehaviour
         // load the current character material that has been saved
         playableCharacterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
+        // load the current character material that has been saved
+        Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
+
+
+        hatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
+
+        // GET FROM THE POOL OF HATS (NOT WORKING)
+        hatSelector.GetComponent<MeshFilter>().sharedMesh = gameObjectOptions[currentGOint].GetComponent<MeshFilter>().sharedMesh;
+        // DOES THIS WORK??? ^^^ WORKS
+        // set the players material to the current hat material
+        hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
+
 
         // set the players hat to the current hat
         playableHatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
@@ -291,8 +323,7 @@ public class OutfitChanger : MonoBehaviour
         playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
 
 
-        // load the current character material that has been saved
-        Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
+
 
         // set the players hat to the current hat
         Ghost2HatInScene.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];

@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 15/11/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Date Last Edited: 12/03/22
 // Brief: A script to load the character materials in game
 //////////////////////////////////////////////////////////// 
 
@@ -103,12 +103,23 @@ public class LoadCustomizablesInGame : MonoBehaviour
             //
             outfitChanger.LoadedCustomizables1();
 
+            // put hat in here
+            //outfitChanger.hatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh
+            //    = outfitChanger.gameObjectOptions[outfitChanger.currentGOint].gameObject.GetComponent<MeshFilter>().sharedMesh;
+
+            //MF.GetComponent<MeshFilter>().sharedMesh
+            //    = outfitChanger.gameObjectOptions[outfitChanger.currentGOint].GetComponent<Mesh>();
+
         }
 
         // if no directory exists
         if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
 
+            //
             b_player.isSave2 = true;
+
+            //
+            b_player.LoadPlayer2();
 
             //
             outfitChanger.LoadedCustomizables2();
@@ -118,7 +129,11 @@ public class LoadCustomizablesInGame : MonoBehaviour
         // if no directory exists
         if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
 
+            //
             b_player.isSave3 = true;
+
+            //
+            b_player.LoadPlayer3();
 
             //
             outfitChanger.LoadedCustomizables3();

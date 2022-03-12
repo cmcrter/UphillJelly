@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Date Last Edited: 12/03/22
 // Brief: A script to call the functions to save and load the player
 //////////////////////////////////////////////////////////// 
 
@@ -545,8 +545,9 @@ public class b_Player : MonoBehaviour
         ghostSO2.isRecording = false;
         ghostSO2.isReplaying = true;
 
+        //  NOT GOING TO BE DOING THIS
         // Change to game camera
-        changeCamera.ChangeToGameCam();
+        //changeCamera.ChangeToGameCam();
 
     }
 
