@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 29/11/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 07/01/22
+// Date Last Edited: 02/03/22
 // Brief: A prototype character controller using a board made of 2 RBs with 2 Joints used
 //////////////////////////////////////////////////////////// 
 
@@ -12,16 +12,17 @@ using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
 using L7Games.Triggerables;
+using L7Games.Triggerables.CheckpointSystem;
+using L7Games;
 using System.Collections;
+using Cinemachine;
+using System.Collections.Generic;
 
 namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
-
-
         #region Variables
-
         [Header("State Machine")]
         public FiniteStateMachine playerStateMachine;
 
@@ -35,26 +36,46 @@ namespace L7Games.Movement
         public HisOnGrind grindBelow = new HisOnGrind();
 
         public PlayerCamera playerCamera;
+        public CinemachineVirtualCamera camBrain;
+
         public float currentTurnInput;
         [Tooltip("The time before the player is at full turn")]
-        public float turnDuration;        
+        public float turnDuration;
+
+        [Tooltip("The max distance that the hit points of the roll calculating hit points can be from each other whilst still being valid")]
+        public float angleCorrectionRaycastValidHitWidth = 2f;
+        [Tooltip("The max distance that the hit points of the pitch calculating hit points can be from each other whilst still being valid")]
+        public float angleCorrectionRaycastValidHitLength = 2f;
+
+        [Tooltip("The unit interval indicating how close a collision velocity direction must be to the player is going, 1 being the exact same direction, 0 being perpendicular away")]
+        [Range(0f, 1f)]
+        public float collisionDirectionMinValue = 0.8f;
+
+        [Tooltip("The min unit interval value for a collision to be consider vertical from the normalised dot product")]
+        public float verticalCollisionTheshold = 0.75f;
 
         [Header("Player Setup")]
         [SerializeField]
-        private GameObject playerModel;
+        private Transform root;
 
         [SerializeField]
         public GameObject boardObject;
+        [SerializeField]
+        private GameObject boardModel;
+        private Vector3 boardPos;
+
         //Front Rigidbody
         [SerializeField]
         private Rigidbody fRB;
         //Back Rigidbody
         [SerializeField]
         private Rigidbody bRB;
+        [SerializeField]
+        private Rigidbody ModelRB;
 
-        public SphereCollider ballMovement;
         public PlayerInput input;
         public InputHandler inputHandler;
+        public Animator characterAnimator;
 
         [SerializeField]
         private Transform frontWheelPos;
@@ -62,6 +83,8 @@ namespace L7Games.Movement
         private Transform backWheelPos;
         [SerializeField]
         private GameObject characterModel;
+        [SerializeField]
+        private Transform lookAtTransform;
 
         [SerializeField]
         private float AdditionalGravityAmount = 8;
@@ -69,7 +92,8 @@ namespace L7Games.Movement
 
         private Vector3 initalPos;
         private Quaternion initialRot;
-        private Quaternion lastRot = Quaternion.identity;
+        private Quaternion initialRootRotation;
+
         private Coroutine turningCo;
         private Coroutine AirturningCo;
 
@@ -77,23 +101,33 @@ namespace L7Games.Movement
         public AnimationCurve turnSpeedCurve;
         public float turnClamp = 0.575f;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public HumanoidCollisionHandler humanoidCollision;
+        [Tooltip("The prefab that is spawned to replace this as a ragdoll Ragdoll used prefab used")]
+        [SerializeField]
+        private GameObject ragDollPrefab;
+        public GameObject currentRagdoll;
 
-        public GameObject ragDollPrefab;
-
+        [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
+        public CheckpointManager checkpointManager;
 
-        //System.Collections.Generic.List<Bones> characterInitalBones;
+        [SerializeField]
+        private List<Collider> playerColliders = new List<Collider>();
+
+        [SerializeField]
+        private float airInfluence = 25f;
+
         #endregion
 
         #region Public Methods
 
         public override void ResetPlayer()
         {
+            bWipeOutLocked = true;
+
             Time.timeScale = 0;
+
+            characterAnimator.Play("grounded");
+            characterAnimator.playbackTime = 1f;
 
             fRB.isKinematic = false;
 
@@ -105,20 +139,43 @@ namespace L7Games.Movement
             bRB.angularVelocity = Vector3.zero;
             bRB.velocity = Vector3.zero;
 
+            root.rotation = initialRootRotation;
+
+            boardModel.transform.SetParent(root);
+            boardModel.transform.position = boardPos;
+            boardModel.transform.rotation = Quaternion.identity;
+
             transform.rotation = initialRot;
             transform.position = initalPos;
 
-            ResetRagdollToCharacter();
+            characterModel.SetActive(true);
+
+            camBrain.LookAt = lookAtTransform;
+            camBrain.Follow = transform;
 
             ResetWheelPos();
             AlignWheels();
 
+            CallOnRespawn();
+
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
+
+            playerStateMachine.ForceSwitchToState(aerialState);
+
+            bWipeOutLocked = false;
             Time.timeScale = 1;
         }
 
         public override void ResetPlayer(Transform point)
         {
+            bWipeOutLocked = true;
             Time.timeScale = 0;
+
+            characterAnimator.Play("grounded");
+            characterAnimator.playbackTime = 1f;
 
             fRB.isKinematic = false;
 
@@ -130,15 +187,33 @@ namespace L7Games.Movement
             bRB.angularVelocity = Vector3.zero;
             bRB.velocity = Vector3.zero;
 
+            root.rotation = initialRootRotation;
+
+            boardModel.transform.SetParent(root);
+            boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
+            boardModel.transform.rotation = Quaternion.identity;
+
             transform.rotation = point.rotation;
             transform.position = point.position;
 
-            ResetRagdollToCharacter();
+            characterModel.SetActive(true);
+
+            ResetCameraView();
 
             ResetWheelPos();
             AlignWheels();
 
+            CallOnRespawn();
+
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
+
+            playerStateMachine.ForceSwitchToState(aerialState);
+
             Time.timeScale = 1;
+            bWipeOutLocked = false;
         }
 
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
@@ -153,10 +228,6 @@ namespace L7Games.Movement
             RaycastHit frontRightHitToUse = groundBelow.FrontRightGroundHitLocalDown;
             RaycastHit backLeftHitToUse = groundBelow.BackLeftGroundHitLocalDown;
             RaycastHit backRightHitToUse = groundBelow.BackRightGroundHitLocalDown;
-
-            float localLeftAngle = Vector3.Angle(groundBelow.FrontLeftGroundHitLocalDown.normal, groundBelow.BackLeftGroundHitLocalDown.normal);
-            float localRightAngle = Vector3.Angle(groundBelow.FrontRightGroundHitLocalDown.normal, groundBelow.BackRightGroundHitLocalDown.normal);
-            float greatestLocalAngle = localLeftAngle > localRightAngle ? localLeftAngle : localRightAngle;
 
             if (bAerial)
             {
@@ -173,8 +244,25 @@ namespace L7Games.Movement
 
                 // Calculate the roll
                 // Find the angles between the width raycasts
-                float frontAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, frontRightHitToUse.point, Vector3.up);
-                float backAngle = CalculateSignedSlopeAngle(backLeftHitToUse.point, backRightHitToUse.point, Vector3.up);
+                // Check if the smoothing points are a reasonable distance from each other
+                float frontAngle;
+                if (Vector3.Distance(frontLeftHitToUse.point, frontRightHitToUse.point) < angleCorrectionRaycastValidHitWidth)
+                {
+                    frontAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, frontRightHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    frontAngle = 0f;
+                }
+                float backAngle;
+                if (Vector3.Distance(backLeftHitToUse.point, backRightHitToUse.point) < angleCorrectionRaycastValidHitWidth)
+                {
+                    backAngle = CalculateSignedSlopeAngle(backLeftHitToUse.point, backRightHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    backAngle = 0f;
+                }
                 // Use the largest unsigned value
                 float unsignedFrontAngle = frontAngle < 0f ? frontAngle * -1f : frontAngle;
                 float unsignedBackAngle = backAngle < 0f ? backAngle * -1f : backAngle;
@@ -182,10 +270,25 @@ namespace L7Games.Movement
 
                 // Calculate the pitch
                 // Find the angles between the length raycasts
-                float leftAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, backLeftHitToUse.point, Vector3.up);
-                //linesToDraw.Add(new LineToDraw(frontLeftHit.point, backLeftHit.point, Color.white));
-                float rightAngle = CalculateSignedSlopeAngle(frontRightHitToUse.point, backRightHitToUse.point, Vector3.up);
-                //linesToDraw.Add(new LineToDraw(frontRightHit.point, backRightHit.point, Color.white));
+                float leftAngle;
+                if (Vector3.Distance(frontLeftHitToUse.point, backLeftHitToUse.point) < angleCorrectionRaycastValidHitLength)
+                {
+                    leftAngle = CalculateSignedSlopeAngle(frontLeftHitToUse.point, backLeftHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    leftAngle = 0f;
+                }
+                float rightAngle;
+                if (Vector3.Distance(frontRightHitToUse.point, backRightHitToUse.point) < angleCorrectionRaycastValidHitLength)
+                {
+                    rightAngle = CalculateSignedSlopeAngle(frontRightHitToUse.point, backRightHitToUse.point, Vector3.up);
+                }
+                else
+                {
+                    rightAngle = 0f;
+                }
+
                 // Use the smallest unsigned value
                 float unsignedLeftAngle = leftAngle < 0f ? leftAngle * -1f : leftAngle;
                 float unsignedRightAngle = rightAngle < 0f ? rightAngle * -1f : rightAngle;
@@ -253,9 +356,11 @@ namespace L7Games.Movement
             groundedState.InitialiseState(this, fRB, bRB, groundBelow, grindBelow);
             aerialState.InitialiseState(this, fRB, bRB, groundBelow, nextToWallRun, grindBelow);
             wallRideState.InitialiseState(this, fRB, bRB, nextToWallRun, groundBelow);
-            grindingState.InitialiseState(this, fRB, grindBelow);
+            grindingState.InitialiseState(this, fRB, bRB, ModelRB, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(aerialState);
+
+            camBrain = camBrain ?? FindObjectOfType<CinemachineVirtualCamera>();
         }
 
         //Adding the inputs to the finite state machine
@@ -264,15 +369,21 @@ namespace L7Games.Movement
             groundedState.RegisterInputs();
             grindingState.RegisterInputs();
             wallRideState.RegisterInputs();
+            aerialState.RegisterInputs();
+
+            inputHandler.wipeoutResetStarted += WipeOutResetPressed;
+            onWipeout += WipeOutCharacter;
         }
-
-
 
         private void OnDisable()
         {
             groundedState.UnRegisterInputs();
             grindingState.UnRegisterInputs();
             wallRideState.UnRegisterInputs();
+            aerialState.UnRegisterInputs();
+
+            inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
+            onWipeout -= WipeOutCharacter;
         }
 
         private void Start()
@@ -280,11 +391,19 @@ namespace L7Games.Movement
             initalPos = transform.position;
             initialRot = transform.rotation;
             fRB.transform.parent = null;
-
-            //Setting up model position
-            playerModel.transform.position = new Vector3(boardObject.transform.position.x, (ballMovement.transform.position.y - (ballMovement.radius * ballMovement.transform.localScale.y) + 0.0275f), boardObject.transform.position.z);
+            boardPos = boardModel.transform.position;
+            boardModel.transform.rotation = Quaternion.identity;
+            initialRootRotation = root.rotation;
 
             //characterInitalBones = GetBonesFromObject(characterModel);
+
+            if (checkpointManager == null)
+            {
+                checkpointManager = FindObjectOfType<CheckpointManager>();
+            }
+
+            characterAnimator.SetFloat("crouchingFloat", -1);
+            characterAnimator.SetFloat("turnValue", 0);
         }
 
         private void Update()
@@ -298,16 +417,10 @@ namespace L7Games.Movement
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
 
-            else if (UnityEngine.InputSystem.Keyboard.current.oKey.IsActuated())
+            if (characterModel.activeSelf)
             {
-                if (characterModel.activeSelf)
-                {
-                    WipeOut(fRB.velocity);
-                }
-
+                playerStateMachine.RunMachine(Time.deltaTime);
             }
-
-            playerStateMachine.RunMachine(Time.deltaTime);
 
             if (Keyboard.current != null)
             {
@@ -317,15 +430,25 @@ namespace L7Games.Movement
                 }
             }
 
-            if(inputHandler.TurningAxis != 0 && turningCo == null)
+            if (inputHandler.TurningAxis != 0 && turningCo == null)
             {
                 turningCo = StartCoroutine(Co_TurnAngle());
             }
+
+            if(AirturningCo != null || groundedState.hasRan)
+            {
+                characterAnimator.SetFloat("turnValue", currentTurnInput / turnClamp);
+            }
+
+            //inAirBooleanMaterialIndicator.materialBoolean = groundBelow.isConditionTrue();
         }
 
         private void FixedUpdate()
         {
-            playerStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+            if (characterModel.activeSelf)
+            {
+                playerStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+            }
 
             if(bAddAdditionalGravity)
             {
@@ -336,14 +459,48 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            for (int i = 0; i < collision.contactCount; ++i)
+            if(bWipeOutLocked)
+                return;
+
+            if (characterModel.activeSelf)
             {
-                if (collision.contacts[i].thisCollider.CompareTag("BodyWipeOutCollider"))
+                for (int i = 0; i < collision.contactCount; ++i)
                 {
-                    WipeOut(fRB.velocity);
+                    if (collision.contacts[i].thisCollider.gameObject.TryGetComponent(out WipeOutCollider characterCollider))
+                    {
+                        // Check if it is not a vertical collision
+                        bool verticalCheck = characterCollider.ignoreVerticalCollisions;
+                        if (!verticalCheck)
+                        {
+                            float value = Vector3.Dot(collision.relativeVelocity.normalized, transform.up);
+                            verticalCheck = verticalCollisionTheshold > value;
+                            Debug.Log(value);
+                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + collision.relativeVelocity.normalized, Color.black);
+                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + transform.up, Color.magenta);
+                        }
+
+                        if (verticalCheck)
+                        {
+                            float verticalDot = Vector3.Dot(collision.relativeVelocity.normalized, collision.contacts[i].normal);
+
+                            float scaler = 1.0f;
+                            if (characterCollider.effectedByCollisionAngle)
+                            {
+                                scaler = Vector3.Dot(collision.relativeVelocity.normalized, collision.contacts[i].normal);
+                            }
+                            if (scaler > collisionDirectionMinValue)
+                            {
+
+                                if (collision.relativeVelocity.magnitude > characterCollider.forceRequiredToWipeOut)
+                                {
+                                    CallOnWipeout(-collision.relativeVelocity);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-
         }
         #endregion
 
@@ -353,7 +510,7 @@ namespace L7Games.Movement
         //A few utility functions
         public override void MoveToPosition(Vector3 positionToMoveTo)
         {
-            ballMovement.transform.position = positionToMoveTo;
+            
         }
 
         public void ResetWheelPos()
@@ -398,8 +555,21 @@ namespace L7Games.Movement
             }
         }
 
-        public void WipeOut(Vector3 currentVelocity)
+        public void ResetCameraView()
         {
+            camBrain.LookAt = lookAtTransform;
+            camBrain.Follow = transform;
+        }
+
+        public void WipeOutCharacter(Vector3 currentVelocity)
+        {
+            if(!characterModel.activeSelf)
+            {
+                return;
+            }
+
+            bWipeOutLocked = true;
+
             // Spawn the ragdoll
             GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
             // If there is a root or main rigid body then take that into account, otherwise not a problem
@@ -417,12 +587,17 @@ namespace L7Games.Movement
             // Set the camera to follow the rag doll
             if (mainBody != null)
             {
-                playerCamera.target = mainBody.transform;
+                camBrain.LookAt = mainBody.transform;
+                camBrain.Follow = mainBody.transform;
             }
             else if (boneBodies.Length > 0)
             {
-                playerCamera.target = boneBodies[0].transform;
+                camBrain.LookAt = boneBodies[0].transform;
+                camBrain.Follow = boneBodies[0].transform;
             }
+
+            boardModel.transform.SetParent(null);
+            characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
         }
 
@@ -438,15 +613,17 @@ namespace L7Games.Movement
             while (influenceTimer.isActive)
             {
                 InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
-                Debug.Log("Influence Up", this);
+                //Debug.Log("Influence Up", this);
 
                 if(InfluenceDir)
                 {
-                    fRB.AddForce(-transform.right * 5f, ForceMode.Impulse);
+                    yield return new WaitForFixedUpdate();
+                    fRB.AddForce(-transform.right * airInfluence, ForceMode.Impulse);
                 }
                 else if (inputHandler.TurningAxis != 0 )
                 {
-                    fRB.AddForce(transform.right * 5f, ForceMode.Impulse);
+                    yield return new WaitForFixedUpdate();
+                    fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
                 }
 
                 influenceTimer.Tick(Time.deltaTime);
@@ -528,53 +705,13 @@ namespace L7Games.Movement
         {
             if (fRB.velocity.magnitude > 0f)
             {
-                WipeOut(fRB.velocity);
+                CallOnWipeout(fRB.velocity);
             }
         }
 
         private void ResetRagdollToCharacter()
         {
-            //characterModel.transform.parent = playerModel.transform;
 
-            // TODO: Needs to do something to kill the already spawned rag Doll probably through events
-
-            characterModel.SetActive(true);
-
-            //// Get the bones in current state
-            //System.Collections.Generic.List<Bones> characterBones = GetBonesFromObject(characterModel);
-            //// Get the bones in current state
-            //System.Collections.Generic.List<Bones> intialBones = new System.Collections.Generic.List<Bones>(characterInitalBones);
-            //// rest positions
-            //for (int i = 0; i < characterBones.Count; ++i)
-            //{
-            //    for (int j = 0; j < intialBones.Count; ++j)
-            //    {
-            //        if (characterBones[i].gameObject == intialBones[j].gameObject)
-            //        {   
-            //            if (!characterBones[i].gameObject.CompareTag("WipeOutCollider"))
-            //            {
-            //                if (characterBones[i].collider != null)
-            //                {
-            //                    characterBones[i].collider.enabled = false;
-            //                }
-            //                Rigidbody boneRigidbody = characterBones[i].gameObject.GetComponent<Rigidbody>();
-            //                if (boneRigidbody != null)
-            //                {
-            //                    Destroy(boneRigidbody);
-            //                }
-            //            }
-            //            characterBones[i].gameObject.transform.localPosition = intialBones[j].position;
-            //            characterBones[i].gameObject.transform.localRotation = intialBones[j].rotation;
-            //            characterBones[i].gameObject.transform.localScale = intialBones[j].scale;
-            //            intialBones.RemoveAt(j);
-            //            break;
-            //        }
-
-            //    }
-            //}
-
-            // Get a list of all the bones
-            playerCamera.target = boardObject.transform;
         }
 
         //private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
@@ -595,13 +732,31 @@ namespace L7Games.Movement
         {
             // Spawn the rag-doll
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
-            // Gets it's bone container
-            if (ragDoll.TryGetComponent<RagdollDataContainer>(out RagdollDataContainer spawnedRagdollDataContainer))
+            if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
-                spawnedRagdollDataContainer.CopyRagdollBonesPositions(ragdollDataContainer);
+                spawnedRagdoll.Initalise(this, ragdollDataContainer);
             }
+
+            currentRagdoll = ragDoll;
+            Debug.Break();
             return ragDoll;
         }
+
+        private void WipeOutResetPressed()
+        {
+            if (characterModel.activeSelf)
+            {
+                CallOnWipeout(fRB.velocity);
+            }
+            else
+            {
+                if (checkpointManager != null)
+                {
+                    checkpointManager.MovePlayerToTheirLastCheckPoint(this);
+                }
+            }
+        }
+
         #endregion
     }
 }

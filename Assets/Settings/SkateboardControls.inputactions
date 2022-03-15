@@ -76,6 +76,14 @@
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Grounded_WipeOutReset",
+                    "type": "Button",
+                    "id": "d0e5f81c-a1a6-4aaf-8424-1439eee7a96b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -287,6 +295,28 @@
                     "action": "Grounded_KeyboardRightTurn",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28cf419d-d3d9-40fb-8f9f-9edcd8fe3fa8",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grounded_WipeOutReset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "264d46c2-8da1-428b-a15c-40f03a00be91",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grounded_WipeOutReset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -354,6 +384,14 @@
                     "name": "Aerial_TestInput_1",
                     "type": "Button",
                     "id": "5d890ac3-21e2-4932-a120-afb6abfba540",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Aerial_WipeOutReset",
+                    "type": "Button",
+                    "id": "c2a6ab6d-3515-4b31-aa19-03b9d4f4ac66",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -506,7 +544,18 @@
                 {
                     "name": "",
                     "id": "8f2aad36-6a0d-4693-b970-9e9367229ad9",
-                    "path": "<Gamepad>/leftStick/up",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_TestInput_0",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "23ef785e-081f-408b-b48c-f46851d1a48c",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -522,6 +571,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aerial_TestInput_1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a445279-9cc1-46db-b2a1-331ffa8d5872",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_WipeOutReset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfc700e3-7e99-4716-97d1-8945184a621d",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aerial_WipeOutReset",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -560,6 +631,14 @@
                     "type": "Value",
                     "id": "c7505b3b-88c9-4463-8e58-0c3750084f8a",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grinding_WipeOutReset",
+                    "type": "Button",
+                    "id": "e23743b1-ae70-4dc9-b1c9-5f55750a04e6",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -674,6 +753,28 @@
                     "action": "Grinding_KeyboardRightTurn",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c643026-b45f-426c-8a45-f23eb066f2c8",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_WipeOutReset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b32b9a97-7f5b-4ce3-a2d4-00ebdaf917df",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grinding_WipeOutReset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -710,6 +811,14 @@
                     "type": "Value",
                     "id": "8ba35259-6743-4fae-a483-26503bd8352e",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "WallRiding_WipeOutReset",
+                    "type": "Button",
+                    "id": "f1d32cf3-257a-4cae-a00d-6a46d4628f26",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -822,6 +931,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "WallRiding_KeyboardRightTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ab1c5e9-6ca1-42e2-b32c-ebb3774f57e5",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_WipeOutReset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "003b1b83-f528-491a-b7b1-181fb1be367e",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRiding_WipeOutReset",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
