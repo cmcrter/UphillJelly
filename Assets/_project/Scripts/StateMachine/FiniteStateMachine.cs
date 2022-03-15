@@ -25,6 +25,7 @@ namespace L7Games.Utility.StateMachine
         public FiniteStateMachine()
         {
             //Waiting for a given current state
+
         }
 
         public FiniteStateMachine(State startingState)
