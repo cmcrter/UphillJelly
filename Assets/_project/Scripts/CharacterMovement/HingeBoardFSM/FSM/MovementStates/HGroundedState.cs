@@ -107,7 +107,7 @@ namespace L7Games.Movement
         public void RegisterInputs()
         {
             //Register functions
-            inputHandler.groundedJumpUpPerformed += Jump;
+            inputHandler.groundedJumpUpCancelled += Jump;
             inputHandler.pressDownStarted += PressDown;
             inputHandler.pressDownEnded += UnPressDown;
         }
@@ -115,7 +115,7 @@ namespace L7Games.Movement
         public void UnRegisterInputs()
         {
             //Unregister functions
-            inputHandler.groundedJumpUpPerformed -= Jump;
+            inputHandler.groundedJumpUpCancelled -= Jump;
             inputHandler.pressDownStarted -= PressDown;
             inputHandler.pressDownEnded -= UnPressDown;
 
