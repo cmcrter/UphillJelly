@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/03/22
+// Date Last Edited: 13/03/22
 // Brief: 
 //////////////////////////////////////////////////////////// 
 
@@ -22,31 +22,19 @@ public class b_PlayerData
     // int for currency
     public int iCurrency;
 
-    // list of the saved hat ints
+    // list of the saved hat ints and saved character ints
     public List<int> savedHatList;
-
-    // list of the saved character ints
     public List<int> savedCharacterList;
 
-    // list of the individual hat prices
+    // list of the individual hat prices and individual character prices
     public List<int> iIndividualHatPrices;
-
-    // list of the individual character prices
     public List<int> iIndividualCharacterPrices;
 
-    // current int for the hats
+    // current int for the hats and characters
     public int icurrentGOint;
-
-    // current int for the hat material 
     public int icurrentGOMaterialint;
-
-    // current character int
     public int icurrentCharacterint;
 
-    //
-    //public List<string> scoreBoardEntryNames;
-
-    
 
     #endregion
 
@@ -78,12 +66,6 @@ public class b_PlayerData
 
         // this classes current character gameobject int = outfitchanger current character gameobject int
         icurrentCharacterint = outfitChangerData.currentCharacterint;
-
-
-        //
-        //scoreBoardEntryNames = scoreBoard.entryName.ToString();
-
-        
 
     }
 

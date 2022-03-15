@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 12/03/22
+// Date Last Edited: 13/03/22
 // Brief: A script to control the outfit system
 //////////////////////////////////////////////////////////// 
 
@@ -16,11 +16,11 @@ public class OutfitChanger : MonoBehaviour
 
     #region Variables
 
-    // reference to the shop script
+    // reference to the scripts
     public Shop shopScript;
-
-    // Hat selecter game object
     public GameObject hatSelector;
+    public ReplaySaveManager replaySaveManager;
+    public b_Player b_player;
 
 
 
@@ -31,7 +31,7 @@ public class OutfitChanger : MonoBehaviour
     // reference to the character in the scene
     public GameObject playableCharacterObjectInScene;
 
-    //
+    // reference to the ghost 2 character in the scene
     public GameObject Ghost2CharacterInScene;
 
 
@@ -43,7 +43,7 @@ public class OutfitChanger : MonoBehaviour
     // gameobject hat which will be displayed
     public GameObject playableHatDisplayGameObject;
 
-    //
+    // gameobject ghost 2 hat which will be displayed
     public GameObject Ghost2HatInScene;
 
 
@@ -52,42 +52,23 @@ public class OutfitChanger : MonoBehaviour
     // list of the hat gameobjects
     public List<GameObject> gameObjectOptions = new List<GameObject>();
 
+
     [Header("Material Options")]
     // list of the materials for the hats
     public List<Material> gameObjectMaterialOptions = new List<Material>();
+
 
     [Header("Character Options")]
     // list of materials for the player character
     public List<Material> gameObjectCharacterMaterialOptions = new List<Material>();
 
 
-    // current int for the hats
+    // current int for the hats and character materials
     public int currentGOint;
-
-    // current int for the hat material 
     public int currentGOMaterialint;
-
-    // current character int
     public int currentCharacterint;
 
-    //
-    public ReplaySaveManager replaySaveManager;
-
-    //
-    public b_Player b_player;
-
-
-    //
-    //[SerializeField]
-    //public int LastHatInt;
-
-    //
-    //[SerializeField]
-    //public int LastCharacterInt;
-
-    //public int thischarint;
-    //public int thishatint;
-
+    
     #endregion
 
     #region Methods
@@ -104,38 +85,31 @@ public class OutfitChanger : MonoBehaviour
         // set the current character to 2
         currentCharacterint = 2;
 
-
+        //  if the map is tutorial and or city
         if (replaySaveManager.isMapTutorial || replaySaveManager.isMapCity) {
 
             if (b_player.isSave1) {
 
-                //
                 b_player.LoadPlayer1();
 
             }
 
             if (b_player.isSave2) {
 
-                //
                 b_player.LoadPlayer2();
 
             }
 
             if (b_player.isSave3) {
 
-                //
                 b_player.LoadPlayer3();
 
             }
 
-            
-
         }
         
-
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
-
 
     }
 
@@ -143,7 +117,6 @@ public class OutfitChanger : MonoBehaviour
 
         // set the current hat object to 4
         currentGOint = shopScript.CurrentHatSelectedInt;
-        //Debug.Log(shopScript.CurrentHatSelectedInt);
 
         // set the current hat material to 4
         currentGOMaterialint = shopScript.CurrentHatSelectedInt;
@@ -151,54 +124,29 @@ public class OutfitChanger : MonoBehaviour
         // set the current character to 2
         currentCharacterint = shopScript.CurrentCharacterSelectedInt;
 
-        LoadedCustomizables1();
-
-        //LastCharacterInt = currentCharacterint;
-
-        //LastHatInt = currentGOint;
-
-        //thischarint = LastCharacterInt;
-
-        //thishatint = LastHatInt;
-
-    }
-
-    //
-    public void SaveStaticInts() {
-
-        Debug.Log("FGFGFGFGFGFGFGFGF");
-
-        
-
-        //
-        //LastCharacterInt = shopScript.CurrentCharacterSelectedInt;
-        //Debug.Log(shopScript.CurrentCharacterSelectedInt);
-
-        //
-        //LastHatInt = shopScript.CurrentHatSelectedInt;
-        //Debug.Log(shopScript.CurrentHatSelectedInt);
 
 
+        // NEEDS TO NOT BE IN UPDATE??? PERFORMANCE
+        if (b_player.isSave1) {
 
+            LoadedCustomizables1();
 
-        //
-        //currentCharacterint = LastCharacterInt;
+        }
 
-        //
-        //currentGOint = LastHatInt;
+        if (b_player.isSave2) {
 
-        //
-        //currentGOMaterialint = LastHatInt;
+            LoadedCustomizables2();
 
-        // set the current hat to 4 (No hat)
-        //CurrentHatSelectedInt = LastHatInt;
-        //Debug.Log(LastHatInt);
+        }
 
-        // set the current character to 2(one of the middle materials)
-        //CurrentCharacterSelectedInt = LastCharacterInt;
-        //Debug.Log(LastCharacterInt);
+        if (b_player.isSave3) {
+
+            LoadedCustomizables3();
+
+        }
 
     }
+
 
     // Loaded customizables 1
     public void LoadedCustomizables1() {
@@ -207,7 +155,6 @@ public class OutfitChanger : MonoBehaviour
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
 
         
-
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
@@ -218,7 +165,7 @@ public class OutfitChanger : MonoBehaviour
         Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
 
-        
+        // HAT DISPLAY WORKS
         hatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
 
         // GET FROM THE POOL OF HATS (NOT WORKING)
@@ -263,7 +210,7 @@ public class OutfitChanger : MonoBehaviour
         Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
 
-
+        // HAT DISPLAY WORKS
         hatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
 
         // GET FROM THE POOL OF HATS (NOT WORKING)
@@ -306,7 +253,7 @@ public class OutfitChanger : MonoBehaviour
         Ghost2CharacterInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
 
-
+        // HAT DISPLAY WORKS
         hatDisplayGameObject.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
 
         // GET FROM THE POOL OF HATS (NOT WORKING)
