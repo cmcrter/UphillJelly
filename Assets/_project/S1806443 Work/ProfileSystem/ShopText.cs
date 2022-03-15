@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 20/11/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Date Last Edited: 13/03/22
 // Brief: A script to control the text for all of the profiles
 //////////////////////////////////////////////////////////// 
 
@@ -17,11 +17,12 @@ using System.IO;
 public class ShopText : MonoBehaviour
 {
 
-    // Shop Reference
+    // Reference to the scripts
+    public OutfitChanger outfitChanger;
     public Shop shop;
-
-    // Reference to the b_Player
-    public b_Player b_player; 
+    public b_Player b_player;
+    public TempScoreSystem tempScoreSystem;
+    public LoadCustomizablesInGame loadCustomizablesInGame;
 
     // text input field
     public TMP_InputField tmp_Input;
@@ -31,133 +32,59 @@ public class ShopText : MonoBehaviour
 
     [Header("Starting Menu Buttons")]
 
-    // first button text
-    public Text LoadProfile1Text;
-
-    // second button text
-    public Text LoadProfile2Text;
-
-    // third button text
-    public Text LoadProfile3Text;
+    // first, second and third button text
+    public TMP_Text LoadProfile1Text;
+    public TMP_Text LoadProfile2Text;
+    public TMP_Text LoadProfile3Text;
 
     [Header("Play Buttons")]
 
-    // button for starting the game1
+    // button for starting the game1, game2 and game3
     public GameObject PlayButton1;
-
-    // button for starting the game2
     public GameObject PlayButton2;
-
-    // button for starting the game3
     public GameObject PlayButton3;
 
-    //
-    public TempScoreSystem tempScoreSystem;
 
+    // Start is called before the first frame update
+    void Start() {
 
-    // first button pressed
-    public void ButtonPressed1() {
+        // if Profile 2 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
 
-        // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays")) {
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
 
-            // if the replay folder does not exist, clear the ghost 2 data
-            b_player.ghostSO2.ResetGhostData();
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 2 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 2 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
 
         }
 
         // set the player 1 to true
-        b_player.isSave1 = true;
-
-        // set the second play button to false
-        PlayButton2.SetActive(false);
-
-        // set the third play button to false
-        PlayButton3.SetActive(false);
-
-
-        // set the starting background to false
-        StartingBackground.SetActive(false);
-
-        // load player 1 data
-        b_player.LoadPlayer1();
-
-        // save the second replay for the first save
-        b_player.SavePlayer1Second();
-
-
-    }
-
-    // second button pressed
-    public void ButtonPressed2() {
-
-        // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays")) {
-
-            // if the replay folder does not exist, clear the ghost 2 data
-            b_player.ghostSO2.ResetGhostData();
-
-        }
-
-        // set the player 2 to true
-        b_player.isSave2 = true;
-
-        // set the first play button to false
-        PlayButton1.SetActive(false);
-
-        // set the third play button to false
-        PlayButton3.SetActive(false);
-
-        // set the starting background to false
-        StartingBackground.SetActive(false);
-
-        // load player 1 data
-        b_player.LoadPlayer2();
-
-        // save the second replay for the second save
-        b_player.SavePlayer2Second();
-
-
-    }
-
-    // third button pressed
-    public void ButtonPressed3() {
-
-        // if a directory doesn't exists for "/replay_save/replay_data"
-        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays")) {
-
-            // if the replay folder does not exist, clear the ghost 2 data
-            b_player.ghostSO2.ResetGhostData();
-
-        }
-
-        // set the player 3 to true
-        b_player.isSave3 = true;
-
-        // set the first play button to false
-        PlayButton1.SetActive(false);
-
-        // set the second play button to false
-        PlayButton2.SetActive(false);
-
-
-        // set the starting background to false
-        StartingBackground.SetActive(false);
-
-
-        // load player 1 data
-        b_player.LoadPlayer3();
-
-        // save the second replay for the third save
-        b_player.SavePlayer3Second();
-
-
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        b_player.isSave1 = false;
+        b_player.isSave2 = false;
+        b_player.isSave3 = false;
 
         // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
         string path1 = Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat";
@@ -210,6 +137,238 @@ public class ShopText : MonoBehaviour
 
     }
 
+
+    // first button pressed
+    public void ButtonPressed1() {
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays")) {
+
+            // if the replay folder does not exist, clear the ghost 2 data
+            b_player.ghostSO2.ResetGhostData();
+
+        }
+
+        #region CheckCurrent(isSave1)
+
+        // if no directory exists
+        if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
+
+            // create a directory for "/CurrentProfile"
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile1");
+
+        }
+
+        // if Profile 2 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 3 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        #endregion
+
+
+        // set the player 1 to true
+        b_player.isSave1 = true;
+
+        //
+        b_player.isSave2 = false;
+        b_player.isSave3 = false;
+
+        // set the second play button to false
+        PlayButton2.SetActive(false);
+
+        // set the third play button to false
+        PlayButton3.SetActive(false);
+
+
+        // set the starting background to false
+        StartingBackground.SetActive(false);
+
+        //
+        //b_player.SavePlayer1();
+
+        // load player 1 data
+        b_player.LoadPlayer1();
+
+        // save the second replay for the first save
+        b_player.SavePlayer1Second();
+
+        // LOAD CUSTOMIZABLE INTS FOR ME TO SEE
+        loadCustomizablesInGame.LoadInts();
+
+    }
+
+    // second button pressed
+    public void ButtonPressed2() {
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile2/Replays")) {
+
+            // if the replay folder does not exist, clear the ghost 2 data
+            b_player.ghostSO2.ResetGhostData();
+
+        }
+
+        #region CheckCurrent(isSave2)
+
+        // if no directory exists
+        if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+            // create a directory for "/CurrentProfile"
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile2");
+
+        }
+
+        // if Profile 1 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 3 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        #endregion
+
+
+        // set the player 2 to true
+        b_player.isSave2 = true;
+
+        //
+        b_player.isSave1 = false;
+        b_player.isSave3 = false;
+
+        // set the first play button to false
+        PlayButton1.SetActive(false);
+
+        // set the third play button to false
+        PlayButton3.SetActive(false);
+
+        // set the starting background to false
+        StartingBackground.SetActive(false);
+
+        //
+        //b_player.SavePlayer2();
+
+        // load player 1 data
+        b_player.LoadPlayer2();
+
+        // save the second replay for the second save
+        b_player.SavePlayer2Second();
+
+        // LOAD CUSTOMIZABLE INTS FOR ME TO SEE
+        loadCustomizablesInGame.LoadInts();
+
+    }
+
+    // third button pressed
+    public void ButtonPressed3() {
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile3/Replays")) {
+
+            // if the replay folder does not exist, clear the ghost 2 data
+            b_player.ghostSO2.ResetGhostData();
+
+        }
+
+        #region CheckCurrent(isSave3)
+
+        // if no directory exists
+        if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+            // create a directory for "/CurrentProfile"
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile3");
+
+        }
+
+        // if Profile 1 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        // if Profile 3 directory exists
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+            // Delete the file
+            Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
+
+            //
+            UnityEditor.AssetDatabase.Refresh();
+
+        }
+
+        #endregion
+
+
+        // set the player 3 to true
+        b_player.isSave3 = true;
+
+        //
+        b_player.isSave1 = false;
+        b_player.isSave2 = false;
+
+        // set the first play button to false
+        PlayButton1.SetActive(false);
+
+        // set the second play button to false
+        PlayButton2.SetActive(false);
+
+
+        // set the starting background to false
+        StartingBackground.SetActive(false);
+
+
+        // load player 1 data
+        b_player.LoadPlayer3();
+
+        // save the second replay for the third save
+        b_player.SavePlayer3Second();
+
+        // LOAD CUSTOMIZABLE INTS FOR ME TO SEE
+        loadCustomizablesInGame.LoadInts();
+
+    }
+
+
+
+
     // press play button 1
     public void PressPlayButton1() {
 
@@ -231,6 +390,12 @@ public class ShopText : MonoBehaviour
 
         }
 
+        //
+        loadCustomizablesInGame.LoadInts();
+
+        //
+        b_player.SavePlayer1();
+
         // Load all of the data from the first player
         b_player.LoadPlayer1();
 
@@ -239,6 +404,8 @@ public class ShopText : MonoBehaviour
 
         //
         tempScoreSystem.TimerActive = true;
+
+        Debug.Log("88888888888");
 
     }
 
@@ -262,6 +429,12 @@ public class ShopText : MonoBehaviour
             return;
 
         }
+
+        //
+        loadCustomizablesInGame.LoadInts();
+
+        //
+        b_player.SavePlayer2();
 
         // Load all of the data from the second player
         b_player.LoadPlayer2();
@@ -295,8 +468,15 @@ public class ShopText : MonoBehaviour
 
         }
 
+        //
+        loadCustomizablesInGame.LoadInts();
+
+        //
+        b_player.SavePlayer3();
+
         // Load all of the data from the third player
         b_player.LoadPlayer3();
+
 
         // play 3
         b_player.PlayPlayer3();
