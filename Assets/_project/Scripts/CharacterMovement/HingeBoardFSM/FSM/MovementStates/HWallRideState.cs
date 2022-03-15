@@ -24,7 +24,6 @@ namespace L7Games.Movement
         private PlayerInput pInput;
         private InputHandler inputManager;
         private Rigidbody fRB;
-        private Rigidbody bRB;
 
         [NonSerialized] private HisNextToWallRun nextToWallRun;
         [NonSerialized] private HisGroundBelow nextToGround;
@@ -51,13 +50,12 @@ namespace L7Games.Movement
 
         }
 
-        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody frontRB, Rigidbody backRB, HisNextToWallRun wallRun, HisGroundBelow groundBelow)
+        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody frontRB, HisNextToWallRun wallRun, HisGroundBelow groundBelow)
         {
             playerMovement = controllerParent;
             pInput = controllerParent.input;
             inputManager = controllerParent.inputHandler;
             fRB = frontRB;
-            bRB = backRB;
             nextToWallRun = wallRun;
             nextToGround = groundBelow;
         }
@@ -126,8 +124,7 @@ namespace L7Games.Movement
             fRB.isKinematic = true;
             fRB.velocity = Vector3.zero;
 
-            bRB.isKinematic = true;
-            bRB.velocity = Vector3.zero;
+            playerMovement.bWipeOutLocked = false;
 
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
@@ -148,7 +145,7 @@ namespace L7Games.Movement
             wallRideCam.enabled = false;
 
             fRB.isKinematic = false;
-            bRB.isKinematic = false;
+
             bJumping = false;
 
             playerMovement.characterAnimator.SetBool("wallriding", false);
@@ -177,8 +174,9 @@ namespace L7Games.Movement
                 yield return null;
             }
 
+            //Was on the wall ride too long let gravity take hold
+            fRB.velocity = Vector3.zero;
             fRB.isKinematic = false;
-            bRB.isKinematic = false;
 
             Co_CoyoteCoroutine = null;
         }
@@ -189,7 +187,6 @@ namespace L7Games.Movement
             //Debug.Log("Jumping off wall ride");
 
             fRB.isKinematic = false;
-            bRB.isKinematic = false;
 
             playerMovement.StartCoroutine(WipeOutCooldown());
             playerMovement.StartAirInfluenctCoroutine();
@@ -198,11 +195,7 @@ namespace L7Games.Movement
         private IEnumerator WipeOutCooldown()
         {
             yield return new WaitForFixedUpdate();
-            fRB.AddForce((playerMovement.transform.up * 450f) + (nextToWallRun.currentWallRide.transform.forward * 950), ForceMode.Impulse);
-
-
-            yield return new WaitForSeconds(1.2f);
-            playerMovement.bWipeOutLocked = false;
+            fRB.AddForce((playerMovement.transform.up * 350f) + (nextToWallRun.currentWallRide.transform.forward * 950), ForceMode.Impulse);
         }
 
         #endregion
