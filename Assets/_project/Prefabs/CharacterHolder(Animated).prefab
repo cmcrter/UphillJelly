@@ -2476,7 +2476,7 @@ MonoBehaviour:
   bWipeOutLocked: 0
   aerialState:
     hasRan: 0
-    AerialDrag: 0.15
+    AerialDrag: 0.125
     adjustGroundSmoothness: 3
     trickClips:
     - {fileID: 7400000, guid: 61dd091fad70ffd40b2a0937af6fa3e6, type: 2}
@@ -2486,7 +2486,7 @@ MonoBehaviour:
   groundedState:
     hasRan: 0
     testPressDownObject: {fileID: 8040090982727821118}
-    GroundedDrag: 0.25
+    GroundedDrag: 0.175
     forwardSpeed: 1
     turnSpeed: 0.15
     backwardSpeed: 50
@@ -2574,26 +2574,26 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.6201782
-      inSlope: 1.3781182
-      outSlope: 1.3781182
-      tangentMode: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.029643588
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.13762389
-      outSlope: 0.13762389
-      tangentMode: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.03697878
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  turnClamp: 0.8
+  turnClamp: 0.6
   ragDollPrefab: {fileID: 4657433874770968513, guid: 8aca706b38b46ec4d9afe02e66e5df8e, type: 3}
   currentRagdoll: {fileID: 0}
   ragdollDataContainer: {fileID: 4268095153265589537}
@@ -2653,7 +2653,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9112553975738110861}
   serializedVersion: 2
-  m_Mass: 41
+  m_Mass: 31
   m_Drag: 0.2
   m_AngularDrag: 0.5
   m_UseGravity: 0

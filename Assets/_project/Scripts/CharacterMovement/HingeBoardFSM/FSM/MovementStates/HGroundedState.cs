@@ -351,7 +351,7 @@ namespace L7Games.Movement
             jumpTimer = new Timer(jumpTimerDuration);
 
             //Pressing down makes jumping bigger
-            float newjumpSpeed = isPressingDown ? jumpSpeed * 1.25f : jumpSpeed;
+            float newjumpSpeed = /*isPressingDown ? jumpSpeed * 1.25f : */ jumpSpeed;
 
             yield return new WaitForFixedUpdate();
             movementRB.AddForce(parentController.transform.up * newjumpSpeed * 1000f);
