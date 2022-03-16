@@ -7,20 +7,21 @@ using L7Games.Movement;
 public class ToCloseToPlayerCondition : Condition
 {
     private const int MaxNumberOfPlayers = 4;
+    
+    private List<PlayerHingeMovementController> playersWithinRadius;
 
-    private List<PlayerController> playersWithinRadius;
-
-    public void PlayerEnteredRadius(PlayerController playerPosition)
+    public void PlayerEnteredRadius(PlayerHingeMovementController playerPosition)
     {
         if (playersWithinRadius == null)
         {
-            playersWithinRadius = new List<PlayerController>(MaxNumberOfPlayers);
+            playersWithinRadius = new List<PlayerHingeMovementController>(MaxNumberOfPlayers);
         }
         playersWithinRadius.Add(playerPosition);
     }
-    public void PlayerExitedRadius(PlayerController playerPosition)
+    public void PlayerExitedRadius(PlayerHingeMovementController playerPosition)
     {
-        playersWithinRadius.Add(playerPosition);
+        Debug.Log("Removing Player");
+        playersWithinRadius.Remove(playerPosition);
     }
 
     public override bool isConditionTrue()
@@ -36,7 +37,7 @@ public class ToCloseToPlayerCondition : Condition
         return false;
     }
 
-    public PlayerController[] GetPlayersInRaidus()
+    public PlayerHingeMovementController[] GetPlayersInRaidus()
     {
         return playersWithinRadius.ToArray();
     }

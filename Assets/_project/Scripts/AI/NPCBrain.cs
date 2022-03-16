@@ -30,7 +30,7 @@ public class NPCBrain : MonoBehaviour
         if (playerPoximityTrigger != null)
         {
             playerPoximityTrigger.playerEnteredTrigger += AddPlayerPositionToCondition;
-            playerPoximityTrigger.playerExitedTrigger += AddPlayerPositionToCondition;
+            playerPoximityTrigger.playerExitedTrigger += RemovePlayerPositionFromCondition;
         }
         #if DEBUG || UNITY_EDITOR
         else
@@ -45,7 +45,7 @@ public class NPCBrain : MonoBehaviour
         if (playerPoximityTrigger != null)
         {
             playerPoximityTrigger.playerEnteredTrigger -= AddPlayerPositionToCondition;
-            playerPoximityTrigger.playerExitedTrigger -= AddPlayerPositionToCondition;
+            playerPoximityTrigger.playerExitedTrigger -= RemovePlayerPositionFromCondition;
         }
     }
 
@@ -57,26 +57,31 @@ public class NPCBrain : MonoBehaviour
         divingState = new NpcDivingState(this);
 
         stateMachine = new FiniteStateMachine(idleNpcState);
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         stateMachine.RunMachine(Time.deltaTime);
+
+
     }
 
     void FixedUpdate()
     {
         stateMachine.RunPhysicsOnMachine(Time.deltaTime);
+
+        // Gravity
+        npcCharacyerController.Move(Vector3.down * Time.deltaTime * 10f);
     }
 
-    private void AddPlayerPositionToCondition(PlayerController playerController)
+    private void AddPlayerPositionToCondition(PlayerHingeMovementController playerController)
     {
         toCloseToPlayerCondition.PlayerEnteredRadius(playerController);
     }
 
-    private void RemovePlayerPositionFromCondition(PlayerController playerController)
+    private void RemovePlayerPositionFromCondition(PlayerHingeMovementController playerController)
     {
         toCloseToPlayerCondition.PlayerExitedRadius(playerController);
     }

@@ -13,45 +13,49 @@ using L7Games.Movement;
 
 public class PlayerPoximityTrigger : MonoBehaviour
 {
-    public event System.Action<PlayerController> playerEnteredTrigger;
+    public event System.Action<PlayerHingeMovementController> playerEnteredTrigger;
 
-    public event System.Action<PlayerController> playerExitedTrigger;
+    public event System.Action<PlayerHingeMovementController> playerExitedTrigger;
 
-    public List<PlayerController> playersEntered;
+    public List<PlayerHingeMovementController> playersEntered;
 
-    public List<KeyValuePair<PlayerController, Collider>> playerCollidersEntered;
+    public List<KeyValuePair<PlayerHingeMovementController, Collider>> playerCollidersEntered;
 
     private void Start()
     {
-        playersEntered = new List<PlayerController>();
-        playerCollidersEntered = new List<KeyValuePair<PlayerController, Collider>>();
+        playersEntered = new List<PlayerHingeMovementController>();
+        playerCollidersEntered = new List<KeyValuePair<PlayerHingeMovementController, Collider>>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerController playerController = other.transform.root.GetComponentInChildren<PlayerController>();
-        // If the collider is a valid collider
-        if (!playersEntered.Contains(playerController))
+        PlayerHingeMovementController playerController = other.transform.root.GetComponentInChildren<PlayerHingeMovementController>();
+        if (playerController != null)
         {
-            if (playerController != null)
+            // If the collider is a valid collider
+            if (!playersEntered.Contains(playerController))
             {
-                // Check if this is a new PlayerController
-                if (!CheckControllerAlreadyEntered(playerController))
+                if (playerController != null)
                 {
-                    playersEntered.Add(playerController);
-                    if (playerEnteredTrigger != null)
+                    // Check if this is a new PlayerController
+                    if (!CheckControllerAlreadyEntered(playerController))
                     {
-                        playerEnteredTrigger(playerController);
+                        playersEntered.Add(playerController);
+                        if (playerEnteredTrigger != null)
+                        {
+                            playerEnteredTrigger(playerController);
+                        }
                     }
+
                 }
-                playerCollidersEntered.Add(new KeyValuePair<PlayerController, Collider>(playerController, other));
             }
+            playerCollidersEntered.Add(new KeyValuePair<PlayerHingeMovementController, Collider>(playerController, other));
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        PlayerController playerController = other.transform.root.GetComponentInChildren<PlayerController>();
+        PlayerHingeMovementController playerController = other.transform.root.GetComponentInChildren<PlayerHingeMovementController>();
         if (playerController != null)
         {
             // Try and get the found pair index from the collider
@@ -86,7 +90,7 @@ public class PlayerPoximityTrigger : MonoBehaviour
         return false;
     }
 
-    private bool CheckControllerAlreadyEntered(PlayerController controllerToCheckFor)
+    private bool CheckControllerAlreadyEntered(PlayerHingeMovementController controllerToCheckFor)
     {
         for (int i = 0; i < playerCollidersEntered.Count; ++i)
         {
