@@ -74,7 +74,7 @@ public class ReplaySaveManager : MonoBehaviour
     #region Methods
 
     //
-    public void Start() {
+    public void Update() {
         
         //
         if (MAPCHECKER.tag == "map_tutorial") {

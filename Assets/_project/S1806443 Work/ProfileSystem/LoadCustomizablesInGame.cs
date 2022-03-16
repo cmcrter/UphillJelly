@@ -31,14 +31,25 @@ public class LoadCustomizablesInGame : MonoBehaviour
     public int CurrentPlayerHat;
     public int CurrentGhostHat;
 
+    public Material cMP;
+
+    public GameObject cHat;
+
+    public Material cHatM;
+
+    public GameObject CatMeshRef;
+
+    public GameObject HatRef;
+
+
     public void Start() {
 
         // Load customizables
         LoadTheCustomizables();
 
-    }
+        Debug.Log("STARTED");
 
-    public void LoadTheCustomizables() {
+        LoadInts();
 
         // if directory exists
         if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
@@ -50,7 +61,9 @@ public class LoadCustomizablesInGame : MonoBehaviour
             b_player.LoadPlayer1();
 
             // load customizables 1
-            outfitChanger.LoadedCustomizables1();
+            //outfitChanger.LoadedCustomizables1();
+
+            Debug.Log("SAVE 1");
 
         }
 
@@ -81,6 +94,54 @@ public class LoadCustomizablesInGame : MonoBehaviour
             outfitChanger.LoadedCustomizables3();
 
         }
+
+    }
+
+    void Update() {
+
+        
+        CurrentPlayerCharacter = shop.CurrentCharacterSelectedInt;
+
+        CurrentGhostCharacter = shop.CurrentCharacterSelectedInt;
+
+        CurrentPlayerHat = shop.CurrentHatSelectedInt;
+
+        CurrentGhostHat = shop.CurrentHatSelectedInt;
+
+
+
+        // Current Material
+        cMP = outfitChanger.gameObjectCharacterMaterialOptions[CurrentPlayerCharacter];
+
+        cHat = outfitChanger.gameObjectOptions[CurrentPlayerHat];
+
+        cHatM = outfitChanger.gameObjectMaterialOptions[CurrentPlayerHat];
+
+
+
+        HatRef.GetComponent<MeshFilter>().sharedMesh = cHat.gameObject.GetComponent<MeshFilter>().sharedMesh;
+
+        HatRef.GetComponent<MeshRenderer>().material = cHatM;
+
+        CatMeshRef.GetComponent<SkinnedMeshRenderer>().material = cMP;
+
+        //shop.CurrentHatSelectedInt = CurrentPlayerHat;
+
+        //shop.CurrentCharacterSelectedInt = CurrentPlayerCharacter;
+
+
+
+
+
+        
+
+        
+
+    }
+
+    public void LoadTheCustomizables() {
+
+        
 
     }
 
