@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 25/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Date Last Edited: 13/03/22
 // Brief: A script to control the shop and all transactions
 //////////////////////////////////////////////////////////// 
 
@@ -17,88 +17,72 @@ public class Shop : MonoBehaviour
 
     #region Variables
 
-    // gameobject panel for sure you want to buy hat
-    public GameObject SureYouWantToBuyHat;
+    // reference to the scripts
+    public b_Player b_player;
+    public OutfitChanger outfitChanger;
+    public ReplaySaveManager replaySaveManager;
+    public LoadCustomizablesInGame loadCustomizablesInGame;
 
-    // gameobject panel for sure you want to buy character
+
+    // gameobject panel for sure you want to buy hat and sure you want to buy character
+    public GameObject SureYouWantToBuyHat;
     public GameObject SureYouWantToBuyCharacter;
 
-    // reference to the b_player
-    public b_Player b_player;
 
-    // Outfitchanger reference
-    public OutfitChanger outfitChanger;
-
-    // int for the currency
+    // int for the currency and currency text
     public int Currency; // SAVED
-
-    // text for the currency text
     public Text currencyText;
 
-    // gameobject for the hat price panel
+    // gameobject for the hat and character price panel
     public GameObject HatPricePanel; // SAVED
-
-    // gameobject for the character price panel
     public GameObject CharacterPricePanel; // SAVED
 
-    // Buy hat button
+    // Buy hat and character button
     public GameObject BuyHatButton;
-
-    // buy character button
     public GameObject BuyCharacterButton;
 
     // current hat price text
     public Text CurrentHatPriceText;
 
-    // public list of the hat prices
+    // public list of the hat and character prices
     public List<int> IndividualHatPrices = new List<int>(); // SAVED
-
-    //  public list of all the character prices
     public List<int> IndividualCharacterPrices = new List<int>(); // SAVED
 
 
-    // current hat selected as an int
+    // current hat selected as an int and current character selected as an int
     public int CurrentHatSelectedInt;
-
-    // current character selected as an int
     public int CurrentCharacterSelectedInt;
 
+    // last hat and character int
+    [SerializeField]
+    public static int LastHatInt;
+    [SerializeField]
+    public static int LastCharacterInt;
 
-    // current hat price as an int
+
+    // current hat and character price as an int
     public int CurrentHatPriceInt;
-
-    // current character price as an int
     public int CurrentCharacterPriceInt;
 
 
-    // list of bools for which hat is bought
+    // list of bools for which hat is bought and for which character is bought
     public List<bool> IsHatBought = new List<bool>();
-
-    // list of bools for which character is bought
     public List<bool> IsCharacterBought = new List<bool>();
 
 
-    // List of the saved hat ints to save
+    // List of the saved hat ints to save and of the character materials and gameobjects as ints to save
     public List<int> iSavedHatInts = new List<int>(); // SAVED
-
-    // List of the character materials and gameobjects as ints to save
     public List<int> iSavedCharacterInts = new List<int>(); // SAVED
 
 
     // current character price text
     public Text CurrentCharacterPriceText;
 
-    //
-    //
-    //
-    public ReplaySaveManager replaySaveManager;
-    //
-    //
-    //
-    
+
     #endregion
 
     #region Methods
+
 
     // On start
     public void Start() {
@@ -106,17 +90,11 @@ public class Shop : MonoBehaviour
         // set the currency to 500
         Currency = 500;
 
-        // set the current hat to 4 (No hat)
-        CurrentHatSelectedInt = 4;
-
-        // set the current character to 2(one of the middle materials)
-        CurrentCharacterSelectedInt = 2;
-
-
     }
 
     // on update
     public void Update() {
+
 
         // set the currency text to "Currency : £ " + currency int
         currencyText.text = "Currency : £ " + Currency;
@@ -183,7 +161,39 @@ public class Shop : MonoBehaviour
 
         }
 
+
+
+        /*
+
+        if (replaySaveManager.isMapTutorial && !replaySaveManager.isMapCity) {
+
+            Debug.Log("GAMESCENETUTORIAL");
+
+            CurrentHatSelectedInt = loadCustomizablesInGame.CurrentPlayerHat;
+
+            CurrentCharacterSelectedInt = loadCustomizablesInGame.CurrentPlayerCharacter;
+
+        }
+
+        if (!replaySaveManager.isMapTutorial && replaySaveManager.isMapCity) {
+
+            Debug.Log("GAMESCENECITY");
+
+            CurrentHatSelectedInt = loadCustomizablesInGame.CurrentPlayerHat;
+
+            CurrentCharacterSelectedInt = loadCustomizablesInGame.CurrentPlayerCharacter;
+
+        }
+
         
+        if (!replaySaveManager.isMapTutorial && !replaySaveManager.isMapCity) {
+
+            
+
+        }
+        */
+
+
 
     }
 
@@ -297,7 +307,7 @@ public class Shop : MonoBehaviour
 
         }
 
-        
+
 
     }
 
@@ -418,11 +428,7 @@ public class Shop : MonoBehaviour
 
         }
 
-        
-
     }
-
-
 
     // bought character method
     public void BoughtCharacter() {
@@ -501,7 +507,7 @@ public class Shop : MonoBehaviour
 
 
     }
-    
+
 
 
     #endregion
