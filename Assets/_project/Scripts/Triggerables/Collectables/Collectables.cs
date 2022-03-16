@@ -19,22 +19,51 @@ namespace L7Games.Triggerables.Collectables
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         GameObject ITriggerable.ReturnGameObject() => gameObject;
 
-        void ITriggerable.Trigger(PlayerController player) => PickupCollectable();
+        void ITriggerable.Trigger(PlayerController player) => PickupCollectable(player);
         void ITriggerable.UnTrigger(PlayerController player) => PutdownCollectable();
+
+        #endregion
+
+        #region Variables
+
+        PlayerController playerPickedUp;
 
         #endregion
 
         #region Public Methods
 
-        public virtual void PickupCollectable()
+        private void OnEnable()
+        {
+            if(!playerPickedUp) return;
+
+            playerPickedUp.onRespawn -= TurnCollectableOn;
+            playerPickedUp = null;
+        }
+
+        public virtual void PickupCollectable(PlayerController player)
         {
             //Turning off item
             gameObject.SetActive(false);
+
+            //For testing reasons
+            player.onRespawn += TurnCollectableOn;
+
+            playerPickedUp = player;
+
+            //For multiplayer - list of the players that have picked it up, and when they respawn... remove them from the list
+            //Get more and more ghost as more players pick it up (1 time pickup per player per collectable)
+            //When list is full with every player, disable object
         }
 
         public virtual void PutdownCollectable()
         {
-            //Doesn't do anything but in-case there's needed functionality later
+            //Doesn't do anything but in-case there's needed functionality later          
+        
+        }
+
+        public void TurnCollectableOn()
+        {
+            gameObject.SetActive(true);
         }
 
         #endregion
