@@ -43,6 +43,9 @@ namespace L7Games.Movement
         CinemachineVirtualCamera wallRideCam;
         bool bJumping;
 
+        [SerializeField]
+        LayerMask collisionCheckMask;
+
         #region Public Methods
 
         public HWallRideState()
@@ -91,6 +94,21 @@ namespace L7Games.Movement
         public override void Tick(float dT)
         {
             //playerMovement.transform.position = fRB.transform.position;
+
+            //Raycast forward to see if board is hitting something
+            //If it is, end the wall ride...
+            if(Time.frameCount % 15 == 0)
+            {
+                Debug.DrawLine(fRB.transform.position, fRB.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+                if(Physics.Raycast(fRB.transform.position, playerMovement.transform.forward, out RaycastHit hit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore))
+                {
+                    Debug.Log(hit.collider.name);
+
+                    //Wipeout
+                    playerMovement.WipeOutCharacter(Vector3.down + (playerMovement.transform.forward * 10f));
+                }
+            }
+
         }
 
         public override void PhysicsTick(float dT)
