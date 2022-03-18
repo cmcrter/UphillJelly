@@ -37,6 +37,7 @@ namespace L7Games.Movement
 
         public PlayerCamera playerCamera;
         public CinemachineVirtualCamera camBrain;
+        public CinemachineVirtualCamera wipeOutCam;
 
         public float currentTurnInput;
         [Tooltip("The time before the player is at full turn")]
@@ -514,14 +515,15 @@ namespace L7Games.Movement
 
         public void StartTurn()
         {
-            if(inputHandler.TurningAxis < 0)
-            {
-                currentTurnInput = -turnClamp;
-            }
-            else
-            {
-                currentTurnInput = turnClamp;
-            }
+            //if(inputHandler.TurningAxis < 0)
+            //{
+            //    currentTurnInput = -turnClamp;
+            //}
+            //else
+            //{
+            //    currentTurnInput = turnClamp;
+            //}
+            currentTurnInput = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
         }
 
         public void StopTurnCoroutine()
@@ -573,18 +575,6 @@ namespace L7Games.Movement
             foreach (Rigidbody body in boneBodies)
             {
                 body.AddForce(currentVelocity, ForceMode.Impulse);
-            }
-
-            // Set the camera to follow the rag doll
-            if (mainBody != null)
-            {
-                camBrain.LookAt = mainBody.transform;
-                camBrain.Follow = mainBody.transform;
-            }
-            else if (boneBodies.Length > 0)
-            {
-                camBrain.LookAt = boneBodies[0].transform;
-                camBrain.Follow = boneBodies[0].transform;
             }
 
             boardModel.transform.SetParent(null);
@@ -666,11 +656,10 @@ namespace L7Games.Movement
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
             if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
-                spawnedRagdoll.Initalise(this, ragdollDataContainer);
+                spawnedRagdoll.Initalise(this, ragdollDataContainer, characterAnimator);
             }
 
             currentRagdoll = ragDoll;
-            //Debug.Break();
             return ragDoll;
         }
 
