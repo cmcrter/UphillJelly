@@ -106,66 +106,86 @@ namespace SleepyCat
             // Do your drawing here using Handles.
             if (placementActivated)
             {
+                RaycastHit raycastHit2 = new RaycastHit();
                 Vector2 mousePosition = new Vector3(Event.current.mousePosition.x, SceneView.lastActiveSceneView.camera.pixelHeight - Event.current.mousePosition.y);
 
-                Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(mousePosition);
-                Handles.color = Color.green;
-
-                if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit raycastHit2, 100f, raycastMask, QueryTriggerInteraction.Ignore))
+                if (CheckMouseInsideSceneBounds(mousePosition))
                 {
-                    if (brushObject != null)
+                    Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(mousePosition);
+                    Handles.color = Color.green;
+
+                    if (Physics.Raycast(ray.origin, ray.direction, out raycastHit2, 100f, raycastMask, QueryTriggerInteraction.Ignore))
                     {
-                        if (temporaryVisualsationGameObject == null)
+                        if (brushObject != null)
                         {
-                            CreateBrushGhostObject(Vector3.zero, Quaternion.identity);
+                            if (temporaryVisualsationGameObject == null)
+                            {
+                                CreateBrushGhostObject(Vector3.zero, Quaternion.identity);
+                            }
+                            temporaryVisualsationGameObject.transform.position = raycastHit2.point + raycastHit2.normal * heightOffset;
+                            Vector3 upDirection = raycastHit2.normal;
+                            if (useWorldUp)
+                            {
+                                upDirection = Vector3.up;
+                            }
+                            temporaryVisualsationGameObject.transform.up = upDirection;
+                            temporaryVisualsationGameObject.transform.Rotate(Vector3.up, rotationAngles.y);
+                            temporaryVisualsationGameObject.transform.Rotate(Vector3.forward, rotationAngles.z);
+                            temporaryVisualsationGameObject.transform.Rotate(Vector3.right, rotationAngles.x);
                         }
-                        temporaryVisualsationGameObject.transform.position = raycastHit2.point + raycastHit2.normal * heightOffset;
-                        Vector3 upDirection = raycastHit2.normal;
-                        if (useWorldUp)
+                        else
                         {
-                            upDirection = Vector3.up;
+                            if (temporaryVisualsationGameObject != null)
+                            {
+                                GameObject.DestroyImmediate(temporaryVisualsationGameObject);
+                            }
                         }
-                        temporaryVisualsationGameObject.transform.up = upDirection;
-                        temporaryVisualsationGameObject.transform.Rotate(Vector3.up, rotationAngles.y);
-                        temporaryVisualsationGameObject.transform.Rotate(Vector3.forward, rotationAngles.z);
-                        temporaryVisualsationGameObject.transform.Rotate(Vector3.right, rotationAngles.x);
+
+                        Handles.DrawSolidDisc(raycastHit2.point, raycastHit2.normal, 0.1f);
                     }
-                    else
+
+                    Handles.DrawSolidArc(Vector3.zero, Vector3.up, Vector3.left, 100f, 20f);
+
+
+                }
+                else
+                {
+                    if (temporaryVisualsationGameObject != null)
+                    {
+                        GameObject.DestroyImmediate(temporaryVisualsationGameObject);
+                    }
+                }
+                HandleUtility.Repaint();
+                if (Event.current.type == EventType.MouseUp && Event.current.button == 0)
+                {
+                    if (CheckMouseInsideSceneBounds(mousePosition))
                     {
                         if (temporaryVisualsationGameObject != null)
                         {
-                            GameObject.DestroyImmediate(temporaryVisualsationGameObject);
+                            GameObject newObject = (GameObject)PrefabUtility.InstantiatePrefab((Object)brushObject);
+                            newObject.transform.position = raycastHit2.point + raycastHit2.normal * heightOffset;
+                            Vector3 upDirection = raycastHit2.normal;
+                            if (useWorldUp)
+                            {
+                                upDirection = Vector3.up;
+                            }
+                            newObject.transform.up = upDirection;
+                            newObject.transform.Rotate(Vector3.up, rotationAngles.y);
+                            newObject.transform.Rotate(Vector3.forward, rotationAngles.z);
+                            newObject.transform.Rotate(Vector3.right, rotationAngles.x);
+
+                            Undo.RegisterCreatedObjectUndo(newObject, "Placed " + newObject.name + " With Brush");
                         }
-                    }
-
-                    Handles.DrawSolidDisc(raycastHit2.point, raycastHit2.normal, 0.1f);
-                }
-
-                Handles.DrawSolidArc(Vector3.zero, Vector3.up, Vector3.left, 100f, 20f);
-
-                HandleUtility.Repaint();
-
-                if (Event.current.type == EventType.MouseDown)
-                {
-                    if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
-                    {
-                        GameObject newObject = GameObject.Instantiate(brushObject, Vector3.zero, Quaternion.identity);
-                        newObject.transform.position = raycastHit2.point + raycastHit2.normal * heightOffset;
-                        Vector3 upDirection = raycastHit2.normal;
-                        if (useWorldUp)
-                        {
-                            upDirection = Vector3.up;
-                        }
-                        newObject.transform.up = upDirection;
-                        newObject.transform.Rotate(Vector3.up, rotationAngles.y);
-                        newObject.transform.Rotate(Vector3.forward, rotationAngles.z);
-                        newObject.transform.Rotate(Vector3.right, rotationAngles.x);
-
-                        Undo.RegisterCreatedObjectUndo(newObject, "Placed " + newObject.name +  " With Brush");
 
                         Event.current.Use();
                     }
-
+                }
+                else if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+                {
+                    if (CheckMouseInsideSceneBounds(mousePosition))
+                    {
+                        Event.current.Use();
+                    }
                 }
             }
         }
@@ -232,6 +252,18 @@ namespace SleepyCat
             {
                 RemoveCollidersFromGhost(brushObject.transform.GetChild(i).gameObject);
             }
+        }
+
+        private bool CheckMouseInsideSceneBounds(Vector2 mousePositon)
+        {
+            if (mousePositon.x > 0f && mousePositon.x < SceneView.lastActiveSceneView.camera.pixelWidth)
+            {
+                if (mousePositon.y > 0f && mousePositon.y < SceneView.lastActiveSceneView.camera.pixelHeight)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
