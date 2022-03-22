@@ -39,11 +39,12 @@ namespace SleepyCat
 
         }
 
-        // when collides with something
-        void OnTriggerEnter(Collider col) {
+        public void OnTriggerEnter(Collider other) {
 
             // if the ghost collides with this collectable
-            if (col.gameObject.tag == "Player") {
+            if (other.tag == "FinishPlayer") {
+
+                Debug.Log("COLLIDEDWITHPLAYERFINISH");
 
                 //
                 b_player.SaveFinalValues();
@@ -60,6 +61,7 @@ namespace SleepyCat
             }
 
         }
+
 
     }
 }

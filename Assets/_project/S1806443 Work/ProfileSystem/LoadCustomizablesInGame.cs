@@ -31,6 +31,24 @@ public class LoadCustomizablesInGame : MonoBehaviour
     public int CurrentPlayerHat;
     public int CurrentGhostHat;
 
+<<<<<<< Updated upstream
+=======
+    public Material cMP;
+
+    public GameObject cHat;
+
+    public Material cHatM;
+
+    public GameObject CatMeshRef;
+
+    public GameObject HatRef;
+
+    public GameObject GhostCatMeshRef;
+
+    public GameObject GhostHatRef;
+
+
+>>>>>>> Stashed changes
     public void Start() {
 
         // Load customizables
@@ -84,6 +102,61 @@ public class LoadCustomizablesInGame : MonoBehaviour
 
     }
 
+<<<<<<< Updated upstream
+=======
+    void Update() {
+
+        
+        CurrentPlayerCharacter = shop.CurrentCharacterSelectedInt;
+
+        CurrentGhostCharacter = shop.CurrentCharacterSelectedInt;
+
+        CurrentPlayerHat = shop.CurrentHatSelectedInt;
+
+        CurrentGhostHat = shop.CurrentHatSelectedInt;
+
+
+
+        // Current Material
+        cMP = outfitChanger.gameObjectCharacterMaterialOptions[CurrentPlayerCharacter];
+
+        cHat = outfitChanger.gameObjectOptions[CurrentPlayerHat];
+
+        cHatM = outfitChanger.gameObjectMaterialOptions[CurrentPlayerHat];
+
+
+
+        HatRef.GetComponent<MeshFilter>().sharedMesh = cHat.gameObject.GetComponent<MeshFilter>().sharedMesh;
+
+        HatRef.GetComponent<MeshRenderer>().material = cHatM;
+
+        CatMeshRef.GetComponent<SkinnedMeshRenderer>().material = cMP;
+
+        //shop.CurrentHatSelectedInt = CurrentPlayerHat;
+
+        //shop.CurrentCharacterSelectedInt = CurrentPlayerCharacter;
+
+
+        GhostHatRef.GetComponent<MeshFilter>().sharedMesh = cHat.gameObject.GetComponent<MeshFilter>().sharedMesh;
+
+        GhostHatRef.GetComponent<MeshRenderer>().material = cHatM;
+
+        GhostCatMeshRef.GetComponent<SkinnedMeshRenderer>().material = cMP;
+
+
+
+
+
+
+    }
+
+    public void LoadTheCustomizables() {
+
+        
+
+    }
+
+>>>>>>> Stashed changes
     // MIGHT BE USELESS
     public void LoadInts() {
 

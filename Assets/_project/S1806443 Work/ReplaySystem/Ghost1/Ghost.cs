@@ -18,6 +18,10 @@ public class Ghost : ScriptableObject
 {
     #region Public Fields
 
+    public ReplaySaveManager replaySaveManager;
+
+    //public GameObject MapCheckerGO;
+
     // public bool for if the scene is recording the ghosts movement or if Unity is replaying the Ghosts movement
     public bool isRecording;
     public bool isReplaying;
@@ -44,6 +48,38 @@ public class Ghost : ScriptableObject
         position.Clear();
         rotation.Clear();
 
+        /*
+        if (MapCheckerGO.tag == "map_tutorial") {
+
+            //
+            isRecording = true;
+
+        }
+
+        if (MapCheckerGO.tag == "map_city") {
+
+            //
+            isRecording = true;
+
+        }
+
+        if (MapCheckerGO.tag == "map_old_town") {
+
+            //
+            isRecording = true;
+
+        }
+        */
+
+        /*
+        //
+        if (replaySaveManager.isMapCity || replaySaveManager.isMapOldTown || replaySaveManager.isMapTutorial) {
+
+            
+
+        }
+        */
+        isRecording = true;
 
         Debug.Log("543211");
 
