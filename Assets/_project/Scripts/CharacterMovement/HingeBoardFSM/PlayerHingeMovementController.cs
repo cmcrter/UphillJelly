@@ -738,7 +738,7 @@ namespace L7Games.Movement
             }
 
             currentRagdoll = ragDoll;
-            //Debug.Break();
+            Debug.Break();
             return ragDoll;
         }
 
