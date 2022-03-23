@@ -31,8 +31,6 @@ public class LoadCustomizablesInGame : MonoBehaviour
     public int CurrentPlayerHat;
     public int CurrentGhostHat;
 
-<<<<<<< Updated upstream
-=======
     public Material cMP;
 
     public GameObject cHat;
@@ -48,7 +46,6 @@ public class LoadCustomizablesInGame : MonoBehaviour
     public GameObject GhostHatRef;
 
 
->>>>>>> Stashed changes
     public void Start() {
 
         // Load customizables
@@ -102,8 +99,6 @@ public class LoadCustomizablesInGame : MonoBehaviour
 
     }
 
-<<<<<<< Updated upstream
-=======
     void Update() {
 
         
@@ -150,13 +145,7 @@ public class LoadCustomizablesInGame : MonoBehaviour
 
     }
 
-    public void LoadTheCustomizables() {
 
-        
-
-    }
-
->>>>>>> Stashed changes
     // MIGHT BE USELESS
     public void LoadInts() {
 
