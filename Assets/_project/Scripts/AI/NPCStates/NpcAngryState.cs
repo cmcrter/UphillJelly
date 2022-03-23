@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using L7Games.Utility.StateMachine;
 
-[System.Serializable]
-public class NpcIdleState : State
+public class NpcAngryState : State
 {
-    #region Public Variables
     [HideInInspector]
     public NPCBrain brainComponent;
 
-    public NpcIdleState(NPCBrain brainComponent)
+    private MeshRenderer characterMesh;
+
+    public NpcAngryState(NPCBrain brainComponent)
     {
         this.brainComponent = brainComponent;
     }
-    #endregion
 
-    #region Public Methods
     public override State returnCurrentState()
     {
+        // If the NPC is out of view of the player and out a certain distance then they can return back to their starting spot
+
         if (brainComponent.toCloseToPlayerCondition.isConditionTrue())
         {
             return brainComponent.divingState;
@@ -48,6 +48,4 @@ public class NpcIdleState : State
         //To be overridden
         hasRan = false;
     }
-
-    #endregion
 }
