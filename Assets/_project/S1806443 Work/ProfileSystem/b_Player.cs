@@ -194,7 +194,7 @@ public class b_Player : MonoBehaviour
             Debug.Log("Saved Replay 3's");
 
         }
-        
+
 
     }
 
@@ -207,7 +207,7 @@ public class b_Player : MonoBehaviour
 
         // shop currency = data currency
         shop.Currency = data.iCurrency;
-        
+
         // shop saved hat ints = data saved hat ints
         shop.iSavedHatInts = data.savedHatList;
 
@@ -271,7 +271,7 @@ public class b_Player : MonoBehaviour
 
     }
 
-    
+
     // Load the player2
     public void LoadPlayer2() {
 
