@@ -541,13 +541,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 4, z: 0}
+  m_FollowOffset: {x: 0, y: 3, z: -1}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
   m_AngularDampingMode: 0
   m_PitchDamping: 0
-  m_YawDamping: 0
+  m_YawDamping: 20
   m_RollDamping: 0
   m_AngularDamping: 0
 --- !u!1 &1312971496276796344
@@ -2550,6 +2550,7 @@ MonoBehaviour:
     ButtonPressed: 0
   playerCamera: {fileID: 3903168884203430513}
   camBrain: {fileID: 6087022926027470657}
+  wipeOutCam: {fileID: 0}
   currentTurnInput: 0
   turnDuration: 0.25
   angleCorrectionRaycastValidHitWidth: 2
