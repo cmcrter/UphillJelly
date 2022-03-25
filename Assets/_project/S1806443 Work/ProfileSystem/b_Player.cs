@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Date Last Edited: 13/03/22
 // Brief: A script to call the functions to save and load the player
 //////////////////////////////////////////////////////////// 
 
@@ -19,62 +19,33 @@ public class b_Player : MonoBehaviour
 
     #region Variables
 
-    // replay save manager
+    // managers and script references
     public ReplaySaveManager replaySaveManager;
+    public LoadCustomizablesInGame loadCustomizablesInGame;
+    public ReplaySaveManager replayGhostSaveManager;
+    public CC changeCamera;
+    public OutfitChanger outfitChanger;
+    public Shop shop;
 
-    // ghost SO 1
+    // ghost SO 1 and 2
     public Ghost ghostSO1;
-
-    // ghost SO 2
     public Ghost2 ghostSO2;
 
-    // is save 1
+    // is save 1, 2, 3
     public bool isSave1;
-
-    // is save 2
     public bool isSave2;
-
-    // is save 3
     public bool isSave3;
 
-    // CC script
-    public CC changeCamera;
-
-    // load customizables in game
-    public LoadCustomizablesInGame loadCustomizablesInGame;
-
-    // reference to the ReplaySaveManager
-    public ReplaySaveManager replayGhostSaveManager;
-
-
-    // list of the hat bought bools
+    // list of the hat bought, character bought bools and ints
     public List<bool> HatBoughtBools;
-
-    // list of the character bought bools
     public List<bool> CharacterBoughtBools;
-
-    // list of hatboughtints
     [SerializeField]
     public List<int> hatBoughtInts = new List<int>();
 
-    // reference to the outfit changer script
-    public OutfitChanger outfitChanger;
-
-    // reference to the shop script
-    public Shop shop;
-
-    //
-    //public SleepyCat.ScoreBoardSavedData scoreBoardSavedData;
-
-    // int for the current hat gameobject
+    // int for the current hat and character ints
     public int CurrentGameObjectInt;
-
-    // int for the current hat material
     public int CurrentGameObjectMaterialInt;
-
-    // character material int
     public int CharacterMaterialInt;
-
 
     // int for currency
     public int Currency;
@@ -97,27 +68,19 @@ public class b_Player : MonoBehaviour
     //
     public void Start() {
 
-        // set ghost 1 recording to false
+        // set ghost 1 recording and replaying to false
         ghostSO1.isRecording = false;
-
-        // set ghost 1 replaying to false
         ghostSO1.isReplaying = false;
 
 
-        // set ghost 2 replaying to false
+        // set ghost 2 replaying and replaying to false
         ghostSO2.isReplaying = false;
-
-        // set ghost 2 recording to false
         ghostSO2.isRecording = false;
 
 
-        // is save 1 = false
+        // is save 1, 2 and 3 = false
         isSave1 = false;
-
-        // is save 2 = false
         isSave2 = false;
-
-        // is save 3 = false
         isSave3 = false;
 
         // reset ghost 1 data
@@ -231,7 +194,7 @@ public class b_Player : MonoBehaviour
             Debug.Log("Saved Replay 3's");
 
         }
-        
+
 
     }
 
@@ -244,7 +207,7 @@ public class b_Player : MonoBehaviour
 
         // shop currency = data currency
         shop.Currency = data.iCurrency;
-        
+
         // shop saved hat ints = data saved hat ints
         shop.iSavedHatInts = data.savedHatList;
 
@@ -308,7 +271,7 @@ public class b_Player : MonoBehaviour
 
     }
 
-    
+
     // Load the player2
     public void LoadPlayer2() {
 
@@ -545,9 +508,6 @@ public class b_Player : MonoBehaviour
         ghostSO2.isRecording = false;
         ghostSO2.isReplaying = true;
 
-        // Change to game camera
-        changeCamera.ChangeToGameCam();
-
     }
 
     // play button 2 pressed
@@ -567,8 +527,6 @@ public class b_Player : MonoBehaviour
         ghostSO2.isRecording = false;
         ghostSO2.isReplaying = true;
 
-        // Change to game camera
-        changeCamera.ChangeToGameCam();
 
     }
 
@@ -588,9 +546,6 @@ public class b_Player : MonoBehaviour
         // set the ghost 2 to recording = false and replaying = true
         ghostSO2.isRecording = false;
         ghostSO2.isReplaying = true;
-
-        // Change to game camera
-        changeCamera.ChangeToGameCam();
 
     }
 

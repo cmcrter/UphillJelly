@@ -8,18 +8,21 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Mat_LandingDust
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: cbbcecdc1ac7b0d42a16638080e093b0, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap:
-    RenderType: Opaque
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_6B92A7F3:
+        m_Texture: {fileID: 2800000, guid: ffd3a84f5ec90b646a93d9cd6e23beb8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -78,6 +81,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Vector1_42063131: 0.416
+    - Vector1_9FDEEFF9: 0.305
+    - Vector1_DA4B51: 0.167
+    - Vector1_FA7350E4: 0.343
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -105,6 +112,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_4793B139: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 0}
+    - Color_6D922577: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0}
     - _BaseColor: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

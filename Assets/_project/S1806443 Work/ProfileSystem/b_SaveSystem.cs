@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 24/10/21
 // Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Date Last Edited: 13/03/22
 // Brief: A script to control the binary formatters to save and load data using filestreams 
 //////////////////////////////////////////////////////////// 
 
@@ -18,9 +18,6 @@ using TMPro;
 public static class b_SaveSystem
 {
 
-    #region Variables
-
-    #endregion
 
     #region Methods
 
@@ -144,8 +141,8 @@ public static class b_SaveSystem
             // return the data
             return data;
 
-            
-           
+
+
         } else {
 
             //  debug log which outputs the save was not found in the "path"

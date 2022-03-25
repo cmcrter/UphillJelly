@@ -750,6 +750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: {fileID: 7339284286233081921}
+  movementHingeController: {fileID: 0}
 --- !u!1 &5074508492082960629
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,6 +1588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0f107f1c207de142b057386744f8198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraZ: {fileID: 0}
+  bWipeOutLocked: 0
   aerialState:
     hasRan: 0
     AerialDrag: 0.2
@@ -1599,6 +1602,8 @@ MonoBehaviour:
     backwardSpeed: 15
     jumpSpeed: 25
     groundAdjustSmoothness: 15
+    bConstantForce: 0
+    constantForce: 0
     pushTimerDuration: 0.65
     pushForceDuration: 0.35
     pushDuringTimer:
@@ -1624,17 +1629,19 @@ MonoBehaviour:
     pos: {x: 0, y: 0, z: 0}
     timeAlongGrind: 0
     jumpCoroutineDuration: 0
-    autoJumpCoroutineDuration: 0
     jumpSpeed: 25
   groundBelow:
     playerMask:
       serializedVersion: 2
       m_Bits: 64
+    frontraycastPointTransform: {fileID: 0}
+    backRaycastPointTransform: {fileID: 0}
     groundDist: 0.095
     rampDist: 0.55
   nextToWallRun:
     currentWallRide: {fileID: 0}
     dotProductWithWall: 0
+    cooldownDuration: 0.5
   grindBelow:
     splineCurrentlyGrindingOn: {fileID: 0}
     grindDetails: {fileID: 0}
@@ -1642,6 +1649,8 @@ MonoBehaviour:
     coyoteTimer:
       isLocked: 0
       isActive: 0
+    grindDotProduct: 0
+    angleAllowance: 0.4
   playerCamera: {fileID: 0}
   currentTurnInput: 0
   turnDuration: 0.8
@@ -1678,6 +1687,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  turnClamp: 0.55
 --- !u!114 &7339284286233081935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1725,6 +1735,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8ab5a8f3c3f59e4ea07d24e0dd8877f, type: 2}
   - {fileID: 11400000, guid: eceea8f684e047e448b62ec2c80c345a, type: 2}
   - {fileID: 11400000, guid: 26fb4aa63ee3e6b418a98d269d86c54b, type: 2}
+  trickInputBuffer: {fileID: 0}
 --- !u!54 &5074508490412107108
 Rigidbody:
   m_ObjectHideFlags: 0
