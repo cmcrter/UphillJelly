@@ -37,7 +37,7 @@ public class Ghost2 : ScriptableObject
     #region Unity Methods
 
     // On start put the recording to false and replaying to true
-    public void Start() {
+    public void OnEnable() {
 
         isRecording = false;
 

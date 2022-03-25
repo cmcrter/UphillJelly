@@ -13,6 +13,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.IO;
 
 public class b_Player : MonoBehaviour
 {
@@ -69,13 +70,13 @@ public class b_Player : MonoBehaviour
     public void Start() {
 
         // set ghost 1 recording and replaying to false
-        ghostSO1.isRecording = false;
-        ghostSO1.isReplaying = false;
+        //ghostSO1.isRecording = false;
+        //ghostSO1.isReplaying = false;
 
 
         // set ghost 2 replaying and replaying to false
-        ghostSO2.isReplaying = false;
-        ghostSO2.isRecording = false;
+        //ghostSO2.isReplaying = false;
+        //ghostSO2.isRecording = false;
 
 
         // is save 1, 2 and 3 = false
@@ -104,7 +105,11 @@ public class b_Player : MonoBehaviour
     // IF GET HIGH SCORE SAVE FIRST AND SECOND REPLAY (DONT NEED TO SAVE FIRST REPLAY)
     public void SaveFinalValues() {
 
-        if (isSave1) {
+        Debug.Log("SAVEDFINALVALUES");
+
+        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) { // (isSave1 && !isSave2 && !isSave3)
+
+            Debug.Log("Saved Replay 1's");
 
             // set ghost 1 and ghost 2 recording and replaing to false
             ghostSO1.isRecording = false;

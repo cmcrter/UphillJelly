@@ -21,6 +21,7 @@ public class Shop : MonoBehaviour
     public b_Player b_player;
     public OutfitChanger outfitChanger;
     public ReplaySaveManager replaySaveManager;
+    public LoadCustomizablesInGame loadCustomizablesInGame;
 
 
     // gameobject panel for sure you want to buy hat and sure you want to buy character
@@ -82,7 +83,7 @@ public class Shop : MonoBehaviour
 
     #region Methods
 
-    
+
     // On start
     public void Start() {
 
@@ -160,7 +161,40 @@ public class Shop : MonoBehaviour
 
         }
 
+
+
+        /*
+
+        if (replaySaveManager.isMapTutorial && !replaySaveManager.isMapCity) {
+
+            Debug.Log("GAMESCENETUTORIAL");
+
+            CurrentHatSelectedInt = loadCustomizablesInGame.CurrentPlayerHat;
+
+            CurrentCharacterSelectedInt = loadCustomizablesInGame.CurrentPlayerCharacter;
+
+        }
+
+        if (!replaySaveManager.isMapTutorial && replaySaveManager.isMapCity) {
+
+            Debug.Log("GAMESCENECITY");
+
+            CurrentHatSelectedInt = loadCustomizablesInGame.CurrentPlayerHat;
+
+            CurrentCharacterSelectedInt = loadCustomizablesInGame.CurrentPlayerCharacter;
+
+        }
+
         
+        if (!replaySaveManager.isMapTutorial && !replaySaveManager.isMapCity) {
+
+            
+
+        }
+        */
+
+
+
     }
 
     // sure you want to buy hat method
@@ -273,7 +307,7 @@ public class Shop : MonoBehaviour
 
         }
 
-        
+
 
     }
 
@@ -473,7 +507,7 @@ public class Shop : MonoBehaviour
 
 
     }
-    
+
 
 
     #endregion

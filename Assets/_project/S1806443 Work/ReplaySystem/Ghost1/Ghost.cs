@@ -41,12 +41,18 @@ public class Ghost : ScriptableObject
     #region Unity Methods
 
     //
-    public void Start() {
+    public void OnEnable() {
+
+        Debug.Log("IMBACK");
+
+        isRecording = true;
 
         // Reset the saved ghost data for a new ghost to be recorded
-        timeStamp.Clear();
-        position.Clear();
-        rotation.Clear();
+        //timeStamp.Clear();
+        //position.Clear();
+        //rotation.Clear();
+
+
 
         /*
         if (MapCheckerGO.tag == "map_tutorial") {
@@ -79,7 +85,7 @@ public class Ghost : ScriptableObject
 
         }
         */
-        isRecording = true;
+
 
         Debug.Log("543211");
 

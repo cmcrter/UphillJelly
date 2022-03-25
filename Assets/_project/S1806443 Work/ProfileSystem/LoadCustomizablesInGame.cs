@@ -50,10 +50,10 @@ public class LoadCustomizablesInGame : MonoBehaviour
 
         // Load customizables
         LoadTheCustomizables();
-        
-    }
 
-    public void LoadTheCustomizables() {
+        Debug.Log("STARTED");
+
+        LoadInts();
 
         // if directory exists
         if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
@@ -65,7 +65,9 @@ public class LoadCustomizablesInGame : MonoBehaviour
             b_player.LoadPlayer1();
 
             // load customizables 1
-            outfitChanger.LoadedCustomizables1();
+            //outfitChanger.LoadedCustomizables1();
+
+            Debug.Log("SAVE 1");
 
         }
 
@@ -145,6 +147,11 @@ public class LoadCustomizablesInGame : MonoBehaviour
 
     }
 
+    public void LoadTheCustomizables() {
+
+        
+
+    }
 
     // MIGHT BE USELESS
     public void LoadInts() {

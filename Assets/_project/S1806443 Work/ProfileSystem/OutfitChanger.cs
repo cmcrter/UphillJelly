@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class OutfitChanger : MonoBehaviour
@@ -68,7 +69,7 @@ public class OutfitChanger : MonoBehaviour
     public int currentGOMaterialint;
     public int currentCharacterint;
 
-    
+
     #endregion
 
     #region Methods
@@ -88,9 +89,60 @@ public class OutfitChanger : MonoBehaviour
         //  if the map is tutorial and or city
         if (replaySaveManager.isMapTutorial || replaySaveManager.isMapCity) {
 
+            // if no directory exists
+            if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
+
+                // is save 1 = true
+                b_player.isSave1 = true;
+
+                // load player 1
+                b_player.LoadPlayer1();
+
+                // load customizables 1
+                LoadedCustomizables1();
+
+                //currentGOint = shopScript.CurrentHatSelectedInt;
+
+                //currentGOMaterialint = shopScript.CurrentHatSelectedInt;
+
+                //currentCharacterint = shopScript.CurrentCharacterSelectedInt;
+
+            }
+
+            // if no directory exists
+            if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2")) {
+
+                // is save 1 = true
+                b_player.isSave2 = true;
+
+                // load player 1
+                b_player.LoadPlayer2();
+
+                // load customizables 1
+                LoadedCustomizables2();
+
+            }
+
+            // if no directory exists
+            if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3")) {
+
+                // is save 1 = true
+                b_player.isSave3 = true;
+
+                // load player 1
+                b_player.LoadPlayer3();
+
+                // load customizables 1
+                LoadedCustomizables3();
+
+            }
+
+            
             if (b_player.isSave1) {
 
                 b_player.LoadPlayer1();
+
+                //currentGOint = shopScript.current
 
             }
 
@@ -105,9 +157,10 @@ public class OutfitChanger : MonoBehaviour
                 b_player.LoadPlayer3();
 
             }
+            
 
         }
-        
+
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
@@ -154,7 +207,7 @@ public class OutfitChanger : MonoBehaviour
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
 
-        
+
         // load the current character material that has been saved
         characterObjectInScene.GetComponent<SkinnedMeshRenderer>().material = gameObjectCharacterMaterialOptions[currentCharacterint];
 
@@ -182,14 +235,14 @@ public class OutfitChanger : MonoBehaviour
         playableHatDisplayGameObject.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
 
 
-        
+
 
         // set the players hat to the current hat
         Ghost2HatInScene.GetComponent<MeshRenderer>().material = gameObjectMaterialOptions[currentGOMaterialint];
 
         // set the players material to the current hat material
         Ghost2HatInScene.GetComponent<MeshFilter>().sharedMesh = hatSelector.GetComponent<MeshFilter>().sharedMesh;
-        
+
 
     }
 

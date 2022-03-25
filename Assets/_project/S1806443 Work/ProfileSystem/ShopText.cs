@@ -367,7 +367,7 @@ public class ShopText : MonoBehaviour
     }
 
 
-    
+
 
     // press play button 1
     public void PressPlayButton1() {
@@ -391,7 +391,11 @@ public class ShopText : MonoBehaviour
         }
 
         //
-        loadCustomizablesInGame.LoadInts();
+        //loadCustomizablesInGame.LoadInts();
+
+        loadCustomizablesInGame.CurrentPlayerCharacter = outfitChanger.currentCharacterint;
+
+        loadCustomizablesInGame.CurrentPlayerHat = outfitChanger.currentGOint;
 
         //
         b_player.SavePlayer1();
@@ -399,11 +403,13 @@ public class ShopText : MonoBehaviour
         // Load all of the data from the first player
         b_player.LoadPlayer1();
 
+        
+
         // play 1
-        b_player.PlayPlayer1();
+        //b_player.PlayPlayer1();
 
         //
-        tempScoreSystem.TimerActive = true;
+        //tempScoreSystem.TimerActive = true;
 
         Debug.Log("88888888888");
 

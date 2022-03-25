@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopScript: {fileID: 9097779830629303194, guid: 6154d104111d85a43a6840753bb0bdf2, type: 3}
   hatSelector: {fileID: 1251040265983239675}
+  replaySaveManager: {fileID: 0}
+  b_player: {fileID: 0}
   characterObjectInScene: {fileID: 8220769026018243192, guid: bbe5fda47a2177d4d9708e89d65f3ea1, type: 3}
   playableCharacterObjectInScene: {fileID: 7339284286233081922, guid: bfc5f5802c3dbdc4d9e938809a0aefe6, type: 3}
   Ghost2CharacterInScene: {fileID: 3879914698915832553, guid: 71bd6b923e354374caeb9564f18ba5d7, type: 3}
@@ -84,11 +86,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 13ddd62d0f47ed84c93574f950bbb8f9, type: 2}
   - {fileID: 2100000, guid: c163869dc01d24c4fb341dd44e378aab, type: 2}
   - {fileID: 2100000, guid: b2d9e77600947e945ba06ffbab1176ca, type: 2}
-  currentGOint: 3
-  currentGOMaterialint: 3
+  currentGOint: 1
+  currentGOMaterialint: 1
   currentCharacterint: 0
-  replaySaveManager: {fileID: 0}
-  b_player: {fileID: 0}
 --- !u!33 &1251040265983239671
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -96,7 +96,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251040265983239675}
-  m_Mesh: {fileID: -2128599272216676504, guid: 7482ab74e686a0144a90df7d9600c410, type: 3}
+  m_Mesh: {fileID: -3292925553009838691, guid: 7f9dd48886a947044bef65b2d9d36834, type: 3}
 --- !u!23 &1251040265983239672
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -117,7 +117,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 33bc3869645caf9478717a5caf168768, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

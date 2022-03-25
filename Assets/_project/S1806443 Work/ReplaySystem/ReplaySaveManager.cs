@@ -7,14 +7,13 @@
 // Brief: Script to store the data of the ghosts poisition and rotation 
 //////////////////////////////////////////////////////////// 
 
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public class ReplaySaveManager : MonoBehaviour
-{
+public class ReplaySaveManager : MonoBehaviour {
 
     #region variables
 
