@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ScrollTexture : MonoBehaviour
 {
-    //scroll the texture over time, used for the wrong way barriers.
+
     public float ScrollX = 0.5f;
     public float ScrollY = 0.5f;
  
