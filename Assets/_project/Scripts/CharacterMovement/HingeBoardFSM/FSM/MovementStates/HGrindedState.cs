@@ -25,7 +25,6 @@ namespace L7Games.Movement
         private PlayerHingeMovementController parentController;
         private Rigidbody movementRB;
         private Rigidbody modelRB;
-        private Rigidbody backRB;
 
         [NonSerialized] private HisOnGrind onGrind = null;
         private PlayerInput pInput;
@@ -64,12 +63,11 @@ namespace L7Games.Movement
 
         }
 
-        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody playerRB, Rigidbody backWheel, Rigidbody bodyRB, HisOnGrind grind)
+        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody playerRB, Rigidbody bodyRB, HisOnGrind grind)
         {
             parentController = controllerParent;
             movementRB = playerRB;
             modelRB = bodyRB;
-            backRB = backWheel;
 
             onGrind = grind;
             grind.SetGrindState(this);
@@ -96,12 +94,15 @@ namespace L7Games.Movement
 
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.characterAnimator.SetBool("grinding", true);
-
+            parentController.bWipeOutLocked = true;
             parentController.camBrain.Follow = parentController.transform;
 
             //Making sure nothing interferes with the movement
-            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.4025f, 0);
-            timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.005f, 1f);
+            Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.25f, 0);
+            Debug.Log(closestPoint);
+
+            movementRB.transform.position = closestPoint;
+            timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.0075f, 0.9925f);
 
             movementRB.velocity = Vector3.zero;
             movementRB.useGravity = false;
@@ -152,6 +153,7 @@ namespace L7Games.Movement
             timeAlongGrind = 0;
             bTravelBackwards = false;
             bForceExit = false;
+            parentController.bWipeOutLocked = false;
             hasRan = false;
         }
 
@@ -226,7 +228,6 @@ namespace L7Games.Movement
 
             movementRB.interpolation = RigidbodyInterpolation.None;
             modelRB.interpolation = RigidbodyInterpolation.None;
-            backRB.interpolation = RigidbodyInterpolation.None;
 
             yield return new WaitForFixedUpdate();
             movementRB.useGravity = true;

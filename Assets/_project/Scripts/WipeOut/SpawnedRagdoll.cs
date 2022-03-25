@@ -25,6 +25,9 @@ public class SpawnedRagdoll : MonoBehaviour
     /// </summary>
     [SerializeField]
     private RagdollDataContainer ragdollData;
+
+    [SerializeField]
+    private Animator tempAnimator;
     #endregion
 
     #region Private Variables
@@ -52,7 +55,7 @@ public class SpawnedRagdoll : MonoBehaviour
     /// </summary>
     /// <param name="playerSpawnedFrom">The player that will have started the spawning of the ragdoll</param>
     /// <param name="ragdollSpawningData">The player that will have started the spawning of the ragdoll</param>
-    public void Initalise(PlayerController playerSpawnedFrom, RagdollDataContainer ragdollSpawningData)
+    public void Initalise(PlayerController playerSpawnedFrom, RagdollDataContainer ragdollSpawningData, Animator orignalAnimator)
     {
         if (ragdollData == null)
         {
@@ -64,6 +67,22 @@ public class SpawnedRagdoll : MonoBehaviour
             this.playerSpawnedFrom.onRespawn += DestroySelf;
         }
         ragdollData.CopyRagdollBonesPositions(ragdollSpawningData);
+
+        // Copy animation position
+        tempAnimator.avatar = orignalAnimator.avatar;
+
+        for (int i = 0; i < orignalAnimator.layerCount; ++i)
+        {
+            AnimatorStateInfo animatorStateInfo = orignalAnimator.GetCurrentAnimatorStateInfo(i);
+            tempAnimator.Play(animatorStateInfo.shortNameHash, i, animatorStateInfo.normalizedTime);
+        }
+        StartCoroutine(DestoryAnimator());
+    }
+
+    private IEnumerator DestoryAnimator()
+    {
+        yield return new WaitForEndOfFrame();
+        Destroy(tempAnimator);
     }
     #endregion
 

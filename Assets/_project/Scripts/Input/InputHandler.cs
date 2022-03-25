@@ -219,6 +219,7 @@ namespace L7Games.Input
         /// Called when the grounded jump input action has been performed
         /// </summary>
         public event System.Action groundedJumpUpPerformed;
+        public event System.Action groundedJumpUpCancelled;
         /// <summary>
         /// Called when the wall riding jump input action has been performed
         /// </summary>
@@ -396,6 +397,19 @@ namespace L7Games.Input
                 groundedJumpUpPerformed();
             }
         }
+
+        /// <summary>
+        /// Called when the player performs the grounded jump action
+        /// </summary>
+        /// <param name="callbackContext">Jump Action's CallbackContext</param>
+        private void GroundedJumpUpAction_Cancelled(InputAction.CallbackContext callbackContext)
+        {
+            if(groundedJumpUpCancelled != null)
+            {
+                groundedJumpUpCancelled();
+            }
+        }
+
         /// <summary>
         /// Called when the player performs the wall riding jump action
         /// </summary>
@@ -669,6 +683,7 @@ namespace L7Games.Input
             playerInput.actions["Grounded_PressDown"].performed += PressDownAction_Performed;
 
             playerInput.actions["Grounded_JumpUp"].performed += GroundedJumpUpAction_Performed;
+            playerInput.actions["Grounded_JumpUp"].canceled += GroundedJumpUpAction_Cancelled;
 
             playerInput.actions["Grounded_Balance"].performed += BalanceAction_Performed;
             playerInput.actions["Grounded_Balance"].canceled += BalanceAction_Canceled;
@@ -744,6 +759,7 @@ namespace L7Games.Input
             playerInput.actions["Grounded_PressDown"].performed -= PressDownAction_Performed;
 
             playerInput.actions["Grounded_JumpUp"].performed -= GroundedJumpUpAction_Performed;
+            playerInput.actions["Grounded_JumpUp"].canceled -= GroundedJumpUpAction_Cancelled;
 
             playerInput.actions["Grounded_Balance"].performed -= BalanceAction_Performed;
             playerInput.actions["Grounded_Balance"].canceled -= BalanceAction_Canceled;

@@ -70,11 +70,30 @@ public class CineLockCameraZ : CinemachineExtension
         wipeoutCam.enabled = true;
         normalCam.enabled = false;
 
-        if(movementController.currentRagdoll)
+
+
+        // If there is a root or main rigid body then take that into account, otherwise not a problem
+        Rigidbody mainBody = movementController.currentRagdoll.GetComponent<Rigidbody>();
+        if (mainBody != null)
         {
-            wipeoutCam.Follow = movementController.currentRagdoll.transform;
-            wipeoutCam.LookAt = movementController.currentRagdoll.transform;
+            wipeoutCam.LookAt = mainBody.transform;
+            wipeoutCam.Follow = mainBody.transform;
         }
+        else
+        {
+            Rigidbody[] boneBodies = movementController.currentRagdoll.GetComponentsInChildren<Rigidbody>();
+            if (boneBodies.Length > 0)
+            {
+                wipeoutCam.LookAt = boneBodies[0].transform;
+                wipeoutCam.Follow = boneBodies[0].transform;
+            }
+        }
+
+        //if (movementController.currentRagdoll)
+        //{
+        //    wipeoutCam.Follow = movementController.currentRagdoll.transform;
+        //    wipeoutCam.LookAt = movementController.currentRagdoll.transform;
+        //}
 
         wipeoutTransp = wipeoutCam.GetCinemachineComponent<CinemachineTransposer>();
         wipeoutTransp.m_FollowOffset.y = WipeoutGroundThreshold;
