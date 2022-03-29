@@ -8,9 +8,9 @@ public class NpcIdleState : State
 {
     #region Public Variables
     [HideInInspector]
-    public NPCBrain brainComponent;
+    public IdleReactionNPC brainComponent;
 
-    public NpcIdleState(NPCBrain brainComponent)
+    public NpcIdleState(IdleReactionNPC brainComponent)
     {
         this.brainComponent = brainComponent;
     }
@@ -19,10 +19,10 @@ public class NpcIdleState : State
     #region Public Methods
     public override State returnCurrentState()
     {
-        if (brainComponent.toCloseToPlayerCondition.isConditionTrue())
-        {
-            return brainComponent.divingState;
-        }
+        //if (brainComponent.toCloseToPlayerCondition.isConditionTrue())
+        //{
+        //    //return brainComponent.divingState;
+        //}
         return this;
     }
 

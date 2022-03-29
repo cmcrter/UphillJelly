@@ -28,6 +28,12 @@ public class SpawnedRagdoll : MonoBehaviour
 
     [SerializeField]
     private Animator tempAnimator;
+
+    [SerializeField]
+    private Rigidbody primaryRigidBody;
+
+    [SerializeField]
+    private Rigidbody[] allRigidbody;
     #endregion
 
     #region Private Variables
@@ -43,40 +49,55 @@ public class SpawnedRagdoll : MonoBehaviour
     /// </summary>
     public void DestroySelf()
     {
-        if (playerSpawnedFrom != null)
-        {
-            this.playerSpawnedFrom.onRespawn -= DestroySelf;
-        }
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
     /// <summary>
     /// Called to initialise the ragdoll when its spawned
     /// </summary>
-    /// <param name="playerSpawnedFrom">The player that will have started the spawning of the ragdoll</param>
+    /// <param name="EventToDestroyOn">The event that will trigger the players ragdoll's destruction, can be left null if the ragdoll will not be destruction</param>
     /// <param name="ragdollSpawningData">The player that will have started the spawning of the ragdoll</param>
-    public void Initalise(PlayerController playerSpawnedFrom, RagdollDataContainer ragdollSpawningData, Animator orignalAnimator)
+    public void Initalise(RagdollDataContainer ragdollSpawningData)
     {
         if (ragdollData == null)
         {
             ragdollData = GetComponent<RagdollDataContainer>();
         }
-        if (playerSpawnedFrom != null)
-        {
-            this.playerSpawnedFrom = playerSpawnedFrom;
-            this.playerSpawnedFrom.onRespawn += DestroySelf;
-        }
-        ragdollData.CopyRagdollBonesPositions(ragdollSpawningData);
+        //if (EventToDestroyOn != null)
+        //{
+        //    EventToDestroyOn += DestroySelf;
+        //    //this.playerSpawnedFrom = playerSpawnedFrom;
+        //    //this.playerSpawnedFrom.onRespawn += DestroySelf;
+        //}
+        //ragdollData.CopyRagdollBonesPositions(ragdollSpawningData);
+
+        // Copy the characters mesh and materials across
+        ragdollData.characterRenderer.sharedMesh = ragdollSpawningData.characterRenderer.sharedMesh;
+        ragdollData.characterRenderer.materials = ragdollSpawningData.characterRenderer.materials;
 
         // Copy animation position
-        tempAnimator.avatar = orignalAnimator.avatar;
+        ragdollData.attachedAnimator.avatar = ragdollSpawningData.attachedAnimator.avatar;
 
-        for (int i = 0; i < orignalAnimator.layerCount; ++i)
+        for (int i = 0; i < ragdollSpawningData.attachedAnimator.layerCount; ++i)
         {
-            AnimatorStateInfo animatorStateInfo = orignalAnimator.GetCurrentAnimatorStateInfo(i);
+            AnimatorStateInfo animatorStateInfo = ragdollSpawningData.attachedAnimator.GetCurrentAnimatorStateInfo(i);
             tempAnimator.Play(animatorStateInfo.shortNameHash, i, animatorStateInfo.normalizedTime);
         }
         StartCoroutine(DestoryAnimator());
+
+    }
+
+    public void AddForceToRagdollMainRigidbody(Vector3 force, ForceMode forceMode)
+    {
+        primaryRigidBody.AddForce(force, forceMode);
+    }
+
+    public void AddForceToRagdollAllRigidbody(Vector3 force, ForceMode forceMode)
+    {
+        for (int i = 0; i < allRigidbody.Length; ++i)
+        {
+            allRigidbody[i].AddForce(force, forceMode);
+        }
     }
 
     private IEnumerator DestoryAnimator()

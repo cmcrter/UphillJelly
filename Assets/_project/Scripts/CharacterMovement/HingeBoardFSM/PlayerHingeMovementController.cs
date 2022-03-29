@@ -99,7 +99,7 @@ namespace L7Games.Movement
         [Tooltip("The prefab that is spawned to replace this as a ragdoll Ragdoll used prefab used")]
         [SerializeField]
         private GameObject ragDollPrefab;
-        public GameObject currentRagdoll;
+        public SpawnedRagdoll currentRagdoll;
 
         [Tooltip("The ")]
         public RagdollDataContainer ragdollDataContainer;
@@ -149,7 +149,13 @@ namespace L7Games.Movement
             ResetWheelPos();
             AlignWheels();
 
+            if (currentRagdoll != null)
+            {
+                currentRagdoll.DestroySelf();
+            }
+
             CallOnRespawn();
+
 
             groundedState.OnStateExit();
             grindingState.OnStateExit();
@@ -194,6 +200,11 @@ namespace L7Games.Movement
             ResetWheelPos();
             AlignWheels();
 
+            if (currentRagdoll != null)
+            {
+                currentRagdoll.DestroySelf();
+            }
+            
             CallOnRespawn();
 
             groundedState.OnStateExit();
@@ -566,16 +577,12 @@ namespace L7Games.Movement
             // Spawn the ragdoll
             GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
             // If there is a root or main rigid body then take that into account, otherwise not a problem
-            Rigidbody mainBody = ragdoll.GetComponent<Rigidbody>();
-            if (mainBody != null)
+            SpawnedRagdoll ragdollComponent = ragdoll.GetComponent<SpawnedRagdoll>();
+            if (ragdollComponent != null)
             {
-                mainBody.AddForce(currentVelocity, ForceMode.Impulse);
+                ragdollComponent.AddForceToRagdollMainRigidbody(currentVelocity, ForceMode.Impulse);
             }
-            Rigidbody[] boneBodies = ragdoll.GetComponentsInChildren<Rigidbody>();
-            foreach (Rigidbody body in boneBodies)
-            {
-                body.AddForce(currentVelocity, ForceMode.Impulse);
-            }
+            ragdollComponent.AddForceToRagdollAllRigidbody(currentVelocity, ForceMode.Impulse);
 
             boardModel.transform.SetParent(null);
             characterAnimator.Play("Wipeout");
@@ -656,10 +663,11 @@ namespace L7Games.Movement
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
             if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
-                spawnedRagdoll.Initalise(this, ragdollDataContainer, characterAnimator);
+                spawnedRagdoll.Initalise(ragdollDataContainer);
+                currentRagdoll = spawnedRagdoll;
             }
 
-            currentRagdoll = ragDoll;
+
             return ragDoll;
         }
 

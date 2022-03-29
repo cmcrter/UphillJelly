@@ -6,11 +6,11 @@ using L7Games.Utility.StateMachine;
 public class NpcAngryState : State
 {
     [HideInInspector]
-    public NPCBrain brainComponent;
+    public IdleReactionNPC brainComponent;
 
     private MeshRenderer characterMesh;
 
-    public NpcAngryState(NPCBrain brainComponent)
+    public NpcAngryState(IdleReactionNPC brainComponent)
     {
         this.brainComponent = brainComponent;
     }
@@ -19,10 +19,10 @@ public class NpcAngryState : State
     {
         // If the NPC is out of view of the player and out a certain distance then they can return back to their starting spot
 
-        if (brainComponent.toCloseToPlayerCondition.isConditionTrue())
-        {
-            return brainComponent.divingState;
-        }
+        //if (brainComponent.toCloseToPlayerCondition.isConditionTrue())
+        //{
+        //    //return brainComponent.divingState;
+        //}
         return this;
     }
 

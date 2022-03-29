@@ -15,6 +15,10 @@ namespace L7Games
 {
     public class RagdollDataContainer : MonoBehaviour
     {
+        public Animator attachedAnimator;
+
+        public SkinnedMeshRenderer characterRenderer;
+
         //public struct Bones
         //{
         //    public Vector3 position;
@@ -35,24 +39,24 @@ namespace L7Games
         //    }
         //}
 
-        public List<GameObject> bones;
+        //public List<GameObject> bones;
 
-        public void CopyRagdollBonesPositions(RagdollDataContainer otherRagdollDataContainer)
-        {
-            // Joint bones should be equal or something has probably gone wrong
-            #if UNITY_EDITOR || DEBUG
-            if (otherRagdollDataContainer.bones.Count != bones.Count)
-            {
-                Debug.LogWarning("Character and rag-doll bones are not equal");
-            }
-            #endif
-            for (int i = 0; i < otherRagdollDataContainer.bones.Count && i < bones.Count; ++i)
-            {
-                otherRagdollDataContainer.bones[i].transform.localPosition = bones[i].transform.localPosition;
-                otherRagdollDataContainer.bones[i].transform.localRotation = bones[i].transform.localRotation;
-                otherRagdollDataContainer.bones[i].transform.localScale = bones[i].transform.localScale;
-            }
-        }
+        //public void CopyRagdollBonesPositions(RagdollDataContainer otherRagdollDataContainer)
+        //{
+        //    // Joint bones should be equal or something has probably gone wrong
+        //    #if UNITY_EDITOR || DEBUG
+        //    if (otherRagdollDataContainer.bones.Count != bones.Count)
+        //    {
+        //        Debug.LogWarning("Character and rag-doll bones are not equal");
+        //    }
+        //    #endif
+        //    for (int i = 0; i < otherRagdollDataContainer.bones.Count && i < bones.Count; ++i)
+        //    {
+        //        otherRagdollDataContainer.bones[i].transform.localPosition = bones[i].transform.localPosition;
+        //        otherRagdollDataContainer.bones[i].transform.localRotation = bones[i].transform.localRotation;
+        //        otherRagdollDataContainer.bones[i].transform.localScale = bones[i].transform.localScale;
+        //    }
+        //}
     }
 
 }
