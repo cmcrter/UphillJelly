@@ -26,7 +26,6 @@ namespace L7Games.Movement
 
         private PlayerHingeMovementController parentController;
         private Rigidbody movementRB;
-        private Rigidbody followRB;
         private PlayerInput pInput;
         private InputHandler inputHandler;
 
@@ -56,12 +55,11 @@ namespace L7Games.Movement
 
         }
 
-        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody playerRB, Rigidbody backWheelRB, HisGroundBelow groundBelow, HisNextToWallRun wallRunning, HisOnGrind grinding)
+        public void InitialiseState(PlayerHingeMovementController controllerParent, Rigidbody playerRB, HisGroundBelow groundBelow, HisNextToWallRun wallRunning, HisOnGrind grinding)
         {
             parentController = controllerParent;
             playerTransform = controllerParent.transform;
             movementRB = playerRB;
-            followRB = backWheelRB;
 
             grindCondition = grinding;
             groundedCondition = groundBelow;
@@ -147,7 +145,7 @@ namespace L7Games.Movement
             parentController.playerCamera.FollowRotation = false;
 
             movementRB.drag = AerialDrag;
-            followRB.drag = AerialDrag;
+            parentController.ModelRB.drag = AerialDrag;
 
             hasRan = true;
         }

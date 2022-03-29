@@ -37,6 +37,7 @@ namespace L7Games.Movement
 
         public PlayerCamera playerCamera;
         public CinemachineVirtualCamera camBrain;
+        public CinemachineVirtualCamera wipeOutCam;
 
         public float currentTurnInput;
         [Tooltip("The time before the player is at full turn")]
@@ -67,11 +68,7 @@ namespace L7Games.Movement
         //Front Rigidbody
         [SerializeField]
         private Rigidbody fRB;
-        //Back Rigidbody
-        [SerializeField]
-        private Rigidbody bRB;
-        [SerializeField]
-        private Rigidbody ModelRB;
+        public Rigidbody ModelRB;
 
         public PlayerInput input;
         public InputHandler inputHandler;
@@ -79,8 +76,6 @@ namespace L7Games.Movement
 
         [SerializeField]
         private Transform frontWheelPos;
-        [SerializeField]
-        private Transform backWheelPos;
         [SerializeField]
         private GameObject characterModel;
         [SerializeField]
@@ -128,16 +123,14 @@ namespace L7Games.Movement
 
             characterAnimator.Play("grounded");
             characterAnimator.playbackTime = 1f;
-
+    
             fRB.isKinematic = false;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
 
-            bRB.isKinematic = false;
-
-            bRB.angularVelocity = Vector3.zero;
-            bRB.velocity = Vector3.zero;
+            ModelRB.angularVelocity = Vector3.zero;
+            ModelRB.velocity = Vector3.zero;
 
             root.rotation = initialRootRotation;
 
@@ -182,10 +175,8 @@ namespace L7Games.Movement
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
 
-            bRB.isKinematic = false;
-
-            bRB.angularVelocity = Vector3.zero;
-            bRB.velocity = Vector3.zero;
+            ModelRB.angularVelocity = Vector3.zero;
+            ModelRB.velocity = Vector3.zero;
 
             root.rotation = initialRootRotation;
 
@@ -219,8 +210,6 @@ namespace L7Games.Movement
         //Both grounded and aerial wants to have the model smooth towards what's below them to a degree
         public void SmoothToGroundRotation(bool bAerial, float smoothness, float speed, HisGroundBelow groundBelow)
         {
-            float headingDeltaAngle = 0;
-            Quaternion headingDelta = Quaternion.identity;
             Quaternion groundQuat = transform.rotation;
 
             // Check which ray-casts should be used by getting the angle distance between the normals
@@ -297,9 +286,6 @@ namespace L7Games.Movement
 
                 if (Debug.isDebugBuild)
                 {
-                    Debug.DrawRay(bRB.transform.position, -(frontRightHitToUse.point - backRightHitToUse.point).normalized, Color.green);
-                    Debug.DrawRay(bRB.transform.position, upright.normalized, Color.red);
-                    Debug.DrawRay(bRB.transform.position, Vector3.Cross(transform.right, upright).normalized, Color.cyan);
                     Debug.DrawRay(frontRightHitToUse.point, frontRightHitToUse.normal, Color.cyan);
                     Debug.DrawRay(backRightHitToUse.point, backRightHitToUse.normal, Color.cyan);
                 }
@@ -321,8 +307,8 @@ namespace L7Games.Movement
             }
 
             //GameObject's heading based on the current input
-            headingDeltaAngle = speed * 1000 * currentTurnInput * Time.deltaTime;
-            headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
+            float headingDeltaAngle = speed * 1000f * currentTurnInput * Time.deltaTime;
+            Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
 
             transform.rotation = groundQuat;
             
@@ -353,10 +339,10 @@ namespace L7Games.Movement
             nextToWallRun.InitialiseCondition(this, fRB);
             grindBelow.InitialiseCondition(fRB, inputHandler);
 
-            groundedState.InitialiseState(this, fRB, bRB, groundBelow, grindBelow);
-            aerialState.InitialiseState(this, fRB, bRB, groundBelow, nextToWallRun, grindBelow);
-            wallRideState.InitialiseState(this, fRB, bRB, nextToWallRun, groundBelow);
-            grindingState.InitialiseState(this, fRB, bRB, ModelRB, grindBelow);
+            groundedState.InitialiseState(this, fRB, groundBelow, grindBelow);
+            aerialState.InitialiseState(this, fRB, groundBelow, nextToWallRun, grindBelow);
+            wallRideState.InitialiseState(this, fRB, nextToWallRun, groundBelow);
+            grindingState.InitialiseState(this, fRB, ModelRB, grindBelow);
 
             playerStateMachine = new FiniteStateMachine(aerialState);
 
@@ -430,9 +416,13 @@ namespace L7Games.Movement
                 }
             }
 
-            if (inputHandler.TurningAxis != 0 && turningCo == null)
+            if(inputHandler.TurningAxis != 0)
             {
-                turningCo = StartCoroutine(Co_TurnAngle());
+                StartTurn();
+            }
+            else
+            {
+                currentTurnInput = 0;
             }
 
             if(AirturningCo != null || groundedState.hasRan)
@@ -452,8 +442,8 @@ namespace L7Games.Movement
 
             if(bAddAdditionalGravity)
             {
+                ModelRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
                 fRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
-                bRB.AddForce(Vector3.down * AdditionalGravityAmount, ForceMode.Acceleration);
             }
         }
 
@@ -516,21 +506,24 @@ namespace L7Games.Movement
         public void ResetWheelPos()
         {
             fRB.transform.position = frontWheelPos.transform.position;
-            bRB.transform.position = backWheelPos.transform.position;
         }
 
         public void AlignWheels()
         {
-            fRB.transform.up = transform.up;
-            fRB.transform.forward = transform.forward;
-            bRB.transform.forward = transform.forward;
-            bRB.transform.up = transform.up;
+            fRB.transform.rotation = transform.rotation;
         }
 
-        public void StartTurnCoroutine()
+        public void StartTurn()
         {
-            StopTurnCoroutine();
-            turningCo = StartCoroutine(Co_TurnAngle());
+            //if(inputHandler.TurningAxis < 0)
+            //{
+            //    currentTurnInput = -turnClamp;
+            //}
+            //else
+            //{
+            //    currentTurnInput = turnClamp;
+            //}
+            currentTurnInput = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
         }
 
         public void StopTurnCoroutine()
@@ -584,18 +577,6 @@ namespace L7Games.Movement
                 body.AddForce(currentVelocity, ForceMode.Impulse);
             }
 
-            // Set the camera to follow the rag doll
-            if (mainBody != null)
-            {
-                camBrain.LookAt = mainBody.transform;
-                camBrain.Follow = mainBody.transform;
-            }
-            else if (boneBodies.Length > 0)
-            {
-                camBrain.LookAt = boneBodies[0].transform;
-                camBrain.Follow = boneBodies[0].transform;
-            }
-
             boardModel.transform.SetParent(null);
             characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
@@ -631,65 +612,6 @@ namespace L7Games.Movement
             }
 
             AirturningCo = null;
-        }
-
-        private IEnumerator Co_TurnAngle()
-        {
-            turningTimer = new Timer(turnDuration);
-            currentTurnInput = 0;
-
-            bool initialTurningDir = inputHandler.TurningAxis < 0 ? true : false;
-
-            //Whilst the player wants to turn
-            while(inputHandler.TurningAxis != 0)
-            {
-                bool newTurningDir = inputHandler.TurningAxis < 0 ? true : false;
-
-                if(initialTurningDir != newTurningDir)
-                {
-                    StopTurnCoroutine();
-                    break;
-                }
-
-                //How far along into the timer is this
-                float timeAlongTimer = turnDuration / turningTimer.current_time;
-                timeAlongTimer = Mathf.Clamp(timeAlongTimer, 0f, 0.99f);
-
-                float clampedMoveDelta = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
-
-                //If the skateboard is moving
-                if(fRB.velocity.magnitude > 0.3f && playerStateMachine.currentState == groundedState)
-                {
-                    //Lerping towards the new input by the animation curves amounts (probably increasing over time)
-                    currentTurnInput = Mathf.Lerp(currentTurnInput, clampedMoveDelta, 2f * turnSpeedCurve.Evaluate(timeAlongTimer) * Time.deltaTime);
-                }
-                //Else do a kick turn
-                else
-                {
-                    if(inputHandler.TurningAxis < 0)
-                    {
-                        currentTurnInput = -1f;
-                    }
-                    else
-                    {
-                        currentTurnInput = 1f;
-                    }
-                }
-
-                Mathf.Clamp(currentTurnInput, -1f, 1f);
-
-                if (!turningTimer.isActive)
-                {
-                    yield return null;
-                }
-
-                //Ticking the timer along
-                turningTimer.Tick(Time.deltaTime);
-                yield return null;
-            }
-
-            currentTurnInput = 0;
-            turningCo = null;
         }
 
 
@@ -734,11 +656,10 @@ namespace L7Games.Movement
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
             if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
-                spawnedRagdoll.Initalise(this, ragdollDataContainer);
+                spawnedRagdoll.Initalise(this, ragdollDataContainer, characterAnimator);
             }
 
             currentRagdoll = ragDoll;
-            Debug.Break();
             return ragDoll;
         }
 

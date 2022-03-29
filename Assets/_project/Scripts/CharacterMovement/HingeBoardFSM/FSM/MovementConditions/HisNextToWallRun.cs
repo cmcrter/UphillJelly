@@ -31,7 +31,7 @@ namespace L7Games.Movement
         private Coroutine cooldown;
         private Timer cooldownTimer;
         [SerializeField]
-        private float cooldownDuration = 0.5f;
+        private float cooldownDuration = 0.2f;
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace L7Games.Movement
 
         public override bool isConditionTrue()
         {
-            return (currentWallRide != null) && (dotProductWithWall > 0.8f || dotProductWithWall < -0.8f) && (cooldown == null);
+            return (currentWallRide != null) && (dotProductWithWall > 0.75f || dotProductWithWall < -0.75f) && (cooldown == null);
         }
 
         public void CheckWall(WallRideTriggerable wallRide)

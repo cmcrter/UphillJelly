@@ -103,9 +103,15 @@ namespace SleepyCat
 
         void OnSceneGUI(SceneView sceneView)
         {
+            int controlID = GUIUtility.GetControlID(FocusType.Passive);
+
             // Do your drawing here using Handles.
             if (placementActivated)
             {
+                if (Selection.objects.Length > 0)
+                {
+                    Selection.objects = new Object[0];
+                }
                 RaycastHit raycastHit2 = new RaycastHit();
                 Vector2 mousePosition = new Vector3(Event.current.mousePosition.x, SceneView.lastActiveSceneView.camera.pixelHeight - Event.current.mousePosition.y);
 
@@ -160,6 +166,7 @@ namespace SleepyCat
                 {
                     if (CheckMouseInsideSceneBounds(mousePosition))
                     {
+                        GUIUtility.hotControl = 0;
                         if (temporaryVisualsationGameObject != null)
                         {
                             GameObject newObject = (GameObject)PrefabUtility.InstantiatePrefab((Object)brushObject);
@@ -176,7 +183,6 @@ namespace SleepyCat
 
                             Undo.RegisterCreatedObjectUndo(newObject, "Placed " + newObject.name + " With Brush");
                         }
-
                         Event.current.Use();
                     }
                 }
@@ -184,6 +190,7 @@ namespace SleepyCat
                 {
                     if (CheckMouseInsideSceneBounds(mousePosition))
                     {
+                        GUIUtility.hotControl = controlID;
                         Event.current.Use();
                     }
                 }

@@ -7,6 +7,7 @@
 // Brief: A more specific script for money to be added to a player
 //////////////////////////////////////////////////////////// 
 
+using L7Games.Movement;
 using UnityEngine;
 
 namespace L7Games.Triggerables.Collectables
@@ -22,14 +23,14 @@ namespace L7Games.Triggerables.Collectables
 
         #region Public Methods
 
-        public override void PickupCollectable(/*Player player*/)
+        public override void PickupCollectable(PlayerController player)
         {
             Debug.Log("Money Picked Up");
 
             //Add score onto player
             //player.AddMoney(fCollectableScore);
 
-            base.PickupCollectable();
+            base.PickupCollectable(player);
         }
 
         #endregion
