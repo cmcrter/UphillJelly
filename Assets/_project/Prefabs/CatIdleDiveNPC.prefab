@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2302867642516416118}
+  - component: {fileID: 15041972823206178}
+  - component: {fileID: 2814228983485305877}
   m_Layer: 10
   m_Name: CATRigRArm2
   m_TagString: Untagged
@@ -31,6 +33,32 @@ Transform:
   m_Father: {fileID: 4032242535445677435}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &15041972823206178
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950434308740563927}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.032888368
+  m_Height: 0.28505242
+  m_Direction: 0
+  m_Center: {x: -0.14252624, y: -0.004670798, z: 0.00000008726852}
+--- !u!114 &2814228983485305877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950434308740563927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1861434937490122723
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,6 +98,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4032242535445677435}
+  - component: {fileID: 4414800139609710273}
+  - component: {fileID: 7247125280020716263}
   m_Layer: 10
   m_Name: CATRigRArm1
   m_TagString: Untagged
@@ -92,6 +122,32 @@ Transform:
   m_Father: {fileID: 5085846491684579685}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &4414800139609710273
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134455506722775833}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.032545906
+  m_Height: 0.19873974
+  m_Direction: 0
+  m_Center: {x: -0.099370055, y: 1.5023685e-10, z: 0.0017541618}
+--- !u!114 &7247125280020716263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134455506722775833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2173377456412193048
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +189,6 @@ GameObject:
   - component: {fileID: 3000934613039510905}
   - component: {fileID: 2517132366784540610}
   - component: {fileID: 2517132366784540609}
-  - component: {fileID: 3468421284202263887}
   - component: {fileID: 3018917226063059384}
   m_Layer: 10
   m_Name: CatIdleDiveNPC
@@ -190,27 +245,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2599908d0aedd1d44872250c258f95da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPoximityTrigger: {fileID: 6105693543792267674}
   currentRagdoll: {fileID: 0}
   animator: {fileID: 2517132366784540610}
   speed: 10
   diveDuration: 0.5
   ragDollPrefab: {fileID: 4657433874770968513, guid: 8aca706b38b46ec4d9afe02e66e5df8e, type: 3}
+  playerPoximityTrigger: {fileID: 6105693543792267674}
   ragdollData: {fileID: 3018917226063059384}
---- !u!136 &3468421284202263887
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2517132366784540611}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.13266587
-  m_Height: 1.4954253
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.76661223, z: -0.045868635}
+  bodyCollisionTriggers:
+  - {fileID: 958703493299410976}
+  - {fileID: 4532241536553952433}
+  - {fileID: 612601897544343019}
+  - {fileID: 3380302834320284426}
+  - {fileID: 330588332310046168}
+  - {fileID: 1983680981904214170}
+  - {fileID: 5157925365379470414}
+  - {fileID: 4563127714104168620}
+  - {fileID: 2882000456418469674}
+  - {fileID: 7247125280020716263}
+  - {fileID: 2814228983485305877}
 --- !u!114 &3018917226063059384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,6 +318,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7538553284175476067}
+  - component: {fileID: 4394475569227056017}
+  - component: {fileID: 958703493299410976}
   m_Layer: 10
   m_Name: CATRigHub001
   m_TagString: Untagged
@@ -290,6 +345,31 @@ Transform:
   m_Father: {fileID: 5716252270786511939}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4394475569227056017
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069938609424288044}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.29270303, y: 0.19635516, z: 0.27314758}
+  m_Center: {x: -0.14635152, y: 0.000018481165, z: -0.006409526}
+--- !u!114 &958703493299410976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069938609424288044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3085556144745524161
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +379,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7631983389135940320}
+  - component: {fileID: 7649518171408413177}
+  - component: {fileID: 1983680981904214170}
   m_Layer: 10
   m_Name: CATRigSpine3
   m_TagString: Untagged
@@ -321,6 +403,31 @@ Transform:
   m_Father: {fileID: 4285932348001515523}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7649518171408413177
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3085556144745524161}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.14635181, y: 0.21952724, z: 0.34577942}
+  m_Center: {x: -0.07317574, y: -0.011567652, z: -0.000000029802322}
+--- !u!114 &1983680981904214170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3085556144745524161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3226083453057115032
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,6 +468,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 724520920224930220}
+  - component: {fileID: 2706200508774438465}
+  - component: {fileID: 2882000456418469674}
   m_Layer: 10
   m_Name: CATRigLArm2
   m_TagString: Untagged
@@ -383,6 +492,32 @@ Transform:
   m_Father: {fileID: 1386560604307172884}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2706200508774438465
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454535900980321696}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.02785109
+  m_Height: 0.285053
+  m_Direction: 0
+  m_Center: {x: -0.14252654, y: -0.0018797735, z: 0.011199896}
+--- !u!114 &2882000456418469674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454535900980321696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3508213330524041069
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +558,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1319058710195970104}
+  - component: {fileID: 1795331099711314587}
+  - component: {fileID: 3380302834320284426}
   m_Layer: 10
   m_Name: CATRigRLeg1
   m_TagString: Untagged
@@ -445,6 +582,32 @@ Transform:
   m_Father: {fileID: 7538553284175476067}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1795331099711314587
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3552374696219550007}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.05135643
+  m_Height: 0.27669683
+  m_Direction: 0
+  m_Center: {x: -0.13834837, y: 0.0013956499, z: -0.0019344892}
+--- !u!114 &3380302834320284426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3552374696219550007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3689878292999731869
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,6 +617,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1386560604307172884}
+  - component: {fileID: 5842898764505317914}
+  - component: {fileID: 4563127714104168620}
   m_Layer: 10
   m_Name: CATRigLArm1
   m_TagString: Untagged
@@ -476,6 +641,32 @@ Transform:
   m_Father: {fileID: 409898533556666105}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &5842898764505317914
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3689878292999731869}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.033904713
+  m_Height: 0.19874057
+  m_Direction: 0
+  m_Center: {x: -0.09937033, y: 0.0000000027505602, z: 0.010206171}
+--- !u!114 &4563127714104168620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3689878292999731869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4012948999018439233
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +800,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6836951280352588672}
+  - component: {fileID: 2344520688880443420}
+  - component: {fileID: 330588332310046168}
   m_Layer: 10
   m_Name: CATRigRLeg2
   m_TagString: Untagged
@@ -631,6 +824,32 @@ Transform:
   m_Father: {fileID: 1319058710195970104}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2344520688880443420
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5553597140773406526}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.030660376
+  m_Height: 0.34370035
+  m_Direction: 0
+  m_Center: {x: -0.17184979, y: -0.00544931, z: -0.0000000020905042}
+--- !u!114 &330588332310046168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5553597140773406526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5918385378375366371
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,7 +969,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersEntered: []
 --- !u!1 &6146524820444742050
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,6 +1117,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2149048542966181393}
+  - component: {fileID: 304832666787169647}
+  - component: {fileID: 4532241536553952433}
   m_Layer: 10
   m_Name: CATRigLLeg1
   m_TagString: Untagged
@@ -921,6 +1141,32 @@ Transform:
   m_Father: {fileID: 7538553284175476067}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &304832666787169647
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7113884866501239687}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.060667578
+  m_Height: 0.27669588
+  m_Direction: 0
+  m_Center: {x: -0.13834713, y: -0.0005546124, z: 0.0000000026413636}
+--- !u!114 &4532241536553952433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7113884866501239687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7218774553136860548
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,6 +1238,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8893547775208139296}
+  - component: {fileID: 3629370130194149386}
+  - component: {fileID: 612601897544343019}
   m_Layer: 10
   m_Name: CATRigLLeg2
   m_TagString: Untagged
@@ -1014,6 +1262,32 @@ Transform:
   m_Father: {fileID: 2149048542966181393}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3629370130194149386
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7487143869164043987}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.032535903
+  m_Height: 0.34370014
+  m_Direction: 0
+  m_Center: {x: -0.17185009, y: -0.013898851, z: 0.0051628114}
+--- !u!114 &612601897544343019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7487143869164043987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9178290186866359016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,6 +1297,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5556696209343346512}
+  - component: {fileID: 8451533499676483418}
+  - component: {fileID: 5157925365379470414}
   m_Layer: 10
   m_Name: CATRigHub002Bone001Bone001
   m_TagString: Untagged
@@ -1044,3 +1320,28 @@ Transform:
   m_Father: {fileID: 4733057602865682245}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &8451533499676483418
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9178290186866359016}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.109617725
+  m_Center: {x: -0.12184562, y: 0.0032188892, z: -0.003862664}
+--- !u!114 &5157925365379470414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9178290186866359016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79bf3c31e573a1f4ebcd26ce2ec14ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

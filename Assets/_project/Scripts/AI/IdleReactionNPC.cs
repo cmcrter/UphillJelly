@@ -3,15 +3,13 @@
 //  Authors:            Matthew Mason
 //  Date Created:       29/03/2022
 //  Last Modified By:   Matthew Mason
-//  Date Last Modified: 29/03/2022
+//  Date Last Modified: 30/03/2022
 //  Brief:              The Script control an NPC that will perform and Idle animation, react to player proximity, and rag doll if the player gets too close
 //========================================================================================================================================================================================================================
-
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using L7Games.Utility.StateMachine;
 using L7Games.Movement;
 using L7Games;
 
@@ -21,9 +19,7 @@ using L7Games;
 public class IdleReactionNPC : MonoBehaviour
 {
     #region Public Variables
-    public PlayerPoximityTrigger playerPoximityTrigger;
-
-    public GameObject currentRagdoll;
+    public SpawnedRagdoll currentRagdoll;
 
     public Animator animator;
 
@@ -37,9 +33,29 @@ public class IdleReactionNPC : MonoBehaviour
     [SerializeField]
     private GameObject ragDollPrefab;
 
+    [Tooltip("The Player Proximity for this NPC to react to")]
+    [SerializeField]
+    private PlayerDetectingTrigger playerPoximityTrigger;
+
     [Tooltip("The data to pass to the ragdoll when it spawns")]
     [SerializeField]
     private RagdollDataContainer ragdollData;
+
+    [Tooltip("The player detection triggers used for detecting when the player collides with NPC's body")]
+    [SerializeField]
+    private PlayerDetectingTrigger[] bodyCollisionTriggers;
+    #endregion
+
+    #region Private variables
+    private bool isReacting;
+    #endregion
+
+    #region Public Static Events
+    public delegate void IdleReactionNPCEvent(IdleReactionNPC idleReactionNPCcallingEvent);
+    public delegate void RagdollToNpcEvent(SpawnedRagdoll originalRagdoll, IdleReactionNPC idleReactionNPCcallingEvent);
+    public static event IdleReactionNPCEvent NPCReactingToPlayerProixmity;
+    public static event IdleReactionNPCEvent NPCResetingFromReaction;
+    public static event RagdollToNpcEvent NPCResetingFromRagdoll;
     #endregion
 
     private void OnEnable()
@@ -49,6 +65,17 @@ public class IdleReactionNPC : MonoBehaviour
             playerPoximityTrigger.playerEnteredTrigger += OnPlayerEnteredProximity;
             playerPoximityTrigger.playerEnteredTrigger += AddPlayerPositionToCondition;
             playerPoximityTrigger.playerExitedTrigger += RemovePlayerPositionFromCondition;
+        }
+        if (bodyCollisionTriggers != null)
+        {
+            for (int i = 0; i < bodyCollisionTriggers.Length; ++i)
+            {
+                if (bodyCollisionTriggers[i] != null)
+                {
+                    bodyCollisionTriggers[i].playerEnteredTrigger += OnBodyCollision;
+                }
+
+            }
         }
         #if DEBUG || UNITY_EDITOR
         else
@@ -66,6 +93,18 @@ public class IdleReactionNPC : MonoBehaviour
             playerPoximityTrigger.playerEnteredTrigger -= AddPlayerPositionToCondition;
             playerPoximityTrigger.playerExitedTrigger -= RemovePlayerPositionFromCondition;
         }
+
+        if (bodyCollisionTriggers != null)
+        {
+            for (int i = 0; i < bodyCollisionTriggers.Length; ++i)
+            {
+                if (bodyCollisionTriggers[i] != null)
+                {
+                    bodyCollisionTriggers[i].playerEnteredTrigger -= OnBodyCollision;
+                }
+
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -73,15 +112,13 @@ public class IdleReactionNPC : MonoBehaviour
         PlayerHingeMovementController playerController = other.transform.root.GetComponentInChildren<PlayerHingeMovementController>();
         if (playerController != null)
         {
-            
-            currentRagdoll = ReplaceWithRagdoll(ragDollPrefab);
-            if (currentRagdoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
+            if (ReplaceWithRagdoll(ragDollPrefab, out currentRagdoll))
             {
-                spawnedRagdoll.AddForceToRagdollAllRigidbody(playerController.ModelRB.velocity * 2.5f, ForceMode.Impulse);
+                currentRagdoll.AddForceToRagdollAllRigidbody(playerController.ModelRB.velocity * 2.5f, ForceMode.Impulse);
+                currentRagdoll.StartCoroutine(testRest());
             }
             gameObject.SetActive(false);
         }
-
     }
 
     // Start is called before the first frame update
@@ -104,6 +141,19 @@ public class IdleReactionNPC : MonoBehaviour
         //{
         //    animator.SetTrigger("PlayerPoximity");
         //}
+
+        if (isReacting)
+        {
+            // Check if the NPC Is still reacting otherwise it should be ready to react
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            {
+                if (NPCResetingFromReaction != null)
+                {
+                    NPCResetingFromReaction(this);
+                }
+                isReacting = false;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -114,36 +164,74 @@ public class IdleReactionNPC : MonoBehaviour
         //npcCharacyerController.Move(Vector3.down * Time.deltaTime * 10f);
     }
 
-    private void AddPlayerPositionToCondition(PlayerHingeMovementController playerController)
+    private void AddPlayerPositionToCondition(PlayerController playerController)
     {
         //toCloseToPlayerCondition.PlayerEnteredRadius(playerController);
     }
 
-    private void RemovePlayerPositionFromCondition(PlayerHingeMovementController playerController)
+    private void RemovePlayerPositionFromCondition(PlayerController playerController)
     {
         //toCloseToPlayerCondition.PlayerExitedRadius(playerController);
     }
 
-    private void OnPlayerEnteredProximity(PlayerHingeMovementController playerController)
+    private void OnPlayerEnteredProximity(PlayerController playerController)
     {
         // Check if the NPC Is still reacting otherwise it should be ready to react
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Reaction"))
         {
+            if (NPCReactingToPlayerProixmity != null)
+            {
+                NPCReactingToPlayerProixmity(this);
+            }
+
             animator.SetTrigger("PlayerPoximity");
+            isReacting = true;
         }
     }
 
-    private GameObject ReplaceWithRagdoll(GameObject ragDollPrefab)
+    private bool ReplaceWithRagdoll(GameObject ragDollPrefab, out SpawnedRagdoll spawnedRagdoll)
     {
         // Spawn the rag-doll
         GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, transform.position, transform.rotation);
-        if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
+        if (ragDoll.TryGetComponent<SpawnedRagdoll>(out spawnedRagdoll))
         {
             spawnedRagdoll.Initalise(ragdollData);
+            return spawnedRagdoll;
+        }
+        return false;
+    }
 
+    public void ResetNPCFromRagdoll()
+    {
+        if (currentRagdoll != null)
+        {
+            //Clean up the current rag-doll
+            Destroy(currentRagdoll.gameObject);
         }
 
-        currentRagdoll = ragDoll;
-        return ragDoll;
+        // re-enable NPC and reset animations
+        gameObject.SetActive(true);
+        animator.Play("Idle", -1, 0f);
+    }
+
+    public IEnumerator testRest()
+    {
+        yield return new WaitForSeconds(3f);
+        ResetNPCFromRagdoll();
+    }
+
+    private void OnBodyCollision(PlayerController playerController)
+    {
+        // Convert The player controller to a hinge controller
+        PlayerHingeMovementController hingeController = (PlayerHingeMovementController)playerController;
+        if (hingeController != null)
+        {
+            if (ReplaceWithRagdoll(ragDollPrefab, out currentRagdoll))
+            {
+                currentRagdoll.AddForceToRagdollAllRigidbody(hingeController.ModelRB.velocity * 2.5f, ForceMode.Impulse);
+                currentRagdoll.StartCoroutine(testRest());
+            }
+            gameObject.SetActive(false);
+        }
     }
 }

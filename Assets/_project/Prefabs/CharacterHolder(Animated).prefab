@@ -108,32 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b4a9afb886de7439a3f4b19e49faf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bones:
-  - {fileID: 4730603086208322685}
-  - {fileID: 1086171951656306901}
-  - {fileID: 5130127589479752318}
-  - {fileID: 4787303223290396458}
-  - {fileID: 4296755157267394785}
-  - {fileID: 1496557044554719438}
-  - {fileID: 7537354965604812487}
-  - {fileID: 4349741058655249946}
-  - {fileID: 8622725748155201306}
-  - {fileID: 1524444469924376212}
-  - {fileID: 1106301884125080120}
-  - {fileID: 1312971496276796344}
-  - {fileID: 670225498352542305}
-  - {fileID: 6545860077789985553}
-  - {fileID: 4898967051190628459}
-  - {fileID: 1638557670147767140}
-  - {fileID: 754561147638537305}
-  - {fileID: 7260060350362033559}
-  - {fileID: 8522176727502786584}
-  - {fileID: 4041801159765926624}
-  - {fileID: 2934334520815059502}
-  - {fileID: 2136422863443787294}
-  - {fileID: 7126298861523027698}
-  - {fileID: 458072046484879029}
-  - {fileID: 8895145289285997941}
+  attachedAnimator: {fileID: 533361863209971257}
+  characterRenderer: {fileID: 6707967665577530428}
 --- !u!95 &533361863209971257
 Animator:
   serializedVersion: 3
@@ -337,7 +313,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7769517, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -889,8 +865,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: 0.29999924, y: 1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1586,8 +1562,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: 0.29999924, y: 1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -1623,7 +1599,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7769517, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2550,6 +2526,7 @@ MonoBehaviour:
     ButtonPressed: 0
   playerCamera: {fileID: 3903168884203430513}
   camBrain: {fileID: 6087022926027470657}
+  wipeOutCam: {fileID: 0}
   currentTurnInput: 0
   turnDuration: 0.25
   angleCorrectionRaycastValidHitWidth: 2
