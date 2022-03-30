@@ -385,7 +385,7 @@ namespace L7Games.Movement
                 if(pushDuringTimer.current_time <= pushForceDuration)
                 {
                     //Pushing forward
-                    Vector3 force = parentController.transform.forward * forwardSpeed * 1000 * Time.deltaTime;
+                    Vector3 force = parentController.transform.forward * forwardSpeed * 250f * Time.fixedDeltaTime;
 
                     if(movementRB.velocity.magnitude > 1)
                     {
