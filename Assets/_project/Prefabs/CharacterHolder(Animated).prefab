@@ -1624,7 +1624,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7763864, y: 1}
+    m_SensorSize: {x: 1.7772622, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2502,6 +2502,7 @@ MonoBehaviour:
     jumpTimer:
       isLocked: 0
       isActive: 0
+    landingDust: {fileID: 11400000, guid: b36f1b280b4d4be428cc14c171ea5d40, type: 2}
   wallRideState:
     hasRan: 0
     coyoteDuration: 3
@@ -2522,7 +2523,7 @@ MonoBehaviour:
     timeAlongGrind: 0.001
     jumpCoroutineDuration: 0
     jumpSpeed: 50
-    grindVFXObject: {fileID: 0}
+    grindVFXObject: {fileID: 4178507339667563327}
   groundBelow:
     GroundMask:
       serializedVersion: 2
@@ -3405,5 +3406,10 @@ PrefabInstance:
 --- !u!4 &4178507339667563322 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1276008219694590224, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
+  m_PrefabInstance: {fileID: 2902641421408307754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4178507339667563327 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1276008219694590229, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
   m_PrefabInstance: {fileID: 2902641421408307754}
   m_PrefabAsset: {fileID: 0}
