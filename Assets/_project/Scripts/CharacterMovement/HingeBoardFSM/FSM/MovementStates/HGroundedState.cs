@@ -190,7 +190,7 @@ namespace L7Games.Movement
 
             parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
 
-            VFXPlayer.instance.PlayVFX(landingDust, parentController.transform.position - new Vector3(0, 0.5f, 0));
+            VFXPlayer.instance.PlayVFX(landingDust, parentController.transform.position - new Vector3(0, 0.45f, 0));
 
             hasRan = true;
         }

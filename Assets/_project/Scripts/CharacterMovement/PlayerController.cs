@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using L7Games.Triggerables;
+using Cinemachine;
 
 namespace L7Games.Movement
 {
@@ -51,6 +52,11 @@ namespace L7Games.Movement
         public virtual void RemoveWallRide(WallRideTriggerable wallRide)
         {
 
+        }
+
+        public virtual void OverrideCamera(CinemachineVirtualCamera camera)
+        {
+            
         }
 
         #region Protected Methods

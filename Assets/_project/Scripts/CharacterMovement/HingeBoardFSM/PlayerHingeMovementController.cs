@@ -37,6 +37,7 @@ namespace L7Games.Movement
 
         public PlayerCamera playerCamera;
         public CinemachineVirtualCamera camBrain;
+        public CinemachineVirtualCamera wallRideCam;
         public CinemachineVirtualCamera wipeOutCam;
 
         public float currentTurnInput;
@@ -315,6 +316,7 @@ namespace L7Games.Movement
             if(!bAerial)
             {
                 transform.rotation = transform.rotation * headingDelta;
+                fRB.MoveRotation(transform.rotation);
             }
         }
 
@@ -326,6 +328,15 @@ namespace L7Games.Movement
         public override void RemoveWallRide(WallRideTriggerable wallRide)
         {
             nextToWallRun.LeftWall(wallRide);
+        }
+
+        public override void OverrideCamera(CinemachineVirtualCamera camera)
+        {
+            wipeOutCam.enabled = false;
+            wallRideCam.enabled = false;
+            camBrain.enabled = false;
+
+            camera.enabled = true;
         }
 
         #endregion

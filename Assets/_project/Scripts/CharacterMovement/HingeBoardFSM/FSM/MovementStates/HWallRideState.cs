@@ -39,8 +39,6 @@ namespace L7Games.Movement
         [SerializeField]
         private float rideSpeed = 0.1f;
 
-        [SerializeField]
-        CinemachineVirtualCamera wallRideCam;
         bool bJumping;
 
         [SerializeField]
@@ -133,7 +131,7 @@ namespace L7Games.Movement
             rideSpeed = nextToWallRun.wallSpeed;
 
             playerMovement.camBrain.enabled = false;
-            wallRideCam.enabled = true;
+            playerMovement.wallRideCam.enabled = true;
 
             playerMovement.transform.rotation = Quaternion.LookRotation(wallForward, Vector3.up);
             playerMovement.AlignWheels();
@@ -160,7 +158,7 @@ namespace L7Games.Movement
             nextToWallRun.StartCooldown();
 
             playerMovement.camBrain.enabled = true;
-            wallRideCam.enabled = false;
+            playerMovement.wallRideCam.enabled = false;
 
             fRB.isKinematic = false;
 
@@ -213,7 +211,11 @@ namespace L7Games.Movement
         private IEnumerator WipeOutCooldown()
         {
             yield return new WaitForFixedUpdate();
-            fRB.AddForce((playerMovement.transform.up * 350f) + (nextToWallRun.currentWallRide.transform.forward * 950), ForceMode.Impulse);
+            float intialMagnitude = fRB.velocity.magnitude;
+
+            playerMovement.ModelRB.velocity = Vector3.zero;
+            fRB.velocity = Vector3.zero;
+            fRB.AddForce((playerMovement.transform.up * 350f) + (nextToWallRun.currentWallRide.transform.forward * 950f) + (playerMovement.transform.forward * intialMagnitude * 2f), ForceMode.Impulse);
         }
 
         #endregion
