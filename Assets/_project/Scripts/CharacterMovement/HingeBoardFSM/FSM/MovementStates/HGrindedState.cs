@@ -54,6 +54,10 @@ namespace L7Games.Movement
         private bool bForceExit = false;
         Vector3 jumpDir;
 
+        //This is simpler and more effective than using the one-shot vfx system
+        [SerializeField]
+        private GameObject grindVFXObject;
+
         #endregion
 
         #region Public Methods
@@ -126,6 +130,8 @@ namespace L7Games.Movement
 
             parentController.transform.forward = currentSplineDir;
 
+            grindVFXObject.SetActive(true);
+
             hasRan = true;
         }
 
@@ -149,6 +155,8 @@ namespace L7Games.Movement
             parentController.StartAirInfluenctCoroutine();
             parentController.characterAnimator.SetBool("grinding", false);
             parentController.ResetCameraView();
+
+            grindVFXObject.SetActive(false);
 
             timeAlongGrind = 0;
             bTravelBackwards = false;
