@@ -291,7 +291,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965107660457948467}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -1499,7 +1499,7 @@ MonoBehaviour:
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
   m_XDamping: 0.25
-  m_YDamping: 0.2
+  m_YDamping: 0.1
   m_ZDamping: 0
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
@@ -1600,7 +1600,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7772622, y: 1}
+    m_SensorSize: {x: 1.7761807, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2462,8 +2462,8 @@ MonoBehaviour:
     hasRan: 0
     testPressDownObject: {fileID: 8040090982727821118}
     GroundedDrag: 0.175
-    forwardSpeed: 1
-    turnSpeed: 0.15
+    forwardSpeed: 1.2
+    turnSpeed: 0.1
     backwardSpeed: 50
     jumpSpeed: 25
     groundAdjustSmoothness: 75
@@ -2487,7 +2487,6 @@ MonoBehaviour:
       isActive: 0
     wallForward: {x: 0, y: 0, z: 0}
     rideSpeed: 0.1
-    wallRideCam: {fileID: 5448106028648022363}
     collisionCheckMask:
       serializedVersion: 2
       m_Bits: 64
@@ -2527,7 +2526,8 @@ MonoBehaviour:
     ButtonPressed: 0
   playerCamera: {fileID: 3903168884203430513}
   camBrain: {fileID: 6087022926027470657}
-  wipeOutCam: {fileID: 0}
+  wallRideCam: {fileID: 5448106028648022363}
+  wipeOutCam: {fileID: 5374356352794921964}
   currentTurnInput: 0
   turnDuration: 0.25
   angleCorrectionRaycastValidHitWidth: 2
@@ -2571,7 +2571,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  turnClamp: 0.6
+  turnClamp: 1
   ragDollPrefab: {fileID: 4657433874770968513, guid: 8aca706b38b46ec4d9afe02e66e5df8e, type: 3}
   currentRagdoll: {fileID: 0}
   ragdollDataContainer: {fileID: 4268095153265589537}

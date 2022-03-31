@@ -85,7 +85,7 @@ public class VFXPlayer : MonoBehaviour
 
     public GameObject PlayVFX(ScriptableParticles particle, Vector3 position)
     {
-        GameObject go = Instantiate(particle.vfx_prefab, position, Quaternion.identity);
+        GameObject go = Instantiate(particle.vfx_prefab, position, particle.vfx_prefab.transform.rotation, null);
         go.name = particle.vfx_name;
 
         return go;

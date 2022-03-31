@@ -2,8 +2,8 @@
 // File: CineLockCameraZ
 // Author: Charles Carter, Matthew Mason
 // Date Created: 01/03/22
-// Last Edited By: Matthew Mason
-// Date Last Edited: 23/03/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 30/03/22
 // Brief: An Extension to lock the camera's orientation
 //////////////////////////////////////////////////////////// 
 
@@ -67,10 +67,7 @@ public class CineLockCameraZ : CinemachineExtension
     public void SwitchOnWipeoutCam(Vector3 vel)
     {
         bWipeOutCamera = true;
-        wipeoutCam.enabled = true;
-        normalCam.enabled = false;
-
-
+        movementController.OverrideCamera(wipeoutCam);
 
         // If there is a root or main rigid body then take that into account, otherwise not a problem
         Rigidbody mainBody = movementController.currentRagdoll.GetComponent<Rigidbody>();

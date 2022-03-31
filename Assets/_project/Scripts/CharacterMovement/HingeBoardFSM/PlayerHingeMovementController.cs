@@ -37,6 +37,7 @@ namespace L7Games.Movement
 
         public PlayerCamera playerCamera;
         public CinemachineVirtualCamera camBrain;
+        public CinemachineVirtualCamera wallRideCam;
         public CinemachineVirtualCamera wipeOutCam;
 
         public float currentTurnInput;
@@ -318,14 +319,14 @@ namespace L7Games.Movement
             }
 
             //GameObject's heading based on the current input
-            float headingDeltaAngle = speed * 1000f * currentTurnInput * Time.deltaTime;
+            float headingDeltaAngle = speed * 1000f * currentTurnInput;
             Quaternion headingDelta = Quaternion.AngleAxis(headingDeltaAngle, transform.up);
 
             transform.rotation = groundQuat;
             
             if(!bAerial)
             {
-                transform.rotation = transform.rotation * headingDelta;
+                transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation * headingDelta, 1.25f * Time.deltaTime);
             }
         }
 
@@ -337,6 +338,15 @@ namespace L7Games.Movement
         public override void RemoveWallRide(WallRideTriggerable wallRide)
         {
             nextToWallRun.LeftWall(wallRide);
+        }
+
+        public override void OverrideCamera(CinemachineVirtualCamera camera)
+        {
+            wipeOutCam.enabled = false;
+            wallRideCam.enabled = false;
+            camBrain.enabled = false;
+
+            camera.enabled = true;
         }
 
         #endregion
@@ -438,7 +448,7 @@ namespace L7Games.Movement
 
             if(AirturningCo != null || groundedState.hasRan)
             {
-                characterAnimator.SetFloat("turnValue", currentTurnInput / turnClamp);
+                characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
             }
 
             //inAirBooleanMaterialIndicator.materialBoolean = groundBelow.isConditionTrue();
@@ -448,7 +458,7 @@ namespace L7Games.Movement
         {
             if (characterModel.activeSelf)
             {
-                playerStateMachine.RunPhysicsOnMachine(Time.deltaTime);
+                playerStateMachine.RunPhysicsOnMachine(Time.fixedDeltaTime);
             }
 
             if(bAddAdditionalGravity)
