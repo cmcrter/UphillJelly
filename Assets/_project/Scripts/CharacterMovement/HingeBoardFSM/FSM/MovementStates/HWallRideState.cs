@@ -106,7 +106,6 @@ namespace L7Games.Movement
                     playerMovement.WipeOutCharacter(Vector3.down + (playerMovement.transform.forward * 10f));
                 }
             }
-
         }
 
         public override void PhysicsTick(float dT)
