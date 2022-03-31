@@ -80,6 +80,9 @@ namespace L7Games.Movement
         private Timer jumpTimer;
         private bool bPressingDown = false;
 
+        [SerializeField]
+        private ScriptableParticles landingDust;
+
         public HGroundedState()
         {
         }
@@ -186,6 +189,8 @@ namespace L7Games.Movement
             }
 
             parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
+
+            VFXPlayer.instance.PlayVFX(landingDust, parentController.transform.position - new Vector3(0, 0.5f, 0));
 
             hasRan = true;
         }

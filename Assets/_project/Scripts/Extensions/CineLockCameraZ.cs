@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////
 // File: CineLockCameraZ
-// Author: Charles Carter
+// Author: Charles Carter, Matthew Mason
 // Date Created: 01/03/22
-// Last Edited By: Charles Carter
-// Date Last Edited: 02/03/22
+// Last Edited By: Matthew Mason
+// Date Last Edited: 23/03/22
 // Brief: An Extension to lock the camera's orientation
 //////////////////////////////////////////////////////////// 
 
@@ -29,11 +29,11 @@ public class CineLockCameraZ : CinemachineExtension
 
     [SerializeField]
     CinemachineVirtualCamera wipeoutCam;
-    [SerializeField]
-    CinemachineTransposer wipeoutTransp;
+    //[SerializeField]
+    //CinemachineTransposer wipeoutTransp;
 
-    [SerializeField]
-    private float WipeoutGroundThreshold = 4f;
+    //[SerializeField]
+    //private float WipeoutGroundThreshold = 4f;
 
     protected override void Awake()
     {
@@ -95,8 +95,8 @@ public class CineLockCameraZ : CinemachineExtension
         //    wipeoutCam.LookAt = movementController.currentRagdoll.transform;
         //}
 
-        wipeoutTransp = wipeoutCam.GetCinemachineComponent<CinemachineTransposer>();
-        wipeoutTransp.m_FollowOffset.y = WipeoutGroundThreshold;
+        //wipeoutTransp = wipeoutCam.GetCinemachineComponent<CinemachineTransposer>();
+        //wipeoutTransp.m_FollowOffset.y = WipeoutGroundThreshold;
     }
 
     public void SwitchOffWipeoutCam()
