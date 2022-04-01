@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using L7Games.Movement;
+using UnityEngine.UI;
 
 namespace SleepyCat
 {
@@ -21,13 +22,37 @@ namespace SleepyCat
 
         private StudioEventEmitter soundEmitter;
 
+        FMOD.Studio.Bus Master;
+        FMOD.Studio.Bus Ambient;
+        FMOD.Studio.Bus Player;
+        FMOD.Studio.Bus Music;
+
         public float fDeath;
 
         public string deathParameter;
 
+        public Slider slider1;
+        public Slider slider2;
+        public Slider slider3;
+        public Slider slider4;
+
+        public float masterVolume;
+        public float ambientVolume;
+        public float playerVolume;
+        public float musicVolume;
+
         //public string Eventthis = "";
 
         //private StudioEventEmitter secondEmitter;
+
+        private void Awake() {
+
+            Master = FMODUnity.RuntimeManager.GetBus("bus:/Master");
+            Ambient = FMODUnity.RuntimeManager.GetBus("bus:/Ambient");
+            Player = FMODUnity.RuntimeManager.GetBus("bus:/Player");
+            Music = FMODUnity.RuntimeManager.GetBus("bus:/Music");
+
+        }
 
         private void OnEnable() {
             playerReference.onWipeout += PlayerWipeOut;
@@ -43,6 +68,8 @@ namespace SleepyCat
 
         // Start is called before the first frame update
         void Start() {
+
+            
 
             soundEmitter = GetComponent<FMODUnity.StudioEventEmitter>();
 
@@ -143,6 +170,22 @@ namespace SleepyCat
                 fDeath = 0;
             }
 
+            masterVolume = slider1.value;
+            Debug.Log(masterVolume);
+
+            ambientVolume = slider2.value;
+            Debug.Log(ambientVolume);
+
+            playerVolume = slider3.value;
+            Debug.Log(playerVolume);
+
+            musicVolume = slider4.value;
+            Debug.Log(musicVolume);
+
+            Master.setVolume(masterVolume);
+            Ambient.setVolume(ambientVolume);
+            Player.setVolume(playerVolume);
+            Music.setVolume(musicVolume);
         }
 
         private IEnumerator WaitOnStart() {
