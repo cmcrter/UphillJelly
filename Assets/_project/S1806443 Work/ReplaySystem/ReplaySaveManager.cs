@@ -33,11 +33,18 @@ public class ReplaySaveManager : MonoBehaviour
     //
     public GameObject MAPCHECKER;
 
+    public bool isMainMenu;
+
     //
     public bool isMapTutorial;
 
     //
     public bool isMapCity;
+
+    //
+    public bool isMapOldTown;
+
+    public GameObject RecorderGO;
 
     #endregion
 
@@ -75,15 +82,28 @@ public class ReplaySaveManager : MonoBehaviour
 
     //
     public void Update() {
-        
+
         //
         if (MAPCHECKER.tag == "map_tutorial") {
+
+            //Debug.Log("ISTUTORIALMATE");
 
             //
             isMapTutorial = true;
 
             //
             isMapCity = false;
+
+            isMapOldTown = false;
+
+            isMainMenu = false;
+
+
+            //
+            //
+            //ghost.isRecording = true;
+            //
+            //
 
         }
 
@@ -95,6 +115,52 @@ public class ReplaySaveManager : MonoBehaviour
 
             //
             isMapCity = true;
+
+            isMapOldTown = false;
+
+            isMainMenu = false;
+
+            //
+            //
+            //ghost.isRecording = true;
+            //
+            //
+
+        }
+
+        //
+        if (MAPCHECKER.tag == "map_old_town") {
+
+            //
+            isMapTutorial = false;
+
+            //
+            isMapCity = false;
+
+            isMapOldTown = true;
+
+            isMainMenu = false;
+
+            //
+            //
+            //ghost.isRecording = true;
+            //
+            //
+
+        }
+
+        //
+        if (MAPCHECKER.tag == "MainMenu") {
+
+            //
+            isMapTutorial = false;
+
+            //
+            isMapCity = false;
+
+            isMapOldTown = false;
+
+            isMainMenu = true;
 
         }
 

@@ -18,7 +18,7 @@ public class CollisionSound : MonoBehaviour
 
     public float startCollisionTime;
 
-   public bool canCollide;
+    public bool canCollide;
 
     public string Sound;
 
