@@ -1,12 +1,16 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
+using L7Games.Movement;
 
 namespace SleepyCat
 {
     public class EnvAudioManager : MonoBehaviour
     {
+
+        public L7Games.Movement.PlayerController playerReference;
 
         public ReplaySaveManager replaySaveManager;
 
@@ -17,12 +21,34 @@ namespace SleepyCat
 
         private StudioEventEmitter soundEmitter;
 
+        public float fDeath;
+
+        public string deathParameter;
+
         //public string Eventthis = "";
 
         //private StudioEventEmitter secondEmitter;
 
+        private void OnEnable() {
+            playerReference.onWipeout += PlayerWipeOut;
+
+            playerReference.onRespawn += PlayerRespawn;
+        }
+
+        private void OnDisable() {
+            playerReference.onWipeout -= PlayerWipeOut;
+
+            playerReference.onRespawn -= PlayerRespawn;
+        }
+
         // Start is called before the first frame update
         void Start() {
+
+            soundEmitter = GetComponent<FMODUnity.StudioEventEmitter>();
+
+            soundEmitter.SetParameter(deathParameter, fDeath);
+
+            fDeath = 0;
 
             //secondEmitter.EventInstance
 
@@ -109,6 +135,14 @@ namespace SleepyCat
         // Update is called once per frame
         void Update() {
         
+            if (fDeath > 5) {
+                fDeath = 5;
+            }
+
+            if (fDeath < 0) {
+                fDeath = 0;
+            }
+
         }
 
         private IEnumerator WaitOnStart() {
@@ -121,5 +155,22 @@ namespace SleepyCat
 
         }
 
+        public void PlayerWipeOut(Vector3 death) {
+            Debug.Log("12345");
+
+            fDeath = 5;
+        }
+
+        public void LevelEnd() {
+
+            Debug.Log("12345");
+
+            fDeath = 5;
+
+        }
+
+        public void PlayerRespawn() {
+
+        }
     }
 }

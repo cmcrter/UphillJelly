@@ -31,6 +31,8 @@ namespace SleepyCat
         //
         public TempScoreSystem tempScoreSystem;
 
+        public EnvAudioManager envAudioManager;
+
         //
         public void Start() {
 
@@ -56,6 +58,8 @@ namespace SleepyCat
 
                 //
                 tempScoreSystem.TimerActive = false;
+
+                envAudioManager.LevelEnd();
 
             }
 

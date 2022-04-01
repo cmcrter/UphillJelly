@@ -22,6 +22,7 @@ namespace L7Games.Movement
 {
     public class PlayerHingeMovementController : PlayerController
     {
+
         #region Variables
         [Header("State Machine")]
         public FiniteStateMachine playerStateMachine;
@@ -167,6 +168,7 @@ namespace L7Games.Movement
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
+
         }
 
         public override void ResetPlayer(Transform point)
