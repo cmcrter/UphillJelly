@@ -134,6 +134,7 @@ namespace L7Games.Movement
 
             root.rotation = initialRootRotation;
 
+            Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
             boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
@@ -186,6 +187,7 @@ namespace L7Games.Movement
 
             root.rotation = initialRootRotation;
 
+            Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
             boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
@@ -561,6 +563,10 @@ namespace L7Games.Movement
             triggerObject.enabled = false;
 
             playerStateMachine.ForceSwitchToState(null);
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
 
             //WipeOut needs to stop most of the players' actions
             input.SwitchCurrentActionMap("WipedOut");
@@ -576,6 +582,11 @@ namespace L7Games.Movement
             ragdollComponent.AddForceToRagdollAllRigidbody(currentVelocity, ForceMode.Impulse);
 
             boardModel.transform.SetParent(null);
+            Rigidbody boardRb =  boardModel.AddComponent<Rigidbody>();
+            boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            boardRb.AddForce(Vector3.up);
+            fRB.isKinematic = true;
+
             characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
         }

@@ -100,7 +100,7 @@ namespace L7Games.Movement
 
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.characterAnimator.SetBool("grinding", true);
-            parentController.bWipeOutLocked = true;
+            //parentController.bWipeOutLocked = true;
             parentController.camBrain.Follow = parentController.transform;
 
             //Making sure nothing interferes with the movement
