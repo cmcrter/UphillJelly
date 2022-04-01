@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 0
+  forceRequiredToWipeOut: 15
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &1106301884125080120
@@ -711,7 +711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 0
+  forceRequiredToWipeOut: 3
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &2136422863443787294
@@ -865,8 +865,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.30000082, y: 1, z: -3.999996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1148,7 +1148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 0
+  forceRequiredToWipeOut: 3
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &4296755157267394785
@@ -1563,8 +1563,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.30000082, y: 1, z: -3.999996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -1600,7 +1600,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7771429, y: 1}
+    m_SensorSize: {x: 1.77758, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2405,6 +2405,7 @@ GameObject:
   - component: {fileID: 2636407542772683316}
   - component: {fileID: 6755519519185260203}
   - component: {fileID: 9112553975738110860}
+  - component: {fileID: 8464849187059315087}
   m_Layer: 6
   m_Name: PlayerHingeMovementController
   m_TagString: Untagged
@@ -2479,6 +2480,7 @@ MonoBehaviour:
       isLocked: 0
       isActive: 0
     landingDust: {fileID: 11400000, guid: b36f1b280b4d4be428cc14c171ea5d40, type: 2}
+    parameterName: 
   wallRideState:
     hasRan: 0
     coyoteDuration: 3
@@ -2528,8 +2530,6 @@ MonoBehaviour:
   camBrain: {fileID: 6087022926027470657}
   wallRideCam: {fileID: 5448106028648022363}
   wipeOutCam: {fileID: 5374356352794921964}
-  currentTurnInput: 0
-  turnDuration: 0.25
   angleCorrectionRaycastValidHitWidth: 2
   angleCorrectionRaycastValidHitLength: 2
   collisionDirectionMinValue: 0.8
@@ -2547,30 +2547,6 @@ MonoBehaviour:
   lookAtTransform: {fileID: 7535963120756405929}
   AdditionalGravityAmount: 6
   bAddAdditionalGravity: 1
-  turnSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   turnClamp: 1
   ragDollPrefab: {fileID: 4657433874770968513, guid: 8aca706b38b46ec4d9afe02e66e5df8e, type: 3}
   currentRagdoll: {fileID: 0}
@@ -2578,6 +2554,7 @@ MonoBehaviour:
   checkpointManager: {fileID: 0}
   playerColliders: []
   airInfluence: 25
+  audioEmitter: {fileID: 8464849187059315087}
 --- !u!114 &9112553975738110848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2654,6 +2631,29 @@ FixedJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &8464849187059315087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9112553975738110861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!1 &9112553976162905586
 GameObject:
   m_ObjectHideFlags: 0
