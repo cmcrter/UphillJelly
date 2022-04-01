@@ -584,6 +584,8 @@ namespace L7Games.Movement
             boardModel.transform.SetParent(null);
             Rigidbody boardRb =  boardModel.AddComponent<Rigidbody>();
             boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            boardRb.AddForce(Vector3.up);
+            fRB.isKinematic = true;
 
             characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
