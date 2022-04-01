@@ -148,11 +148,6 @@ namespace L7Games.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
-            if(Keyboard.current.escapeKey.isPressed)
-            {
-                parentController.ResetPlayer();
-            }
-
             if(inputHandler.PushHeldDown && pushCoroutine == null)
             {
                 PushBoard();

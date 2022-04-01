@@ -134,7 +134,7 @@ namespace L7Games.Movement
             root.rotation = initialRootRotation;
 
             boardModel.transform.SetParent(root);
-            boardModel.transform.position = boardPos;
+            boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
 
             transform.rotation = initialRot;
@@ -432,7 +432,7 @@ namespace L7Games.Movement
 
             if (Keyboard.current != null)
             {
-                if (Keyboard.current.escapeKey.isPressed)
+                if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 {
                     ResetPlayer();
                 }
@@ -575,8 +575,8 @@ namespace L7Games.Movement
         {
             respawnSound.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
 
-            if(state != FMOD.Studio.PLAYBACK_STATE.STOPPED)
-                return;
+            //if(state != FMOD.Studio.PLAYBACK_STATE.STOPPED)
+            //    return;
 
             respawnSound.start();
         }
