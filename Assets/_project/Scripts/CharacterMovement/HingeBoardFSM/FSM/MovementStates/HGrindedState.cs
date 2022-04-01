@@ -104,7 +104,7 @@ namespace L7Games.Movement
             parentController.camBrain.Follow = parentController.transform;
 
             //Making sure nothing interferes with the movement
-            Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.25f, 0);
+            Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.265f, 0);
             //Debug.Log(closestPoint);
 
             movementRB.transform.position = closestPoint;
@@ -271,7 +271,7 @@ namespace L7Games.Movement
                 float desiredChange = desiredDistance / currentDistanceChange;
                 timeAlongGrind = Mathf.Clamp01(timeAlongGrind + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
 
-                Vector3 newPos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.45f + 0.0375f, 0);
+                Vector3 newPos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.465f + 0.0375f, 0);
 
                 //Using the calculated time to position everything correctly
                 pos = newPos;
@@ -284,7 +284,7 @@ namespace L7Games.Movement
             //if it's at the end
             else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f)
             {
-                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, 0.45f + 0.0375f, 0);
+                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, 0.465f + 0.0375f, 0);
 
                 currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
 
