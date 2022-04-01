@@ -410,6 +410,8 @@ namespace L7Games.Movement
 
             characterAnimator.SetFloat("crouchingFloat", -1);
             characterAnimator.SetFloat("turnValue", 0);
+
+            respawnSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/Respawn");
         }
 
         private void Update()
@@ -571,7 +573,11 @@ namespace L7Games.Movement
 
         public void PlayRespawnSound()
         {
-            respawnSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/Respawn");
+            respawnSound.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
+
+            if(state != FMOD.Studio.PLAYBACK_STATE.STOPPED)
+                return;
+
             respawnSound.start();
         }
 
