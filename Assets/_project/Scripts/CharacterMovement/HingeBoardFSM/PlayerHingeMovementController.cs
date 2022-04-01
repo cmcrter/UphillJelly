@@ -73,6 +73,7 @@ namespace L7Games.Movement
         public PlayerInput input;
         public InputHandler inputHandler;
         public Animator characterAnimator;
+        public TriggerableTrigger triggerObject;
 
         [SerializeField]
         private Transform frontWheelPos;
@@ -161,6 +162,7 @@ namespace L7Games.Movement
             wallRideState.OnStateExit();
 
             playerStateMachine.ForceSwitchToState(aerialState);
+            triggerObject.enabled = true;
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -211,6 +213,7 @@ namespace L7Games.Movement
             wallRideState.OnStateExit();
 
             playerStateMachine.ForceSwitchToState(aerialState);
+            triggerObject.enabled = true;
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -555,6 +558,12 @@ namespace L7Games.Movement
             }
 
             bWipeOutLocked = true;
+            triggerObject.enabled = false;
+
+            playerStateMachine.ForceSwitchToState(null);
+
+            //WipeOut needs to stop most of the players' actions
+            input.SwitchCurrentActionMap("WipedOut");
 
             // Spawn the ragdoll
             GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);

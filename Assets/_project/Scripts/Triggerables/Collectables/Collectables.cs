@@ -40,6 +40,11 @@ namespace L7Games.Triggerables.Collectables
 
         private void OnEnable()
         {
+            playerPickedUp = null;
+        }
+
+        private void OnDisable()
+        {
             if(!playerPickedUp) return;
 
             playerPickedUp.onRespawn -= TurnCollectableOn;

@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 0
+  forceRequiredToWipeOut: 2
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &1524444469924376212
@@ -865,8 +865,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.30000082, y: 1, z: -3.999996}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.3, y: 1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1364,7 +1364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 0
+  forceRequiredToWipeOut: 2
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &5324430513142531548
@@ -1563,8 +1563,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.30000082, y: 1, z: -3.999996}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.3, y: 1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -1600,7 +1600,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.77758, y: 1}
+    m_SensorSize: {x: 1.7764705, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2450,6 +2450,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraZ: {fileID: 560279600}
   bWipeOutLocked: 0
+  collectableCounter: 0
+  cooldownDuration: 1
   aerialState:
     hasRan: 0
     AerialDrag: 0.125
@@ -2542,6 +2544,7 @@ MonoBehaviour:
   input: {fileID: 9112553975738110848}
   inputHandler: {fileID: 2636407542772683316}
   characterAnimator: {fileID: 533361863209971257}
+  triggerObject: {fileID: 2067759062112456412}
   frontWheelPos: {fileID: 2895347839156224780}
   characterModel: {fileID: 533361863209971258}
   lookAtTransform: {fileID: 7535963120756405929}
