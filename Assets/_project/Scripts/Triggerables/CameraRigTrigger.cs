@@ -41,6 +41,7 @@ namespace L7Games
         {
             player.OverrideCamera(cameraToUse);
             trackedDolly.enabled = true;
+            //player.enabled = false;
         }
 
         void PlayerExited(PlayerController player)
