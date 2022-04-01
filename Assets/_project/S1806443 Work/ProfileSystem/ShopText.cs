@@ -55,7 +55,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -66,7 +66,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -77,7 +77,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -166,7 +166,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -177,7 +177,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -243,7 +243,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -254,7 +254,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -319,7 +319,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 
@@ -330,7 +330,7 @@ public class ShopText : MonoBehaviour
             Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
 
             //
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.Refresh();
 
         }
 

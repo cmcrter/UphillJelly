@@ -27,12 +27,23 @@ namespace L7Games.Triggerables.Collectables
         #region Variables
 
         PlayerController playerPickedUp;
+        private FMOD.Studio.EventInstance pickupSound;
 
         #endregion
 
         #region Public Methods
 
+        private void Start()
+        {
+            pickupSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/ItemPickup");
+        }
+
         private void OnEnable()
+        {
+            playerPickedUp = null;
+        }
+
+        private void OnDisable()
         {
             if(!playerPickedUp) return;
 
@@ -47,6 +58,12 @@ namespace L7Games.Triggerables.Collectables
 
             //For testing reasons
             player.onRespawn += TurnCollectableOn;
+
+            //Debug.Log(player.collectableCounter);
+            pickupSound.setParameterByName("ItemCombo", player.collectableCounter);
+            pickupSound.start();
+
+            player.CollectableSoundCooldown();
 
             playerPickedUp = player;
 
