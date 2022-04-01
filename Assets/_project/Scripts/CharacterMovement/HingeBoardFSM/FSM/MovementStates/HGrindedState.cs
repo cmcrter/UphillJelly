@@ -134,7 +134,7 @@ namespace L7Games.Movement
 
             grindVFXObject.SetActive(true);
 
-            GS = FMODUnity.RuntimeManager.CreateInstance("event:/GrindRail2");
+            GS = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/GrindRail2");
             GS.start();
 
             hasRan = true;

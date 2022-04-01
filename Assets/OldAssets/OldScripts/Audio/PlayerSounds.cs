@@ -323,7 +323,7 @@ public class PlayerSounds : MonoBehaviour
 
         //plays the respawn sound on respawn
 
-        respawnSound = FMODUnity.RuntimeManager.CreateInstance("event:/Respawn");
+        respawnSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/Respawn");
         respawnSound.start();
 
 

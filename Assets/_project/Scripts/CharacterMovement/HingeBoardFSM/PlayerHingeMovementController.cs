@@ -571,7 +571,7 @@ namespace L7Games.Movement
 
         public void PlayRespawnSound()
         {
-            respawnSound = FMODUnity.RuntimeManager.CreateInstance("event:/Respawn");
+            respawnSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/Respawn");
             respawnSound.start();
         }
 
