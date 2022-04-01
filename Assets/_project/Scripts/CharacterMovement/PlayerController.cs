@@ -10,6 +10,7 @@
 using UnityEngine;
 using L7Games.Triggerables;
 using Cinemachine;
+using System.Collections;
 
 namespace L7Games.Movement
 {
@@ -26,6 +27,14 @@ namespace L7Games.Movement
         private CineLockCameraZ cameraZ;
 
         public bool bWipeOutLocked = false;
+
+        //Used to pitch up the collectable sounds when in a spree of picking them up
+        public int collectableCounter = 0;
+
+        private Coroutine CollectableCooldownCoroutine;
+        [SerializeField]
+        private float cooldownDuration = 1f;
+        private Timer cooldownTimer;
 
         #endregion
 
@@ -59,6 +68,21 @@ namespace L7Games.Movement
             
         }
 
+        public void CollectableSoundCooldown()
+        {
+            collectableCounter++;
+            collectableCounter = Mathf.Clamp(collectableCounter, 0, 8);
+
+            if(CollectableCooldownCoroutine == null)
+            {
+                CollectableCooldownCoroutine = StartCoroutine(Co_CollectablePitchCooldown());
+            }
+            else
+            {
+                cooldownTimer.OverrideCurrentTime(cooldownDuration - cooldownTimer.current_time);
+            }
+        }
+
         #region Protected Methods
         protected void CallOnRespawn()
         {
@@ -75,6 +99,23 @@ namespace L7Games.Movement
                 onWipeout(vel);
                 cameraZ.SwitchOnWipeoutCam(Vector3.zero);
             }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private IEnumerator Co_CollectablePitchCooldown()
+        {
+            cooldownTimer = new Timer(cooldownDuration);
+
+            while(cooldownTimer.isActive)
+            {
+                cooldownTimer.Tick(Time.deltaTime);
+                yield return null;
+            }
+
+            collectableCounter = 0;
         }
 
         #endregion
