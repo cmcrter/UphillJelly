@@ -77,7 +77,7 @@ namespace L7Games.Movement
             {
                 CollectableCooldownCoroutine = StartCoroutine(Co_CollectablePitchCooldown());
             }
-            else
+            else if (cooldownTimer != null)
             {
                 cooldownTimer.OverrideCurrentTime(cooldownDuration - cooldownTimer.current_time);
             }
@@ -116,6 +116,7 @@ namespace L7Games.Movement
             }
 
             collectableCounter = 0;
+            CollectableCooldownCoroutine = null;
         }
 
         #endregion
