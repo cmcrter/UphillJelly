@@ -13,10 +13,11 @@ using L7Games.Utility.StateMachine;
 using L7Games.Input;
 using L7Games.Triggerables;
 using L7Games.Triggerables.CheckpointSystem;
-using L7Games;
 using System.Collections;
 using Cinemachine;
 using System.Collections.Generic;
+using Debug = UnityEngine.Debug;
+using FMODUnity;
 
 namespace L7Games.Movement
 {
@@ -40,9 +41,7 @@ namespace L7Games.Movement
         public CinemachineVirtualCamera wallRideCam;
         public CinemachineVirtualCamera wipeOutCam;
 
-        public float currentTurnInput;
-        [Tooltip("The time before the player is at full turn")]
-        public float turnDuration;
+        private float currentTurnInput;
 
         [Tooltip("The max distance that the hit points of the roll calculating hit points can be from each other whilst still being valid")]
         public float angleCorrectionRaycastValidHitWidth = 2f;
@@ -74,6 +73,7 @@ namespace L7Games.Movement
         public PlayerInput input;
         public InputHandler inputHandler;
         public Animator characterAnimator;
+        public TriggerableTrigger triggerObject;
 
         [SerializeField]
         private Transform frontWheelPos;
@@ -90,12 +90,8 @@ namespace L7Games.Movement
         private Quaternion initialRot;
         private Quaternion initialRootRotation;
 
-        private Coroutine turningCo;
         private Coroutine AirturningCo;
-
-        private Timer turningTimer;
-        public AnimationCurve turnSpeedCurve;
-        public float turnClamp = 0.575f;
+        public float turnClamp = 1f;
 
         [Tooltip("The prefab that is spawned to replace this as a ragdoll Ragdoll used prefab used")]
         [SerializeField]
@@ -111,6 +107,9 @@ namespace L7Games.Movement
 
         [SerializeField]
         private float airInfluence = 25f;
+
+        public StudioEventEmitter audioEmitter;
+        private FMOD.Studio.EventInstance respawnSound;
 
         #endregion
 
@@ -135,8 +134,9 @@ namespace L7Games.Movement
 
             root.rotation = initialRootRotation;
 
+            Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
-            boardModel.transform.position = boardPos;
+            boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
 
             transform.rotation = initialRot;
@@ -157,13 +157,13 @@ namespace L7Games.Movement
 
             CallOnRespawn();
 
-
             groundedState.OnStateExit();
             grindingState.OnStateExit();
             aerialState.OnStateExit();
             wallRideState.OnStateExit();
 
             playerStateMachine.ForceSwitchToState(aerialState);
+            triggerObject.enabled = true;
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -187,6 +187,7 @@ namespace L7Games.Movement
 
             root.rotation = initialRootRotation;
 
+            Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
             boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
             boardModel.transform.rotation = Quaternion.identity;
@@ -214,6 +215,7 @@ namespace L7Games.Movement
             wallRideState.OnStateExit();
 
             playerStateMachine.ForceSwitchToState(aerialState);
+            triggerObject.enabled = true;
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -380,6 +382,7 @@ namespace L7Games.Movement
 
             inputHandler.wipeoutResetStarted += WipeOutResetPressed;
             onWipeout += WipeOutCharacter;
+            onRespawn += PlayRespawnSound;
         }
 
         private void OnDisable()
@@ -391,6 +394,7 @@ namespace L7Games.Movement
 
             inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
             onWipeout -= WipeOutCharacter;
+            onRespawn -= PlayRespawnSound;
         }
 
         private void Start()
@@ -411,6 +415,8 @@ namespace L7Games.Movement
 
             characterAnimator.SetFloat("crouchingFloat", -1);
             characterAnimator.SetFloat("turnValue", 0);
+
+            respawnSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/Respawn");
         }
 
         private void Update()
@@ -431,27 +437,18 @@ namespace L7Games.Movement
 
             if (Keyboard.current != null)
             {
-                if (Keyboard.current.escapeKey.isPressed)
+                if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 {
                     ResetPlayer();
                 }
             }
 
-            if(inputHandler.TurningAxis != 0)
-            {
-                StartTurn();
-            }
-            else
-            {
-                currentTurnInput = 0;
-            }
+            currentTurnInput = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
 
             if(AirturningCo != null || groundedState.hasRan)
             {
                 characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
             }
-
-            //inAirBooleanMaterialIndicator.materialBoolean = groundBelow.isConditionTrue();
         }
 
         private void FixedUpdate()
@@ -485,7 +482,7 @@ namespace L7Games.Movement
                         {
                             float value = Vector3.Dot(collision.relativeVelocity.normalized, transform.up);
                             verticalCheck = verticalCollisionTheshold > value;
-                            Debug.Log(value);
+                            //Debug.Log(value);
                             Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + collision.relativeVelocity.normalized, Color.black);
                             Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + transform.up, Color.magenta);
                         }
@@ -504,6 +501,7 @@ namespace L7Games.Movement
 
                                 if (collision.relativeVelocity.magnitude > characterCollider.forceRequiredToWipeOut)
                                 {
+                                    Debug.Log(collision.relativeVelocity.magnitude + " + " + characterCollider.forceRequiredToWipeOut + " + " + characterCollider.name);
                                     CallOnWipeout(-collision.relativeVelocity);
                                     break;
                                 }
@@ -534,27 +532,6 @@ namespace L7Games.Movement
             fRB.transform.rotation = transform.rotation;
         }
 
-        public void StartTurn()
-        {
-            //if(inputHandler.TurningAxis < 0)
-            //{
-            //    currentTurnInput = -turnClamp;
-            //}
-            //else
-            //{
-            //    currentTurnInput = turnClamp;
-            //}
-            currentTurnInput = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
-        }
-
-        public void StopTurnCoroutine()
-        {
-            if(turningCo != null) 
-            {
-                StopCoroutine(turningCo);
-            }
-        }
-
         public void StartAirInfluenctCoroutine()
         {
             StopAirInfluenctCoroutine();
@@ -583,6 +560,16 @@ namespace L7Games.Movement
             }
 
             bWipeOutLocked = true;
+            triggerObject.enabled = false;
+
+            playerStateMachine.ForceSwitchToState(null);
+            groundedState.OnStateExit();
+            grindingState.OnStateExit();
+            aerialState.OnStateExit();
+            wallRideState.OnStateExit();
+
+            //WipeOut needs to stop most of the players' actions
+            input.SwitchCurrentActionMap("WipedOut");
 
             // Spawn the ragdoll
             GameObject ragdoll = ReplaceWithRagdoll(ragDollPrefab);
@@ -595,8 +582,23 @@ namespace L7Games.Movement
             ragdollComponent.AddForceToRagdollAllRigidbody(currentVelocity, ForceMode.Impulse);
 
             boardModel.transform.SetParent(null);
+            Rigidbody boardRb =  boardModel.AddComponent<Rigidbody>();
+            boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            boardRb.AddForce(Vector3.up);
+            fRB.isKinematic = true;
+
             characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
+        }
+
+        public void PlayRespawnSound()
+        {
+            respawnSound.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
+
+            //if(state != FMOD.Studio.PLAYBACK_STATE.STOPPED)
+            //    return;
+
+            respawnSound.start();
         }
 
         #endregion
@@ -631,7 +633,6 @@ namespace L7Games.Movement
             AirturningCo = null;
         }
 
-
         private float CalculateSignedSlopeAngle(Vector3 startingPoint, Vector3 endPoint, Vector3 flatPlaneNormal)
         {
             Vector3 slopeVector = endPoint - startingPoint;
@@ -646,11 +647,6 @@ namespace L7Games.Movement
             {
                 CallOnWipeout(fRB.velocity);
             }
-        }
-
-        private void ResetRagdollToCharacter()
-        {
-
         }
 
         //private System.Collections.Generic.List<Bones> GetBonesFromObject(GameObject currentObject)
@@ -676,7 +672,6 @@ namespace L7Games.Movement
                 spawnedRagdoll.Initalise(ragdollDataContainer);
                 currentRagdoll = spawnedRagdoll;
             }
-
 
             return ragDoll;
         }

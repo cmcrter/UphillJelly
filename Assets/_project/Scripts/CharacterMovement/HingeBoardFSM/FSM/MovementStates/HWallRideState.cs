@@ -113,7 +113,6 @@ namespace L7Games.Movement
                     playerMovement.WipeOutCharacter(Vector3.down + (playerMovement.transform.forward * 10f));
                 }
             }
-
         }
 
         public override void PhysicsTick(float dT)
@@ -133,7 +132,7 @@ namespace L7Games.Movement
 
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
-            Debug.Log(nextToWallRun.dotProductWithWall + " " + wallForward);
+            //Debug.Log(nextToWallRun.dotProductWithWall + " " + wallForward);
 
             rideSpeed = nextToWallRun.wallSpeed;
 
