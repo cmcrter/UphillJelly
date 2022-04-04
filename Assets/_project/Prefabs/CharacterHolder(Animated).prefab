@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 877411814213596288}
   - component: {fileID: 4268095153265589537}
   - component: {fileID: 533361863209971257}
+  - component: {fileID: 9167767378778458970}
   m_Layer: 6
   m_Name: CatCharacter
   m_TagString: Untagged
@@ -129,6 +130,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &9167767378778458970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533361863209971258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb54e0e5df4b12b44916f4c3c8545a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &670225498352542305
 GameObject:
   m_ObjectHideFlags: 0
@@ -2406,6 +2419,7 @@ GameObject:
   - component: {fileID: 6755519519185260203}
   - component: {fileID: 9112553975738110860}
   - component: {fileID: 8464849187059315087}
+  - component: {fileID: 5230695797762261264}
   m_Layer: 6
   m_Name: PlayerHingeMovementController
   m_TagString: Untagged
@@ -2461,6 +2475,7 @@ MonoBehaviour:
     - {fileID: 7400000, guid: 00061297a7298d14d8673eae19f0ba97, type: 2}
     currentTrickPercent: 0
     trickCombo: []
+    trickBuffer: {fileID: 5230695797762261264}
   groundedState:
     hasRan: 0
     testPressDownObject: {fileID: 8040090982727821118}
@@ -2494,6 +2509,8 @@ MonoBehaviour:
     collisionCheckMask:
       serializedVersion: 2
       m_Bits: 64
+    trickBuffer: {fileID: 5230695797762261264}
+    wallrideScoreableAction: {fileID: 11400000, guid: 124679ba47d95274bba7e0d86fdd7aeb, type: 2}
   grindingState:
     hasRan: 0
     grindVisualiser: {fileID: 6755519519456546527}
@@ -2503,6 +2520,8 @@ MonoBehaviour:
     jumpCoroutineDuration: 0
     jumpSpeed: 50
     grindVFXObject: {fileID: 4178507339667563327}
+    trickBuffer: {fileID: 5230695797762261264}
+    grindScoreableAction: {fileID: 11400000, guid: bc5bc91ae31a7704bab8325d8d17b12a, type: 2}
   groundBelow:
     GroundMask:
       serializedVersion: 2
@@ -2657,6 +2676,32 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
+--- !u!114 &5230695797762261264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9112553975738110861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b74ba499ddf46347b3bf7a2fbe2fccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAnimator: {fileID: 533361863209971257}
+  ComboTimeOutDuration: 0
+  inputValidityDuration: 0.2
+  inputHandler: {fileID: 2636407542772683316}
+  playerAnimationEventHandler: {fileID: 9167767378778458970}
+  aerialTricks:
+  - scoreableDetails: {fileID: 11400000, guid: 86c87b8131609944b8d2b7d3eb366fab, type: 2}
+    TrickAnimStateName: 360HardFlip
+  - scoreableDetails: {fileID: 11400000, guid: bf9a933c060da3048aa05de8bbe36d66, type: 2}
+    TrickAnimStateName: 360ShoveIt
+  - scoreableDetails: {fileID: 11400000, guid: 767be526f873f3440846e6163921d6f2, type: 2}
+    TrickAnimStateName: KickFlip
+  playerHingeMovementController: {fileID: 9112553975738110858}
+  scoreMultiplierMultiplier: 0.5
 --- !u!1 &9112553976162905586
 GameObject:
   m_ObjectHideFlags: 0
@@ -3382,13 +3427,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
---- !u!4 &4178507339667563322 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1276008219694590224, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
-  m_PrefabInstance: {fileID: 2902641421408307754}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4178507339667563327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1276008219694590229, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
+  m_PrefabInstance: {fileID: 2902641421408307754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4178507339667563322 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1276008219694590224, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
   m_PrefabInstance: {fileID: 2902641421408307754}
   m_PrefabAsset: {fileID: 0}

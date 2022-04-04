@@ -44,6 +44,13 @@ namespace L7Games.Movement
         [SerializeField]
         LayerMask collisionCheckMask;
 
+        [SerializeField]
+        private TrickBuffer trickBuffer;
+        [SerializeField]
+        private ScoreableAction wallrideScoreableAction;
+
+        private int currentGrindTrickID;
+
         #region Public Methods
 
         public HWallRideState()
@@ -143,6 +150,8 @@ namespace L7Games.Movement
 
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
+            currentGrindTrickID = trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
+
             hasRan = true;
         }
 
@@ -164,6 +173,9 @@ namespace L7Games.Movement
             bJumping = false;
 
             playerMovement.characterAnimator.SetBool("wallriding", false);
+
+            trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+
             hasRan = false;
         }
 

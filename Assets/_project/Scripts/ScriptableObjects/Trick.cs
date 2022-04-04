@@ -12,7 +12,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Trick", menuName = "ScriptableObject/Trick")]
+[System.Obsolete("Tricks are mostly decided randomly so many field")]
+//[CreateAssetMenu(fileName = "Trick", menuName = "ScriptableObject/Trick")]
 public class Trick : ScriptableObject
 {
     /// <summary>

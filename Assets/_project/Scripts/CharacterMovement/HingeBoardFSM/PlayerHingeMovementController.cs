@@ -562,11 +562,13 @@ namespace L7Games.Movement
             bWipeOutLocked = true;
             triggerObject.enabled = false;
 
+            playerStateMachine.currentState.OnStateExit();
             playerStateMachine.ForceSwitchToState(null);
-            groundedState.OnStateExit();
-            grindingState.OnStateExit();
-            aerialState.OnStateExit();
-            wallRideState.OnStateExit();
+
+            //groundedState.OnStateExit();
+            //grindingState.OnStateExit();
+            //aerialState.OnStateExit();
+            //wallRideState.OnStateExit();
 
             //WipeOut needs to stop most of the players' actions
             input.SwitchCurrentActionMap("WipedOut");
