@@ -73,7 +73,7 @@ namespace L7Games.Triggerables.CheckpointSystem
 
         void Update()
         {
-            if (Keyboard.current.commaKey.isPressed)
+            if (Keyboard.current.commaKey.wasPressedThisFrame)
             {
                 foreach (PlayerController playerController in playersCurrentCheckpoints.Keys)
                 {

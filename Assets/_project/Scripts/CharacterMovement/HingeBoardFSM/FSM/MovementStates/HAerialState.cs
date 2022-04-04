@@ -192,12 +192,13 @@ namespace L7Games.Movement
             {
                 if(trickPlaying == null)
                 {
+                    //Start the tricking
                     trickCombo.Add(trick);
                     trickPlaying = parentController.StartCoroutine(Co_TrickPlayed(trick.length));
                 }
                 else
                 {
-                    if(currentTrickPercent > 0.8f || currentTrickPercent < 1)
+                    if(currentTrickPercent > 0.8f)
                     {
                         //Add to the combo for when the current animation is done (only if the trick is almost complete)
                         trickCombo.Add(trick);
@@ -228,7 +229,6 @@ namespace L7Games.Movement
                     yield return null;
                 }
 
-                currentTrickPercent = 1;
                 //Go to next trick if it's a combo
                 trickCombo.RemoveAt(0);
                          
