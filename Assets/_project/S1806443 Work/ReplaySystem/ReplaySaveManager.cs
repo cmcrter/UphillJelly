@@ -32,6 +32,8 @@ public class ReplaySaveManager : MonoBehaviour {
     //
     public GameObject MAPCHECKER;
 
+    public bool isMainMenu;
+
     //
     public bool isMapTutorial;
 
@@ -52,7 +54,12 @@ public class ReplaySaveManager : MonoBehaviour {
 
     // on awake
     void Awake() {
-        
+
+        //TestSave1Function();
+        //Debug.Log("FIRSTTHINGSFIRST");
+
+
+        /*
         // if the replay save manager is = nothing
         if (replaySaveManager == null) {
 
@@ -70,7 +77,7 @@ public class ReplaySaveManager : MonoBehaviour {
 
         // do not destroy this on load
         DontDestroyOnLoad(this);
-        
+        */
     }
 
     #endregion
@@ -80,9 +87,13 @@ public class ReplaySaveManager : MonoBehaviour {
 
     //
     public void Update() {
+
         
+
         //
         if (MAPCHECKER.tag == "map_tutorial") {
+
+            //Debug.Log("ISTUTORIALMATE");
 
             //
             isMapTutorial = true;
@@ -91,6 +102,9 @@ public class ReplaySaveManager : MonoBehaviour {
             isMapCity = false;
 
             isMapOldTown = false;
+
+            isMainMenu = false;
+
 
             //
             //
@@ -111,6 +125,8 @@ public class ReplaySaveManager : MonoBehaviour {
 
             isMapOldTown = false;
 
+            isMainMenu = false;
+
             //
             //
             //ghost.isRecording = true;
@@ -130,6 +146,8 @@ public class ReplaySaveManager : MonoBehaviour {
 
             isMapOldTown = true;
 
+            isMainMenu = false;
+
             //
             //
             //ghost.isRecording = true;
@@ -138,7 +156,63 @@ public class ReplaySaveManager : MonoBehaviour {
 
         }
 
+        //
+        if (MAPCHECKER.tag == "MainMenu") {
+
+            //
+            isMapTutorial = false;
+
+            //
+            isMapCity = false;
+
+            isMapOldTown = false;
+
+            isMainMenu = true;
+
+        }
+        
     }
+
+    /*
+    public void TestSave1Function() {
+
+        
+        Debug.Log("ISMAPTUTORIAL");
+
+        // if there is not a save file for the replay
+        if (!IsReplaySaveFile1()) {
+
+            // create a save file in the data path folder called /replay_save
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays/Tutorial_Map");
+
+            Debug.Log("CREATEDDIRECTORY");
+
+        }
+
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays/Tutorial_Map")) {
+
+            // create a directory for "/replay_save/replay_data"
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays/Tutorial_Map");
+
+        }
+
+        // create a new binary formatter called replay_bf
+        BinaryFormatter replay_bf1 = new BinaryFormatter();
+
+        // create a filestream in the replay data and call it "replay_SavedData"
+        FileStream replay_file1 = File.Create(Application.persistentDataPath + "/Profile1/Replays/Tutorial_Map/Replay_SavedData1.sdat");
+
+        // pass in ghost object and save public variables
+        var json = JsonUtility.ToJson(ghost);
+
+        // serializes the data to binary format in a json file
+        replay_bf1.Serialize(replay_file1, json);
+
+        // close the replay file
+        replay_file1.Close();
+        
+    }*/
 
 
     #region FirstSaveFile
@@ -154,15 +228,25 @@ public class ReplaySaveManager : MonoBehaviour {
 
     // public void for save replay
     public void SaveReplay1() {
-        
+
+        //Debug.Log(isMapTutorial);
+
+        //if (isMapTutorial || isMainMenu || isMapCity || isMapOldTown) {
+        //    Debug.Log("UPDOWNLEFTRIGHT");
+        //}
+
         //
         if (isMapTutorial) {
+
+            Debug.Log("ISMAPTUTORIAL");
 
             // if there is not a save file for the replay
             if (!IsReplaySaveFile1()) {
 
                 // create a save file in the data path folder called /replay_save
                 Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/Replays/Tutorial_Map");
+
+                Debug.Log("CREATEDDIRECTORY");
 
             }
 
@@ -190,9 +274,12 @@ public class ReplaySaveManager : MonoBehaviour {
             replay_file1.Close();
 
         }
-
+        else if (!isMapTutorial){
+            Debug.Log("DoNothing");
+        }
+        /*
         //
-        if (isMapCity) {
+        if (isMapCity == true) {
 
             // if there is not a save file for the replay
             if (!IsReplaySaveFile1()) {
@@ -228,7 +315,7 @@ public class ReplaySaveManager : MonoBehaviour {
         }
 
         //
-        if (isMapOldTown) {
+        if (isMapOldTown == true) {
 
             // if there is not a save file for the replay
             if (!IsReplaySaveFile1()) {
@@ -262,7 +349,7 @@ public class ReplaySaveManager : MonoBehaviour {
             replay_file1.Close();
 
         }
-
+        */
     }
 
     // load the replay

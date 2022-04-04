@@ -18,7 +18,7 @@ public class Ghost : ScriptableObject
 {
     #region Public Fields
 
-    public ReplaySaveManager replaySaveManager;
+    //public ReplaySaveManager replaySaveManager;
 
     //public GameObject MapCheckerGO;
 

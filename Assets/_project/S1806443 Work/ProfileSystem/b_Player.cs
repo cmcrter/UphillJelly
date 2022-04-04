@@ -92,6 +92,7 @@ public class b_Player : MonoBehaviour
     // update
     public void Update() {
 
+        /*
         // if the replayGhostSaveManager == null
         if (replayGhostSaveManager == null) {
 
@@ -99,6 +100,7 @@ public class b_Player : MonoBehaviour
             replayGhostSaveManager = GameObject.FindGameObjectWithTag("GhostReplaySaveSystem").GetComponent<ReplaySaveManager>();
 
         }
+        */
 
     }
 
@@ -108,7 +110,8 @@ public class b_Player : MonoBehaviour
         Debug.Log("SAVEDFINALVALUES");
 
         if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) { // (isSave1 && !isSave2 && !isSave3)
-
+            
+            Debug.Log(replaySaveManager.isMapTutorial);
             Debug.Log("Saved Replay 1's");
 
             // set ghost 1 and ghost 2 recording and replaing to false
@@ -123,6 +126,8 @@ public class b_Player : MonoBehaviour
             // Save replay 1 as replay 2
             SavePlayer1();
 
+            Debug.Log(replaySaveManager.isMapTutorial);
+
             // set the ghost 2 timestamp to the ghost 1 timestamp
             ghostSO2.timeStamp = ghostSO1.timeStamp;
 
@@ -136,7 +141,7 @@ public class b_Player : MonoBehaviour
             SavePlayer1Second();
 
             Debug.Log("Saved Replay 1's");
-
+            Debug.Log(replaySaveManager.isMapTutorial);
         }
 
         //
@@ -205,7 +210,7 @@ public class b_Player : MonoBehaviour
 
     // Load the player1
     public void LoadPlayer1() {
-
+        Debug.Log(replaySaveManager.isMapTutorial);
 
         // set the player data to the loaded player in the save system
         b_PlayerData data = b_SaveSystem.LoadPlayer1();
@@ -428,13 +433,24 @@ public class b_Player : MonoBehaviour
     // Save the player1
     public void SavePlayer1() {
 
+        //Debug.Log(replaySaveManager.isMapTutorial);
+        //replaySaveManager.isMapTutorial = true;
+        //Debug.Log(replaySaveManager.isMapTutorial);
+
         // save the player 1 and pass through the shop and outfitchanger
         b_SaveSystem.SavePlayer1(shop, outfitChanger);
 
         // save the replay 1 through the ghost save manager
         replayGhostSaveManager.SaveReplay1();
 
-        Debug.Log("Saved Player 1");
+        //Debug.Log(replaySaveManager.isMapTutorial);
+        //Debug.Log(replaySaveManager.isMapTutorial);
+        //replaySaveManager.isMapTutorial = true;
+        //Debug.Log(replaySaveManager.isMapTutorial);
+
+        //replayGhostSaveManager.TestSave1Function();
+
+
 
     }
 

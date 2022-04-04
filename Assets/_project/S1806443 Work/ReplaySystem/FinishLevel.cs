@@ -46,6 +46,7 @@ namespace SleepyCat
             // if the ghost collides with this collectable
             if (other.tag == "FinishPlayer") {
 
+                
 
                 ghost.isRecording = false;
 
@@ -62,6 +63,8 @@ namespace SleepyCat
 
                 //
                 tempScoreSystem.TimerActive = false;
+
+                
 
             }
 

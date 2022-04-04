@@ -1,7 +1,17 @@
+////////////////////////////////////////////////////////////
+// File: MainMenuLevelSelect.cs
+// Author: Jack Peedle
+// Date Created: 26/03/22
+// Last Edited By: Jack Peedle
+// Date Last Edited: 27/03/22
+// Brief: 
+//////////////////////////////////////////////////////////// 
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace SleepyCat
 {
@@ -125,6 +135,8 @@ namespace SleepyCat
             //
             Debug.Log("LOADEDTUTORIAL");
 
+            SceneManager.LoadScene(0);
+
         }
 
         public void LoadCityMap() {
@@ -132,12 +144,16 @@ namespace SleepyCat
             //
             Debug.Log("LOADEDCITY");
 
+            SceneManager.LoadScene(1);
+
         }
 
         public void LoadOldTownMap() {
 
             //
             Debug.Log("LOADEDOLDTOWN");
+
+            SceneManager.LoadScene(2);
 
         }
 

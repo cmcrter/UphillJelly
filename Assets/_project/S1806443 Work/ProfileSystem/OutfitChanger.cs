@@ -87,7 +87,7 @@ public class OutfitChanger : MonoBehaviour
         currentCharacterint = 2;
 
         //  if the map is tutorial and or city
-        if (replaySaveManager.isMapTutorial || replaySaveManager.isMapCity) {
+        if (replaySaveManager.isMapTutorial || replaySaveManager.isMapCity || replaySaveManager.isMapOldTown) {
 
             // if no directory exists
             if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) {
