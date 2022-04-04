@@ -13,9 +13,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
-using FMODUnity;
-using FMOD;
-using Debug = UnityEngine.Debug;
 
 namespace L7Games.Movement
 {
@@ -86,9 +83,6 @@ namespace L7Games.Movement
         [SerializeField]
         private ScriptableParticles landingDust;
 
-        private FMOD.Studio.EventInstance moveSound;
-        [SerializeField]
-        private string parameterName;
         public HGroundedState()
         {
         }
@@ -148,6 +142,11 @@ namespace L7Games.Movement
         //Ticking the state along this frame and passing in the deltaTime
         public override void Tick(float dT)
         {
+            if(Keyboard.current.escapeKey.isPressed)
+            {
+                parentController.ResetPlayer();
+            }
+
             if(inputHandler.PushHeldDown && pushCoroutine == null)
             {
                 PushBoard();
@@ -192,7 +191,6 @@ namespace L7Games.Movement
             parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
 
             VFXPlayer.instance.PlayVFX(landingDust, parentController.transform.position - new Vector3(0, 0.45f, 0));
-            FMODUnity.RuntimeManager.PlayOneShot("event:/PlayerSounds/Land2", parentController.transform.position);
 
             hasRan = true;
         }
@@ -249,11 +247,6 @@ namespace L7Games.Movement
                         movementRB.AddForce(playerTransform.forward.normalized, ForceMode.Impulse);
                     }
                 }
-
-                if(!parentController.audioEmitter)
-                {
-                    parentController.audioEmitter.SetParameter(parameterName, movementRB.velocity.magnitude / 55f);
-                }
             }
 
             //With the hinge, this means that the rb wont just run away without the player
@@ -292,7 +285,6 @@ namespace L7Games.Movement
         {
             if(jumpCoroutine == null && hasRan)
             {
-                FMODUnity.RuntimeManager.PlayOneShot("event:/PlayerSounds/Jump", parentController.transform.position);
                 Debug.Log("Jumping");
                 StartJumpTimer();
             }

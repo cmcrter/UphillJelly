@@ -64,8 +64,6 @@ namespace L7Games.Movement
         private ScoreableAction grindScoreableAction;
 
         private int currentGrindTrickID;
-        private FMOD.Studio.EventInstance GS;
-
         #endregion
 
         #region Public Methods
@@ -106,12 +104,12 @@ namespace L7Games.Movement
 
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.characterAnimator.SetBool("grinding", true);
-            //parentController.bWipeOutLocked = true;
+            parentController.bWipeOutLocked = true;
             parentController.camBrain.Follow = parentController.transform;
 
             //Making sure nothing interferes with the movement
             Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.25f, 0);
-            //Debug.Log(closestPoint);
+            Debug.Log(closestPoint);
 
             movementRB.transform.position = closestPoint;
             timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.0075f, 0.9925f);
@@ -141,8 +139,6 @@ namespace L7Games.Movement
             grindVFXObject.SetActive(true);
 
             currentGrindTrickID = trickBuffer.AddScoreableActionInProgress(grindScoreableAction);
-            GS = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/GrindRail2");
-            GS.start();
 
             hasRan = true;
         }
@@ -169,9 +165,6 @@ namespace L7Games.Movement
             parentController.ResetCameraView();
 
             grindVFXObject.SetActive(false);
-
-            GS.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            GS.release();
 
             timeAlongGrind = 0;
             bTravelBackwards = false;

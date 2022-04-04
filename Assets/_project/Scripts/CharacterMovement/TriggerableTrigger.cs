@@ -22,9 +22,6 @@ namespace L7Games.Triggerables
         //When something enters or leaves the player's zone
         private void OnTriggerEnter(Collider other)
         {
-            if(!enabled)
-                return;
-
             //If it can be triggerable
             if (other.TryGetComponent(out ITriggerable triggerable))
             {
@@ -39,9 +36,6 @@ namespace L7Games.Triggerables
 
         private void OnTriggerExit(Collider other)
         {
-            if(!enabled)
-                return;
-
             if (other.TryGetComponent(out ITriggerable triggerable))
             {
                 if (triggerable.ReturnGameObject().activeSelf)

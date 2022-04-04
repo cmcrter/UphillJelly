@@ -326,7 +326,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7761807, y: 1}
+    m_SensorSize: {x: 1.7763864, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 15
+  forceRequiredToWipeOut: 0
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &1106301884125080120
@@ -631,7 +631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 2
+  forceRequiredToWipeOut: 0
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &1524444469924376212
@@ -724,7 +724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 3
+  forceRequiredToWipeOut: 0
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &2136422863443787294
@@ -878,8 +878,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: 0.29999924, y: 1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -980,7 +980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attenuationObject: {fileID: 9112553975738110861}
+  attenuationObject: {fileID: 0}
   ListenerNumber: -1
 --- !u!114 &3903168884203430513
 MonoBehaviour:
@@ -1161,7 +1161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 3
+  forceRequiredToWipeOut: 0
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &4296755157267394785
@@ -1377,7 +1377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 2
+  forceRequiredToWipeOut: 0
   effectedByCollisionAngle: 0
   ignoreVerticalCollisions: 0
 --- !u!1 &5324430513142531548
@@ -1576,8 +1576,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: 0.29999924, y: 1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -1613,7 +1613,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7764705, y: 1}
+    m_SensorSize: {x: 1.7761807, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2418,7 +2418,7 @@ GameObject:
   - component: {fileID: 2636407542772683316}
   - component: {fileID: 6755519519185260203}
   - component: {fileID: 9112553975738110860}
-  - component: {fileID: 8464849187059315087}
+  - component: {fileID: 7141671326013700297}
   m_Layer: 6
   m_Name: PlayerHingeMovementController
   m_TagString: Untagged
@@ -2463,8 +2463,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraZ: {fileID: 560279600}
   bWipeOutLocked: 0
-  collectableCounter: 0
-  cooldownDuration: 1
   aerialState:
     hasRan: 0
     AerialDrag: 0.125
@@ -2479,7 +2477,7 @@ MonoBehaviour:
     hasRan: 0
     testPressDownObject: {fileID: 8040090982727821118}
     GroundedDrag: 0.175
-    forwardSpeed: 1.05
+    forwardSpeed: 1.2
     turnSpeed: 0.1
     backwardSpeed: 50
     jumpSpeed: 25
@@ -2496,7 +2494,6 @@ MonoBehaviour:
       isLocked: 0
       isActive: 0
     landingDust: {fileID: 11400000, guid: b36f1b280b4d4be428cc14c171ea5d40, type: 2}
-    parameterName: 
   wallRideState:
     hasRan: 0
     coyoteDuration: 3
@@ -2550,6 +2547,8 @@ MonoBehaviour:
   camBrain: {fileID: 6087022926027470657}
   wallRideCam: {fileID: 5448106028648022363}
   wipeOutCam: {fileID: 5374356352794921964}
+  currentTurnInput: 0
+  turnDuration: 0.25
   angleCorrectionRaycastValidHitWidth: 2
   angleCorrectionRaycastValidHitLength: 2
   collisionDirectionMinValue: 0.8
@@ -2562,12 +2561,35 @@ MonoBehaviour:
   input: {fileID: 9112553975738110848}
   inputHandler: {fileID: 2636407542772683316}
   characterAnimator: {fileID: 533361863209971257}
-  triggerObject: {fileID: 2067759062112456412}
   frontWheelPos: {fileID: 2895347839156224780}
   characterModel: {fileID: 533361863209971258}
   lookAtTransform: {fileID: 7535963120756405929}
   AdditionalGravityAmount: 6
   bAddAdditionalGravity: 1
+  turnSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   turnClamp: 1
   ragDollPrefab: {fileID: 4657433874770968513, guid: 8aca706b38b46ec4d9afe02e66e5df8e, type: 3}
   currentRagdoll: {fileID: 0}
@@ -2575,7 +2597,6 @@ MonoBehaviour:
   checkpointManager: {fileID: 0}
   playerColliders: []
   airInfluence: 25
-  audioEmitter: {fileID: 8464849187059315087}
 --- !u!114 &9112553975738110848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2652,7 +2673,7 @@ FixedJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &8464849187059315087
+--- !u!114 &7141671326013700297
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2661,20 +2682,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 9112553975738110861}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b74ba499ddf46347b3bf7a2fbe2fccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  Event: event:/PlayerSounds/Jump
-  PlayEvent: 0
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
+  text: {fileID: 0}
+  playerAnimator: {fileID: 533361863209971257}
+  ComboTimeOutDuration: 0
+  inputValidityDuration: 0.2
+  inputHandler: {fileID: 2636407542772683316}
+  playerAnimationEventHandler: {fileID: 9167767378778458970}
+  aerialTricks:
+  - scoreableDetails: {fileID: 11400000, guid: 86c87b8131609944b8d2b7d3eb366fab, type: 2}
+    TrickAnimStateName: 360HardFlip
+  - scoreableDetails: {fileID: 11400000, guid: bf9a933c060da3048aa05de8bbe36d66, type: 2}
+    TrickAnimStateName: 360ShoveIt
+  - scoreableDetails: {fileID: 11400000, guid: 767be526f873f3440846e6163921d6f2, type: 2}
+    TrickAnimStateName: KickFlip
+  playerHingeMovementController: {fileID: 9112553975738110858}
+  scoreMultiplierMultiplier: 0.5
 --- !u!1 &9112553976162905586
 GameObject:
   m_ObjectHideFlags: 0

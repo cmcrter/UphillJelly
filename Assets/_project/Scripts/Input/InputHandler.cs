@@ -273,7 +273,6 @@ namespace L7Games.Input
                 BindGroundedActions();
                 BindAerialActions();
                 BindWallRidingAction();
-                BindWipeOutAction();
             }
 
             UpdatePatterns();
@@ -351,7 +350,6 @@ namespace L7Games.Input
             UnbindGrindingActions();
             UnbindGroundedAction();
             UnbindWallRidingAction();
-            UnbindWipeOutAction();
         }
         #endregion
 
@@ -721,16 +719,6 @@ namespace L7Games.Input
             playerInput.actions["WallRiding_WipeOutReset"].performed += WipeOutResetAction_Performed;
             playerInput.actions["WallRiding_WipeOutReset"].canceled += WipeOutReset_Canceled;
         }
-
-        /// <summary>
-        /// Bind to all the events to the wipe out actions
-        /// </summary>
-        private void BindWipeOutAction()
-        {
-            playerInput.actions["WipedOut_WipeOutReset"].performed += WipeOutResetAction_Performed;
-            playerInput.actions["WipedOut_WipeOutReset"].canceled += WipeOutReset_Canceled;
-        }
-
         /// <summary>
         /// Unbind to all the events to the aerial actions
         /// </summary>
@@ -799,16 +787,6 @@ namespace L7Games.Input
             playerInput.actions["WallRiding_WipeOutReset"].performed    -= WipeOutResetAction_Performed;
             playerInput.actions["WallRiding_WipeOutReset"].canceled     -= WipeOutReset_Canceled;
         }
-
-        /// <summary>
-        /// Unbind to all the events to the wipe out actions
-        /// </summary>
-        private void UnbindWipeOutAction()
-        {
-            playerInput.actions["WipedOut_WipeOutReset"].performed -= WipeOutResetAction_Performed;
-            playerInput.actions["WipedOut_WipeOutReset"].canceled -= WipeOutReset_Canceled;
-        }
-
         #endregion
         /// <summary>
         /// Update the progress on performing the analogue stick patterns

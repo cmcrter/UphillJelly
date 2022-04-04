@@ -50,6 +50,16 @@ public class VFXPlayer : MonoBehaviour
         instance = this;
     }
 
+    void Start()
+    {
+	
+    }
+ 
+    void Update()
+    {
+	
+    }
+
     #endregion
 
     #region Public Methods
