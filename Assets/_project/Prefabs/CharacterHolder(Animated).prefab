@@ -2505,6 +2505,8 @@ MonoBehaviour:
     collisionCheckMask:
       serializedVersion: 2
       m_Bits: 64
+    trickBuffer: {fileID: 7141671326013700297}
+    wallrideScoreableAction: {fileID: 11400000, guid: 124679ba47d95274bba7e0d86fdd7aeb, type: 2}
   grindingState:
     hasRan: 0
     grindVisualiser: {fileID: 6755519519456546527}
@@ -2514,6 +2516,8 @@ MonoBehaviour:
     jumpCoroutineDuration: 0
     jumpSpeed: 50
     grindVFXObject: {fileID: 4178507339667563327}
+    trickBuffer: {fileID: 7141671326013700297}
+    grindScoreableAction: {fileID: 11400000, guid: bc5bc91ae31a7704bab8325d8d17b12a, type: 2}
   groundBelow:
     GroundMask:
       serializedVersion: 2
@@ -2683,7 +2687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 0}
   playerAnimator: {fileID: 533361863209971257}
-  ComboTimeOutDuration: 0.2
+  ComboTimeOutDuration: 0
   inputValidityDuration: 0.2
   inputHandler: {fileID: 2636407542772683316}
   playerAnimationEventHandler: {fileID: 9167767378778458970}
@@ -2695,6 +2699,7 @@ MonoBehaviour:
   - scoreableDetails: {fileID: 11400000, guid: 767be526f873f3440846e6163921d6f2, type: 2}
     TrickAnimStateName: KickFlip
   playerHingeMovementController: {fileID: 9112553975738110858}
+  scoreMultiplierMultiplier: 0.5
 --- !u!1 &9112553976162905586
 GameObject:
   m_ObjectHideFlags: 0

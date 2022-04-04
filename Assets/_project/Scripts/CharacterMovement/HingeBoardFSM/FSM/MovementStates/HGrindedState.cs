@@ -58,6 +58,12 @@ namespace L7Games.Movement
         [SerializeField]
         private GameObject grindVFXObject;
 
+        [SerializeField]
+        private TrickBuffer trickBuffer;
+        [SerializeField]
+        private ScoreableAction grindScoreableAction;
+
+        private int currentGrindTrickID;
         #endregion
 
         #region Public Methods
@@ -132,6 +138,8 @@ namespace L7Games.Movement
 
             grindVFXObject.SetActive(true);
 
+            currentGrindTrickID = trickBuffer.AddScoreableActionInProgress(grindScoreableAction);
+
             hasRan = true;
         }
 
@@ -162,6 +170,9 @@ namespace L7Games.Movement
             bTravelBackwards = false;
             bForceExit = false;
             parentController.bWipeOutLocked = false;
+
+            trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+
             hasRan = false;
         }
 

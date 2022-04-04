@@ -70,8 +70,6 @@ public class TrickBuffer : MonoBehaviour
     }
     #endregion
 
-    public Text text;
-
     #region Private Serialized Fields
     [SerializeField] [Tooltip("The animator used by the player model")]
     private Animator playerAnimator;
@@ -98,6 +96,9 @@ public class TrickBuffer : MonoBehaviour
     [SerializeField]
     [Tooltip("The player controller this is attached too")]
     private PlayerHingeMovementController playerHingeMovementController;
+
+    [SerializeField]
+    private float scoreMultiplierMultiplier;
     #endregion
 
     #region Private Variables
@@ -180,22 +181,6 @@ public class TrickBuffer : MonoBehaviour
         }
     }
 
-    private void PlayerHingeMovementController_onWipeout(Vector3 obj)
-    {
-
-
-        // Break combo
-        if (scoreableActionsInProgress.Count > 0 || scoreableActionsCompleted.Count > 0)
-        {
-            if (ComboBroken != null)
-            {
-                ComboBroken();
-            }
-            ClearBuffer();
-        }
-        // End current trick if there is one going 
-        trickPlaying = null;
-    }
 
     private void Update()
     {
@@ -219,8 +204,7 @@ public class TrickBuffer : MonoBehaviour
         // If the player is grounded then the countdown must be active for how much trick time is left
         if (playerHingeMovementController.groundedState.hasRan)
         {
-            comboTimeOutTimer.Tick(Time.deltaTime);
-            if (!comboTimeOutTimer.isActive)
+            if (ComboTimeOutDuration <= 0f)
             {
                 if (ComboCompleted != null)
                 {
@@ -228,17 +212,29 @@ public class TrickBuffer : MonoBehaviour
                 }
                 ClearBuffer();
             }
+            else
+            {
+                comboTimeOutTimer.Tick(Time.deltaTime);
+                if (!comboTimeOutTimer.isActive)
+                {
+                    if (ComboCompleted != null)
+                    {
+                        ComboCompleted();
+                    }
+                    ClearBuffer();
+                }
+            }
         }
         else
         {
-            if (comboTimeOutTimer.current_time == ComboTimeOutDuration)
+            if (ComboTimeOutDuration > 0f)
             {
-                comboTimeOutTimer = new Timer(ComboTimeOutDuration);
-
+                if (comboTimeOutTimer.current_time != ComboTimeOutDuration)
+                {
+                    comboTimeOutTimer = new Timer(ComboTimeOutDuration);
+                }
             }
         }
-
-        text.text = GetComboText();
     }
     #endregion
 
@@ -252,6 +248,10 @@ public class TrickBuffer : MonoBehaviour
         float baseScore = 0f;
         for (int i = 0; i < scoreableActionsCompleted.Count; ++i)
         {
+            if (scoreableActionsCompleted[i].Key == null)
+            {
+                Debug.Log("Here");
+            }
             baseScore += scoreableActionsCompleted[i].Key.initalScoreValue;
             baseScore += scoreableActionsCompleted[i].Key.scorePerSecond * scoreableActionsCompleted[i].Value;
         }
@@ -260,7 +260,7 @@ public class TrickBuffer : MonoBehaviour
             baseScore += scoreableActionsInProgress[i].scoreableActionData.initalScoreValue;
             baseScore += scoreableActionsInProgress[i].scoreableActionData.scorePerSecond * (Time.time - scoreableActionsInProgress[i].startTime);
         }
-        return baseScore * (scoreableActionsCompleted.Count + scoreableActionsInProgress.Count);
+        return baseScore * (1f + (((float)scoreableActionsCompleted.Count + (float)scoreableActionsInProgress.Count - 1f) * scoreMultiplierMultiplier));
     }
 
     /// <summary>
@@ -273,13 +273,19 @@ public class TrickBuffer : MonoBehaviour
         // Add the new scoreable action then increment the current Id for the next usage
         scoreableActionsInProgress.Add(new ScorableActionInProgress(Time.time, currentID, scoreableActionData));
 
-        ActionStarted(scoreableActionData);
+        if (ActionStarted != null)
+        {
+            ActionStarted(scoreableActionData);
+        }
+
+
+
         return currentID++;
     }
 
     public string GetComboText()
     {
-        string comboText = GetScoreFromCurrentCombo().ToString() + " X " + (scoreableActionsCompleted.Count + scoreableActionsInProgress.Count).ToString() + '\n';
+        string comboText = GetScoreFromCurrentCombo().ToString() + " X " + (1f + (((float)scoreableActionsCompleted.Count + (float)scoreableActionsInProgress.Count - 1f) * scoreMultiplierMultiplier)).ToString() + '\n';
         for (int i = 0; i < scoreableActionsCompleted.Count; ++i)
         {
             comboText += scoreableActionsCompleted[i].Key.name;
@@ -305,6 +311,11 @@ public class TrickBuffer : MonoBehaviour
         {
             ActionCompleted(scoreableActionData);
         }
+
+        if (scoreableActionsCompleted[scoreableActionsCompleted.Count - 1].Key == null)
+        {
+            Debug.Log("Here");
+        }
     }
     /// <summary>
     /// Called to mark a scoreable action in progress as finished
@@ -313,19 +324,25 @@ public class TrickBuffer : MonoBehaviour
     public void FinishScorableActionInProgress(int actionInProgressID)
     {
         // Find the action in progress that matches the id
-        ScorableActionInProgress actionFinished = new ScorableActionInProgress();
         for (int i = 0; i < scoreableActionsInProgress.Count; ++i)
         {
             if (scoreableActionsInProgress[i].ID == actionInProgressID)
             {
-                actionFinished = scoreableActionsInProgress[i];
-            }
-        }
+                ScorableActionInProgress actionFinished = scoreableActionsInProgress[i];
+                scoreableActionsInProgress.RemoveAt(i);
 
-        scoreableActionsCompleted.Add(new KeyValuePair<ScoreableAction, float>(actionFinished.scoreableActionData, Time.time - actionFinished.startTime));
-        if (ActionCompleted != null)
-        {
-            ActionCompleted(actionFinished.scoreableActionData);
+                scoreableActionsCompleted.Add(new KeyValuePair<ScoreableAction, float>(actionFinished.scoreableActionData, Time.time - actionFinished.startTime));
+                if (scoreableActionsCompleted[scoreableActionsCompleted.Count - 1].Key == null)
+                {
+                    Debug.Log("Here");
+                }
+                if (ActionCompleted != null)
+                {
+                    ActionCompleted(actionFinished.scoreableActionData);
+                }
+
+                return;
+            }
         }
     }
     #endregion
@@ -359,8 +376,6 @@ public class TrickBuffer : MonoBehaviour
     {
         AddOneShotCompletedAction(trickPlaying.scoreableDetails);
         trickPlaying = null;
-
-
     }
 
     private void PlayerAnimationEventHandler_OnTrickAnimationEnded()
@@ -372,6 +387,22 @@ public class TrickBuffer : MonoBehaviour
             StartAerialTrick();
         }
     }
+
+    private void PlayerHingeMovementController_onWipeout(Vector3 obj)
+    {
+        // Break combo
+        if (scoreableActionsInProgress.Count > 0 || scoreableActionsCompleted.Count > 0)
+        {
+            if (ComboBroken != null)
+            {
+                ComboBroken();
+            }
+            ClearBuffer();
+        }
+        // End current trick if there is one going 
+        trickPlaying = null;
+    }
+
     #endregion
 
 
