@@ -43,6 +43,16 @@ public class SpawnedRagdoll : MonoBehaviour
     private PlayerController playerSpawnedFrom;
     #endregion
 
+    #region Public Properties
+    public Rigidbody PrimaryRigidBody
+    {
+        get
+        {
+            return primaryRigidBody;
+        }
+    }
+    #endregion
+
     #region Public Methods
     /// <summary>
     /// Called to destroy the ragdoll this is attached to properly 
