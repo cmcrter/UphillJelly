@@ -167,6 +167,7 @@ namespace L7Games.Movement
             {
                 if (trickBuffer.WithinInWipeOutTheshold)
                 {
+                    if (!parentController.bWipeOutLocked)
                     parentController.CallOnWipeout(movementRB.velocity);
                 }
             }
