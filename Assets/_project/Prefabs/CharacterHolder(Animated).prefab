@@ -2521,7 +2521,15 @@ MonoBehaviour:
     jumpSpeed: 50
     grindVFXObject: {fileID: 4178507339667563327}
     trickBuffer: {fileID: 5230695797762261264}
-    grindScoreableAction: {fileID: 11400000, guid: bc5bc91ae31a7704bab8325d8d17b12a, type: 2}
+    grindTricks:
+    - scoreableDetails: {fileID: 11400000, guid: bc5bc91ae31a7704bab8325d8d17b12a, type: 2}
+      TrickAnimStateName: 5-0Grind
+    - scoreableDetails: {fileID: 11400000, guid: 4a2ded14c2c9cdf4dab2e2a34343b858, type: 2}
+      TrickAnimStateName: 50-50Grind
+    - scoreableDetails: {fileID: 11400000, guid: 70a3a5768ab234441a85153a09f7ac83, type: 2}
+      TrickAnimStateName: NoseGrind
+    - scoreableDetails: {fileID: 11400000, guid: 9ea3fa73f88a2554999d69ea13caa226, type: 2}
+      TrickAnimStateName: BSBoardSlide
   groundBelow:
     GroundMask:
       serializedVersion: 2
@@ -2621,7 +2629,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 9112553975738110848}
   analogueStickPatterns: []
-  trickInputBuffer: {fileID: 0}
 --- !u!54 &6755519519185260203
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2702,6 +2709,7 @@ MonoBehaviour:
     TrickAnimStateName: KickFlip
   playerHingeMovementController: {fileID: 9112553975738110858}
   scoreMultiplierMultiplier: 0.5
+  text: {fileID: 0}
 --- !u!1 &9112553976162905586
 GameObject:
   m_ObjectHideFlags: 0

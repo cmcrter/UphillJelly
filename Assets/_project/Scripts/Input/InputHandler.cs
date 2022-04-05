@@ -54,10 +54,6 @@ namespace L7Games.Input
         [SerializeField]
         [Tooltip("The patterns to check for from the analogue stick")]
         private List<AnalogueStickPattern> analogueStickPatterns;
-
-        [SerializeField]
-        [Tooltip("The trick input buffer to pass inputs too")]
-        private TrickInputBuffer trickInputBuffer;
         #endregion
 
         #region Private Variables
@@ -832,7 +828,6 @@ namespace L7Games.Input
                         else
                         {
                             Debug.Log("Pattern Completed with Id: " + analogueStickPatterns[i].ID.ToString());
-                            trickInputBuffer.AddUnHeldInput(analogueStickPatterns[i].ID);
                             if (analogueStickPatternCompleted != null)
                             {
                                 analogueStickPatternCompleted(analogueStickPatterns[i].ID);
