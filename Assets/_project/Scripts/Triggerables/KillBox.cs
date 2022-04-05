@@ -36,6 +36,9 @@ namespace L7Games.Triggerables
         [SerializeField]
         private bool wipeoutOnHit = false;
 
+        [SerializeField]
+        private ScriptableParticles particlesOnContact;
+
         #endregion
 
         #region Private Methods
@@ -45,6 +48,11 @@ namespace L7Games.Triggerables
         /// <param name="player">The player controller that entered the kill box</param>
         private void KillPlayer(PlayerController player)
         {
+            if(VFXPlayer.instance && particlesOnContact)
+            {
+                VFXPlayer.instance.PlayVFX(particlesOnContact, player.transform.position);
+            }
+
             if(wipeoutOnHit)
             {
                 player.CallOnWipeout(Vector3.zero);
