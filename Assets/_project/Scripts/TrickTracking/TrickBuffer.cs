@@ -237,6 +237,16 @@ namespace L7Games.Tricks
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Forcibly stop the buffer and clear everything
+        /// </summary>
+        public void ClearTricks()
+        {
+            ClearBuffer();
+            trickPlaying = null;
+        }
+
         /// <summary>
         /// Returns the score value of the current combo
         /// </summary>
@@ -372,6 +382,9 @@ namespace L7Games.Tricks
 
         private void EndAerialTrick()
         {
+            //Guard clause to make sure there's no issues
+            if(trickPlaying == null) return;
+
             AddOneShotCompletedAction(trickPlaying.scoreableDetails);
             trickPlaying = null;
         }

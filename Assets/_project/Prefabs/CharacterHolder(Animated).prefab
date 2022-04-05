@@ -878,8 +878,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: -0.45000076, y: 1, z: -4.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1576,8 +1576,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1, z: -4}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: -0.45000076, y: 1, z: -4.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -1613,7 +1613,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7764705, y: 1}
+    m_SensorSize: {x: 1.7787162, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2228,7 +2228,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8125778536543895643}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0.7910607, z: -0.043778285}
+  m_LocalPosition: {x: 0.00019836426, y: 0.7910607, z: 67.32389}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 877411814213596288}
@@ -2435,7 +2435,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9112553975738110861}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: -0.75, y: 0.5, z: -0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 877411814213596288}
@@ -2470,12 +2470,6 @@ MonoBehaviour:
     hasRan: 0
     AerialDrag: 0.125
     adjustGroundSmoothness: 3
-    trickClips:
-    - {fileID: 7400000, guid: 61dd091fad70ffd40b2a0937af6fa3e6, type: 2}
-    - {fileID: 7400000, guid: 00061297a7298d14d8673eae19f0ba97, type: 2}
-    currentTrickPercent: 0
-    trickCombo: []
-    trickBuffer: {fileID: 5230695797762261264}
   groundedState:
     hasRan: 0
     testPressDownObject: {fileID: 8040090982727821118}
@@ -2509,7 +2503,6 @@ MonoBehaviour:
     collisionCheckMask:
       serializedVersion: 2
       m_Bits: 64
-    trickBuffer: {fileID: 5230695797762261264}
     wallrideScoreableAction: {fileID: 11400000, guid: 124679ba47d95274bba7e0d86fdd7aeb, type: 2}
   grindingState:
     hasRan: 0
@@ -2520,7 +2513,6 @@ MonoBehaviour:
     jumpCoroutineDuration: 0
     jumpSpeed: 50
     grindVFXObject: {fileID: 4178507339667563327}
-    trickBuffer: {fileID: 5230695797762261264}
     grindTricks:
     - scoreableDetails: {fileID: 11400000, guid: bc5bc91ae31a7704bab8325d8d17b12a, type: 2}
       TrickAnimStateName: 5-0Grind
@@ -2572,6 +2564,7 @@ MonoBehaviour:
   inputHandler: {fileID: 2636407542772683316}
   characterAnimator: {fileID: 533361863209971257}
   triggerObject: {fileID: 2067759062112456412}
+  trickBuffer: {fileID: 5230695797762261264}
   frontWheelPos: {fileID: 2895347839156224780}
   characterModel: {fileID: 533361863209971258}
   lookAtTransform: {fileID: 7535963120756405929}

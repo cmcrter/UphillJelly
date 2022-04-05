@@ -46,8 +46,6 @@ namespace L7Games.Movement
         LayerMask collisionCheckMask;
 
         [SerializeField]
-        private TrickBuffer trickBuffer;
-        [SerializeField]
         private ScoreableAction wallrideScoreableAction;
 
         private int currentGrindTrickID;
@@ -151,7 +149,7 @@ namespace L7Games.Movement
 
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
-            currentGrindTrickID = trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
+            currentGrindTrickID = playerMovement.trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
 
             hasRan = true;
         }
@@ -177,7 +175,7 @@ namespace L7Games.Movement
 
             playerMovement.StartAirInfluenctCoroutine();
 
-            trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+            playerMovement.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
 
             hasRan = false;
         }

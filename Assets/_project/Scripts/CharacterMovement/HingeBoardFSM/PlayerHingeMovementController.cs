@@ -18,9 +18,11 @@ using Cinemachine;
 using System.Collections.Generic;
 using Debug = UnityEngine.Debug;
 using FMODUnity;
+using L7Games.Tricks;
 
 namespace L7Games.Movement
 {
+    [RequireComponent(typeof(TrickBuffer))]
     public class PlayerHingeMovementController : PlayerController
     {
         #region Variables
@@ -74,6 +76,7 @@ namespace L7Games.Movement
         public InputHandler inputHandler;
         public Animator characterAnimator;
         public TriggerableTrigger triggerObject;
+        public TrickBuffer trickBuffer;
 
         [SerializeField]
         private Transform frontWheelPos;
@@ -121,7 +124,7 @@ namespace L7Games.Movement
 
             Time.timeScale = 0;
 
-            characterAnimator.Play("grounded");
+            characterAnimator.Play("aerial");
             characterAnimator.playbackTime = 1f;
     
             fRB.isKinematic = false;
@@ -157,13 +160,15 @@ namespace L7Games.Movement
 
             CallOnRespawn();
 
-            groundedState.OnStateExit();
-            grindingState.OnStateExit();
-            aerialState.OnStateExit();
-            wallRideState.OnStateExit();
+            trickBuffer.ClearTricks();
+
+            if(playerStateMachine.currentState != null)
+            {
+                playerStateMachine.currentState.OnStateExit();
+            }
 
             playerStateMachine.ForceSwitchToState(aerialState);
-            triggerObject.enabled = true;
+            triggerObject.enabled = true;            
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -174,7 +179,7 @@ namespace L7Games.Movement
             bWipeOutLocked = true;
             Time.timeScale = 0;
 
-            characterAnimator.Play("grounded");
+            characterAnimator.Play("aerial");
             characterAnimator.playbackTime = 1f;
 
             fRB.isKinematic = false;
@@ -209,10 +214,12 @@ namespace L7Games.Movement
             
             CallOnRespawn();
 
-            groundedState.OnStateExit();
-            grindingState.OnStateExit();
-            aerialState.OnStateExit();
-            wallRideState.OnStateExit();
+            trickBuffer.ClearTricks();
+
+            if(playerStateMachine.currentState != null)
+            {
+                playerStateMachine.currentState.OnStateExit();
+            }
 
             playerStateMachine.ForceSwitchToState(aerialState);
             triggerObject.enabled = true;
@@ -370,6 +377,7 @@ namespace L7Games.Movement
             playerStateMachine = new FiniteStateMachine(aerialState);
 
             camBrain = camBrain ?? FindObjectOfType<CinemachineVirtualCamera>();
+            trickBuffer = trickBuffer ?? GetComponent<TrickBuffer>();
         }
 
         //Adding the inputs to the finite state machine
