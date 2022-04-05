@@ -162,12 +162,13 @@ namespace L7Games.Movement
                 parentController.AlignWheels();
             }
 
-            UpdatePositionAndRotation(dT);
             parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
         }
 
         public override void PhysicsTick(float dT)
         {
+            UpdatePositionAndRotation(dT);
+
             if(bConstantForce)
             {
                 movementRB.AddForceAtPosition(playerTransform.forward * constantForce, movementRB.position + movementRB.centerOfMass, ForceMode.Force);
@@ -220,7 +221,7 @@ namespace L7Games.Movement
                 float dotAngle = Vector3.Dot(movementRB.velocity.normalized, playerTransform.forward.normalized);
                 float absDotAngle = Mathf.Abs(dotAngle);
 
-                Vector3 forward = movementRB.transform.forward;
+                Vector3 forward = parentController.transform.forward;
 
                 //Moving almost directly backwards
                 if(dotAngle < -0.98f && movementRB.velocity.magnitude > 1)
@@ -240,13 +241,13 @@ namespace L7Games.Movement
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if(absDotAngle < 0.99f)
                 {
-                    movementRB.angularVelocity = Vector3.zero;
+                    //movementRB.angularVelocity = Vector3.zero;
 
                     //And conserving it if need be
                     if(absDotAngle < 0.3265f)
                     {
                         movementRB.velocity = Vector3.zero;
-                        movementRB.AddForce(playerTransform.forward.normalized, ForceMode.Impulse);
+                        movementRB.AddForce(playerTransform.forward.normalized * dT, ForceMode.Impulse);
                     }
                 }
 
@@ -367,6 +368,8 @@ namespace L7Games.Movement
             float newjumpSpeed = /*isPressingDown ? jumpSpeed * 1.25f : */ jumpSpeed;
 
             yield return new WaitForFixedUpdate();
+            jumpTimer.Tick(Time.fixedDeltaTime);
+
             movementRB.AddForce(parentController.transform.up * newjumpSpeed * 1000f);
             Mathf.Clamp(movementRB.velocity.y, -99999, 5f);
 
@@ -427,7 +430,7 @@ namespace L7Games.Movement
                 }
              
                 //Tick each frame
-                pushDuringTimer.Tick(Time.deltaTime);
+                pushDuringTimer.Tick(Time.fixedDeltaTime);
                 yield return null;
             }
 

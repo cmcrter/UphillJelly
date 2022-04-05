@@ -358,6 +358,8 @@ namespace L7Games.Movement
             {
                 transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation * headingDelta, 1.25f * Time.deltaTime);
             }
+
+            fRB.transform.rotation = transform.rotation;
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
