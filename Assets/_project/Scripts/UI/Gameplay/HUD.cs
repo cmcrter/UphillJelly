@@ -46,7 +46,7 @@ public class HUD : MonoBehaviour
     private float trickTextFadeOutDuration;
 
     [SerializeField]
-    private PlayerController playerControllingHud;
+    private PlayerHingeMovementController playerControllingHud;
 
     private ScoreableAction actionInProgress;
 
@@ -69,16 +69,25 @@ public class HUD : MonoBehaviour
     #region Unity Methods
     void Start()
     {
-	    // TODO: This will only work in single player, this should be one of the first things to fixed if local multiplayer is implemented
+
+    }
+
+    private void Awake()
+    {
+        // TODO: This will only work in single player, this should be one of the first things to fixed if local multiplayer is implemented
         if (trickBuffer == null)
         {
             trickBuffer = FindObjectOfType<TrickBuffer>();
         }
+        if (playerControllingHud == null)
+        {
+            playerControllingHud = FindObjectOfType<PlayerHingeMovementController>();
+        }
     }
- 
+
     void Update()
     {
-        ScoreText.text = storedScore.ToString();
+        ScoreText.text = Mathf.Round(storedScore).ToString();
     }
 
     private void OnEnable()
@@ -90,6 +99,13 @@ public class HUD : MonoBehaviour
         trickBuffer.ComboBroken += TrickBuffer_ComboBroken;
 
         MoneyCollectable.MoneyPickedUp += MoneyCollectable_MoneyPickedUp;
+
+        playerControllingHud.onRespawn += PlayerControllingHud_onRespawn;
+    }
+
+    private void PlayerControllingHud_onRespawn()
+    {
+        HUDReset();
     }
 
     private void OnDisable()
@@ -101,6 +117,8 @@ public class HUD : MonoBehaviour
         trickBuffer.ComboBroken -= TrickBuffer_ComboBroken;
 
         MoneyCollectable.MoneyPickedUp -= MoneyCollectable_MoneyPickedUp;
+
+        playerControllingHud.onRespawn -= PlayerControllingHud_onRespawn;
     }
 
     private void MoneyCollectable_MoneyPickedUp(L7Games.Movement.PlayerController playerPickingUpMoney)
