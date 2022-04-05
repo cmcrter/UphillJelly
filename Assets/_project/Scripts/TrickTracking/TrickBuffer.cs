@@ -138,6 +138,16 @@ namespace L7Games.Tricks
         private List<KeyValuePair<ScoreableAction, float>> scoreableActionsCompleted;
         #endregion
 
+        #region Public Properties
+        public float ComboMultiplier
+        {
+            get
+            {
+                return (1f + (((float)scoreableActionsCompleted.Count + (float)scoreableActionsInProgress.Count - 1f) * scoreMultiplierMultiplier));
+            }
+        }
+        #endregion
+
         #region Public Events
         public event System.Action<ScoreableAction> ActionCompleted;
         public event System.Action<ScoreableAction> ActionStarted;
@@ -232,7 +242,7 @@ namespace L7Games.Tricks
                 }
             }
 
-            text.text = GetComboText();
+            //text.text = GetComboText();
         }
         #endregion
 
@@ -268,7 +278,7 @@ namespace L7Games.Tricks
                 baseScore += scoreableActionsInProgress[i].scoreableActionData.initalScoreValue;
                 baseScore += scoreableActionsInProgress[i].scoreableActionData.scorePerSecond * (Time.time - scoreableActionsInProgress[i].startTime);
             }
-            return baseScore * (1f + (((float)scoreableActionsCompleted.Count + (float)scoreableActionsInProgress.Count - 1f) * scoreMultiplierMultiplier));
+            return baseScore * ComboMultiplier;
         }
 
         /// <summary>
@@ -293,7 +303,7 @@ namespace L7Games.Tricks
 
         public string GetComboText()
         {
-            string comboText = GetScoreFromCurrentCombo().ToString() + " X " + (1f + (((float)scoreableActionsCompleted.Count + (float)scoreableActionsInProgress.Count - 1f) * scoreMultiplierMultiplier)).ToString() + '\n';
+            string comboText = GetScoreFromCurrentCombo().ToString() + " X " + ComboMultiplier.ToString() + '\n';
             for (int i = 0; i < scoreableActionsCompleted.Count; ++i)
             {
                 comboText += scoreableActionsCompleted[i].Key.trickName;

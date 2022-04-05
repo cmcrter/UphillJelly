@@ -21,6 +21,11 @@ namespace L7Games.Triggerables.Collectables
 
         #endregion
 
+        #region Public Events
+        public delegate void MoneyPickedUpDelegate(PlayerController playerPickingUpMoney);
+        public static event MoneyPickedUpDelegate MoneyPickedUp;
+        #endregion
+
         #region Public Methods
 
         public override void PickupCollectable(PlayerController player)
@@ -31,6 +36,11 @@ namespace L7Games.Triggerables.Collectables
             //player.AddMoney(fCollectableScore);
 
             base.PickupCollectable(player);
+
+            if (MoneyPickedUp != null)
+            {
+                MoneyPickedUp(player);
+            }
         }
 
         #endregion
