@@ -26,6 +26,9 @@ namespace L7Games
 
         #region Variables
 
+        //public b_Player b_player;
+        //public PlayFabManager playfabManager;
+
         [SerializeField]
         private GameObject endUI;
 
@@ -45,6 +48,10 @@ namespace L7Games
         private void MapFinished(PlayerController player)
         {
             //Show End UI
+            if(endUI)
+            {
+                endUI.SetActive(true);
+            }
         }
 
 

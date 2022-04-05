@@ -2739,6 +2739,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 512008785}
   m_CullTransparentMesh: 1
+--- !u!114 &573405261 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 770019657, guid: b4b7e8fadc5d12f4db8df1e6c554e7ed, type: 3}
+  m_PrefabInstance: {fileID: 1240221540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &585092456
 Mesh:
   m_ObjectHideFlags: 0
@@ -6157,7 +6168,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
   analogueStickPatterns: []
-  trickInputBuffer: {fileID: 0}
 --- !u!1 &1145114516 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 344732999792547764, guid: ebcddb17e99f8c445ba225ef49234fcd, type: 3}
@@ -14598,6 +14608,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5230695797762261264, guid: d77d97ddf2dd80d4a8ee0f9ba740a8ba, type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 573405261}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d77d97ddf2dd80d4a8ee0f9ba740a8ba, type: 3}
 --- !u!1001 &6191495317840154333
@@ -14713,7 +14727,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 791570300273447}
   analogueStickPatterns: []
-  trickInputBuffer: {fileID: 0}
 --- !u!4 &6760451510322693524
 Transform:
   m_ObjectHideFlags: 0
