@@ -199,6 +199,8 @@ namespace L7Games.Movement
             fRB.drag = aerialState.AerialDrag;
             ModelRB.drag = aerialState.AerialDrag;
 
+            fRB.centerOfMass = Vector3.zero;
+
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
 
