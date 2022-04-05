@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using L7Games.Tricks;
 using System.Collections;
 using System.Collections.Generic;
 

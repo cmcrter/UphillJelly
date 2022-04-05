@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using L7Games.Tricks;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -61,7 +62,7 @@ namespace L7Games.Movement
         [SerializeField]
         private TrickBuffer trickBuffer;
         [SerializeField]
-        private ScoreableAction grindScoreableAction;
+        private Trick[] grindTricks;
 
         private int currentGrindTrickID;
         private FMOD.Studio.EventInstance GS;
@@ -104,6 +105,11 @@ namespace L7Games.Movement
         {
             grindVisualiser.transform.parent = null;
 
+            // Select Trick
+            Trick selectedTrick = grindTricks[UnityEngine.Random.Range(0, grindTricks.Length)];
+
+            parentController.characterAnimator.Play(selectedTrick.TrickAnimStateName);
+
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.characterAnimator.SetBool("grinding", true);
             //parentController.bWipeOutLocked = true;
@@ -140,7 +146,7 @@ namespace L7Games.Movement
 
             grindVFXObject.SetActive(true);
 
-            currentGrindTrickID = trickBuffer.AddScoreableActionInProgress(grindScoreableAction);
+            currentGrindTrickID = trickBuffer.AddScoreableActionInProgress(selectedTrick.scoreableDetails);
             GS = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/GrindRail2");
             GS.start();
 

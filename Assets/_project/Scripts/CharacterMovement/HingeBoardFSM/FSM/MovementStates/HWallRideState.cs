@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using L7Games.Tricks;
 using Cinemachine;
 
 namespace L7Games.Movement
