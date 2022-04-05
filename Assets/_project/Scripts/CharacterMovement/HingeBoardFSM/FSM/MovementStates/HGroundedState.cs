@@ -132,10 +132,10 @@ namespace L7Games.Movement
 
         public override State returnCurrentState()
         {
-            if(grindedCondition.isConditionTrue())
-            {
-                return parentController.grindingState;
-            }
+            //if(grindedCondition.isConditionTrue())
+            //{
+            //    return parentController.grindingState;
+            //}
 
             if(!groundedCondition.isConditionTrue())
             {

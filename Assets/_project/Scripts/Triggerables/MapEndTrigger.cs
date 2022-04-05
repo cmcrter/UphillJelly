@@ -32,6 +32,10 @@ namespace L7Games
         [SerializeField]
         private GameObject endUI;
 
+        //Should be replaced by the HUD script at some point
+        [SerializeField]
+        private RankTimer timer;
+
         #endregion
 
         #region Unity Methods
@@ -45,16 +49,22 @@ namespace L7Games
 
         #region Private Methods
 
-        private void MapFinished(PlayerController player)
+        //Can be called by cinematics too
+        public void MapFinished(PlayerController player)
         {
             //Show End UI
             if(endUI)
             {
                 endUI.SetActive(true);
             }
+
+            if(timer)
+            {
+                timer.gameEnded = true;
+            }
         }
 
-
+        //shouldn't do anything
         private void MapUnfinished()
         {
 
