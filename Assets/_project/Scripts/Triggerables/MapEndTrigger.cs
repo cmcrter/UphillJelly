@@ -24,14 +24,16 @@ namespace L7Games
 
         #endregion
 
+        #region Variables
+
+        [SerializeField]
+        private GameObject endUI;
+
+        #endregion
+
         #region Unity Methods
 
         void Start()
-        {
-
-        }
-
-        void Update()
         {
 
         }
@@ -42,7 +44,7 @@ namespace L7Games
 
         private void MapFinished(PlayerController player)
         {
-
+            //Show End UI
         }
 
 
