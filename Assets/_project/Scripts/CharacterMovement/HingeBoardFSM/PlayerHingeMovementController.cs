@@ -124,10 +124,13 @@ namespace L7Games.Movement
 
             Time.timeScale = 0;
 
-            characterAnimator.Play("aerial");
-            characterAnimator.playbackTime = 1f;
-    
             fRB.isKinematic = false;
+
+            fRB.useGravity = true;
+            ModelRB.useGravity = true;
+
+            fRB.drag = aerialState.AerialDrag;
+            ModelRB.drag = aerialState.AerialDrag;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
@@ -165,10 +168,14 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
+                StopAllCoroutines();
             }
 
             playerStateMachine.ForceSwitchToState(aerialState);
-            triggerObject.enabled = true;            
+            triggerObject.enabled = true;
+
+            characterAnimator.Play("aerial");
+            characterAnimator.playbackTime = 1f;
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -179,10 +186,13 @@ namespace L7Games.Movement
             bWipeOutLocked = true;
             Time.timeScale = 0;
 
-            characterAnimator.Play("aerial");
-            characterAnimator.playbackTime = 1f;
-
             fRB.isKinematic = false;
+
+            fRB.useGravity = true;
+            ModelRB.useGravity = true;
+
+            fRB.drag = aerialState.AerialDrag;
+            ModelRB.drag = aerialState.AerialDrag;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
@@ -219,10 +229,14 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
+                StopAllCoroutines();
             }
 
             playerStateMachine.ForceSwitchToState(aerialState);
             triggerObject.enabled = true;
+
+            characterAnimator.Play("aerial");
+            characterAnimator.playbackTime = 1f;
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
