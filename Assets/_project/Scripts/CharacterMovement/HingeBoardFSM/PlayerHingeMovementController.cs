@@ -124,13 +124,15 @@ namespace L7Games.Movement
 
             Time.timeScale = 0;
 
-            fRB.isKinematic = false;
+            collectableCounter = 0;
 
+            fRB.isKinematic = false;
             fRB.useGravity = true;
-            ModelRB.useGravity = true;
 
             fRB.drag = aerialState.AerialDrag;
             ModelRB.drag = aerialState.AerialDrag;
+
+            fRB.centerOfMass = Vector3.zero;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
@@ -186,13 +188,18 @@ namespace L7Games.Movement
             bWipeOutLocked = true;
             Time.timeScale = 0;
 
+            collectableCounter = 0;
+
             fRB.isKinematic = false;
 
             fRB.useGravity = true;
-            ModelRB.useGravity = true;
+
+            fRB.centerOfMass = Vector3.zero;
 
             fRB.drag = aerialState.AerialDrag;
             ModelRB.drag = aerialState.AerialDrag;
+
+            fRB.centerOfMass = Vector3.zero;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
