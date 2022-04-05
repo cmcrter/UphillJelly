@@ -543,6 +543,7 @@ namespace L7Games.Movement
             if(AirturningCo != null)
             {
                 StopCoroutine(AirturningCo);
+                AirturningCo = null;
             }
         }
 
@@ -610,7 +611,7 @@ namespace L7Games.Movement
         private IEnumerator Co_AirInfluence()
         {
             bool InfluenceDir;
-            Timer influenceTimer = new Timer(5.0f);
+            Timer influenceTimer = new Timer(2.5f);
 
             while (influenceTimer.isActive)
             {
@@ -628,11 +629,9 @@ namespace L7Games.Movement
                     fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
                 }
 
-                influenceTimer.Tick(Time.deltaTime);
+                influenceTimer.Tick(Time.fixedDeltaTime);
                 yield return null;
             }
-
-            AirturningCo = null;
         }
 
         private float CalculateSignedSlopeAngle(Vector3 startingPoint, Vector3 endPoint, Vector3 flatPlaneNormal)

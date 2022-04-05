@@ -174,6 +174,8 @@ namespace L7Games.Movement
 
             playerMovement.characterAnimator.SetBool("wallriding", false);
 
+            playerMovement.StartAirInfluenctCoroutine();
+
             trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
 
             hasRan = false;
@@ -214,9 +216,8 @@ namespace L7Games.Movement
             //Debug.Log("Jumping off wall ride");
 
             fRB.isKinematic = false;
-
             playerMovement.StartCoroutine(WipeOutCooldown());
-            playerMovement.StartAirInfluenctCoroutine();
+
         }
 
         private IEnumerator WipeOutCooldown()
