@@ -58,6 +58,12 @@ namespace L7Games.Movement
         [SerializeField]
         private GameObject grindVFXObject;
 
+        [SerializeField]
+        private TrickBuffer trickBuffer;
+        [SerializeField]
+        private ScoreableAction grindScoreableAction;
+
+        private int currentGrindTrickID;
         private FMOD.Studio.EventInstance GS;
 
         #endregion
@@ -134,6 +140,7 @@ namespace L7Games.Movement
 
             grindVFXObject.SetActive(true);
 
+            currentGrindTrickID = trickBuffer.AddScoreableActionInProgress(grindScoreableAction);
             GS = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/GrindRail2");
             GS.start();
 
@@ -170,6 +177,9 @@ namespace L7Games.Movement
             bTravelBackwards = false;
             bForceExit = false;
             parentController.bWipeOutLocked = false;
+
+            trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+
             hasRan = false;
         }
 

@@ -49,6 +49,8 @@ namespace L7Games.Movement
         private float currentTrickPercent;
         [SerializeField]
         private List<AnimationClip> trickCombo = new List<AnimationClip>();
+        [SerializeField]
+        private TrickBuffer trickBuffer;
 
         public HAerialState()
         {
@@ -72,13 +74,13 @@ namespace L7Games.Movement
         public void RegisterInputs()
         {
             //Register functions
-            inputHandler.trickPressed += Trick;
+            //inputHandler.trickPressed += Trick;
         }
 
         public void UnRegisterInputs()
         {
             //Unregister functions
-            inputHandler.trickPressed -= Trick;
+            //inputHandler.trickPressed -= Trick;
         }
 
         public override State returnCurrentState()
@@ -161,11 +163,21 @@ namespace L7Games.Movement
             parentController.StopAirInfluenctCoroutine();
             parentController.characterAnimator.SetBool("aerial", false);
 
-            if(wipeOutOnExit && currentTrickPercent < 0.75f)
+            if (trickBuffer.IsTricking)
             {
-                parentController.CallOnWipeout(movementRB.velocity);
-                wipeOutOnExit = false;
+                if (trickBuffer.WithinInWipeOutTheshold)
+                {
+                    if (!parentController.bWipeOutLocked)
+                    parentController.CallOnWipeout(movementRB.velocity);
+                }
             }
+
+
+            //if(wipeOutOnExit && currentTrickPercent < 0.8f)
+            //{
+            //    parentController.CallOnWipeout(movementRB.velocity);
+            //    wipeOutOnExit = false;
+            //}
 
             trickCombo.Clear();
             currentTrickPercent = 0;
