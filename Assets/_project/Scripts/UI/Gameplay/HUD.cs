@@ -204,7 +204,10 @@ public class HUD : MonoBehaviour
         // If the action is the first one
         if (actionInProgress == null && lastScoreableAction == null)
         {
-            StopCoroutine(trickTextFadeOut);
+            if (trickTextFadeOut != null)
+            {
+                StopCoroutine(trickTextFadeOut);
+            }
             trickComboText.color = trickTextBaseColor;
             comboString = completedAction.trickName;
             currentTrickCount = 1;
@@ -248,7 +251,11 @@ public class HUD : MonoBehaviour
         if (actionInProgress == null && lastScoreableAction == null)
         {
             Debug.Log("NEW TRICK!");
-            StopCoroutine(trickTextFadeOut);
+            if (trickTextFadeOut != null)
+            {
+                StopCoroutine(trickTextFadeOut);
+            }
+
             trickComboText.color = trickTextBaseColor;
             comboString = startedAction.trickName;
             currentTrickCount = 1;
