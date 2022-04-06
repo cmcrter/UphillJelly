@@ -129,7 +129,7 @@ namespace L7Games.Movement
             parentController.ResetWheelPos();
             parentController.AlignWheels();
 
-            parentController.playerCamera.FollowRotation = false;
+            parentController.OverrideCamera(parentController.camBrain);
 
             movementRB.drag = AerialDrag;
             parentController.ModelRB.drag = AerialDrag;
