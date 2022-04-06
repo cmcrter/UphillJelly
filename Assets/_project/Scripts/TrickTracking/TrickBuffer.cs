@@ -117,6 +117,19 @@ namespace L7Games.Tricks
         private Timer comboTimeOutTimer;
 
         /// <summary>
+        /// The sound event for the basic combo sound
+        /// </summary>
+        private FMOD.Studio.EventInstance basicComboSound;
+        /// <summary>
+        /// The sound event for the when a 5 trick combo is reach
+        /// </summary>
+        private FMOD.Studio.EventInstance fiveComboSound;
+        /// <summary>
+        /// The sound event for the when a 10 or multiple of 5 above 10 trick combo is reached  
+        /// </summary>
+        private FMOD.Studio.EventInstance tenComboSound;
+
+        /// <summary>
         /// The ID of the aerial trick currently in progress
         /// </summary>
         private int aerialTrickInProgressID;
@@ -137,6 +150,10 @@ namespace L7Games.Tricks
         /// The score-able actions that have been complete and how long they were performed for
         /// </summary>
         private List<KeyValuePair<ScoreableAction, float>> scoreableActionsCompleted;
+
+
+
+
         #endregion
 
         #region Public Properties
@@ -167,6 +184,10 @@ namespace L7Games.Tricks
         private void Start()
         {
             comboTimeOutTimer = new Timer(ComboTimeOutDuration);
+
+            basicComboSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/ScoreSound");
+            fiveComboSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/ScoreSpecialCombo");
+            tenComboSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/ScoreSpecialCombo2");
         }
 
         private void OnDisable()
@@ -304,7 +325,7 @@ namespace L7Games.Tricks
                 ActionStarted(scoreableActionData);
             }
 
-
+            PlayComboSound();
 
             return currentID++;
         }
@@ -338,10 +359,7 @@ namespace L7Games.Tricks
                 ActionCompleted(scoreableActionData);
             }
 
-            if (scoreableActionsCompleted[scoreableActionsCompleted.Count - 1].Key == null)
-            {
-                Debug.Log("Here");
-            }
+            PlayComboSound();
         }
         /// <summary>
         /// Called to mark a scoreable action in progress as finished
@@ -418,6 +436,27 @@ namespace L7Games.Tricks
                 StartAerialTrick();
             }
         }
+        private void PlayComboSound()
+        {
+            int comboCount = scoreableActionsCompleted.Count + scoreableActionsInProgress.Count;
+            if (comboCount == 5)
+            {
+                basicComboSound.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                fiveComboSound.start();
+            }
+            else if (comboCount % 5 == 0)
+            {
+
+                tenComboSound.start();
+            }
+            else
+            {
+                basicComboSound.setParameterByName("ItemCombo", (comboCount));
+                basicComboSound.start();
+
+            }
+
+        }
 
         private void PlayerHingeMovementController_onWipeout(Vector3 obj)
         {
@@ -433,6 +472,8 @@ namespace L7Games.Tricks
             // End current trick if there is one going 
             trickPlaying = null;
         }
+
+
         #endregion
     }
 }
