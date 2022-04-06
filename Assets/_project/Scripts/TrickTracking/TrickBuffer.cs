@@ -116,9 +116,10 @@ namespace L7Games.Tricks
         /// </summary>
         private Timer comboTimeOutTimer;
 
-        public Text text;
-
-
+        /// <summary>
+        /// The ID of the aerial trick currently in progress
+        /// </summary>
+        private int aerialTrickInProgressID;
         /// <summary>
         /// The Id for the last state the animator was in before a trick was started
         /// </summary>
@@ -212,10 +213,14 @@ namespace L7Games.Tricks
             {
                 if (ComboTimeOutDuration <= 0f)
                 {
-                    if (ComboCompleted != null)
+                    if (scoreableActionsCompleted.Count > 0)
                     {
-                        ComboCompleted();
+                        if (ComboCompleted != null)
+                        {
+                            ComboCompleted();
+                        }
                     }
+
                     ClearBuffer();
                 }
                 else
@@ -223,9 +228,12 @@ namespace L7Games.Tricks
                     comboTimeOutTimer.Tick(Time.deltaTime);
                     if (!comboTimeOutTimer.isActive)
                     {
-                        if (ComboCompleted != null)
+                        if (scoreableActionsCompleted.Count > 0)
                         {
-                            ComboCompleted();
+                            if (ComboCompleted != null)
+                            {
+                                ComboCompleted();
+                            }
                         }
                         ClearBuffer();
                     }
@@ -380,6 +388,7 @@ namespace L7Games.Tricks
 
         private void StartAerialTrick()
         {
+
             previousAnimationStateHash = playerAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash;
             // Pick a random aerial trick to play 
             Trick aerialTrick = aerialTricks[Random.Range(0, aerialTricks.Length)];
@@ -388,14 +397,15 @@ namespace L7Games.Tricks
 
             trickWanted = false;
             trickPlaying = aerialTrick;
+            aerialTrickInProgressID = AddScoreableActionInProgress(aerialTrick.scoreableDetails);
         }
 
         private void EndAerialTrick()
         {
             //Guard clause to make sure there's no issues
             if(trickPlaying == null) return;
-
-            AddOneShotCompletedAction(trickPlaying.scoreableDetails);
+            FinishScorableActionInProgress(aerialTrickInProgressID);
+            //AddOneShotCompletedAction(trickPlaying.scoreableDetails);
             trickPlaying = null;
         }
 

@@ -213,7 +213,7 @@ public class HUD : MonoBehaviour
         else
         {
             // Check if the last trick performed was the same as the new one
-            if (completedAction == lastScoreableAction || completedAction == lastScoreableAction)
+            if (completedAction == lastScoreableAction)
             {
                 ++currentTrickCount;
                 if (currentTrickCount > 2)
@@ -221,7 +221,11 @@ public class HUD : MonoBehaviour
                     comboString = comboString.Remove(comboString.Length - 4);
                 }
                 comboString += " X " + currentTrickCount.ToString();
-
+            }
+            else if (completedAction == actionInProgress)
+            {
+                lastScoreableAction = completedAction;
+                actionInProgress = null;
             }
             else
             {
@@ -237,12 +241,47 @@ public class HUD : MonoBehaviour
 
         trickComboText.text = comboScoreText + '\n' + comboString;
     }
-    private void TrickBuffer_ActionStarted(ScoreableAction obj)
+    private void TrickBuffer_ActionStarted(ScoreableAction startedAction)
     {
-        //throw new System.NotImplementedException();
+        Debug.Log("Action Started!");
+        // If the action is the first one
+        if (actionInProgress == null && lastScoreableAction == null)
+        {
+            Debug.Log("NEW TRICK!");
+            StopCoroutine(trickTextFadeOut);
+            trickComboText.color = trickTextBaseColor;
+            comboString = startedAction.trickName;
+            currentTrickCount = 1;
+            actionInProgress = startedAction;
+        }
+        else
+        {
+            // Check if the last trick performed was the same as the new one
+            if (startedAction == lastScoreableAction)
+            {
+                ++currentTrickCount;
+                if (currentTrickCount > 2)
+                {
+                    comboString = comboString.Remove(comboString.Length - 4);
+                }
+                comboString += " X " + currentTrickCount.ToString();
+            }
+            else
+            {
+                // otherwise its a new trick in the combo
+                comboString += " + " + startedAction.trickName;
+                currentTrickCount = 1;
+                actionInProgress = startedAction;
+            }
+        }
+        // Figure Out the score Text
+        string comboScoreText = trickBuffer.GetScoreFromCurrentCombo().ToString() + " X " + trickBuffer.ComboMultiplier;
+
+        trickComboText.text = comboScoreText + '\n' + comboString;
     }
     private void TrickBuffer_ComboBroken()
     {
+        Debug.Log("Combo Broken");
         comboString = "";
         trickTextFadeOut = StartCoroutine(FadeOutTrickText(comboFailedColor, trickTextFadeOutDuration));
         lastScoreableAction = null;
@@ -250,6 +289,7 @@ public class HUD : MonoBehaviour
     }
     private void TrickBuffer_ComboCompleted()
     {
+        Debug.Log("Combo Completed");
         comboString = "";
         trickTextFadeOut = StartCoroutine(FadeOutTrickText(comboSuccessColor, trickTextFadeOutDuration));
         lastScoreableAction = null;
