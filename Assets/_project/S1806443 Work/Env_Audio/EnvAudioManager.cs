@@ -59,12 +59,21 @@ namespace SleepyCat
         }
 
         private void OnEnable() {
+            if(!playerReference)
+            {
+                return;
+            }
             playerReference.onWipeout += PlayerWipeOut;
 
             playerReference.onRespawn += PlayerRespawn;
         }
 
         private void OnDisable() {
+            if(!playerReference)
+            {
+                return;
+            }
+
             playerReference.onWipeout -= PlayerWipeOut;
 
             playerReference.onRespawn -= PlayerRespawn;
