@@ -22,9 +22,9 @@ namespace SleepyCat
 
         private StudioEventEmitter soundEmitter;
 
-        FMOD.Studio.Bus Master;
-        FMOD.Studio.Bus Ambient;
-        FMOD.Studio.Bus Player;
+        //FMOD.Studio.Bus Master;
+        //FMOD.Studio.Bus Ambient;
+        //FMOD.Studio.Bus Player;
         FMOD.Studio.Bus Music;
 
         public float fDeath;
@@ -36,9 +36,9 @@ namespace SleepyCat
         public Slider slider3;
         public Slider slider4;
 
-        public float masterVolume;
-        public float ambientVolume;
-        public float playerVolume;
+        //public float masterVolume;
+        //public float ambientVolume;
+        //public float playerVolume;
         public float musicVolume;
 
         //public string Eventthis = "";
@@ -47,10 +47,14 @@ namespace SleepyCat
 
         private void Awake() {
 
-            Master = FMODUnity.RuntimeManager.GetBus("bus:/Master");
-            Ambient = FMODUnity.RuntimeManager.GetBus("bus:/Ambient");
-            Player = FMODUnity.RuntimeManager.GetBus("bus:/Player");
+            //Master = FMODUnity.RuntimeManager.GetBus("bus:/Master");
+            //Ambient = FMODUnity.RuntimeManager.GetBus("bus:/Ambient");
+            //Player = FMODUnity.RuntimeManager.GetBus("bus:/Player");
             Music = FMODUnity.RuntimeManager.GetBus("bus:/Music");
+            
+            //Ambient.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            //Player.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            Music.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 
         }
 
@@ -65,6 +69,8 @@ namespace SleepyCat
 
             playerReference.onRespawn -= PlayerRespawn;
         }
+
+
 
         // Start is called before the first frame update
         void Start() {
@@ -81,7 +87,7 @@ namespace SleepyCat
 
             StartCoroutine(WaitOnStart());
 
-            mainMenuMusic = FMODUnity.RuntimeManager.CreateInstance(null);
+            //mainMenuMusic = FMODUnity.RuntimeManager.CreateInstance(null);
 
             //soundEmitter.SetParameter
 
@@ -113,6 +119,7 @@ namespace SleepyCat
         }
 
         public void PlayMusicForMap() {
+
             /*
             if (replaySaveManager.isMainMenu) {
 
@@ -126,6 +133,7 @@ namespace SleepyCat
 
 
             }
+            
 
             if (replaySaveManager.isMapTutorial) {
 
@@ -170,22 +178,22 @@ namespace SleepyCat
                 fDeath = 0;
             }
 
-            masterVolume = slider1.value;
-            Debug.Log(masterVolume);
+            //masterVolume = slider1.value;
+            //Debug.Log(masterVolume);
 
-            ambientVolume = slider2.value;
-            Debug.Log(ambientVolume);
+            //ambientVolume = slider2.value;
+            //Debug.Log(ambientVolume);
 
-            playerVolume = slider3.value;
-            Debug.Log(playerVolume);
+            //playerVolume = slider3.value;
+            //Debug.Log(playerVolume);
 
-            musicVolume = slider4.value;
-            Debug.Log(musicVolume);
+            //musicVolume = slider4.value;
+            //Debug.Log(musicVolume);
 
-            Master.setVolume(masterVolume);
-            Ambient.setVolume(ambientVolume);
-            Player.setVolume(playerVolume);
-            Music.setVolume(musicVolume);
+            //Master.setVolume(masterVolume);
+            //Ambient.setVolume(ambientVolume);
+            //Player.setVolume(playerVolume);
+            //Music.setVolume(musicVolume);
         }
 
         private IEnumerator WaitOnStart() {
