@@ -119,6 +119,11 @@ namespace L7Games.Movement
             CollectableCooldownCoroutine = null;
         }
 
+        public virtual void OverrideCamera(CinemachineVirtualCamera camera, bool lockCamera)
+        {
+
+        }
+
         #endregion
     }
 }
