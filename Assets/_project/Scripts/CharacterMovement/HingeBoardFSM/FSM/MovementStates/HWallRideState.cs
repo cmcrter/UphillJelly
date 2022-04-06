@@ -135,8 +135,7 @@ namespace L7Games.Movement
 
             rideSpeed = nextToWallRun.wallSpeed;
 
-            playerMovement.camBrain.enabled = false;
-            playerMovement.wallRideCam.enabled = true;
+            playerMovement.OverrideCamera(playerMovement.wallRideCam, false);
 
             playerMovement.transform.rotation = Quaternion.LookRotation(wallForward, Vector3.up);
             playerMovement.AlignWheels();

@@ -112,7 +112,7 @@ namespace L7Games.Movement
             parentController.characterAnimator.SetBool("grinding", true);
             //parentController.bWipeOutLocked = true;
 
-            parentController.OverrideCamera(parentController.grindCam);
+            parentController.OverrideCamera(parentController.grindCam, false);
 
             //Making sure nothing interferes with the movement
             Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.265f, 0);

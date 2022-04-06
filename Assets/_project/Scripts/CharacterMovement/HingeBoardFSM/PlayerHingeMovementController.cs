@@ -86,6 +86,8 @@ namespace L7Games.Movement
         [SerializeField]
         private Transform lookAtTransform;
 
+        private bool bCameraLocked = false;
+
         [SerializeField]
         private float AdditionalGravityAmount = 8;
         public bool bAddAdditionalGravity = true;
@@ -131,6 +133,9 @@ namespace L7Games.Movement
 
             fRB.isKinematic = false;
             fRB.useGravity = true;
+
+            bCameraLocked = false;
+            OverrideCamera(camBrain);
 
             fRB.drag = aerialState.AerialDrag;
             ModelRB.drag = aerialState.AerialDrag;
@@ -197,6 +202,9 @@ namespace L7Games.Movement
             fRB.isKinematic = false;
 
             fRB.useGravity = true;
+
+            bCameraLocked = false;
+            OverrideCamera(camBrain);
 
             fRB.centerOfMass = Vector3.zero;
 
@@ -377,14 +385,21 @@ namespace L7Games.Movement
             nextToWallRun.LeftWall(wallRide);
         }
 
-        public override void OverrideCamera(CinemachineVirtualCamera camera)
+        public override void OverrideCamera(CinemachineVirtualCamera camera, bool lockCamera)
         {
+            if(bCameraLocked)
+            {
+                return;
+            }
+
             wipeOutCam.enabled = false;
             wallRideCam.enabled = false;
             camBrain.enabled = false;
             grindCam.enabled = false;
 
             camera.enabled = true;
+
+            bCameraLocked = lockCamera;
         }
 
         #endregion
