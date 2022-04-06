@@ -182,8 +182,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3424500109865572437}
-  - component: {fileID: 4939307931123949254}
-  - component: {fileID: 2165338930136536126}
   m_Layer: 6
   m_Name: CATRigLArm2
   m_TagString: BodyWipeOutCollider
@@ -206,35 +204,6 @@ Transform:
   m_Father: {fileID: 3942420716612087789}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -12.725187, y: -2.7882595, z: -15.709772}
---- !u!136 &4939307931123949254
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 754561147638537305}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.057010543
-  m_Height: 0.28505272
-  m_Direction: 0
-  m_Center: {x: -0.14252636, y: 0, z: 0}
---- !u!114 &2165338930136536126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 754561147638537305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 0
-  effectedByCollisionAngle: 0
-  ignoreVerticalCollisions: 0
 --- !u!1 &875987109895887014
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,8 +643,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3942420716612087789}
-  - component: {fileID: 6332591184887524977}
-  - component: {fileID: 1205653994676073071}
   m_Layer: 6
   m_Name: CATRigLArm1
   m_TagString: BodyWipeOutCollider
@@ -698,35 +665,6 @@ Transform:
   m_Father: {fileID: 2321614195983089408}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 5.2575345, y: 12.320112, z: 1.5476801}
---- !u!136 &6332591184887524977
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1638557670147767140}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.049685128
-  m_Height: 0.19874051
-  m_Direction: 0
-  m_Center: {x: -0.099370256, y: 0, z: 0}
---- !u!114 &1205653994676073071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1638557670147767140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 3
-  effectedByCollisionAngle: 0
-  ignoreVerticalCollisions: 0
 --- !u!1 &2136422863443787294
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,8 +704,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4214571759600723855}
-  - component: {fileID: 7746021083600303517}
-  - component: {fileID: 7580328688159628287}
   m_Layer: 6
   m_Name: CATRigRArm2
   m_TagString: BodyWipeOutCollider
@@ -790,35 +726,6 @@ Transform:
   m_Father: {fileID: 1332256782038303874}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -21.051579, y: 9.858839, z: -14.899381}
---- !u!136 &7746021083600303517
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2934334520815059502}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.057010528
-  m_Height: 0.28505263
-  m_Direction: 0
-  m_Center: {x: -0.14252631, y: 0, z: 0}
---- !u!114 &7580328688159628287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2934334520815059502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 0
-  effectedByCollisionAngle: 0
-  ignoreVerticalCollisions: 0
 --- !u!1 &3427917892551222308
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,8 +785,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.44999695, y: 1, z: -4.7499914}
+  m_LocalRotation: {x: 0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: -0.45000076, y: 1, z: -4.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1111,8 +1018,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1332256782038303874}
-  - component: {fileID: 1584977456457317795}
-  - component: {fileID: 5192612729766795037}
   m_Layer: 6
   m_Name: CATRigRArm1
   m_TagString: BodyWipeOutCollider
@@ -1135,35 +1040,6 @@ Transform:
   m_Father: {fileID: 7141804337911359644}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -4.8734574, y: -7.9462767, z: 2.6062667}
---- !u!136 &1584977456457317795
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4041801159765926624}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.049685016
-  m_Height: 0.19874007
-  m_Direction: 0
-  m_Center: {x: -0.09937003, y: 0, z: 0}
---- !u!114 &5192612729766795037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4041801159765926624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84683be8d9f4954e884eeaa85e958e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceRequiredToWipeOut: 3
-  effectedByCollisionAngle: 0
-  ignoreVerticalCollisions: 0
 --- !u!1 &4259979561909069369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1658,8 +1534,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.44999695, y: 1, z: -4.7499914}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: -0.45000076, y: 1, z: -4.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -1695,7 +1571,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9822867, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2605,6 +2481,8 @@ MonoBehaviour:
       TrickAnimStateName: NoseGrind
     - scoreableDetails: {fileID: 11400000, guid: 9ea3fa73f88a2554999d69ea13caa226, type: 2}
       TrickAnimStateName: BSBoardSlide
+    - scoreableDetails: {fileID: 11400000, guid: 27084b09e125e4b4894451e1f2925524, type: 2}
+      TrickAnimStateName: BSCrooked
   groundBelow:
     GroundMask:
       serializedVersion: 2
@@ -2783,6 +2661,10 @@ MonoBehaviour:
     TrickAnimStateName: 360ShoveIt
   - scoreableDetails: {fileID: 11400000, guid: 767be526f873f3440846e6163921d6f2, type: 2}
     TrickAnimStateName: KickFlip
+  - scoreableDetails: {fileID: 11400000, guid: 25599ce77e782e84594884b3eb26a667, type: 2}
+    TrickAnimStateName: HeelFlip
+  - scoreableDetails: {fileID: 11400000, guid: 991edc6604224a643829aa1c2496ab4f, type: 2}
+    TrickAnimStateName: TreFlip
   playerHingeMovementController: {fileID: 9112553975738110858}
   scoreMultiplierMultiplier: 0.5
   text: {fileID: 0}
@@ -3511,13 +3393,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
---- !u!1 &4178507339667563327 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1276008219694590229, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
-  m_PrefabInstance: {fileID: 2902641421408307754}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4178507339667563322 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1276008219694590224, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
+  m_PrefabInstance: {fileID: 2902641421408307754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4178507339667563327 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1276008219694590229, guid: 7a8b4e37593c76b47a7ecefcc81fbcef, type: 3}
   m_PrefabInstance: {fileID: 2902641421408307754}
   m_PrefabAsset: {fileID: 0}

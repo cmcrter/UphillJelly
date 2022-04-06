@@ -95,6 +95,8 @@ namespace L7Games.Movement
 
         private Coroutine AirturningCo;
         public float turnClamp = 1f;
+        [SerializeField]
+        private float turnSmoothness = 1.25f;
 
         [Tooltip("The prefab that is spawned to replace this as a ragdoll Ragdoll used prefab used")]
         [SerializeField]
@@ -178,6 +180,7 @@ namespace L7Games.Movement
 
             characterAnimator.Play("aerial");
             characterAnimator.playbackTime = 1f;
+            characterAnimator.SetFloat("crouchingFloat", -1);
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -244,6 +247,7 @@ namespace L7Games.Movement
 
             characterAnimator.Play("aerial");
             characterAnimator.playbackTime = 1f;
+            characterAnimator.SetFloat("crouchingFloat", -1);
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -356,10 +360,10 @@ namespace L7Games.Movement
             
             if(!bAerial)
             {
-                transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation * headingDelta, 1.25f * Time.deltaTime);
+                transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation * headingDelta, turnSmoothness * Time.deltaTime);
             }
 
-            fRB.transform.rotation = transform.rotation;
+            //fRB.transform.rotation = transform.rotation;
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
