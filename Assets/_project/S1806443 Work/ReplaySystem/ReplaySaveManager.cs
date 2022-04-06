@@ -46,6 +46,7 @@ public class ReplaySaveManager : MonoBehaviour
     // public static for this replaySaveManager
     public static ReplaySaveManager replaySaveManager;
 
+    /*
     // on awake
     void Awake() {
         
@@ -68,7 +69,7 @@ public class ReplaySaveManager : MonoBehaviour
         DontDestroyOnLoad(this);
         
     }
-
+    */
     #endregion
 
     #region Methods
