@@ -58,7 +58,7 @@ namespace L7Games.Tricks
         {
             get
             {
-                return playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.8f;
+                return playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.75f;
             }
         }
         #endregion
@@ -106,6 +106,8 @@ namespace L7Games.Tricks
         /// </summary>
         private Trick trickPlaying;
 
+        private int currentTrickAnimationStateHash;
+
         /// <summary>
         /// The timer for when the trick requests will time out
         /// </summary>
@@ -150,10 +152,6 @@ namespace L7Games.Tricks
         /// The score-able actions that have been complete and how long they were performed for
         /// </summary>
         private List<KeyValuePair<ScoreableAction, float>> scoreableActionsCompleted;
-
-
-
-
         #endregion
 
         #region Public Properties
@@ -227,6 +225,16 @@ namespace L7Games.Tricks
                     StartAerialTrick();
                 }
             }
+            else
+            {
+                if (!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName(trickPlaying.TrickAnimStateName))//(playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash != currentTrickAnimationStateHash)
+                {
+                    Debug.Log("Hash Mismatch");
+                    Debug.Log("current hash: " + playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash);
+                    Debug.Log("current stored: " + currentTrickAnimationStateHash.ToString());
+                    EndAerialTrick();
+                }
+            }
 
 
             // If the player is grounded then the countdown must be active for how much trick time is left
@@ -284,6 +292,7 @@ namespace L7Games.Tricks
         {
             ClearBuffer();
             trickPlaying = null;
+            currentTrickAnimationStateHash = -1;
         }
 
         /// <summary>
@@ -406,7 +415,6 @@ namespace L7Games.Tricks
 
         private void StartAerialTrick()
         {
-
             previousAnimationStateHash = playerAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash;
             // Pick a random aerial trick to play 
             Trick aerialTrick = aerialTricks[Random.Range(0, aerialTricks.Length)];
@@ -415,6 +423,8 @@ namespace L7Games.Tricks
 
             trickWanted = false;
             trickPlaying = aerialTrick;
+            currentTrickAnimationStateHash = playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+            Debug.Log("Start Hash " + playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash.ToString());
             aerialTrickInProgressID = AddScoreableActionInProgress(aerialTrick.scoreableDetails);
         }
 
@@ -423,8 +433,8 @@ namespace L7Games.Tricks
             //Guard clause to make sure there's no issues
             if(trickPlaying == null) return;
             FinishScorableActionInProgress(aerialTrickInProgressID);
-            //AddOneShotCompletedAction(trickPlaying.scoreableDetails);
             trickPlaying = null;
+            currentTrickAnimationStateHash = -1;
         }
 
         private void PlayerAnimationEventHandler_OnTrickAnimationEnded()
@@ -471,9 +481,8 @@ namespace L7Games.Tricks
             }
             // End current trick if there is one going 
             trickPlaying = null;
+            currentTrickAnimationStateHash = -1;
         }
-
-
         #endregion
     }
 }

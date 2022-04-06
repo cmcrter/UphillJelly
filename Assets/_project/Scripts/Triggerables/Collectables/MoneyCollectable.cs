@@ -30,7 +30,7 @@ namespace L7Games.Triggerables.Collectables
 
         public override void PickupCollectable(PlayerController player)
         {
-            Debug.Log("Money Picked Up");
+            //Debug.Log("Money Picked Up");
 
             //Add score onto player
             //player.AddMoney(fCollectableScore);

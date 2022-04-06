@@ -246,11 +246,9 @@ public class HUD : MonoBehaviour
     }
     private void TrickBuffer_ActionStarted(ScoreableAction startedAction)
     {
-        Debug.Log("Action Started!");
         // If the action is the first one
         if (actionInProgress == null && lastScoreableAction == null)
         {
-            Debug.Log("NEW TRICK!");
             if (trickTextFadeOut != null)
             {
                 StopCoroutine(trickTextFadeOut);
@@ -288,7 +286,6 @@ public class HUD : MonoBehaviour
     }
     private void TrickBuffer_ComboBroken()
     {
-        Debug.Log("Combo Broken");
         comboString = "";
         trickTextFadeOut = StartCoroutine(FadeOutTrickText(comboFailedColor, trickTextFadeOutDuration));
         lastScoreableAction = null;
@@ -296,7 +293,6 @@ public class HUD : MonoBehaviour
     }
     private void TrickBuffer_ComboCompleted()
     {
-        Debug.Log("Combo Completed");
         comboString = "";
         trickTextFadeOut = StartCoroutine(FadeOutTrickText(comboSuccessColor, trickTextFadeOutDuration));
         lastScoreableAction = null;
