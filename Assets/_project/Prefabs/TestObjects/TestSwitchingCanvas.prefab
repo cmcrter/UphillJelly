@@ -531,15 +531,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a8c47d323c32c646b97fdc9da1ad7dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TrickText: {fileID: 6015767057066285626}
-  ScoreText: {fileID: 163144895668767759}
-  SoundImage: {fileID: 0}
-  trickBuffer: {fileID: 0}
-  comboSuccessColor: {r: 0, g: 1, b: 0.03731489, a: 1}
   comboFailedColor: {r: 1, g: 0, b: 0, a: 1}
+  comboSuccessColor: {r: 0, g: 1, b: 0.03731489, a: 1}
   trickTextBaseColor: {r: 0, g: 0.8453088, b: 1, a: 1}
   trickTextFadeOutDuration: 3
-  playerControllingHud: {fileID: 0}
+  SoundImage: {fileID: 0}
+  controllingPlayer: {fileID: 0}
+  ScoreText: {fileID: 163144895668767759}
+  trickComboText: {fileID: 6015767057066285626}
+  trickBuffer: {fileID: 0}
 --- !u!1 &1404337487622476123
 GameObject:
   m_ObjectHideFlags: 0
