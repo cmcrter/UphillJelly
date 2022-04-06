@@ -785,8 +785,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: 0, y: 1, z: -0, w: -0.00000004371139}
-  m_LocalPosition: {x: 38.2, y: 14, z: 7.75}
+  m_LocalRotation: {x: 0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: -0.45000076, y: 1, z: -4.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1534,8 +1534,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.45, y: 1, z: -4.75}
+  m_LocalRotation: {x: -0, y: 0.00000004371139, z: -0, w: 1}
+  m_LocalPosition: {x: -0.45000076, y: 1, z: -4.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -2481,6 +2481,8 @@ MonoBehaviour:
       TrickAnimStateName: NoseGrind
     - scoreableDetails: {fileID: 11400000, guid: 9ea3fa73f88a2554999d69ea13caa226, type: 2}
       TrickAnimStateName: BSBoardSlide
+    - scoreableDetails: {fileID: 11400000, guid: 27084b09e125e4b4894451e1f2925524, type: 2}
+      TrickAnimStateName: BSCrooked
   groundBelow:
     GroundMask:
       serializedVersion: 2
@@ -2659,6 +2661,10 @@ MonoBehaviour:
     TrickAnimStateName: 360ShoveIt
   - scoreableDetails: {fileID: 11400000, guid: 767be526f873f3440846e6163921d6f2, type: 2}
     TrickAnimStateName: KickFlip
+  - scoreableDetails: {fileID: 11400000, guid: 25599ce77e782e84594884b3eb26a667, type: 2}
+    TrickAnimStateName: HeelFlip
+  - scoreableDetails: {fileID: 11400000, guid: 991edc6604224a643829aa1c2496ab4f, type: 2}
+    TrickAnimStateName: TreFlip
   playerHingeMovementController: {fileID: 9112553975738110858}
   scoreMultiplierMultiplier: 0.5
   text: {fileID: 0}
