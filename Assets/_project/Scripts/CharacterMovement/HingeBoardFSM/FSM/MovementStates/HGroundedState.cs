@@ -118,7 +118,7 @@ namespace L7Games.Movement
             //Register functions
             inputHandler.groundedJumpUpCancelled += Jump;
             inputHandler.pressDownStarted += PressDown;
-            inputHandler.pressDownEnded += UnPressDown;
+            inputHandler.pressDownEnded += Jump;
         }
 
         public void UnRegisterInputs()
@@ -126,7 +126,7 @@ namespace L7Games.Movement
             //Unregister functions
             inputHandler.groundedJumpUpCancelled -= Jump;
             inputHandler.pressDownStarted -= PressDown;
-            inputHandler.pressDownEnded -= UnPressDown;
+            inputHandler.pressDownEnded -= Jump;
 
         }
 
@@ -423,15 +423,13 @@ namespace L7Games.Movement
                     //Debug.Log(Time.deltaTime);
                     //Debug.Log(Time.fixedDeltaTime);
 
-                    yield return new WaitForFixedUpdate();
-
                     //Roughly Adjusting fixed update for normal update in testing (roughly)
                     movementRB.AddForce(force * 4f, ForceMode.Impulse);
                 }
              
                 //Tick each frame
                 pushDuringTimer.Tick(Time.fixedDeltaTime);
-                yield return null;
+                yield return new WaitForFixedUpdate();
             }
 
             pushCoroutine = null;
