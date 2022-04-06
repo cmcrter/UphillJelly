@@ -42,6 +42,7 @@ namespace L7Games.Movement
         public CinemachineVirtualCamera camBrain;
         public CinemachineVirtualCamera wallRideCam;
         public CinemachineVirtualCamera wipeOutCam;
+        public CinemachineVirtualCamera grindCam;
 
         private float currentTurnInput;
 
@@ -147,7 +148,7 @@ namespace L7Games.Movement
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
             boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
-            boardModel.transform.rotation = Quaternion.identity;
+            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
 
             transform.rotation = initialRot;
             transform.position = initalPos;
@@ -179,8 +180,8 @@ namespace L7Games.Movement
             triggerObject.enabled = true;
 
             characterAnimator.Play("aerial");
-            characterAnimator.playbackTime = 1f;
-            characterAnimator.SetFloat("crouchingFloat", -1);
+            //characterAnimator.playbackTime = 1f;
+            //characterAnimator.SetFloat("crouchingFloat", -1);
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -215,7 +216,7 @@ namespace L7Games.Movement
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
             boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
-            boardModel.transform.rotation = Quaternion.identity;
+            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
 
             transform.rotation = point.rotation;
             transform.position = point.position;
@@ -246,8 +247,8 @@ namespace L7Games.Movement
             triggerObject.enabled = true;
 
             characterAnimator.Play("aerial");
-            characterAnimator.playbackTime = 1f;
-            characterAnimator.SetFloat("crouchingFloat", -1);
+            //characterAnimator.playbackTime = 1f;
+            //characterAnimator.SetFloat("crouchingFloat", -1);
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -381,6 +382,7 @@ namespace L7Games.Movement
             wipeOutCam.enabled = false;
             wallRideCam.enabled = false;
             camBrain.enabled = false;
+            grindCam.enabled = false;
 
             camera.enabled = true;
         }
@@ -438,12 +440,11 @@ namespace L7Games.Movement
             initialRot = transform.rotation;
             fRB.transform.parent = null;
             boardPos = boardModel.transform.position;
-            boardModel.transform.rotation = Quaternion.identity;
             initialRootRotation = root.rotation;
 
             //characterInitalBones = GetBonesFromObject(characterModel);
 
-            if (checkpointManager == null)
+            if(checkpointManager == null)
             {
                 checkpointManager = FindObjectOfType<CheckpointManager>();
             }

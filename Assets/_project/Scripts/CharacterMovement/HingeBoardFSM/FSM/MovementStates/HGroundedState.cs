@@ -180,7 +180,8 @@ namespace L7Games.Movement
             pInput.SwitchCurrentActionMap("Grounded");
             parentController.characterAnimator.SetBool("grounded", true);
 
-            parentController.playerCamera.FollowRotation = true;
+            parentController.OverrideCamera(parentController.camBrain);
+
             movementRB.drag = GroundedDrag;
             parentController.ModelRB.drag = GroundedDrag;
 
