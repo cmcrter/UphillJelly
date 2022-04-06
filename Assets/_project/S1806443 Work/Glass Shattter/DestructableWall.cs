@@ -29,7 +29,7 @@ namespace SleepyCat
         public void BreakGlassWall() {
             Instantiate(pfGlassWallBroken, transform.position, transform.rotation);
             //Destroy(gameObject);
-            gameObject.transform.position = new Vector3(0, 0, 0);
+            gameObject.transform.position = new Vector3(1000, 1000, 1000);
             Debug.Log("Glass Destroyed");
 
             //pfGlassWallBroken.gameObject.GetComponent<Rigidbody>().AddExplosionForce(0, forceApplied, 0);
