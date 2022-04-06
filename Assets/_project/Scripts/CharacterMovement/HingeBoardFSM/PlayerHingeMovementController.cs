@@ -178,6 +178,7 @@ namespace L7Games.Movement
 
             characterAnimator.Play("aerial");
             characterAnimator.playbackTime = 1f;
+            characterAnimator.SetFloat("crouchingFloat", -1);
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -244,6 +245,7 @@ namespace L7Games.Movement
 
             characterAnimator.Play("aerial");
             characterAnimator.playbackTime = 1f;
+            characterAnimator.SetFloat("crouchingFloat", -1);
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
