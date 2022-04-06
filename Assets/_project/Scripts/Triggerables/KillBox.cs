@@ -1,9 +1,9 @@
 //================================================================================================================================================================================================================================================================================================================================================
 // File: KillBox.cs
-// Author: Matthew Mason
+// Author: Matthew Mason, Charles Carter
 // Date Created: 02/11/21
-// Last Edited By: Matthew Mason
-// Date Last Edited: 02/11/21
+// Last Edited By: Charles Carter
+// Date Last Edited: 01/04/22
 // Brief: A triggerable that makes the player enter the fail state when they enter the trigger (either falling off the board to just quickly teleporting back)
 //================================================================================================================================================================================================================================================================================================================================================
 
@@ -32,6 +32,13 @@ namespace L7Games.Triggerables
         [SerializeField]
         [Tooltip("The checkpoint manager used to control the reseting of the player")]
         private CheckpointManager checkpointManager;
+
+        [SerializeField]
+        private bool wipeoutOnHit = false;
+
+        [SerializeField]
+        private ScriptableParticles particlesOnContact;
+
         #endregion
 
         #region Private Methods
@@ -41,7 +48,19 @@ namespace L7Games.Triggerables
         /// <param name="player">The player controller that entered the kill box</param>
         private void KillPlayer(PlayerController player)
         {
-            checkpointManager.MovePlayerToTheirLastCheckPoint(player);
+            if(VFXPlayer.instance && particlesOnContact)
+            {
+                VFXPlayer.instance.PlayVFX(particlesOnContact, player.transform.position);
+            }
+
+            if(wipeoutOnHit)
+            {
+                player.CallOnWipeout(Vector3.zero);
+            }
+            else
+            {
+                checkpointManager.MovePlayerToTheirLastCheckPoint(player);
+            }
         }
         #endregion
     }

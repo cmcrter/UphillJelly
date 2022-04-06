@@ -18,9 +18,11 @@ using Cinemachine;
 using System.Collections.Generic;
 using Debug = UnityEngine.Debug;
 using FMODUnity;
+using L7Games.Tricks;
 
 namespace L7Games.Movement
 {
+    [RequireComponent(typeof(TrickBuffer))]
     public class PlayerHingeMovementController : PlayerController
     {
         #region Variables
@@ -74,6 +76,7 @@ namespace L7Games.Movement
         public InputHandler inputHandler;
         public Animator characterAnimator;
         public TriggerableTrigger triggerObject;
+        public TrickBuffer trickBuffer;
 
         [SerializeField]
         private Transform frontWheelPos;
@@ -121,10 +124,15 @@ namespace L7Games.Movement
 
             Time.timeScale = 0;
 
-            characterAnimator.Play("grounded");
-            characterAnimator.playbackTime = 1f;
-    
+            collectableCounter = 0;
+
             fRB.isKinematic = false;
+            fRB.useGravity = true;
+
+            fRB.drag = aerialState.AerialDrag;
+            ModelRB.drag = aerialState.AerialDrag;
+
+            fRB.centerOfMass = Vector3.zero;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
@@ -157,13 +165,19 @@ namespace L7Games.Movement
 
             CallOnRespawn();
 
-            groundedState.OnStateExit();
-            grindingState.OnStateExit();
-            aerialState.OnStateExit();
-            wallRideState.OnStateExit();
+            trickBuffer.ClearTricks();
+
+            if(playerStateMachine.currentState != null)
+            {
+                playerStateMachine.currentState.OnStateExit();
+                StopAllCoroutines();
+            }
 
             playerStateMachine.ForceSwitchToState(aerialState);
             triggerObject.enabled = true;
+
+            characterAnimator.Play("aerial");
+            characterAnimator.playbackTime = 1f;
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -174,10 +188,18 @@ namespace L7Games.Movement
             bWipeOutLocked = true;
             Time.timeScale = 0;
 
-            characterAnimator.Play("grounded");
-            characterAnimator.playbackTime = 1f;
+            collectableCounter = 0;
 
             fRB.isKinematic = false;
+
+            fRB.useGravity = true;
+
+            fRB.centerOfMass = Vector3.zero;
+
+            fRB.drag = aerialState.AerialDrag;
+            ModelRB.drag = aerialState.AerialDrag;
+
+            fRB.centerOfMass = Vector3.zero;
 
             fRB.angularVelocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
@@ -209,13 +231,19 @@ namespace L7Games.Movement
             
             CallOnRespawn();
 
-            groundedState.OnStateExit();
-            grindingState.OnStateExit();
-            aerialState.OnStateExit();
-            wallRideState.OnStateExit();
+            trickBuffer.ClearTricks();
+
+            if(playerStateMachine.currentState != null)
+            {
+                playerStateMachine.currentState.OnStateExit();
+                StopAllCoroutines();
+            }
 
             playerStateMachine.ForceSwitchToState(aerialState);
             triggerObject.enabled = true;
+
+            characterAnimator.Play("aerial");
+            characterAnimator.playbackTime = 1f;
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -330,6 +358,8 @@ namespace L7Games.Movement
             {
                 transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation * headingDelta, 1.25f * Time.deltaTime);
             }
+
+            fRB.transform.rotation = transform.rotation;
         }
 
         public override void AddWallRide(WallRideTriggerable wallRide)
@@ -370,6 +400,7 @@ namespace L7Games.Movement
             playerStateMachine = new FiniteStateMachine(aerialState);
 
             camBrain = camBrain ?? FindObjectOfType<CinemachineVirtualCamera>();
+            trickBuffer = trickBuffer ?? GetComponent<TrickBuffer>();
         }
 
         //Adding the inputs to the finite state machine
@@ -543,6 +574,7 @@ namespace L7Games.Movement
             if(AirturningCo != null)
             {
                 StopCoroutine(AirturningCo);
+                AirturningCo = null;
             }
         }
 
@@ -562,11 +594,13 @@ namespace L7Games.Movement
             bWipeOutLocked = true;
             triggerObject.enabled = false;
 
+            playerStateMachine.currentState.OnStateExit();
             playerStateMachine.ForceSwitchToState(null);
-            groundedState.OnStateExit();
-            grindingState.OnStateExit();
-            aerialState.OnStateExit();
-            wallRideState.OnStateExit();
+
+            //groundedState.OnStateExit();
+            //grindingState.OnStateExit();
+            //aerialState.OnStateExit();
+            //wallRideState.OnStateExit();
 
             //WipeOut needs to stop most of the players' actions
             input.SwitchCurrentActionMap("WipedOut");
@@ -608,7 +642,7 @@ namespace L7Games.Movement
         private IEnumerator Co_AirInfluence()
         {
             bool InfluenceDir;
-            Timer influenceTimer = new Timer(5.0f);
+            Timer influenceTimer = new Timer(2.5f);
 
             while (influenceTimer.isActive)
             {
@@ -626,11 +660,9 @@ namespace L7Games.Movement
                     fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
                 }
 
-                influenceTimer.Tick(Time.deltaTime);
+                influenceTimer.Tick(Time.fixedDeltaTime);
                 yield return null;
             }
-
-            AirturningCo = null;
         }
 
         private float CalculateSignedSlopeAngle(Vector3 startingPoint, Vector3 endPoint, Vector3 flatPlaneNormal)

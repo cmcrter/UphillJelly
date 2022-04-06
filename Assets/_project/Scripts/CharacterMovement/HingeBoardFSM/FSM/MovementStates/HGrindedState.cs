@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using L7Games.Tricks;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -58,6 +59,10 @@ namespace L7Games.Movement
         [SerializeField]
         private GameObject grindVFXObject;
 
+        [SerializeField]
+        private Trick[] grindTricks;
+
+        private int currentGrindTrickID;
         private FMOD.Studio.EventInstance GS;
 
         #endregion
@@ -98,13 +103,18 @@ namespace L7Games.Movement
         {
             grindVisualiser.transform.parent = null;
 
+            // Select Trick
+            Trick selectedTrick = grindTricks[UnityEngine.Random.Range(0, grindTricks.Length)];
+
+            parentController.characterAnimator.Play(selectedTrick.TrickAnimStateName);
+
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.characterAnimator.SetBool("grinding", true);
             //parentController.bWipeOutLocked = true;
             parentController.camBrain.Follow = parentController.transform;
 
             //Making sure nothing interferes with the movement
-            Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.25f, 0);
+            Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.265f, 0);
             //Debug.Log(closestPoint);
 
             movementRB.transform.position = closestPoint;
@@ -134,6 +144,7 @@ namespace L7Games.Movement
 
             grindVFXObject.SetActive(true);
 
+            currentGrindTrickID = parentController.trickBuffer.AddScoreableActionInProgress(selectedTrick.scoreableDetails);
             GS = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/GrindRail2");
             GS.start();
 
@@ -170,6 +181,9 @@ namespace L7Games.Movement
             bTravelBackwards = false;
             bForceExit = false;
             parentController.bWipeOutLocked = false;
+
+            parentController.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+
             hasRan = false;
         }
 
@@ -271,7 +285,7 @@ namespace L7Games.Movement
                 float desiredChange = desiredDistance / currentDistanceChange;
                 timeAlongGrind = Mathf.Clamp01(timeAlongGrind + Time.deltaTime * tIncrementPerSecond * desiredChange); // add length to this calculation
 
-                Vector3 newPos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.45f + 0.0375f, 0);
+                Vector3 newPos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind) + new Vector3(0, 0.465f + 0.0375f, 0);
 
                 //Using the calculated time to position everything correctly
                 pos = newPos;
@@ -284,7 +298,7 @@ namespace L7Games.Movement
             //if it's at the end
             else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f)
             {
-                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, 0.45f + 0.0375f, 0);
+                pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, 0.465f + 0.0375f, 0);
 
                 currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(0.99f, 0.01f);
 

@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using L7Games.Utility.StateMachine;
 using L7Games.Input;
+using L7Games.Tricks;
 using Cinemachine;
 
 namespace L7Games.Movement
@@ -43,6 +44,11 @@ namespace L7Games.Movement
 
         [SerializeField]
         LayerMask collisionCheckMask;
+
+        [SerializeField]
+        private ScoreableAction wallrideScoreableAction;
+
+        private int currentGrindTrickID;
 
         #region Public Methods
 
@@ -143,6 +149,8 @@ namespace L7Games.Movement
 
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
+            currentGrindTrickID = playerMovement.trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
+
             hasRan = true;
         }
 
@@ -164,6 +172,11 @@ namespace L7Games.Movement
             bJumping = false;
 
             playerMovement.characterAnimator.SetBool("wallriding", false);
+
+            playerMovement.StartAirInfluenctCoroutine();
+
+            playerMovement.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+
             hasRan = false;
         }
 
@@ -202,9 +215,8 @@ namespace L7Games.Movement
             //Debug.Log("Jumping off wall ride");
 
             fRB.isKinematic = false;
-
             playerMovement.StartCoroutine(WipeOutCooldown());
-            playerMovement.StartAirInfluenctCoroutine();
+
         }
 
         private IEnumerator WipeOutCooldown()

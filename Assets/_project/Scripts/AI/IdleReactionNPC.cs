@@ -44,6 +44,22 @@ public class IdleReactionNPC : MonoBehaviour
     [Tooltip("The player detection triggers used for detecting when the player collides with NPC's body")]
     [SerializeField]
     private PlayerDetectingTrigger[] bodyCollisionTriggers;
+
+    [SerializeField]
+    [Tooltip("The mesh render attached to the rag-doll")]
+    private SkinnedMeshRenderer ragdollMeshRenderer;
+
+    [SerializeField]
+    [Tooltip("The mesh render attached to the character")]
+    private SkinnedMeshRenderer characterMeshRenderer;
+
+    [SerializeField]
+    [Tooltip("The distance to check for players before it can reset")]
+    private float resetCheckDistance;
+
+    [SerializeField]
+    [Tooltip("The players to check look for players in")]
+    private LayerMask playerLayerMask;
     #endregion
 
     #region Private variables
@@ -115,9 +131,11 @@ public class IdleReactionNPC : MonoBehaviour
             if (ReplaceWithRagdoll(ragDollPrefab, out currentRagdoll))
             {
                 currentRagdoll.AddForceToRagdollAllRigidbody(playerController.ModelRB.velocity * 2.5f, ForceMode.Impulse);
-                currentRagdoll.StartCoroutine(testRest());
+                //currentRagdoll.StartCoroutine(testRest());
             }
-            gameObject.SetActive(false);
+            StartCoroutine(LoopingResetCheck());
+            this.enabled = false;
+            characterMeshRenderer.enabled = false;
         }
     }
 
@@ -193,11 +211,15 @@ public class IdleReactionNPC : MonoBehaviour
     {
         // Spawn the rag-doll
         GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, transform.position, transform.rotation);
+
         if (ragDoll.TryGetComponent<SpawnedRagdoll>(out spawnedRagdoll))
         {
             spawnedRagdoll.Initalise(ragdollData);
+            ragdollMeshRenderer = ragDoll.GetComponentInChildren<SkinnedMeshRenderer>();
+
             return spawnedRagdoll;
         }
+
         return false;
     }
 
@@ -211,6 +233,8 @@ public class IdleReactionNPC : MonoBehaviour
 
         // re-enable NPC and reset animations
         gameObject.SetActive(true);
+        this.enabled = true;
+        characterMeshRenderer.enabled = true;
         animator.Play("Idle", -1, 0f);
     }
 
@@ -229,9 +253,39 @@ public class IdleReactionNPC : MonoBehaviour
             if (ReplaceWithRagdoll(ragDollPrefab, out currentRagdoll))
             {
                 currentRagdoll.AddForceToRagdollAllRigidbody(hingeController.ModelRB.velocity * 2.5f, ForceMode.Impulse);
-                currentRagdoll.StartCoroutine(testRest());
+                //currentRagdoll.StartCoroutine(testRest());
             }
-            gameObject.SetActive(false);
+            StartCoroutine(LoopingResetCheck());
+            this.enabled = false;
+            characterMeshRenderer.enabled = false;
+        }
+    }
+
+    private IEnumerator LoopingResetCheck()
+    {
+        while (true)
+        {
+
+            if (ragdollMeshRenderer != null)
+            {
+                if (!characterMeshRenderer.isVisible)
+                {
+                    if (!ragdollMeshRenderer.isVisible)
+                    {
+                        // Check for player colliders in radius of ragdoll
+                        if (Physics.OverlapSphere(currentRagdoll.PrimaryRigidBody.position, resetCheckDistance, playerLayerMask, QueryTriggerInteraction.Ignore).Length == 0)
+                        {
+                            // Check for player colliders in radius of NPC main position
+                            if (Physics.OverlapSphere(gameObject.transform.position, resetCheckDistance, playerLayerMask, QueryTriggerInteraction.Ignore).Length == 0)
+                            {
+                                ResetNPCFromRagdoll();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            yield return null;
         }
     }
 }
