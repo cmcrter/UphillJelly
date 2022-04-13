@@ -90,6 +90,44 @@ namespace L7Games.Utility.Splines
 
         #region Public Methods
         #region Overrides
+        public override Vector3 GetClosestPointOnSpline(Vector3 pointClosestTo, float lengthPrecisionMultiplier = 2)
+        {
+            Vector3 lineDirection = GetDirection(0f);
+            var v = pointClosestTo - WorldStartPosition;
+            var d = Vector3.Dot(v, lineDirection);
+            if (d < 0f)
+            {
+                return WorldStartPosition;
+            }
+            else if (d > GetTotalLength())
+            {
+                return WorldEndPosition;
+            }
+
+            return WorldStartPosition + lineDirection * d;
+        }
+
+        public override Vector3 GetClosestPointOnSpline(Vector3 pointClosestTo, out float tValue, float lengthPrecisionMultiplier = 2)
+        {
+            Vector3 lineDirection = GetDirection(0f);
+            var v = pointClosestTo - WorldStartPosition;
+            var d = Vector3.Dot(v, lineDirection);
+            // Get T value
+            tValue = d / GetTotalLength();
+            if (tValue < 0f)
+            {
+                tValue = 0f;
+                return WorldStartPosition;
+            }
+            else if (tValue > 1f)
+            {
+                tValue = 1f;
+                return WorldEndPosition;
+            }
+
+            return WorldStartPosition + lineDirection * d;
+        }
+
         public override float GetTotalLength()
         {
             return Vector3.Distance(worldStartPoint, worldEndPoint);
