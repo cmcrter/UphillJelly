@@ -91,6 +91,17 @@ namespace L7Games.Movement
 
         }
 
+        /// <summary>
+        /// Called on the wipe-out to reset the condition
+        /// </summary>
+        public void WipeOutReset()
+        {
+
+            ButtonPressed = false;
+            grindDetails = null;
+            splineCurrentlyGrindingOn = null;
+        }
+
         //The player left a grind area
         public void PlayerLeftGrindArea(SplineWrapper splineHit)
         {

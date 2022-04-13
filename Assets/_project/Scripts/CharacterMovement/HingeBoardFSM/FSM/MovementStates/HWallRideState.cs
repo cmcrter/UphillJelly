@@ -125,6 +125,7 @@ namespace L7Games.Movement
 
         public override void OnStateEnter()
         {
+
             pInput.SwitchCurrentActionMap("WallRiding");
             playerMovement.characterAnimator.SetBool("wallriding", true);
             playerMovement.bWipeOutLocked = true;
@@ -149,6 +150,7 @@ namespace L7Games.Movement
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
             currentGrindTrickID = playerMovement.trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
+            Debug.Log("WR Start");
 
             hasRan = true;
         }
@@ -175,6 +177,7 @@ namespace L7Games.Movement
             playerMovement.StartAirInfluenctCoroutine();
 
             playerMovement.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+            Debug.Log("WR finished");
 
             hasRan = false;
         }
@@ -183,7 +186,6 @@ namespace L7Games.Movement
         {
             rideSpeed = newRideSpeed;
         }
-
         #endregion
 
         #region Private Methods
@@ -230,4 +232,6 @@ namespace L7Games.Movement
 
         #endregion
     }
+
+
 }

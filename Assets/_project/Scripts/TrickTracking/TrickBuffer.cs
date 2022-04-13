@@ -61,6 +61,15 @@ namespace L7Games.Tricks
                 return playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.75f;
             }
         }
+
+        public bool WillWipeoutOnImpact
+        {
+            get
+            {
+                return WithinInWipeOutTheshold && IsTricking;
+            }
+        }
+
         #endregion
 
         #region Private Serialized Fields
@@ -229,9 +238,9 @@ namespace L7Games.Tricks
             {
                 if (!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName(trickPlaying.TrickAnimStateName))//(playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash != currentTrickAnimationStateHash)
                 {
-                    Debug.Log("Hash Mismatch");
-                    Debug.Log("current hash: " + playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash);
-                    Debug.Log("current stored: " + currentTrickAnimationStateHash.ToString());
+                    //Debug.Log("Hash Mismatch");
+                    //Debug.Log("current hash: " + playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash);
+                    //Debug.Log("current stored: " + currentTrickAnimationStateHash.ToString());
                     EndAerialTrick();
                 }
             }
@@ -284,6 +293,30 @@ namespace L7Games.Tricks
         #endregion
 
         #region Public Methods
+        public void CancelActionInProgress(int actionInProgressID)
+        {
+            // Find the action in progress that matches the id
+            for (int i = 0; i < scoreableActionsInProgress.Count; ++i)
+            {
+                if (scoreableActionsInProgress[i].ID == actionInProgressID)
+                {
+                    ScorableActionInProgress actionFinished = scoreableActionsInProgress[i];
+                    scoreableActionsInProgress.RemoveAt(i);
+
+                    scoreableActionsCompleted.Add(new KeyValuePair<ScoreableAction, float>(actionFinished.scoreableActionData, Time.time - actionFinished.startTime));
+                    if (scoreableActionsCompleted[scoreableActionsCompleted.Count - 1].Key == null)
+                    {
+                        Debug.Log("Here");
+                    }
+                    if (ActionCompleted != null)
+                    {
+                        ActionCompleted(actionFinished.scoreableActionData);
+                    }
+
+                    return;
+                }
+            }
+        }
 
         /// <summary>
         /// Forcibly stop the buffer and clear everything
@@ -424,7 +457,7 @@ namespace L7Games.Tricks
             trickWanted = false;
             trickPlaying = aerialTrick;
             currentTrickAnimationStateHash = playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            Debug.Log("Start Hash " + playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash.ToString());
+            //Debug.Log("Start Hash " + playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash.ToString());
             aerialTrickInProgressID = AddScoreableActionInProgress(aerialTrick.scoreableDetails);
         }
 

@@ -64,6 +64,12 @@ namespace L7Games.Movement
             dotProductWithWall = 0f;
         }
 
+        public void WipeoutReset()
+        {
+            // Called when wiping out to leave its current wall
+            LeftWall(null);
+        }
+
         public void StartCooldown()
         {
             cooldown = parentController.StartCoroutine(Co_Cooldown());
