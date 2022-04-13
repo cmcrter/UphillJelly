@@ -51,14 +51,27 @@ namespace L7Games.Utility.StateMachine
             //If it has to change state to a new one
             if (!thisState.Equals(currentState))
             {
-                //Exit the current state and start the next one
-                currentState.OnStateExit();
-                currentState = thisState;
-                currentState.OnStateEnter();
+                // State can be made null but the state machine will cease to run until forced into a new state
+                if (thisState == null)
+                {
+                    //Exit the current state
+                    currentState.OnStateExit();
+                    currentState = thisState;
+                }
+                else
+                {
+                    //Exit the current state and start the next one
+                    currentState.OnStateExit();
+                    currentState = thisState;
+                    currentState.OnStateEnter();
+                }
+
             }
+
+
         }
 
-        //This will run every fixed update
+        // This will run every fixed update
         public void RunPhysicsOnMachine(float dT)
         {
             if(currentState == null)
