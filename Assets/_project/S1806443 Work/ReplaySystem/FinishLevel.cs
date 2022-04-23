@@ -39,6 +39,9 @@ namespace SleepyCat
 
         }
 
+        //
+        // INCLUDE TRIGGER FROM PLAYER FUNCTION (CHARLE'S WORK)
+        //
         // when collides with something
         void OnTriggerEnter(Collider col) {
 

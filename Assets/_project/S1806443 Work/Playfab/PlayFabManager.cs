@@ -14,11 +14,21 @@ using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine.UI;
+using L7Games;
+using L7Games.Movement;
 
 namespace SleepyCat
 {
-    public class PlayFabManager : MonoBehaviour
+    public class PlayFabManager : MonoBehaviour, ITriggerable
     {
+
+        //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
+        GameObject ITriggerable.ReturnGameObject() => gameObject;
+
+        void ITriggerable.Trigger(PlayerController player) => TriggerLeaderboardMoney(player);
+        void ITriggerable.UnTrigger(PlayerController player) => UnTriggerLeaderboardMoney();
+
+
 
         //
         public ReplaySaveManager replaySaveManager;
@@ -99,6 +109,23 @@ namespace SleepyCat
                 name = result.InfoResultPayload.PlayerProfile.DisplayName;
 
         }
+
+        public virtual void TriggerLeaderboardMoney(PlayerController player) {
+
+            // ^^^ how does this know it has hit the map end trigger?
+            //
+            // Money collected by the player = score to send to leaderboard
+            // Submit leaderboard method
+
+        }
+
+        public virtual void UnTriggerLeaderboardMoney() {
+
+            //Doesn't do anything but in-case there's needed functionality later          
+
+
+        }
+
 
         //
         public void SubmitNameButton() {
@@ -181,6 +208,18 @@ namespace SleepyCat
 
             }
 
+            if (replaySaveManager.isMapOldTown) {
+
+                //
+                SendCityScoreLeaderBoard(score);
+
+                //
+                SendCityTimeLeaderBoard(time);
+
+                //
+                SendCityKOsLeaderBoard(KOs);
+
+            }
 
 
         }

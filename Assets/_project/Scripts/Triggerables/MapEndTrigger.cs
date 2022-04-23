@@ -52,8 +52,11 @@ namespace L7Games
         //Can be called by cinematics too
         public void MapFinished(PlayerController player)
         {
+
+            // leaderboard.TriggerLeaderboardMoney(money);
+
             //Show End UI
-            if(endUI)
+            if (endUI)
             {
                 endUI.SetActive(true);
             }
@@ -62,6 +65,9 @@ namespace L7Games
             {
                 timer.gameEnded = true;
             }
+
+            
+
         }
 
         //shouldn't do anything

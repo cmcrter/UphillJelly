@@ -30,7 +30,6 @@ namespace SleepyCat
 
         public virtual void TriggerWallBreak(PlayerController player) {
 
-            Debug.Log("Collided with something M8");
 
             explosionGO.transform.position = player.transform.position + new Vector3(0, 0, 3f);
 
@@ -50,7 +49,6 @@ namespace SleepyCat
 
             //explosionGO.GetComponent<Rigidbody>().AddExplosionForce(power, explosionPosition, radius, 5f);
             //explosionGO.GetComponent<Rigidbody>().AddForce(transform.forward * 4000f);
-            Debug.Log("Force added M8");
 
 
 
