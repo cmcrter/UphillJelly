@@ -11,16 +11,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Inventory Item Data")]
-public class InventoryItemData : ScriptableObject {
+namespace L7Games {
 
-    public string id;
-    public string displayName;
-    public Sprite icon;
-    public int price;
-    // public Text description???????
-    // public string type???????? (body, hat etc)
-    public GameObject prefab;
+    [CreateAssetMenu(menuName = "Inventory Item Data")]
+    public class InventoryItemData : ScriptableObject
+    {
+
+        public string id;
+        public string displayName;
+        public Sprite icon;
+        public int price;
+        // public Text description???????
+        // public string type???????? (body, hat etc)
+        public GameObject prefab;
+
+    }
 
 }
+
+
     

@@ -20,7 +20,7 @@ namespace SleepyCat
         public b_Player b_player;
 
         //
-        public PlayFabManager playfabManager;
+        //public PlayFabManager playfabManager;
 
         //
         public GameObject savePlayerNamePanel;
@@ -52,7 +52,7 @@ namespace SleepyCat
                 b_player.SaveFinalValues();
 
                 //
-                playfabManager.SetScore();
+                //playfabManager.SetScore();
 
                 //
                 leaderboardPanel.SetActive(true);

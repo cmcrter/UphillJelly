@@ -27,7 +27,7 @@ namespace L7Games
         #region Variables
 
         //public b_Player b_player;
-        //public PlayFabManager playfabManager;
+        public PlayFabManager playfabManager;
 
         [SerializeField]
         private GameObject endUI;

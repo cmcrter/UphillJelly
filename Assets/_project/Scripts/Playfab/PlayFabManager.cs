@@ -17,16 +17,16 @@ using UnityEngine.UI;
 using L7Games;
 using L7Games.Movement;
 
-namespace SleepyCat
-{
+//namespace L7Games
+//{
     public class PlayFabManager : MonoBehaviour, ITriggerable
     {
 
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         GameObject ITriggerable.ReturnGameObject() => gameObject;
 
-        void ITriggerable.Trigger(PlayerController player) => TriggerLeaderboardMoney(player);
-        void ITriggerable.UnTrigger(PlayerController player) => UnTriggerLeaderboardMoney();
+        void ITriggerable.Trigger(PlayerController player) => TriggerLeaderboardEndMap(player);
+        void ITriggerable.UnTrigger(PlayerController player) => UnTriggerLeaderboardEndMap();
 
 
 
@@ -110,7 +110,7 @@ namespace SleepyCat
 
         }
 
-        public virtual void TriggerLeaderboardMoney(PlayerController player) {
+        public virtual void TriggerLeaderboardEndMap(PlayerController player) {
 
             // ^^^ how does this know it has hit the map end trigger?
             //
@@ -119,7 +119,7 @@ namespace SleepyCat
 
         }
 
-        public virtual void UnTriggerLeaderboardMoney() {
+        public virtual void UnTriggerLeaderboardEndMap() {
 
             //Doesn't do anything but in-case there's needed functionality later          
 
@@ -557,4 +557,4 @@ namespace SleepyCat
         }
 
     }
-}
+//}
