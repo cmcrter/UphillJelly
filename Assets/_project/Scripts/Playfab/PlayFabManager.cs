@@ -17,16 +17,16 @@ using UnityEngine.UI;
 using L7Games;
 using L7Games.Movement;
 
-//namespace L7Games
-//{
-    public class PlayFabManager : MonoBehaviour, ITriggerable
+namespace L7Games
+{
+    public class PlayFabManager : MonoBehaviour//, ITriggerable
     {
 
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
-        GameObject ITriggerable.ReturnGameObject() => gameObject;
+        //GameObject ITriggerable.ReturnGameObject() => gameObject;
 
-        void ITriggerable.Trigger(PlayerController player) => TriggerLeaderboardEndMap(player);
-        void ITriggerable.UnTrigger(PlayerController player) => UnTriggerLeaderboardEndMap();
+        //void ITriggerable.Trigger(PlayerController player) => TriggerLeaderboardEndMap(player);
+        //void ITriggerable.UnTrigger(PlayerController player) => UnTriggerLeaderboardEndMap();
 
 
 
@@ -110,22 +110,44 @@ using L7Games.Movement;
 
         }
 
-        public virtual void TriggerLeaderboardEndMap(PlayerController player) {
+
+
+        /*
+        public void TriggerLeaderboardEndMap(PlayerController player) {
+
+            Debug.Log("F");
 
             // ^^^ how does this know it has hit the map end trigger?
             //
             // Money collected by the player = score to send to leaderboard
             // Submit leaderboard method
 
+            FinishedLevelTriggered();
+
         }
 
-        public virtual void UnTriggerLeaderboardEndMap() {
+        public void UnTriggerLeaderboardEndMap() {
 
             //Doesn't do anything but in-case there's needed functionality later          
 
 
         }
+        */
 
+        public void FinishedLevelTriggered() {
+
+            Debug.Log("FINISHLEVELTRIGGERED");
+
+            //
+            SendLeaderBoards();
+
+            Debug.Log("SENTTHEBOARD");
+
+            //
+            GetLeaderBoard();
+            Debug.Log("GETTHEBOARD");
+
+        }
 
         //
         public void SubmitNameButton() {
@@ -211,13 +233,13 @@ using L7Games.Movement;
             if (replaySaveManager.isMapOldTown) {
 
                 //
-                SendCityScoreLeaderBoard(score);
+                SendOldTownScoreLeaderBoard(score);
 
                 //
-                SendCityTimeLeaderBoard(time);
+                SendOldTownTimeLeaderBoard(time);
 
                 //
-                SendCityKOsLeaderBoard(KOs);
+                SendOldTownKOsLeaderBoard(KOs);
 
             }
 
@@ -286,6 +308,40 @@ using L7Games.Movement;
         }
 
         //
+        public void SendOldTownScoreLeaderBoard(int score) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "OldTown_Score",
+
+                        //
+                        Value = score,
+
+                    }
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+
+
+
+
+
+        //
         public void SendTutorialTimeLeaderBoard(int time) {
 
             //
@@ -348,6 +404,45 @@ using L7Games.Movement;
         }
 
         //
+        public void SendOldTownTimeLeaderBoard(int time) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "OldTown_Time",
+
+                        //
+                        Value = time,
+
+                    }
+
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+        
+
+
+
+
+
+
+
+
+        //
         public void SendTutorialKOsLeaderBoard(int KOs) {
 
             //
@@ -408,6 +503,43 @@ using L7Games.Movement;
             PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
 
         }
+
+
+
+        //
+        public void SendOldTownKOsLeaderBoard(int KOs) {
+
+            //
+            var request = new UpdatePlayerStatisticsRequest {
+
+                //
+                Statistics = new List<StatisticUpdate> {
+
+                    //
+                    new StatisticUpdate {
+
+                        //
+                        StatisticName = "OldTown_KOs",
+
+                        //
+                        Value = KOs,
+
+                    }
+
+
+                }
+
+
+            };
+
+            //
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
+
+        }
+
+
+
+
 
 
         //
@@ -507,6 +639,50 @@ using L7Games.Movement;
 
             }
 
+
+            if (replaySaveManager.isMapOldTown) {
+
+                //
+                var OldTownScorerequest = new GetLeaderboardRequest {
+
+                    //
+                    StatisticName = "OldTown_Score",
+                    StartPosition = 0 //,
+                                      //MaxResultsCount = 3,
+
+                };
+
+                //
+                var OldTownTimerequest = new GetLeaderboardRequest {
+
+                    //
+                    StatisticName = "OldTown_Time",
+                    //StartPosition = 0 //,
+                    //MaxResultsCount = 3,
+
+                };
+
+                //
+                var OldTownKOsrequest = new GetLeaderboardRequest {
+
+                    //
+                    StatisticName = "OldTown_KOs",
+                    StartPosition = 0 //,
+                                      //MaxResultsCount = 3,
+
+                };
+
+                //
+                PlayFabClientAPI.GetLeaderboard(OldTownScorerequest, OnLeaderBoardGet, OnError);
+
+                //
+                PlayFabClientAPI.GetLeaderboard(OldTownTimerequest, OnLeaderBoardGet, OnError);
+
+                //
+                PlayFabClientAPI.GetLeaderboard(OldTownKOsrequest, OnLeaderBoardGet, OnError);
+
+            }
+
         }
 
         //
@@ -557,4 +733,4 @@ using L7Games.Movement;
         }
 
     }
-//}
+}
