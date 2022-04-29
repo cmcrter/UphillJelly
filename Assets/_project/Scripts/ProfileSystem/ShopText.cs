@@ -37,12 +37,12 @@ public class ShopText : MonoBehaviour
     public TMP_Text LoadProfile2Text;
     public TMP_Text LoadProfile3Text;
 
-    [Header("Play Buttons")]
+    //[Header("Play Buttons")]
 
     // button for starting the game1, game2 and game3
-    public GameObject PlayButton1;
-    public GameObject PlayButton2;
-    public GameObject PlayButton3;
+    //public GameObject PlayButton1;
+    //public GameObject PlayButton2;
+    //public GameObject PlayButton3;
 
 
     // Start is called before the first frame update
@@ -141,6 +141,18 @@ public class ShopText : MonoBehaviour
     // first button pressed
     public void ButtonPressed1() {
 
+
+        /*
+        // if a directory doesn't exists for "/replay_save/replay_data"
+        if (!Directory.Exists(Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat")) {
+
+            // create a directory for "/replay_save/replay_data"
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat");
+
+        }
+        */
+
+
         // if a directory doesn't exists for "/replay_save/replay_data"
         if (!Directory.Exists(Application.persistentDataPath + "/Profile1/Replays")) {
 
@@ -192,17 +204,17 @@ public class ShopText : MonoBehaviour
         b_player.isSave3 = false;
 
         // set the second play button to false
-        PlayButton2.SetActive(false);
+        //PlayButton2.SetActive(false);
 
         // set the third play button to false
-        PlayButton3.SetActive(false);
+        //PlayButton3.SetActive(false);
 
 
         // set the starting background to false
         StartingBackground.SetActive(false);
 
         //
-        //b_player.SavePlayer1();
+        b_player.SavePlayer1();
 
         // load player 1 data
         b_player.LoadPlayer1();
@@ -269,10 +281,10 @@ public class ShopText : MonoBehaviour
         b_player.isSave3 = false;
 
         // set the first play button to false
-        PlayButton1.SetActive(false);
+        //PlayButton1.SetActive(false);
 
         // set the third play button to false
-        PlayButton3.SetActive(false);
+        //PlayButton3.SetActive(false);
 
         // set the starting background to false
         StartingBackground.SetActive(false);
@@ -345,10 +357,10 @@ public class ShopText : MonoBehaviour
         b_player.isSave2 = false;
 
         // set the first play button to false
-        PlayButton1.SetActive(false);
+        //PlayButton1.SetActive(false);
 
         // set the second play button to false
-        PlayButton2.SetActive(false);
+        //PlayButton2.SetActive(false);
 
 
         // set the starting background to false

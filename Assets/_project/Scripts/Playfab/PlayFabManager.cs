@@ -7,6 +7,7 @@
 // Brief: 
 ////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,11 +25,10 @@ namespace L7Games
 
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         //GameObject ITriggerable.ReturnGameObject() => gameObject;
+        //void ITriggerable.Trigger(PlayerController player) => PlayerEnteredLeaderboard(player);
+        //void ITriggerable.UnTrigger(PlayerController player) => PlayerExitedLeaderboard(player);
 
-        //void ITriggerable.Trigger(PlayerController player) => TriggerLeaderboardEndMap(player);
-        //void ITriggerable.UnTrigger(PlayerController player) => UnTriggerLeaderboardEndMap();
-
-
+        //public GameObject leaderboardGO;
 
         //
         public ReplaySaveManager replaySaveManager;
@@ -61,8 +61,29 @@ namespace L7Games
         public GameObject SubmitNameButtonGameObject;
 
 
+
+
+        
+
+        /*
+        void PlayerEnteredLeaderboard(PlayerController player) {
+
+            FinishedLevelTriggered();
+            Debug.Log("TRIGGEREDTRIGGERED");
+
+        }
+
+        void PlayerExitedLeaderboard(PlayerController player) {
+
+            // do nothing
+
+        }
+        */
+
         //
         void Start() {
+
+            //leaderboardGO.SetActive(false);
 
             //
             Login();
@@ -135,6 +156,8 @@ namespace L7Games
         */
 
         public void FinishedLevelTriggered() {
+
+            //leaderboardGO.SetActive(true);
 
             Debug.Log("FINISHLEVELTRIGGERED");
 
