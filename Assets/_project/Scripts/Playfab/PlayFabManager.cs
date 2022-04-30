@@ -131,7 +131,143 @@ namespace L7Games
 
         }
 
+        #region Get Main Menu Leaderboards
+        public void GetMainMenuTutorialLeaderboard() {
 
+            //
+            var TutorialScorerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "Tutorial_Score",
+                StartPosition = 0 //,
+                                  //MaxResultsCount = 3,
+
+            };
+
+            //
+            var TutorialTimerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "Tutorial_Time",
+                //StartPosition = 0 //,
+                //MaxResultsCount = 3,
+
+            };
+
+            //
+            var TutorialKOsrequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "Tutorial_KOs",
+                StartPosition = 0 //,
+                                  //MaxResultsCount = 3,
+
+            };
+
+            //
+            PlayFabClientAPI.GetLeaderboard(TutorialScorerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(TutorialTimerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
+
+            Debug.Log("Main menu tutorial leaderboard got");
+
+        }
+
+        public void GetMainMenuCityLeaderboard() {
+
+            //
+            var CityScorerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "City_Score",
+                StartPosition = 0 //,
+                                  //MaxResultsCount = 3,
+
+            };
+
+            //
+            var CityTimerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "City_Time",
+                //StartPosition = 0 //,
+                //MaxResultsCount = 3,
+
+            };
+
+            //
+            var CityKOsrequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "City_KOs",
+                StartPosition = 0 //,
+                                  //MaxResultsCount = 3,
+
+            };
+
+            //
+            PlayFabClientAPI.GetLeaderboard(CityScorerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(CityTimerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(CityKOsrequest, OnLeaderBoardGet, OnError);
+
+            Debug.Log("Main menu city leaderboard got");
+
+        }
+
+        public void GetMainMenuOldTownLeaderboard() {
+
+            //
+            var OldTownScorerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "OldTown_Score",
+                StartPosition = 0 //,
+                                  //MaxResultsCount = 3,
+
+            };
+
+            //
+            var OldTownTimerequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "OldTown_Time",
+                //StartPosition = 0 //,
+                //MaxResultsCount = 3,
+
+            };
+
+            //
+            var OldTownKOsrequest = new GetLeaderboardRequest {
+
+                //
+                StatisticName = "OldTown_KOs",
+                StartPosition = 0 //,
+                                  //MaxResultsCount = 3,
+
+            };
+
+            //
+            PlayFabClientAPI.GetLeaderboard(OldTownScorerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(OldTownTimerequest, OnLeaderBoardGet, OnError);
+
+            //
+            PlayFabClientAPI.GetLeaderboard(OldTownKOsrequest, OnLeaderBoardGet, OnError);
+
+            Debug.Log("Main menu old town leaderboard got");
+
+        }
+
+        #endregion
 
         /*
         public void TriggerLeaderboardEndMap(PlayerController player) {

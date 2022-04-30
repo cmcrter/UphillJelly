@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////
+// File: MainMenuLevelSelect.cs
+// Author: Jack Peedle
+// Date Created: 29/02/22
+// Last Edited By: Jack Peedle
+// Date Last Edited: 29/02/22
+// Brief: 
+////////////////////////////////////////////////////////////
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,13 +53,6 @@ namespace SleepyCat
 
             }
 
-            // 
-            if (currentLevelInt >= 3) {
-
-                // 
-                currentLevelInt = 0;
-
-            }
 
             UpdateImage();
 
@@ -71,13 +73,6 @@ namespace SleepyCat
 
             }
 
-            //
-            if (currentLevelInt <= -1) {
-
-                //
-                currentLevelInt = 2;
-
-            }
 
             UpdateImage();
 
