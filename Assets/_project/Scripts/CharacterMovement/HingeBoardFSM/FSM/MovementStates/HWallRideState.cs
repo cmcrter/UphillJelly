@@ -216,18 +216,28 @@ namespace L7Games.Movement
             //Debug.Log("Jumping off wall ride");
 
             fRB.isKinematic = false;
-            playerMovement.StartCoroutine(WipeOutCooldown());
+            playerMovement.StartCoroutine(Co_WallRideJump());
 
         }
 
-        private IEnumerator WipeOutCooldown()
+        private IEnumerator Co_WallRideJump()
         {
             yield return new WaitForFixedUpdate();
             float intialMagnitude = fRB.velocity.magnitude;
 
             playerMovement.ModelRB.velocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
-            fRB.AddForce((playerMovement.transform.up * 350f) + (nextToWallRun.currentWallRide.transform.forward * 950f) + (playerMovement.transform.forward * intialMagnitude * 2f), ForceMode.Impulse);
+
+            if (!nextToWallRun.currentWallRide)
+            {
+                fRB.AddForce(playerMovement.transform.up * 350f, ForceMode.Impulse);
+            }
+            else
+            {
+                fRB.AddForce((playerMovement.transform.up * 350f) + (nextToWallRun.currentWallRide.transform.forward * 950f), ForceMode.Impulse);
+            }
+
+            fRB.AddForce(playerMovement.transform.forward * intialMagnitude * 50f, ForceMode.Impulse);
         }
 
         #endregion
