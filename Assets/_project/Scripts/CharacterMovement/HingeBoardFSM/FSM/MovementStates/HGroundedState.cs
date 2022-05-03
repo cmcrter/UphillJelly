@@ -89,6 +89,7 @@ namespace L7Games.Movement
         private FMOD.Studio.EventInstance moveSound;
         [SerializeField]
         private string parameterName;
+
         public HGroundedState()
         {
         }
@@ -217,26 +218,22 @@ namespace L7Games.Movement
             if(jumpCoroutine == null) 
             {
                 //Depending on the difference of angle in the movement currently and the transform forward of the skateboard, apply more drag the wider the angle (maximum angle being 90 for drag)
-                float dotAngle = Vector3.Dot(movementRB.velocity.normalized, playerTransform.forward.normalized);
-                float absDotAngle = Mathf.Abs(dotAngle);
-
                 Vector3 forward = parentController.transform.forward;
 
+                float dotAngle = Vector3.Dot(movementRB.velocity.normalized, forward);
+                float absDotAngle = Mathf.Abs(dotAngle);
+
                 //Moving almost directly backwards
-                if(dotAngle < -0.98f && movementRB.velocity.magnitude > 1)
+                if(dotAngle < -0.985f)
                 {
-                    parentController.playerCamera.bMovingBackwards = true;
-                    movementRB.transform.forward = -playerTransform.forward;
-                    forward *= -1f;
+                    movementRB.velocity = movementRB.velocity.magnitude * -forward;
                 }
                 //Must be moving forwards
                 else
                 {
-                    parentController.playerCamera.bMovingBackwards = false;
+                    movementRB.velocity = movementRB.velocity.magnitude * forward;
                 }
-
-                movementRB.velocity = movementRB.velocity.magnitude * forward;
-
+                
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if(absDotAngle < 0.99f)
                 {
@@ -275,7 +272,7 @@ namespace L7Games.Movement
         {
             if(!bPressingDown)
             {
-                movementRB.centerOfMass += new Vector3(0, -0.2f, 0);
+                movementRB.centerOfMass += new Vector3(0, -0.15f, 0);
                 bPressingDown = true;
 
                 parentController.characterAnimator.SetFloat("crouchingFloat", 1);
@@ -446,7 +443,7 @@ namespace L7Games.Movement
 
             if(bPressingDown)
             {
-                movementRB.centerOfMass += new Vector3(0, 0.25f, 0);
+                movementRB.centerOfMass += new Vector3(0, 0.15f, 0);
                 bPressingDown = false;
                 parentController.characterAnimator.SetFloat("crouchingFloat", -1);
             }
