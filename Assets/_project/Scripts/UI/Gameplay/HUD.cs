@@ -184,7 +184,7 @@ public class HUD : MonoBehaviour
     {
         if (playerPickingUpMoney == controllingPlayer)
         {
-            storedScore += 10f;
+            storedScore = playerPickingUpMoney.collectableScore;
         }
     }
     /// <summary>
