@@ -36,7 +36,7 @@ namespace L7.Loading
 
         private void Awake()
         {
-            if(OverrideValues)
+            if(OverrideValues && LoadingData.sceneToLoad == null)
             {
                 LoadingData.sceneToLoad = sceneToLoad;
                 LoadingData.waitForNextScene = waitForNextScene;
@@ -72,15 +72,30 @@ namespace L7.Loading
                 //The level is ready to finish loading
                 if(asyncLoad.progress >= 0.9f)
                 {
-                    if(screenUI && !bTextShowing && LoadingData.waitForNextScene)
+                    if (!LoadingData.waitForNextScene)
+                    {
+                        asyncLoad.allowSceneActivation = true;
+                    }
+
+                    if (screenUI && !bTextShowing && LoadingData.waitForNextScene)
                     {
                         screenUI.TurnOnPressText();
                         bTextShowing = true;
                     }
 
-                    if(Keyboard.current.anyKey.wasPressedThisFrame && bTextShowing || Gamepad.current.buttonSouth.wasPressedThisFrame && bTextShowing || !LoadingData.waitForNextScene)
+                    if (Keyboard.current != null)
                     {
-                        asyncLoad.allowSceneActivation = true;
+                        if (Keyboard.current.anyKey.wasPressedThisFrame)
+                        {
+                            asyncLoad.allowSceneActivation = true;
+                        }
+                    }
+                    else if (Gamepad.current != null)
+                    {
+                        if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                        {
+                            asyncLoad.allowSceneActivation = true;
+                        }
                     }
                 }
 

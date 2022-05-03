@@ -18,6 +18,8 @@ public class TestSceneSwitcher : MonoBehaviour
     public void SceneSwitched(string scene)
     {
         LoadingData.sceneToLoad = scene;
+        LoadingData.waitForNextScene = true;
+        
         SceneManager.LoadScene("LoadingScene");
     }
 
