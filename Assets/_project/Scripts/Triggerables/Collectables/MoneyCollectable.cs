@@ -33,10 +33,12 @@ namespace L7Games.Triggerables.Collectables
             //Debug.Log("Money Picked Up");
 
             //Add score onto player
-            //player.AddMoney(fCollectableScore);
+            player.collectableScore += fCollectableScore;
 
+            //Run collectable sound etc
             base.PickupCollectable(player);
 
+            //Run the event to see if anything else needs to run
             if (MoneyPickedUp != null)
             {
                 MoneyPickedUp(player);
