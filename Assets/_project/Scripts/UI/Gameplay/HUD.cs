@@ -180,11 +180,11 @@ public class HUD : MonoBehaviour
     /// Called when money is picked up to increase score (Temporary, this script should not be controlling score)
     /// </summary>
     /// <param name="playerPickingUpMoney">The player that picked up the money that triggered this event</param>
-    private void MoneyCollectable_MoneyPickedUp(L7Games.Movement.PlayerController playerPickingUpMoney)
+    private void MoneyCollectable_MoneyPickedUp(L7Games.Movement.PlayerController playerPickingUpMoney, MoneyCollectable money)
     {
         if (playerPickingUpMoney == controllingPlayer)
         {
-            storedScore = playerPickingUpMoney.collectableScore;
+            storedScore += money.ReturnScoreValue;
         }
     }
     /// <summary>
