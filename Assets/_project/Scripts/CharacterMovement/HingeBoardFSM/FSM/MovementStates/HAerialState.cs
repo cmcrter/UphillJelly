@@ -72,17 +72,38 @@ namespace L7Games.Movement
         {
             if(groundedCondition.isConditionTrue())
             {
-                return parentController.groundedState;
+                if (parentController.trickBuffer.WillWipeoutOnImpact)
+                {
+                    return parentController.wipeOutState;
+                }
+                else
+                {
+                    return parentController.groundedState;
+                }
             }
 
             if (grindCondition.isConditionTrue()) 
             {
-                return parentController.grindingState;
+                if (parentController.trickBuffer.WillWipeoutOnImpact)
+                {
+                    return parentController.wipeOutState;
+                }
+                else
+                {
+                    return parentController.grindingState;
+                }
             } 
 
-            if(wallRideCondition.isConditionTrue()) 
+            if (wallRideCondition.isConditionTrue()) 
             {
-                return parentController.wallRideState;
+                if (parentController.trickBuffer.WillWipeoutOnImpact)
+                {
+                    return parentController.wipeOutState;
+                }
+                else
+                {
+                    return parentController.wallRideState;
+                }
             }
 
             return this;

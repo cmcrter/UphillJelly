@@ -125,6 +125,7 @@ namespace L7Games.Movement
 
         public override void OnStateEnter()
         {
+
             pInput.SwitchCurrentActionMap("WallRiding");
             playerMovement.characterAnimator.SetBool("wallriding", true);
             playerMovement.bWipeOutLocked = true;
@@ -149,6 +150,7 @@ namespace L7Games.Movement
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
 
             currentGrindTrickID = playerMovement.trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
+            Debug.Log("WR Start");
 
             hasRan = true;
         }
@@ -175,6 +177,7 @@ namespace L7Games.Movement
             playerMovement.StartAirInfluenctCoroutine();
 
             playerMovement.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+            Debug.Log("WR finished");
 
             hasRan = false;
         }
@@ -183,7 +186,6 @@ namespace L7Games.Movement
         {
             rideSpeed = newRideSpeed;
         }
-
         #endregion
 
         #region Private Methods
@@ -214,20 +216,32 @@ namespace L7Games.Movement
             //Debug.Log("Jumping off wall ride");
 
             fRB.isKinematic = false;
-            playerMovement.StartCoroutine(WipeOutCooldown());
+            playerMovement.StartCoroutine(Co_WallRideJump());
 
         }
 
-        private IEnumerator WipeOutCooldown()
+        private IEnumerator Co_WallRideJump()
         {
             yield return new WaitForFixedUpdate();
             float intialMagnitude = fRB.velocity.magnitude;
 
             playerMovement.ModelRB.velocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
-            fRB.AddForce((playerMovement.transform.up * 350f) + (nextToWallRun.currentWallRide.transform.forward * 950f) + (playerMovement.transform.forward * intialMagnitude * 2f), ForceMode.Impulse);
+
+            if (!nextToWallRun.currentWallRide)
+            {
+                fRB.AddForce(playerMovement.transform.up * 350f, ForceMode.Impulse);
+            }
+            else
+            {
+                fRB.AddForce((playerMovement.transform.up * 350f) + (nextToWallRun.currentWallRide.transform.forward * 950f), ForceMode.Impulse);
+            }
+
+            fRB.AddForce(playerMovement.transform.forward * intialMagnitude * 50f, ForceMode.Impulse);
         }
 
         #endregion
     }
+
+
 }

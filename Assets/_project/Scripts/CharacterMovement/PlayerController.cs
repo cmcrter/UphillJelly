@@ -36,6 +36,8 @@ namespace L7Games.Movement
         private float cooldownDuration = 1f;
         private Timer cooldownTimer;
 
+        public float collectableScore = 0;
+
         #endregion
 
         public virtual void ResetPlayer()

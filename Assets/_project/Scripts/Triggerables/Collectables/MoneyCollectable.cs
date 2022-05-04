@@ -18,11 +18,15 @@ namespace L7Games.Triggerables.Collectables
 
         [SerializeField]
         private float fCollectableScore = 0f;
+        public float ReturnScoreValue
+        {
+            get => fCollectableScore;            
+        }
 
         #endregion
 
-        #region Public Events
-        public delegate void MoneyPickedUpDelegate(PlayerController playerPickingUpMoney);
+            #region Public Events
+        public delegate void MoneyPickedUpDelegate(PlayerController playerPickingUpMoney, MoneyCollectable money);
         public static event MoneyPickedUpDelegate MoneyPickedUp;
         #endregion
 
@@ -33,13 +37,15 @@ namespace L7Games.Triggerables.Collectables
             //Debug.Log("Money Picked Up");
 
             //Add score onto player
-            //player.AddMoney(fCollectableScore);
+            player.collectableScore += fCollectableScore;
 
+            //Run collectable sound etc
             base.PickupCollectable(player);
 
+            //Run the event to see if anything else needs to run
             if (MoneyPickedUp != null)
             {
-                MoneyPickedUp(player);
+                MoneyPickedUp(player, this);
             }
         }
 

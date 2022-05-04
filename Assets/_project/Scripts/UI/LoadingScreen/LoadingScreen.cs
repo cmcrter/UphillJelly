@@ -21,9 +21,27 @@ namespace L7.Loading
         [SerializeField]
         LoadingScreenUI screenUI;
 
+        [Header("Override Loading Data")]
+        [SerializeField]
+        private bool OverrideValues = false;
+
+        [SerializeField]
+        private string sceneToLoad;
+        [SerializeField]
+        private bool waitForNextScene;
+
         #endregion
 
         #region Unity Methods
+
+        private void Awake()
+        {
+            if(OverrideValues && LoadingData.sceneToLoad == null)
+            {
+                LoadingData.sceneToLoad = sceneToLoad;
+                LoadingData.waitForNextScene = waitForNextScene;
+            }
+        }
 
         void Start()
         {
@@ -41,6 +59,7 @@ namespace L7.Loading
             if(LoadingData.sceneToLoad == null)
             {
                 LoadingData.sceneToLoad = "MainMenu";
+                LoadingData.waitForNextScene = false;
             }
 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(LoadingData.sceneToLoad);
@@ -53,18 +72,30 @@ namespace L7.Loading
                 //The level is ready to finish loading
                 if(asyncLoad.progress >= 0.9f)
                 {
-                    if(screenUI && !bTextShowing)
+                    if (!LoadingData.waitForNextScene)
+                    {
+                        asyncLoad.allowSceneActivation = true;
+                    }
+
+                    if (screenUI && !bTextShowing && LoadingData.waitForNextScene)
                     {
                         screenUI.TurnOnPressText();
                         bTextShowing = true;
                     }
 
-                    if(Keyboard.current.anyKey.wasReleasedThisFrame || Gamepad.current.buttonEast.wasReleasedThisFrame
-                        || Gamepad.current.buttonWest.wasReleasedThisFrame 
-                        || Gamepad.current.buttonNorth.wasReleasedThisFrame 
-                        || Gamepad.current.buttonSouth.wasReleasedThisFrame)
+                    if (Keyboard.current != null)
                     {
-                        asyncLoad.allowSceneActivation = true;
+                        if (Keyboard.current.anyKey.wasPressedThisFrame)
+                        {
+                            asyncLoad.allowSceneActivation = true;
+                        }
+                    }
+                    else if (Gamepad.current != null)
+                    {
+                        if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                        {
+                            asyncLoad.allowSceneActivation = true;
+                        }
                     }
                 }
 

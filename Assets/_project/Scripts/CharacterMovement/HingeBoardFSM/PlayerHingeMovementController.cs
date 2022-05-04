@@ -33,6 +33,7 @@ namespace L7Games.Movement
         public HGroundedState groundedState = new HGroundedState();
         public HWallRideState wallRideState = new HWallRideState();
         public HGrindedState grindingState = new HGrindedState();
+        public HWipeOutState wipeOutState = new HWipeOutState();
 
         public HisGroundBelow groundBelow = new HisGroundBelow();
         public HisNextToWallRun nextToWallRun = new HisNextToWallRun();
@@ -119,6 +120,16 @@ namespace L7Games.Movement
         public StudioEventEmitter audioEmitter;
         private FMOD.Studio.EventInstance respawnSound;
 
+        #endregion
+
+        #region Public Properties
+        public bool IsWipedOut
+        {
+            get
+            {
+                return characterModel.activeSelf;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -228,6 +239,7 @@ namespace L7Games.Movement
 
             transform.rotation = point.rotation;
             transform.position = point.position;
+            Debug.Log("Player Position Reset");
 
             characterModel.SetActive(true);
 
@@ -621,6 +633,12 @@ namespace L7Games.Movement
             //grindingState.OnStateExit();
             //aerialState.OnStateExit();
             //wallRideState.OnStateExit();
+
+            // Player will leave wall on wiping out
+            nextToWallRun.WipeoutReset();
+
+            // Player won't be grinding on wipeout
+            grindBelow.WipeOutReset();
 
             //WipeOut needs to stop most of the players' actions
             input.SwitchCurrentActionMap("WipedOut");
