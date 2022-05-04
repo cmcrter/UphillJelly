@@ -11,6 +11,7 @@ using UnityEngine;
 using Cinemachine;
 using L7Games.Movement;
 using UnityEngine.Events;
+using System.Collections;
 
 namespace L7Games
 {
@@ -36,6 +37,8 @@ namespace L7Games
         //public b_Player b_player;
         public PlayFabManager playfabManager;
 
+        public GameObject LeaderboardGO;
+
         #endregion
 
         #region Private Methods
@@ -46,8 +49,24 @@ namespace L7Games
             trackedDolly.enabled = true;
             //player.enabled = false;
 
-            playfabManager.FinishedLevelTriggered();
+            StartCoroutine(WaitFor5Seconds());
+
+            
             Debug.Log("TRIGGEREDTRIGGERED");
+
+        }
+
+        IEnumerator WaitFor5Seconds() {
+
+            yield return new WaitForSeconds(5f);
+
+            this.gameObject.SetActive(false);
+
+            Debug.Log("WAITED");
+
+            LeaderboardGO.SetActive(true);
+
+            //playfabManager.FinishedLevelTriggered();
 
         }
 
