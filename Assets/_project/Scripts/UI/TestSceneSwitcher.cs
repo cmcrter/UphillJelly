@@ -15,7 +15,7 @@ public class TestSceneSwitcher : MonoBehaviour
 {
     #region Public Methods
 
-    public void SceneSwitched(string scene)
+    public static void SceneSwitched(string scene)
     {
         LoadingData.sceneToLoad = scene;
         LoadingData.waitForNextScene = true;
