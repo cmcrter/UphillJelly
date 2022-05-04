@@ -90,6 +90,9 @@ namespace L7Games.Movement
         [SerializeField]
         private string parameterName;
 
+        private bool cameraBackwards;
+        private bool cameraSwitched;
+
         public HGroundedState()
         {
         }
@@ -170,6 +173,38 @@ namespace L7Games.Movement
         {
             UpdatePositionAndRotation(dT);
 
+            if(cameraBackwards)
+            {
+                if(!cameraSwitched && movementRB.velocity.magnitude > 2f)
+                {
+                    parentController.OverrideCamera(parentController.backwardsCamera, false);
+                    cameraSwitched = true;
+                }
+            }
+
+            if(!cameraBackwards)
+            {
+                if(cameraSwitched)
+                {
+                    parentController.OverrideCamera(parentController.camBrain, false);
+                    cameraSwitched = false;
+                }
+            }
+
+            if(parentController.audioEmitter)
+            {
+                parentController.audioEmitter.SetParameter("Velocity", movementRB.velocity.magnitude / 15f);
+
+                if(movementRB.velocity.magnitude < 2)
+                {
+                    parentController.audioEmitter.EventInstance.setVolume(movementRB.velocity.magnitude * 0.5f);
+                }
+                else
+                {
+                    moveSound.setVolume(1f);
+                }
+            }
+
             if(bConstantForce)
             {
                 movementRB.AddForceAtPosition(playerTransform.forward * constantForce, movementRB.position + movementRB.centerOfMass, ForceMode.Force);
@@ -195,6 +230,9 @@ namespace L7Games.Movement
             VFXPlayer.instance.PlayVFX(landingDust, parentController.transform.position - new Vector3(0, 0.45f, 0));
             FMODUnity.RuntimeManager.PlayOneShot("event:/PlayerSounds/Land2", parentController.transform.position);
 
+            parentController.audioEmitter.Play();
+            parentController.OverrideCamera(parentController.camBrain, false);
+
             hasRan = true;
         }
 
@@ -206,6 +244,7 @@ namespace L7Games.Movement
             UnPressDown();
 
             parentController.characterAnimator.SetBool("grounded", false);
+            parentController.audioEmitter.Stop();
 
             parentController.playerCamera.bMovingBackwards = false;
             hasRan = false;
@@ -227,13 +266,15 @@ namespace L7Games.Movement
                 if(dotAngle < -0.985f)
                 {
                     movementRB.velocity = movementRB.velocity.magnitude * -forward;
+                    cameraBackwards = true;
                 }
                 //Must be moving forwards
                 else
                 {
                     movementRB.velocity = movementRB.velocity.magnitude * forward;
+                    cameraBackwards = false;
                 }
-                
+
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if(absDotAngle < 0.99f)
                 {
@@ -245,11 +286,6 @@ namespace L7Games.Movement
                         movementRB.velocity = Vector3.zero;
                         movementRB.AddForce(playerTransform.forward.normalized * dT, ForceMode.Impulse);
                     }
-                }
-
-                if(!parentController.audioEmitter)
-                {
-                    parentController.audioEmitter.SetParameter(parameterName, movementRB.velocity.magnitude / 55f);
                 }
             }
 
@@ -391,6 +427,8 @@ namespace L7Games.Movement
             {
                 if(pushDuringTimer.current_time <= pushForceDuration)
                 {
+                    parentController.characterAnimator.SetFloat("pushFloat", Mathf.Clamp01(pushDuringTimer.current_time));
+
                     //Pushing forward
                     Vector3 force = parentController.transform.forward * forwardSpeed * 250f * Time.fixedDeltaTime;
 

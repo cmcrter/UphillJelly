@@ -65,7 +65,7 @@ public class HUD : MonoBehaviour
     /// <summary>
     /// The current total score for the player (this is place holder and should be gotten from its own score system)
     /// </summary>
-    private float storedScore;
+    public float storedScore;
 
     /// <summary>
     /// The amount of the times the last trick has been the last completed trick in sequence

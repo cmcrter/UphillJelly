@@ -3522,7 +3522,8 @@ namespace PlayFab.ClientModels
         /// </summary>
         public Dictionary<string,string> CustomTags;
         /// <summary>
-        /// If another user is already linked to the account, unlink the other user and re-link.
+        /// If another user is already linked to the account, unlink the other user and re-link. If the current user is already
+        /// linked, link both accounts
         /// </summary>
         public bool? ForceLink;
         /// <summary>
@@ -3565,7 +3566,8 @@ namespace PlayFab.ClientModels
         /// </summary>
         public Dictionary<string,string> CustomTags;
         /// <summary>
-        /// If another user is already linked to the account, unlink the other user and re-link.
+        /// If another user is already linked to the account, unlink the other user and re-link. If the current user is already
+        /// linked, link both accounts
         /// </summary>
         public bool? ForceLink;
         /// <summary>
@@ -5678,7 +5680,8 @@ namespace PlayFab.ClientModels
     }
 
     /// <summary>
-    /// Once verified, the valid items will be restored into the user's inventory.
+    /// Once verified, the valid items will be restored into the user's inventory. This result should be used for immediate
+    /// updates to the local client game state as opposed to the GetUserInventory API which can have an up to half second delay.
     /// </summary>
     [Serializable]
     public class RestoreIOSPurchasesResult : PlayFabResultCommon
@@ -5874,79 +5877,6 @@ namespace PlayFab.ClientModels
         Partner,
         Custom,
         API
-    }
-
-    /// <summary>
-    /// This API must be enabled for use as an option in the game manager website. It is disabled by default.
-    /// </summary>
-    [Serializable]
-    public class StartGameRequest : PlayFabRequestCommon
-    {
-        /// <summary>
-        /// version information for the build of the game server which is to be started
-        /// </summary>
-        public string BuildVersion;
-        /// <summary>
-        /// character to use for stats based matching. Leave null to use account stats
-        /// </summary>
-        public string CharacterId;
-        /// <summary>
-        /// custom command line argument when starting game server process
-        /// </summary>
-        public string CustomCommandLineData;
-        /// <summary>
-        /// The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
-        /// </summary>
-        public Dictionary<string,string> CustomTags;
-        /// <summary>
-        /// the title-defined game mode this server is to be running (defaults to 0 if there is only one mode)
-        /// </summary>
-        public string GameMode;
-        /// <summary>
-        /// the region to associate this server with for match filtering
-        /// </summary>
-        public Region Region;
-        /// <summary>
-        /// player statistic for others to use in finding this game. May be null for no stat-based matching
-        /// </summary>
-        public string StatisticName;
-    }
-
-    [Serializable]
-    public class StartGameResult : PlayFabResultCommon
-    {
-        /// <summary>
-        /// timestamp for when the server should expire, if applicable
-        /// </summary>
-        public string Expires;
-        /// <summary>
-        /// unique identifier for the lobby of the server started
-        /// </summary>
-        public string LobbyID;
-        /// <summary>
-        /// password required to log into the server
-        /// </summary>
-        public string Password;
-        /// <summary>
-        /// server IPV4 address
-        /// </summary>
-        public string ServerIPV4Address;
-        /// <summary>
-        /// server IPV6 address
-        /// </summary>
-        public string ServerIPV6Address;
-        /// <summary>
-        /// port on the server to be used for communication
-        /// </summary>
-        public int? ServerPort;
-        /// <summary>
-        /// server public DNS name
-        /// </summary>
-        public string ServerPublicDNSName;
-        /// <summary>
-        /// unique identifier for the server
-        /// </summary>
-        public string Ticket;
     }
 
     /// <summary>
@@ -7316,7 +7246,9 @@ namespace PlayFab.ClientModels
     }
 
     /// <summary>
-    /// Once verified, the catalog item matching the Amazon item name will be added to the user's inventory.
+    /// Once verified, the catalog item matching the Amazon item name will be added to the user's inventory. This result should
+    /// be used for immediate updates to the local client game state as opposed to the GetUserInventory API which can have an up
+    /// to half second delay.
     /// </summary>
     [Serializable]
     public class ValidateAmazonReceiptResult : PlayFabResultCommon
@@ -7365,7 +7297,8 @@ namespace PlayFab.ClientModels
 
     /// <summary>
     /// Once verified, the catalog item (ItemId) matching the GooglePlay store item (productId) will be added to the user's
-    /// inventory.
+    /// inventory. This result should be used for immediate updates to the local client game state as opposed to the
+    /// GetUserInventory API which can have an up to half second delay.
     /// </summary>
     [Serializable]
     public class ValidateGooglePlayPurchaseResult : PlayFabResultCommon
@@ -7409,7 +7342,9 @@ namespace PlayFab.ClientModels
     }
 
     /// <summary>
-    /// Once verified, the catalog item matching the iTunes item name will be added to the user's inventory.
+    /// Once verified, the catalog item matching the iTunes item name will be added to the user's inventory. This result should
+    /// be used for immediate updates to the local client game state as opposed to the GetUserInventory API which can have an up
+    /// to half second delay.
     /// </summary>
     [Serializable]
     public class ValidateIOSReceiptResult : PlayFabResultCommon
@@ -7446,7 +7381,9 @@ namespace PlayFab.ClientModels
     }
 
     /// <summary>
-    /// Once verified, the catalog item matching the Product name will be added to the user's inventory.
+    /// Once verified, the catalog item matching the Product name will be added to the user's inventory. This result should be
+    /// used for immediate updates to the local client game state as opposed to the GetUserInventory API which can have an up to
+    /// half second delay.
     /// </summary>
     [Serializable]
     public class ValidateWindowsReceiptResult : PlayFabResultCommon

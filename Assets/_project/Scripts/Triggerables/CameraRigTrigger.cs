@@ -33,6 +33,9 @@ namespace L7Games
         [SerializeField]
         private UnityEvent endTrigger;
 
+        //public b_Player b_player;
+        public PlayFabManager playfabManager;
+
         #endregion
 
         #region Private Methods
@@ -42,6 +45,10 @@ namespace L7Games
             player.OverrideCamera(cameraToUse, true);
             trackedDolly.enabled = true;
             //player.enabled = false;
+
+            playfabManager.FinishedLevelTriggered();
+            Debug.Log("TRIGGEREDTRIGGERED");
+
         }
 
         void PlayerExited(PlayerController player)
