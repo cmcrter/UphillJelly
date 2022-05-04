@@ -87,14 +87,22 @@ public class TempScoreSystem : MonoBehaviour
 
         }
 
-        // set the player score to the player score text + "Player Score : "
-        PlayerScoreText.text = "Player Score : " + PlayerScore;
+        if(PlayerScoreText)
+        {
+            // set the player score to the player score text + "Player Score : "
+            PlayerScoreText.text = "Player Score : " + PlayerScore;
+        }
 
-        // set the ghost score to the ghost score text + "Ghost Score : "
-        GhostScoreText.text = "Ghost Score : " + GhostScore;
+        if(GhostScoreText)
+        {
+            // set the ghost score to the ghost score text + "Ghost Score : "
+            GhostScoreText.text = "Ghost Score : " + GhostScore;
+        }
 
-        TimeValueText.text = "Time : " + PlayerTime;
-
+        if(TimeValueText)
+        {
+            TimeValueText.text = "Time : " + PlayerTime;
+        }
     }
 
 }

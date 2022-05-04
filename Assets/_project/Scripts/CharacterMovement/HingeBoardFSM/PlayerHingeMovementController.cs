@@ -120,6 +120,7 @@ namespace L7Games.Movement
 
         public StudioEventEmitter audioEmitter;
         private FMOD.Studio.EventInstance respawnSound;
+        private FMOD.Studio.Bus masterBus;
 
         #endregion
 
@@ -147,7 +148,6 @@ namespace L7Games.Movement
             fRB.useGravity = true;
 
             bCameraLocked = false;
-            OverrideCamera(camBrain);
 
             fRB.drag = aerialState.AerialDrag;
             ModelRB.drag = aerialState.AerialDrag;
@@ -171,9 +171,6 @@ namespace L7Games.Movement
             transform.position = initalPos;
 
             characterModel.SetActive(true);
-
-            camBrain.LookAt = lookAtTransform;
-            camBrain.Follow = transform;
 
             ResetWheelPos();
             AlignWheels();
@@ -199,6 +196,8 @@ namespace L7Games.Movement
             characterAnimator.Play("aerial");
             characterAnimator.SetFloat("crouchingFloat", -1);
 
+            OverrideCamera(camBrain);
+
             bWipeOutLocked = false;
             Time.timeScale = 1;
         }
@@ -215,7 +214,6 @@ namespace L7Games.Movement
             fRB.useGravity = true;
 
             bCameraLocked = false;
-            OverrideCamera(camBrain);
 
             fRB.centerOfMass = Vector3.zero;
 
@@ -268,6 +266,8 @@ namespace L7Games.Movement
 
             characterAnimator.Play("aerial");
             characterAnimator.SetFloat("crouchingFloat", -1);
+
+            OverrideCamera(camBrain);
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -434,6 +434,8 @@ namespace L7Games.Movement
 
             camBrain = camBrain ?? FindObjectOfType<CinemachineVirtualCamera>();
             trickBuffer = trickBuffer ?? GetComponent<TrickBuffer>();
+
+            masterBus = FMODUnity.RuntimeManager.GetBus("bus:/Player Sounds");
         }
 
         //Adding the inputs to the finite state machine
@@ -574,6 +576,13 @@ namespace L7Games.Movement
                 }
             }
         }
+
+        private void OnDestroy()
+        {
+            //Cancel all sounds
+            masterBus.stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        }
+
         #endregion
 
         #region Public Methods
