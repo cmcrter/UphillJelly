@@ -36,6 +36,8 @@ namespace L7Games
         //
         public TempScoreSystem tempScoreSystem;
 
+        public HUD HUDScript;
+
         //
         public GameObject rowPrefab;
 
@@ -87,6 +89,18 @@ namespace L7Games
 
             //
             Login();
+
+        }
+
+        public void Update() {
+
+
+            //HUDScript.storedScore.ToString(score);
+            //score = HUDScript.storedScore;
+
+            score = Mathf.RoundToInt(HUDScript.storedScore);
+
+            //Debug.Log(score);
 
         }
 
@@ -364,6 +378,8 @@ namespace L7Games
         public void SendLeaderBoards() {
 
             if (replaySaveManager.isMapTutorial) {
+
+                Debug.Log("Tutorial Triggered");
 
                 //
                 SendTutorialScoreLeaderBoard(score);
@@ -721,8 +737,13 @@ namespace L7Games
                     StatisticName = "Tutorial_Score",
                     StartPosition = 0 //,
                                       //MaxResultsCount = 3,
+                    
 
                 };
+                Debug.Log("GotTutorialScoreRequest");
+
+                //
+                PlayFabClientAPI.GetLeaderboard(TutorialScorerequest, OnLeaderBoardGet, OnError);
 
                 //
                 var TutorialTimerequest = new GetLeaderboardRequest {
@@ -735,6 +756,9 @@ namespace L7Games
                 };
 
                 //
+                PlayFabClientAPI.GetLeaderboard(TutorialTimerequest, OnLeaderBoardGet, OnError);
+
+                //
                 var TutorialKOsrequest = new GetLeaderboardRequest {
 
                     //
@@ -743,12 +767,6 @@ namespace L7Games
                                       //MaxResultsCount = 3,
 
                 };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(TutorialScorerequest, OnLeaderBoardGet, OnError);
-
-                //
-                PlayFabClientAPI.GetLeaderboard(TutorialTimerequest, OnLeaderBoardGet, OnError);
 
                 //
                 PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
@@ -863,8 +881,10 @@ namespace L7Games
                 //
                 GameObject newGO = Instantiate(rowPrefab, rowsParent);
 
+                Debug.Log("INSTANTIATED ROW PREFAB");
+
                 //
-                Text[] texts = newGO.GetComponentsInChildren<Text>();
+                TMP_Text[] texts = newGO.GetComponentsInChildren<TMP_Text>();
 
                 //
                 texts[0].text = (item.Position + 1).ToString();
@@ -874,6 +894,8 @@ namespace L7Games
 
                 //
                 texts[2].text = score.ToString();
+
+                Debug.Log("3 Texts GOT");
 
                 //
                 texts[3].text = time.ToString();
