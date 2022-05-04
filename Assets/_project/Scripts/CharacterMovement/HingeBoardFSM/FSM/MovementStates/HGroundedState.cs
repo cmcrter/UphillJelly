@@ -191,6 +191,19 @@ namespace L7Games.Movement
                 }
             }
 
+            if(parentController.audioEmitter)
+            {
+                parentController.audioEmitter.SetParameter("Velocity", movementRB.velocity.magnitude / 15f);
+
+                if(movementRB.velocity.magnitude < 2)
+                {
+                    parentController.audioEmitter.EventInstance.setVolume(movementRB.velocity.magnitude * 0.5f);
+                }
+                else
+                {
+                    moveSound.setVolume(1f);
+                }
+            }
 
             if(bConstantForce)
             {
@@ -217,6 +230,8 @@ namespace L7Games.Movement
             VFXPlayer.instance.PlayVFX(landingDust, parentController.transform.position - new Vector3(0, 0.45f, 0));
             FMODUnity.RuntimeManager.PlayOneShot("event:/PlayerSounds/Land2", parentController.transform.position);
 
+            parentController.audioEmitter.Play();
+
             hasRan = true;
         }
 
@@ -228,6 +243,7 @@ namespace L7Games.Movement
             UnPressDown();
 
             parentController.characterAnimator.SetBool("grounded", false);
+            parentController.audioEmitter.Stop();
 
             parentController.playerCamera.bMovingBackwards = false;
             hasRan = false;
@@ -269,11 +285,6 @@ namespace L7Games.Movement
                         movementRB.velocity = Vector3.zero;
                         movementRB.AddForce(playerTransform.forward.normalized * dT, ForceMode.Impulse);
                     }
-                }
-
-                if(!parentController.audioEmitter)
-                {
-                    parentController.audioEmitter.SetParameter(parameterName, movementRB.velocity.magnitude / 55f);
                 }
             }
 
@@ -415,6 +426,8 @@ namespace L7Games.Movement
             {
                 if(pushDuringTimer.current_time <= pushForceDuration)
                 {
+                    parentController.characterAnimator.SetFloat("pushFloat", Mathf.Clamp01(pushDuringTimer.current_time));
+
                     //Pushing forward
                     Vector3 force = parentController.transform.forward * forwardSpeed * 250f * Time.fixedDeltaTime;
 

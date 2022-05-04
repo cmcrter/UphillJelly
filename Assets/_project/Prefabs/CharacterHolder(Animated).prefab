@@ -2631,7 +2631,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8518051773168703781}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -2860,7 +2860,7 @@ MonoBehaviour:
       isLocked: 0
       isActive: 0
     landingDust: {fileID: 11400000, guid: b36f1b280b4d4be428cc14c171ea5d40, type: 2}
-    parameterName: 
+    parameterName: Velocity
   wallRideState:
     hasRan: 0
     coyoteDuration: 3
@@ -3040,13 +3040,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: event:/PlayerSounds/Jump
+  Event: event:/PlayerSounds/SkateBoardMove
   PlayEvent: 0
   StopEvent: 0
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
-  Params: []
+  Params:
+  - Name: Velocity
+    Value: 0
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
