@@ -90,7 +90,8 @@ namespace L7.Loading
                             asyncLoad.allowSceneActivation = true;
                         }
                     }
-                    else if (Gamepad.current != null)
+                    
+                    if (Gamepad.current != null)
                     {
                         if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                         {
