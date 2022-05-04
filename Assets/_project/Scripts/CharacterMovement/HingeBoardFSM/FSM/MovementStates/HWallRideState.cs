@@ -127,18 +127,25 @@ namespace L7Games.Movement
         {
 
             pInput.SwitchCurrentActionMap("WallRiding");
-            playerMovement.characterAnimator.SetBool("wallriding", true);
-            playerMovement.bWipeOutLocked = true;
 
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
+
+            if(Vector3.Dot(wallForward, playerMovement.transform.right) > 0)
+            {
+                playerMovement.characterAnimator.SetBool("wallridingMirror", true);
+            }
+
+            playerMovement.characterAnimator.SetBool("wallriding", true);
+            playerMovement.bWipeOutLocked = true;
+            
             //Debug.Log(nextToWallRun.dotProductWithWall + " " + wallForward);
 
             rideSpeed = nextToWallRun.wallSpeed;
 
             playerMovement.OverrideCamera(playerMovement.wallRideCam, false);
-
             playerMovement.transform.rotation = Quaternion.LookRotation(wallForward, Vector3.up);
+
             playerMovement.AlignWheels();
             playerMovement.ResetWheelPos();           
 
@@ -173,6 +180,7 @@ namespace L7Games.Movement
             bJumping = false;
 
             playerMovement.characterAnimator.SetBool("wallriding", false);
+            playerMovement.characterAnimator.SetBool("wallridingMirror", false);
 
             playerMovement.StartAirInfluenctCoroutine();
 
