@@ -27,6 +27,10 @@ namespace L7Games.UI
         [SerializeField]
         [Tooltip("The menu element that will be shown and hidden depending on the pause state")]
         private GameObject menuUiElement;
+
+        [SerializeField]
+        [Tooltip("The Setting panel that can be opened through this pause menu")]
+        private GameObject settingPanel;
         #endregion
 
         #region Private Variables
@@ -81,13 +85,12 @@ namespace L7Games.UI
         public void MainMenuButton()
         {
             // This should have a confirmation box (probably)
+            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), "Are you sure you want to restart level? Your level progress will not be saved", null, MoveToMainMenu);
         }
         public void RestartLevelButton()
         {
             // This should have a confirmation box (probably)
-
-            LoadingData.sceneToLoad = SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene("LoadingScene");
+            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), "Are you sure you want to restart level? Your level progress will not be saved", null, RestartLevel);
         }
         public void ResumeGameButton()
         {
@@ -96,13 +99,13 @@ namespace L7Games.UI
 
         public void SettingsButton()
         {
-
+            settingPanel.SetActive(true);
         }
 
         public void QuitButton()
         {
             // This should have a confirmation box (probably)
-            
+            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), "Quit to desktop? Your level progress will not be saved", null, Application.Quit);
         }
         #endregion
 
@@ -164,6 +167,17 @@ namespace L7Games.UI
                 PauseGame();
             }
         }
+        private void RestartLevel()
+        {
+            LoadingData.sceneToLoad = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene("LoadingScene");
+        }
+        private void MoveToMainMenu()
+        {
+            LoadingData.sceneToLoad = "MainMenu";
+            SceneManager.LoadScene("LoadingScene");
+        }
+
         /// <summary>
         /// Check through the scene for all the input handlers 
         /// </summary>
