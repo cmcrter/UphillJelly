@@ -41,6 +41,7 @@ namespace L7Games.Movement
 
         public PlayerCamera playerCamera;
         public CinemachineVirtualCamera camBrain;
+        public CinemachineVirtualCamera backwardsCamera;
         public CinemachineVirtualCamera wallRideCam;
         public CinemachineVirtualCamera wipeOutCam;
         public CinemachineVirtualCamera grindCam;
@@ -408,6 +409,7 @@ namespace L7Games.Movement
             wallRideCam.enabled = false;
             camBrain.enabled = false;
             grindCam.enabled = false;
+            backwardsCamera.enabled = false;
 
             camera.enabled = true;
 
@@ -661,6 +663,8 @@ namespace L7Games.Movement
 
             characterAnimator.Play("Wipeout");
             characterModel.SetActive(false);
+
+            OverrideCamera(wipeOutCam, false);
         }
 
         public void PlayRespawnSound()

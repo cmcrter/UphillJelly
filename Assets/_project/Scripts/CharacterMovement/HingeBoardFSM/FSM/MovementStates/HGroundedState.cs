@@ -90,6 +90,9 @@ namespace L7Games.Movement
         [SerializeField]
         private string parameterName;
 
+        private bool cameraBackwards;
+        private bool cameraSwitched;
+
         public HGroundedState()
         {
         }
@@ -170,6 +173,25 @@ namespace L7Games.Movement
         {
             UpdatePositionAndRotation(dT);
 
+            if(cameraBackwards)
+            {
+                if(!cameraSwitched && movementRB.velocity.magnitude > 2f)
+                {
+                    parentController.OverrideCamera(parentController.backwardsCamera, false);
+                    cameraSwitched = true;
+                }
+            }
+
+            if(!cameraBackwards)
+            {
+                if(cameraSwitched)
+                {
+                    parentController.OverrideCamera(parentController.camBrain, false);
+                    cameraSwitched = false;
+                }
+            }
+
+
             if(bConstantForce)
             {
                 movementRB.AddForceAtPosition(playerTransform.forward * constantForce, movementRB.position + movementRB.centerOfMass, ForceMode.Force);
@@ -227,13 +249,15 @@ namespace L7Games.Movement
                 if(dotAngle < -0.985f)
                 {
                     movementRB.velocity = movementRB.velocity.magnitude * -forward;
+                    cameraBackwards = true;
                 }
                 //Must be moving forwards
                 else
                 {
                     movementRB.velocity = movementRB.velocity.magnitude * forward;
+                    cameraBackwards = false;
                 }
-                
+
                 // 0 means it is perpendicular, 1 means it's perfectly parallel
                 if(absDotAngle < 0.99f)
                 {
