@@ -97,8 +97,13 @@ namespace L7.Loading
                 float boundsX = Screen.width * 0.25f;
                 float randScreenPos = Random.Range(-boundsX, boundsX);
 
+                tooltipImage.gameObject.SetActive(true);
                 tooltipImage.transform.localPosition = new Vector3(randScreenPos, tooltipImage.transform.localPosition.y, 0);
                 tooltipImage.sprite = currentTooltip.texture;
+            }
+            else
+            {
+                tooltipImage.gameObject.SetActive(true);
             }
         }
 
@@ -145,7 +150,12 @@ namespace L7.Loading
             for(float t = 0; t <= 1; t += Time.deltaTime / TooltipFadeTime)
             {
                 tooltipText.alpha = t;
-                tooltipImage.color = new Color(tooltipImage.color.r, tooltipImage.color.g, tooltipImage.color.b, t);
+
+                if(currentTooltip.texture != null)
+                {
+                    tooltipImage.color = new Color(tooltipImage.color.r, tooltipImage.color.g, tooltipImage.color.b, t);
+                }
+
                 yield return null;
             }
         }
@@ -156,7 +166,12 @@ namespace L7.Loading
             for(float t = 1; t >= 0; t -= Time.deltaTime / TooltipFadeTime)
             {
                 tooltipText.alpha = t;
-                tooltipImage.color = new Color(tooltipImage.color.r, tooltipImage.color.g, tooltipImage.color.b, t);
+
+                if(currentTooltip.texture != null)
+                {
+                    tooltipImage.color = new Color(tooltipImage.color.r, tooltipImage.color.g, tooltipImage.color.b, t);
+                }
+
                 yield return null;
             }
         }
