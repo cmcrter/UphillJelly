@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 26/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 26/10/21
+// Date Last Edited: 05/05/22
 // Brief: A way of customizing how much force a grind rail will apply to a player that grinds on it.
 //////////////////////////////////////////////////////////// 
 
@@ -20,5 +20,6 @@ namespace L7Games.Movement
         /// </summary>
         [Header("vector is relative to player... x being right, y being up, z being forward")]
         public Vector3 ExitForce = new Vector3(0, 1.5f, 10f);
+        public bool canTravelBackwards = true;
     }
 }
