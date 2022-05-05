@@ -132,7 +132,7 @@ namespace L7Games.Movement
 
                 if(/* inputHandler.StartGrindHeld && */ CoyoteCoroutine == null && movementRB.velocity.magnitude > 1f)
                 {
-                    if(grindDotProduct < -angleAllowance || grindDotProduct > angleAllowance)
+                    if(grindDotProduct < -angleAllowance && grindDetails.canTravelBackwards || grindDotProduct > angleAllowance)
                     {
                         ButtonPressed = true;
                         inputHandler.StopCoroutine(Co_WaitForButtonPress());

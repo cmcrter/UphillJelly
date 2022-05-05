@@ -32,8 +32,6 @@ namespace L7Games
             }
         }
 
-        public bool gameEnded = false;
-
         [SerializeField]
         private TextMeshProUGUI timerText;
 
@@ -54,11 +52,6 @@ namespace L7Games
 
         void Update()
         {
-            if(gameEnded)
-            {
-                return;
-            }
-
             //Tick down in code so timer has no end (not duration needed)
             roundTimer.Tick(-Time.deltaTime);
             UpdateTimerText();
@@ -67,11 +60,6 @@ namespace L7Games
         #endregion
 
         #region Public Methods
-
-        public void EndTimer()
-        {
-            gameEnded = true;
-        }
 
         public void UpdateTimerText()
         {
@@ -82,6 +70,11 @@ namespace L7Games
             float seconds = Mathf.Floor(roundTimer.current_time % 60);
                 
             timerText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
+        }
+
+        public void LockTimer()
+        {
+            roundTimer.isLocked = true;
         }
 
         #endregion

@@ -164,8 +164,8 @@ namespace L7Games.Movement
 
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
-            boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
-            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
+            boardModel.transform.localPosition = Vector3.zero;
+            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
 
             transform.rotation = initialRot;
             transform.position = initalPos;
@@ -232,8 +232,8 @@ namespace L7Games.Movement
 
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
-            boardModel.transform.localPosition = new Vector3(-0.053f, 0, 0);
-            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
+            boardModel.transform.localPosition = Vector3.zero;
+            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
 
             transform.rotation = point.rotation;
             transform.position = point.position;

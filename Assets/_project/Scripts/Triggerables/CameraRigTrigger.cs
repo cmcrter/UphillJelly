@@ -51,23 +51,18 @@ namespace L7Games
 
             StartCoroutine(WaitFor5Seconds());
 
-            
-            Debug.Log("TRIGGEREDTRIGGERED");
-
+            if(endTrigger != null)
+            {
+                endTrigger.Invoke();
+            }      
         }
 
         IEnumerator WaitFor5Seconds() {
 
             yield return new WaitForSeconds(5f);
-
-            this.gameObject.SetActive(false);
-
-            Debug.Log("WAITED");
-
+            gameObject.SetActive(false);
             LeaderboardGO.SetActive(true);
-
             //playfabManager.FinishedLevelTriggered();
-
         }
 
         void PlayerExited(PlayerController player)
