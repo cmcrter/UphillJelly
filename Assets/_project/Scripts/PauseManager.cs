@@ -130,19 +130,4 @@ public class PauseManager : MonoBehaviour
             instance = this;
         }
     }
-
-    private void OnValidate()
-    {
-        if (instance != null)
-        {
-            if (instance != this)
-            {
-                Debug.LogError("Another instance of a pause manager already exist on the" + "\"" + instance.gameObject + "\"" + " GameObject, old instance will be destroyed on awake", instance);
-            }
-        }
-        else
-        {
-            instance = this;
-        }
-    }
 }

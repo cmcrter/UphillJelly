@@ -231,6 +231,7 @@ namespace L7Games.Movement
             FMODUnity.RuntimeManager.PlayOneShot("event:/PlayerSounds/Land2", parentController.transform.position);
 
             parentController.audioEmitter.Play();
+            parentController.OverrideCamera(parentController.camBrain, false);
 
             hasRan = true;
         }
