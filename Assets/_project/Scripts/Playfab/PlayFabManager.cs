@@ -17,6 +17,7 @@ using TMPro;
 using UnityEngine.UI;
 using L7Games;
 using L7Games.Movement;
+using System.IO;
 
 namespace L7Games
 {
@@ -64,7 +65,8 @@ namespace L7Games
 
         public bool hasFetchedLeaderboard;
 
-
+        [SerializeField]
+        public static TMP_InputField PlayerName;
         
 
         /*
@@ -103,6 +105,7 @@ namespace L7Games
             score = Mathf.RoundToInt(HUDScript.storedScore);
 
             //Debug.Log(score);
+
 
         }
 
@@ -313,11 +316,11 @@ namespace L7Games
 
             Debug.Log("FINISHLEVELTRIGGERED");
 
-            if (hasFetchedLeaderboard == true) {
+            //if (hasFetchedLeaderboard == true) {
 
-                return;
+            //    return;
 
-            }
+            //}
 
             //
             SendLeaderBoards();
@@ -328,9 +331,22 @@ namespace L7Games
             GetLeaderBoard();
             Debug.Log("GETTHEBOARD");
 
-            hasFetchedLeaderboard = true;
+            //hasFetchedLeaderboard = true;
+
+            WaitToUpdateLeaderBoard();
 
         }
+
+        private IEnumerator WaitToUpdateLeaderBoard() {
+
+            yield return new WaitForSeconds(3f);
+
+            SendLeaderBoards();
+            GetLeaderBoard();
+
+        }
+
+        
 
         //
         public void SubmitNameButton() {
@@ -344,6 +360,17 @@ namespace L7Games
             };
 
             PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
+
+            // 
+            //Directory.CreateDirectory(Application.persistentDataPath + "/" + TMPPlayerName.text);
+
+            //File.Create(Application.persistentDataPath + "/" + TMPPlayerName.text);
+
+            //PlayerName.text = Application.persistentDataPath + "/" + TMPPlayerName.text;
+
+            //PlayerName.text = TMPPlayerName.text;
+
+            //Debug.Log(PlayerName.text);
 
             //
             SubmittedNameImage.SetActive(false);
@@ -400,7 +427,6 @@ namespace L7Games
                 //
                 SendTutorialKOsLeaderBoard(KOs);
 
-                return;
 
             }
 
@@ -783,7 +809,6 @@ namespace L7Games
                 //
                 PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
 
-                return;
 
             }
 
