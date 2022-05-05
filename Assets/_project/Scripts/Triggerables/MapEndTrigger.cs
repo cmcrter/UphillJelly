@@ -52,9 +52,6 @@ namespace L7Games
         //Can be called by cinematics too
         public void MapFinished(PlayerController player)
         {
-
-            
-
             //Show End UI
             if (endUI)
             {
@@ -63,11 +60,9 @@ namespace L7Games
 
             if(timer)
             {
-                timer.gameEnded = true;
+                timer.LockTimer();
             }
-
-            
-
+           
         }
 
         //shouldn't do anything
