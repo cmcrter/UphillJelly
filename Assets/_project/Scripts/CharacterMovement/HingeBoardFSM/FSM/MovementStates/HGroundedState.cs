@@ -245,8 +245,8 @@ namespace L7Games.Movement
 
             parentController.characterAnimator.SetBool("grounded", false);
             parentController.audioEmitter.Stop();
+            parentController.OverrideCamera(parentController.camBrain, false);
 
-            parentController.playerCamera.bMovingBackwards = false;
             hasRan = false;
         }
 

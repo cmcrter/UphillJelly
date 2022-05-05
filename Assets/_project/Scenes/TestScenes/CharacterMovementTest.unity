@@ -886,6 +886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DuringGrindForce: 10
   ExitForce: {x: 0, y: 1.5, z: 10}
+  canTravelBackwards: 0
 --- !u!1 &129829648
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,6 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DuringGrindForce: 10
   ExitForce: {x: 0, y: 1.5, z: 10}
+  canTravelBackwards: 0
 --- !u!1 &135206180
 GameObject:
   m_ObjectHideFlags: 0
@@ -4898,6 +4900,10 @@ PrefabInstance:
     - target: {fileID: 4315438314806273647, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
       propertyPath: DuringGrindForce
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4315438314806273647, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
+      propertyPath: canTravelBackwards
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50c138add5e16f5428a23f2f9c173887, type: 3}
@@ -9454,6 +9460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DuringGrindForce: 10
   ExitForce: {x: 0, y: 3, z: 5}
+  canTravelBackwards: 0
 --- !u!1 &1789075737
 GameObject:
   m_ObjectHideFlags: 0
@@ -14655,6 +14662,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2895347839156224780, guid: d77d97ddf2dd80d4a8ee0f9ba740a8ba, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2825
+      objectReference: {fileID: 0}
     - target: {fileID: 3903168884410509302, guid: d77d97ddf2dd80d4a8ee0f9ba740a8ba, type: 3}
       propertyPath: m_Name
       value: CharacterHolder(Animated)
