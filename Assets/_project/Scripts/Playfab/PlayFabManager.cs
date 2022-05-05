@@ -17,6 +17,7 @@ using TMPro;
 using UnityEngine.UI;
 using L7Games;
 using L7Games.Movement;
+using System.IO;
 
 namespace L7Games
 {
@@ -62,9 +63,10 @@ namespace L7Games
         //
         public GameObject SubmitNameButtonGameObject;
 
+        public bool hasFetchedLeaderboard;
 
-
-
+        [SerializeField]
+        public static TMP_InputField PlayerName;
         
 
         /*
@@ -90,6 +92,8 @@ namespace L7Games
             //
             Login();
 
+            hasFetchedLeaderboard = false;
+
         }
 
         public void Update() {
@@ -101,6 +105,7 @@ namespace L7Games
             score = Mathf.RoundToInt(HUDScript.storedScore);
 
             //Debug.Log(score);
+
 
         }
 
@@ -311,6 +316,12 @@ namespace L7Games
 
             Debug.Log("FINISHLEVELTRIGGERED");
 
+            //if (hasFetchedLeaderboard == true) {
+
+            //    return;
+
+            //}
+
             //
             SendLeaderBoards();
 
@@ -320,7 +331,22 @@ namespace L7Games
             GetLeaderBoard();
             Debug.Log("GETTHEBOARD");
 
+            //hasFetchedLeaderboard = true;
+
+            WaitToUpdateLeaderBoard();
+
         }
+
+        private IEnumerator WaitToUpdateLeaderBoard() {
+
+            yield return new WaitForSeconds(3f);
+
+            SendLeaderBoards();
+            GetLeaderBoard();
+
+        }
+
+        
 
         //
         public void SubmitNameButton() {
@@ -334,6 +360,17 @@ namespace L7Games
             };
 
             PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
+
+            // 
+            //Directory.CreateDirectory(Application.persistentDataPath + "/" + TMPPlayerName.text);
+
+            //File.Create(Application.persistentDataPath + "/" + TMPPlayerName.text);
+
+            //PlayerName.text = Application.persistentDataPath + "/" + TMPPlayerName.text;
+
+            //PlayerName.text = TMPPlayerName.text;
+
+            //Debug.Log(PlayerName.text);
 
             //
             SubmittedNameImage.SetActive(false);
@@ -389,6 +426,7 @@ namespace L7Games
 
                 //
                 SendTutorialKOsLeaderBoard(KOs);
+
 
             }
 
@@ -771,6 +809,7 @@ namespace L7Games
                 //
                 PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
 
+
             }
 
             if (replaySaveManager.isMapCity) {
@@ -786,6 +825,9 @@ namespace L7Games
                 };
 
                 //
+                PlayFabClientAPI.GetLeaderboard(CityScorerequest, OnLeaderBoardGet, OnError);
+
+                //
                 var CityTimerequest = new GetLeaderboardRequest {
 
                     //
@@ -796,6 +838,9 @@ namespace L7Games
                 };
 
                 //
+                PlayFabClientAPI.GetLeaderboard(CityTimerequest, OnLeaderBoardGet, OnError);
+
+                //
                 var CityKOsrequest = new GetLeaderboardRequest {
 
                     //
@@ -804,12 +849,6 @@ namespace L7Games
                                       //MaxResultsCount = 3,
 
                 };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(CityScorerequest, OnLeaderBoardGet, OnError);
-
-                //
-                PlayFabClientAPI.GetLeaderboard(CityTimerequest, OnLeaderBoardGet, OnError);
 
                 //
                 PlayFabClientAPI.GetLeaderboard(CityKOsrequest, OnLeaderBoardGet, OnError);
@@ -830,6 +869,9 @@ namespace L7Games
                 };
 
                 //
+                PlayFabClientAPI.GetLeaderboard(OldTownScorerequest, OnLeaderBoardGet, OnError);
+
+                //
                 var OldTownTimerequest = new GetLeaderboardRequest {
 
                     //
@@ -838,6 +880,9 @@ namespace L7Games
                     //MaxResultsCount = 3,
 
                 };
+
+                //
+                PlayFabClientAPI.GetLeaderboard(OldTownTimerequest, OnLeaderBoardGet, OnError);
 
                 //
                 var OldTownKOsrequest = new GetLeaderboardRequest {
@@ -850,22 +895,18 @@ namespace L7Games
                 };
 
                 //
-                PlayFabClientAPI.GetLeaderboard(OldTownScorerequest, OnLeaderBoardGet, OnError);
-
-                //
-                PlayFabClientAPI.GetLeaderboard(OldTownTimerequest, OnLeaderBoardGet, OnError);
-
-                //
                 PlayFabClientAPI.GetLeaderboard(OldTownKOsrequest, OnLeaderBoardGet, OnError);
 
             }
+
+
 
         }
 
         //
         void OnLeaderBoardGet(GetLeaderboardResult result) {
 
-            Debug.Log("TTTTTTTTTTTTTTTTTTTTT");
+            //Debug.Log("TTTTTTTTTTTTTTTTTTTTT");
 
             // for each row in the leaderboard
             foreach (Transform item in rowsParent) {
@@ -890,10 +931,14 @@ namespace L7Games
                 texts[0].text = (item.Position + 1).ToString();
 
                 //
-                texts[1].text = TMPPlayerName.text; //+ item.PlayFabId; //playerName.text + "(" + THIS +")";
+                //texts[1].text = TMPPlayerName.text; //+ item.PlayFabId; //playerName.text + "(" + THIS +")";
+
+                texts[1].text = item.DisplayName;
 
                 //
-                texts[2].text = score.ToString();
+                //texts[2].text = score.ToString();
+
+                texts[2].text = item.StatValue.ToString();
 
                 Debug.Log("3 Texts GOT");
 
@@ -910,6 +955,8 @@ namespace L7Games
                 //Debug.Log(item.Position + "" + item.PlayFabId + "" + item.StatValue);
 
             }
+
+            
 
         }
 
