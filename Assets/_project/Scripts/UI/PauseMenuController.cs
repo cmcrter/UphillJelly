@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using L7Games.Input;
@@ -25,15 +26,25 @@ namespace L7Games.UI
     {
         #region Private Serialized Field
         [SerializeField]
+        [Tooltip("The buttons in pause menu from top to bottom in layout order")]
+        private Button[] menuButtons;
+
+        [SerializeField]
         [Tooltip("The menu element that will be shown and hidden depending on the pause state")]
         private GameObject menuUiElement;
 
         [SerializeField]
         [Tooltip("The Setting panel that can be opened through this pause menu")]
         private GameObject settingPanel;
+
+        [SerializeField]
+        [Tooltip("The Event system in the scene")]
+        private UnityEngine.EventSystems.EventSystem eventSystem;
         #endregion
 
         #region Private Variables
+        private int selectedButtonIndex;
+
         /// <summary>
         /// All the input handlers that are currently in the scene
         /// </summary>
@@ -45,6 +56,8 @@ namespace L7Games.UI
         private InputActionMap[] savedInputActionMaps;
         #endregion
 
+
+
         #region Unity Methods
         public void Start()
         {
@@ -53,6 +66,7 @@ namespace L7Games.UI
             {
                 UpdateInputHandlersFromScene();
             }
+
         }
         public void OnEnable()
         {
@@ -66,6 +80,8 @@ namespace L7Games.UI
             {
                 inputHandlersInScene[i].PauseActionPerformed += PauseMenuController_PauseActionPerformed;
             }
+            eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
+
         }
 
         public void OnDisable()
@@ -77,6 +93,13 @@ namespace L7Games.UI
                     inputHandlersInScene[i].PauseActionPerformed -= PauseMenuController_PauseActionPerformed;
                 }
             }
+        }
+
+        private void Update()
+        {
+
+            //eventSystem.sele
+            //menuButtons[0].Selec = Selectable.Transition.ColorTint;
         }
         #endregion
 
@@ -104,6 +127,8 @@ namespace L7Games.UI
 
         public void QuitButton()
         {
+
+
             // This should have a confirmation box (probably)
             WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), "Quit to desktop? Your level progress will not be saved", null, Application.Quit);
         }
@@ -120,6 +145,7 @@ namespace L7Games.UI
                 if (!PauseManager.instance.IsPaused)
                 {
                     PauseManager.instance.PauseGame();
+                    eventSystem.SetSelectedGameObject(menuButtons[0].gameObject);
                     menuUiElement.SetActive(true);
                 }
 

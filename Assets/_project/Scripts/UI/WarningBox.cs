@@ -41,10 +41,11 @@ public class WarningBox : MonoBehaviour
     [SerializeField]
     [Tooltip("The UI text mesh showing the warning text")]
     private TextMeshProUGUI textMesh;
+
+
     #endregion
 
     #region Private Variables
-
     /// <summary>
     /// The button that will respond to cancel inputs
     /// </summary>
@@ -53,6 +54,16 @@ public class WarningBox : MonoBehaviour
     /// The button that will respond to confirm inputs
     /// </summary>
     private Button confirmButton;
+
+    /// <summary>
+    /// The buttons added to the box
+    /// </summary>
+    private List<Button> boxButtons;
+
+    /// <summary>
+    /// The Event system in the scene
+    /// </summary>
+    private UnityEngine.EventSystems.EventSystem eventSystem;
 
     /// <summary>
     /// The input handlers that are found in the scene 
@@ -68,6 +79,7 @@ public class WarningBox : MonoBehaviour
         {
             UpdateInputHandlersFromScene();
         }
+        boxButtons = new List<Button>();
     }
     public void OnEnable()
     {
@@ -80,6 +92,8 @@ public class WarningBox : MonoBehaviour
         for (int i = 0; i < inputHandlersInScene.Length; ++i)
         {
         }
+
+        eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
     }
 
     public void OnDisable()
@@ -144,9 +158,39 @@ public class WarningBox : MonoBehaviour
     /// <returns>The newly created button</returns>
     public Button AddButton(string buttonText)
     {
+        if (boxButtons == null)
+        {
+            boxButtons = new List<Button>();
+        }
         GameObject gameObjectButton = GameObject.Instantiate(buttonPrefab.gameObject, buttonsParentGroup.transform);
         Button newButton = gameObjectButton.GetComponent<Button>();
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = buttonText;
+        boxButtons.Add(newButton);
+        // If the new button is the first one added to the warning box
+        if (boxButtons.Count == 1)
+        {
+            eventSystem.SetSelectedGameObject(gameObjectButton);
+            Navigation newNavigation = new Navigation();
+            newNavigation.mode = Navigation.Mode.Explicit;
+            boxButtons[0].navigation = newNavigation;
+        }
+        else
+        {
+            Navigation newNavigation = new Navigation();
+            newNavigation.selectOnLeft = boxButtons[boxButtons.Count - 2];
+            newNavigation.selectOnRight = boxButtons[0];
+            newNavigation.mode = Navigation.Mode.Explicit;
+            boxButtons[boxButtons.Count - 1].navigation = newNavigation;
+
+            newNavigation = boxButtons[boxButtons.Count - 2].navigation;
+            newNavigation.selectOnRight = boxButtons[boxButtons.Count - 1];
+            boxButtons[boxButtons.Count - 2].navigation = newNavigation;
+
+            newNavigation = boxButtons[0].navigation;
+            newNavigation.selectOnLeft = boxButtons[boxButtons.Count - 1];
+            boxButtons[0].navigation = newNavigation;
+        }
+        
         return newButton;
     }
 
