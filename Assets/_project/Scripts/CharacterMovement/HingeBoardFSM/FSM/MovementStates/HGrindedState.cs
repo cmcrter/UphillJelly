@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 25/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 25/11/21
+// Date Last Edited: 05/05/22
 // Brief: The player state for when the player is grinding
 //////////////////////////////////////////////////////////// 
 
@@ -115,17 +115,18 @@ namespace L7Games.Movement
             parentController.OverrideCamera(parentController.grindCam, false);
 
             //Making sure nothing interferes with the movement
-            Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.265f, 0);
+            Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.465f + 0.0375f, 0);
             //Debug.Log(closestPoint);
 
             movementRB.transform.position = closestPoint;
+            parentController.transform.position = closestPoint;
             timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.0075f, 0.9925f);
 
             movementRB.velocity = Vector3.zero;
             movementRB.useGravity = false;
             movementRB.isKinematic = true;
 
-            if(onGrind.grindDotProduct < -onGrind.angleAllowance)
+            if((onGrind.grindDotProduct < -onGrind.angleAllowance))
             {
                 bTravelBackwards = true;
             }
@@ -297,7 +298,7 @@ namespace L7Games.Movement
                 }
             }
             //if it's at the end
-            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f)
+            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f || timeAlongGrind == 1)
             {
                 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, 0.465f + 0.0375f, 0);
 
@@ -340,7 +341,7 @@ namespace L7Games.Movement
                 }
             }
             //if it's at the end
-            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldStartPosition) < 0.7f)
+            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldStartPosition) < 0.7f || timeAlongGrind == 0)
             {
                 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, 0.45f + 0.0375f, 0);
 

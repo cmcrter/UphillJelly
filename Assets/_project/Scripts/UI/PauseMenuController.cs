@@ -169,11 +169,13 @@ namespace L7Games.UI
         }
         private void RestartLevel()
         {
+            UnpauseGame();
             LoadingData.sceneToLoad = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene("LoadingScene");
         }
         private void MoveToMainMenu()
         {
+            UnpauseGame();
             LoadingData.sceneToLoad = "MainMenu";
             SceneManager.LoadScene("LoadingScene");
         }
