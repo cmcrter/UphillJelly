@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using L7Games.Input;
-using L7.Loading;
+using L7Games.Loading;
 
 
 namespace L7Games.UI
@@ -177,6 +177,8 @@ namespace L7Games.UI
         {
             UnpauseGame();
             LoadingData.sceneToLoad = "MainMenu";
+            LoadingData.currentLevel = LEVEL.MAINMENU;
+
             SceneManager.LoadScene("LoadingScene");
         }
 
