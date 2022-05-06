@@ -37,7 +37,7 @@ namespace SleepyCat
 
             ResetTabs();
 
-            button.background.sprite = tabHover;
+            button.backgroundTabImage.sprite = tabHover;
 
         }
 
@@ -51,7 +51,7 @@ namespace SleepyCat
 
             ResetTabs();
 
-            button.background.sprite = tabActive;
+            button.backgroundTabImage.sprite = tabActive;
 
         }
 
@@ -59,7 +59,7 @@ namespace SleepyCat
 
             foreach(ShopTabButton button in tabButtons) {
 
-                button.background.sprite = tabIdle;
+                button.backgroundTabImage.sprite = tabIdle;
 
             }
 
