@@ -40,6 +40,30 @@ public class InventoryObject : ScriptableObject
 
     }
 
+    /*
+    public void RemoveItem(ItemObjectSO _item, int _amountOfItem) {
+
+        bool hasItem = true;
+
+        for (int i = 0; i > container.Count; i--) {
+
+            if (container[i].item == _item) {
+
+                container[i].RemoveAmountOfItems(_amountOfItem);
+                hasItem = false;
+                break;
+
+            }
+
+        }
+
+        if (hasItem) {
+            container.Remove(new InventorySlot(_item, _amountOfItem));
+        }
+
+    }
+    */
+
 }
 
 [System.Serializable]
@@ -62,5 +86,13 @@ public class InventorySlot
         amountOfItem += value;
 
     }
+
+    /*
+    public void RemoveAmountOfItems(int value) {
+
+        amountOfItem -= value;
+
+    }
+    */
 
 }

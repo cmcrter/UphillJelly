@@ -15,7 +15,9 @@ using UnityEngine.EventSystems;
 public class ShopInventory : MonoBehaviour
 {
 
-    public InventoryObject shopInventory;
+    public InventoryObject shopHatInventory;
+    public InventoryObject playerHatInventory;
+
 
     public void BuyItem() {
 
@@ -23,13 +25,27 @@ public class ShopInventory : MonoBehaviour
 
         if (item) {
 
-            shopInventory.AddItem(item.item, 1);
+            //shopHatInventory.AddItem(item.item, 1);
+            playerHatInventory.AddItem(item.item, 1);
 
-            item.gameObject.SetActive(false);
+
+
+            //shopHatInventory.RemoveItem(item.item, -1);
+
+
+
+
+            //item.gameObject.SetActive(false);
+            Destroy(item.gameObject);
 
         }
 
     }
 
+    private void OnApplicationQuit() {
+
+        playerHatInventory.container.Clear();
+
+    }
 
 }
