@@ -16,9 +16,10 @@ namespace L7Games
     public class RagdollDataContainer : MonoBehaviour
     {
         public Animator attachedAnimator;
-
         public SkinnedMeshRenderer characterRenderer;
-
+        public Transform HatParent;
+        public GameObject HatObject;
+    
         //public struct Bones
         //{
         //    public Vector3 position;

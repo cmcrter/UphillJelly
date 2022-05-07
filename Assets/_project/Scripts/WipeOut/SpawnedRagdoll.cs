@@ -23,8 +23,7 @@ public class SpawnedRagdoll : MonoBehaviour
     /// <summary>
     /// The ragdollData attached to the same ragdoll as this
     /// </summary>
-    [SerializeField]
-    private RagdollDataContainer ragdollData;
+    public RagdollDataContainer ragdollData;
 
     [SerializeField]
     private Animator tempAnimator;
@@ -84,6 +83,13 @@ public class SpawnedRagdoll : MonoBehaviour
         // Copy the characters mesh and materials across
         ragdollData.characterRenderer.sharedMesh = ragdollSpawningData.characterRenderer.sharedMesh;
         ragdollData.characterRenderer.materials = ragdollSpawningData.characterRenderer.materials;
+
+        //Instaniate the correct hat
+        if(ragdollSpawningData.HatObject != null) 
+        {
+            ragdollData.HatObject = ragdollSpawningData.HatObject;
+            GameObject.Instantiate(ragdollSpawningData.HatObject, ragdollData.HatParent);
+        }
 
         // Copy animation position
         ragdollData.attachedAnimator.avatar = ragdollSpawningData.attachedAnimator.avatar;

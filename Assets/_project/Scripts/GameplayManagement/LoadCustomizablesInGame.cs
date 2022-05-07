@@ -67,4 +67,19 @@ public class LoadCustomizablesInGame
         catBoardFilter.sharedMesh = LoadingData.shopItems[2].mesh;
         catBoardMesh.material = LoadingData.shopItems[2].material;
     }
+
+    public GameObject HatObject()
+    {
+        if(equipItems.Count <= 1)
+        {
+            return null;
+        }   
+
+        if(equipItems[1] != null)
+        {
+            return equipItems[1].prefab;
+        }
+
+        return null;
+    }
 }
