@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////
 // File: PlayFabManager.cs
-// Author: Jack Peedle
-// Date Created: 29/01/21
-// Last Edited By: Jack Peedle
-// Date Last Edited: 29/01/22
-// Brief: 
+// Author: Jack Peedle, Charles Carter
+// Date Created: 29/01/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 07/05/22
+// Brief: A script to manage retrieving and sending data for the leaderboards.
 ////////////////////////////////////////////////////////////
 
 using System;
@@ -14,35 +14,62 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
-using UnityEngine.UI;
-using L7Games;
-using L7Games.Movement;
-using System.IO;
 using L7Games.Loading;
+
 
 namespace L7Games
 {
+    public enum leaderboard_value
+    {
+        SCORE = 0,
+        TIME = 1,
+        KOs = 2,
+        COUNT
+    }
+
+    //public class CompiledLeaderboardRow
+    //{
+    //    public int compiled_rank;
+    //    public string compiled_sessionID;
+    //    public string compiled_name;
+    //    public int compiled_score;
+    //    public int compiled_time;
+    //    public int compiled_KOs;
+
+    //    public CompiledLeaderboardRow(string sessionID, string name,  int score, int time, int KOs)
+    //    {
+    //        compiled_sessionID = sessionID;
+    //        compiled_name = name;
+    //        compiled_score = score;
+    //        compiled_time = time;
+    //        compiled_KOs = KOs;
+    //    }
+    //}
+
     public class PlayFabManager : MonoBehaviour
     {
-        string levelname;
+        [Header("Necessary Variables")]
+        public ReplaySaveManager replaySaveManager;
 
-        public ReplaySaveManager replaySaveManager;      
-        public TempScoreSystem tempScoreSystem;
-
+        [Header("This Session")]
         public HUD HUDScript;
+        public RankTimer Timer;
 
+        [Header("UI Values")]
         public GameObject rowPrefab;
         public Transform rowsParent;
         public TMP_InputField TMPPlayerName;
-        public int time;
         public int KOs;
         public GameObject SubmittedNameImage;
         public GameObject SubmitNameButtonGameObject;
 
-        public bool hasFetchedLeaderboard;
+        //private List<CompiledLeaderboardRow> allresults = new List<CompiledLeaderboardRow>();
+        //private List<PlayerLeaderboardEntry> allEntires = new List<PlayerLeaderboardEntry>();
+        private string levelname;
 
-        [SerializeField]
-        public static TMP_InputField PlayerName;
+        private leaderboard_value currentLeadboardToPopulate = leaderboard_value.SCORE;
+        public List<Transform> LeaderboardPanels;
+        public List<Transform> LeaderboardRowObjects;
 
         void Start()
         {
@@ -59,8 +86,6 @@ namespace L7Games
             }
 
             Login();
-
-            hasFetchedLeaderboard = false;
         }
 
         // Login
@@ -83,7 +108,6 @@ namespace L7Games
 
         void OnSuccess(LoginResult result)
         {
-
             Debug.Log("Successful login / account create!");
             string name = null;
             if(result.InfoResultPayload.PlayerProfile != null)
@@ -92,76 +116,31 @@ namespace L7Games
             }
         }
 
-        public void GetMainMenuTutorialLeaderboard()
+        public void GetCurrentLeaderboard(string thislevelname) 
         {
-            var TutorialScorerequest = new GetLeaderboardRequest
+            Debug.Log("Get Leaderboard 2");
+
+            var Scorerequest = new GetLeaderboardRequest
             {
-                StatisticName = "Tutorial_Score",
+                StatisticName = thislevelname + "_Score",
                 StartPosition = 0
             };
 
-            var TutorialTimerequest = new GetLeaderboardRequest
+            var Timerequest = new GetLeaderboardRequest
             {
-                StatisticName = "Tutorial_Time",
-            };
-
-            var TutorialKOsrequest = new GetLeaderboardRequest
-            {
-                StatisticName = "Tutorial_KOs",
+                StatisticName = thislevelname + "_Time",
                 StartPosition = 0
             };
 
-            PlayFabClientAPI.GetLeaderboard(TutorialScorerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(TutorialTimerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
-        }
-
-        public void GetMainMenuCityLeaderboard() 
-        {
-            var CityScorerequest = new GetLeaderboardRequest
+            var KOsrequest = new GetLeaderboardRequest
             {
-                StatisticName = "City_Score",
+                StatisticName = thislevelname + "_KOs",
                 StartPosition = 0
             };
 
-            var CityTimerequest = new GetLeaderboardRequest
-            {
-                StatisticName = "City_Time",
-            };
-
-            var CityKOsrequest = new GetLeaderboardRequest
-            {
-                StatisticName = "City_KOs",
-                StartPosition = 0
-            };
-
-            PlayFabClientAPI.GetLeaderboard(CityScorerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(CityTimerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(CityKOsrequest, OnLeaderBoardGet, OnError);
-        }
-
-        public void GetMainMenuOldTownLeaderboard()
-        {
-            var OldTownScorerequest = new GetLeaderboardRequest
-            {
-                StatisticName = "OldTown_Score",
-                StartPosition = 0
-            };
-
-            var OldTownTimerequest = new GetLeaderboardRequest
-            {
-                StatisticName = "OldTown_Time",
-            };
-
-            var OldTownKOsrequest = new GetLeaderboardRequest
-            {
-                StatisticName = "OldTown_KOs",
-                StartPosition = 0
-            };
-
-            PlayFabClientAPI.GetLeaderboard(OldTownScorerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(OldTownTimerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(OldTownKOsrequest, OnLeaderBoardGet, OnError);
+            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError);
+            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError);
+            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError);
         }
 
         public void FinishedLevelTriggered()
@@ -171,10 +150,10 @@ namespace L7Games
 
         private IEnumerator Co_WaitToUpdateLeaderBoard()
         {
-            yield return new WaitForSeconds(3f);
-
             SendLeaderBoards();
             GetLeaderBoard();
+
+            yield return new WaitForSeconds(3f);
         }
 
         public void SubmitNameButton() 
@@ -204,7 +183,7 @@ namespace L7Games
         public void SendLeaderBoards()
         {
             SendScoreLeaderBoard(Mathf.RoundToInt(HUDScript.storedScore), levelname);
-            SendTimeLeaderBoard(time, levelname);
+            SendTimeLeaderBoard((int)Timer.roundTime, levelname);
             SendKOsLeaderBoard(KOs, levelname);
         }
 
@@ -252,7 +231,6 @@ namespace L7Games
                     {
                         StatisticName = levelname + "_KOs",
                         Value = KOs,
-
                     }
                 }
             };
@@ -278,9 +256,11 @@ namespace L7Games
             var Timerequest = new GetLeaderboardRequest
             {
                 StatisticName = levelname + "_Time",
+                StartPosition = 0
             };
 
             PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError);
+
 
             var KOsrequest = new GetLeaderboardRequest
             {
@@ -289,32 +269,54 @@ namespace L7Games
             };
 
             PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError);
+
+            //Putting all the leaderboards together cohesively
+            //CompileLeadboards();
         }
 
         void OnLeaderBoardGet(GetLeaderboardResult result)
         {
-            // for each row in the leaderboard
-            foreach (Transform item in rowsParent)
+            Debug.Log(currentLeadboardToPopulate.ToString());
+
+            foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
             {
-                // destroy them to be instantiated
-                Destroy(item.gameObject);
+                GameObject newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)currentLeadboardToPopulate]);
+
+                if(newGO.TryGetComponent(out LeaderBoardRow row))
+                {
+                    row.SetRowTexts(entry);
+                }
             }
 
-            foreach (var item in result.Leaderboard) 
-            {
-                GameObject newGO = Instantiate(rowPrefab, rowsParent);
-
-                Debug.Log("INSTANTIATED ROW PREFAB");
-
-                TMP_Text[] texts = newGO.GetComponentsInChildren<TMP_Text>();
-                texts[0].text = (item.Position + 1).ToString();
-                texts[1].text = item.DisplayName;
-                texts[2].text = item.StatValue.ToString();              
-                texts[3].text = time.ToString();
-                texts[4].text = KOs.ToString();
-
-                Debug.Log(string.Format("RANK: {0} | Text: {1} | VALUE: {2} | VALUE: {3} | VALUE: {4}", item.Position, item.DisplayName, Mathf.RoundToInt(HUDScript.storedScore), time, KOs)); //item.StatValue
-            }          
+            currentLeadboardToPopulate++;
         }
+
+        //        private List<CompiledLeaderboardRow> CreateCompiledPosition()
+        //        {
+        //            List<CompiledLeaderboardRow> CompiledPositions = new List<CompiledLeaderboardRow>();
+        //
+        //            foreach(PlayerLeaderboardEntry entry in allEntires)
+        //            {
+        //                //Need a way to remove duplicate runs, so each row has all the stats.
+        //            }
+
+        //            return CompiledPositions;
+        //        }
+
+        //        private void CompileLeadboards()
+        //        {
+        //            //Each this should have a session ID attached, using that you can build a good leaderboard
+        //            foreach(CompiledLeaderboardRow item in allresults)
+        //            {
+        //                GameObject newGO = Instantiate(rowPrefab, rowsParent);
+
+        //                if(newGO.TryGetComponent(out LeaderBoardRow row))
+        //                {
+        //                    row.SetRowTexts(item, KOs);
+        //                }
+
+        //                Debug.Log(string.Format("RANK: {0} | Text: {1} | VALUE: {2} | VALUE: {3} | VALUE: {4}", item.compiled_rank.ToString(), item.compiled_name.ToString()));
+        //            }
+        //        }
     }
 }

@@ -2,8 +2,8 @@
 // File:                SpawnedRagdoll.cs
 // Author:              Matthew Mason
 // Date Created:        19/02/22
-// Last Edited By:      Matthew Mason
-// Date Last Edited:    19/02/22
+// Last Edited By:      Charles Carter
+// Date Last Edited:    06/05/22
 // Brief:               Script attached to the Rag-doll when they are spawned by the player 
 //================================================================================================================================================================================================================================================================================================================================================
 

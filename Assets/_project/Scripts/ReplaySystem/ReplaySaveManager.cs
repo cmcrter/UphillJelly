@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////
 // File: ReplaySaveManager.cs
-// Author: Jack Peedle
+// Author: Jack Peedle, Charles Carter
 // Date Created: 04/10/21
-// Last Edited By: Jack Peedle, Charles Carter
+// Last Edited By: Jack Peedle
 // Date Last Edited: 06/05/22
 // Brief: Script to store the data of the ghosts poisition and rotation 
 //////////////////////////////////////////////////////////// 
