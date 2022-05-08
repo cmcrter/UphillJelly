@@ -18,6 +18,12 @@ public class ShopInventory : MonoBehaviour
     public InventoryObject shopHatInventory;
     public InventoryObject playerHatInventory;
 
+    public void Start() {
+
+        //shopHatInventory.Load();
+        playerHatInventory.Load();   
+
+    }
 
     public void BuyItem() {
 
@@ -28,23 +34,23 @@ public class ShopInventory : MonoBehaviour
             //shopHatInventory.AddItem(item.item, 1);
             playerHatInventory.AddItem(item.item, 1);
 
-
-
             //shopHatInventory.RemoveItem(item.item, -1);
-
-
-
 
             //item.gameObject.SetActive(false);
             Destroy(item.gameObject);
 
         }
 
+        //
+        //shopHatInventory.Save();
+        playerHatInventory.Save();
+
+
     }
 
     private void OnApplicationQuit() {
 
-        playerHatInventory.container.Clear();
+        //playerHatInventory.container.Clear();
 
     }
 
