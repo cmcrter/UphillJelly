@@ -39,7 +39,11 @@ public static class b_SaveSystem
         // create a new filestream taking in the "path" string
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        StoredPlayerProfile data = LoadingData.player;
+        StoredPlayerProfile data = new StoredPlayerProfile();
+        if(LoadingData.player != null)
+        {
+            data = LoadingData.player;
+        }
 
         // serialize the stream and data, data
         formatter.Serialize(stream, data);

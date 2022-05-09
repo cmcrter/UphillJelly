@@ -16,6 +16,7 @@ public class ApplyingGameplayData : MonoBehaviour
 
     public static ApplyingGameplayData instance;
 
+    public int playerSlot;
     public StoredPlayerProfile loadingData;
 
     public LoadCustomizablesInGame loadcustomizables;
@@ -37,6 +38,7 @@ public class ApplyingGameplayData : MonoBehaviour
         }
 
         loadingData = LoadingData.player;
+        playerSlot = LoadingData.playerSlot;
 
         if(loadcustomizables != null)
         {

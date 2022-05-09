@@ -30,6 +30,10 @@ public class ProfileSelector : MonoBehaviour
     public TMP_Text LoadProfile2Text;
     public TMP_Text LoadProfile3Text;
 
+    public TMP_InputField ProfileOneNameField;
+    public TMP_InputField ProfileTwoNameField;
+    public TMP_InputField ProfileThreeNameField;
+
     private void Awake()
     {
         //Not a singleton
@@ -132,5 +136,12 @@ public class ProfileSelector : MonoBehaviour
 
         // set the starting background to false
         StartingBackground.SetActive(false);
+    }
+
+    //Being able to change a profile name based on text input
+    public void ChangePlayerName(string newName)
+    {
+        LoadingData.player.profileName = newName;
+        b_SaveSystem.SavePlayer(LoadingData.playerSlot);
     }
 }
