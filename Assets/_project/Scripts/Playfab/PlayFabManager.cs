@@ -290,7 +290,8 @@ namespace L7Games
                 StartPosition = 0
             };
 
-            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError, leaderboard_value.SCORE);
+            LeaderboardData data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.SCORE);
+            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError, data);
 
             var Timerequest = new GetLeaderboardRequest
             {
@@ -298,7 +299,8 @@ namespace L7Games
                 StartPosition = 0
             };
 
-            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError, leaderboard_value.TIME);
+            data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.TIME);
+            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError, data);
 
             var KOsrequest = new GetLeaderboardRequest
             {
@@ -306,8 +308,8 @@ namespace L7Games
                 StartPosition = 0
             };
 
-            
-            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError, leaderboard_value.KOs);
+            data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.KOs);
+            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError, data);
 
             //Putting all the leaderboards together cohesively (back when it would be 1 leaderboard)
             //CompileLeadboards();
