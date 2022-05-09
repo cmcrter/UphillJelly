@@ -128,7 +128,9 @@ namespace L7Games.Movement
                 //Put here for testing, could be moved to under the next if
                 float timeAlongGrind;
                 Vector3 point = splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind);
+                
                 grindDotProduct = Vector3.Dot(movementRB.velocity.normalized, splineCurrentlyGrindingOn.GetDirection(timeAlongGrind));
+                grindDotProduct = Mathf.Clamp(grindDotProduct, -1, 1);
 
                 if(/* inputHandler.StartGrindHeld && */ CoyoteCoroutine == null && movementRB.velocity.magnitude > 1f)
                 {

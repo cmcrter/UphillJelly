@@ -679,7 +679,7 @@ namespace L7Games.Movement
         public void PlayRespawnSound()
         {
             respawnSound.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
-
+            //Debug.Log(state);
             //if(state != FMOD.Studio.PLAYBACK_STATE.STOPPED)
             //    return;
 
