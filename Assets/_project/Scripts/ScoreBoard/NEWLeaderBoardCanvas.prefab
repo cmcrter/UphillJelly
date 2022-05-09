@@ -429,7 +429,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 100
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &1384882422082906190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,17 +460,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   replaySaveManager: {fileID: 0}
-  tempScoreSystem: {fileID: 0}
   HUDScript: {fileID: 0}
+  Timer: {fileID: 0}
   rowPrefab: {fileID: 2974526420704827836, guid: 21733a1669ff5824ead5d9d0d0137709, type: 3}
   rowsParent: {fileID: 3507200461088610403}
   TMPPlayerName: {fileID: 0}
-  score: 0
-  time: 0
   KOs: 0
   SubmittedNameImage: {fileID: 0}
   SubmitNameButtonGameObject: {fileID: 0}
-  hasFetchedLeaderboard: 0
+  LeaderboardPanels: []
+  LeaderboardRowObjects: []
 --- !u!114 &1384882422082906179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,7 +484,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playFabManager: {fileID: 1384882422082906178}
   leaderboardTypeText: {fileID: 3507200461078876499}
+  valueText: {fileID: 0}
   currentLeaderboardInt: 0
+  MapPanels: []
 --- !u!1 &1384882422712382418
 GameObject:
   m_ObjectHideFlags: 0
