@@ -30,10 +30,6 @@ public class ProfileSelector : MonoBehaviour
     public TMP_Text LoadProfile2Text;
     public TMP_Text LoadProfile3Text;
 
-    public TMP_InputField ProfileOneNameField;
-    public TMP_InputField ProfileTwoNameField;
-    public TMP_InputField ProfileThreeNameField;
-
     private void Awake()
     {
         //Not a singleton
