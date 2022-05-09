@@ -108,12 +108,12 @@ namespace L7Games.UI
         public void MainMenuButton()
         {
             // This should have a confirmation box (probably)
-            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), "Are you sure you want to restart level? Your level progress will not be saved", null, MoveToMainMenu);
+            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", null, MoveToMainMenu);
         }
         public void RestartLevelButton()
         {
             // This should have a confirmation box (probably)
-            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), "Are you sure you want to restart level? Your level progress will not be saved", null, RestartLevel);
+            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", null, RestartLevel);
         }
         public void ResumeGameButton()
         {
@@ -123,14 +123,19 @@ namespace L7Games.UI
         public void SettingsButton()
         {
             settingPanel.SetActive(true);
+            // Set the currently selected object to first one found in the panel
+            eventSystem.SetSelectedGameObject(settingPanel.GetComponentInChildren<Selectable>().gameObject);
         }
 
         public void QuitButton()
         {
-
-
             // This should have a confirmation box (probably)
-            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), "Quit to desktop? Your level progress will not be saved", null, Application.Quit);
+            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), eventSystem, "Quit to desktop? Your level progress will not be saved", null, Application.Quit);
+        }
+
+        public void OnOptionMenuClose()
+        {
+            eventSystem.SetSelectedGameObject(menuButtons[0].gameObject);
         }
         #endregion
 
