@@ -2,8 +2,8 @@
 // File:                SpawnedRagdoll.cs
 // Author:              Matthew Mason
 // Date Created:        19/02/22
-// Last Edited By:      Matthew Mason
-// Date Last Edited:    19/02/22
+// Last Edited By:      Charles Carter
+// Date Last Edited:    06/05/22
 // Brief:               Script attached to the Rag-doll when they are spawned by the player 
 //================================================================================================================================================================================================================================================================================================================================================
 
@@ -23,8 +23,7 @@ public class SpawnedRagdoll : MonoBehaviour
     /// <summary>
     /// The ragdollData attached to the same ragdoll as this
     /// </summary>
-    [SerializeField]
-    private RagdollDataContainer ragdollData;
+    public RagdollDataContainer ragdollData;
 
     [SerializeField]
     private Animator tempAnimator;
@@ -84,6 +83,13 @@ public class SpawnedRagdoll : MonoBehaviour
         // Copy the characters mesh and materials across
         ragdollData.characterRenderer.sharedMesh = ragdollSpawningData.characterRenderer.sharedMesh;
         ragdollData.characterRenderer.materials = ragdollSpawningData.characterRenderer.materials;
+
+        //Instaniate the correct hat
+        if(ragdollSpawningData.HatObject != null) 
+        {
+            ragdollData.HatObject = ragdollSpawningData.HatObject;
+            GameObject.Instantiate(ragdollSpawningData.HatObject, ragdollData.HatParent);
+        }
 
         // Copy animation position
         ragdollData.attachedAnimator.avatar = ragdollSpawningData.attachedAnimator.avatar;

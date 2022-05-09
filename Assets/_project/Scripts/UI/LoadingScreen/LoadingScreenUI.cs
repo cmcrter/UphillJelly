@@ -14,7 +14,7 @@ using L7Games;
 using System.Collections;
 using UnityEngine.UI;
 
-namespace L7.Loading
+namespace L7Games.Loading
 {
     public class LoadingScreenUI : MonoBehaviour
     {

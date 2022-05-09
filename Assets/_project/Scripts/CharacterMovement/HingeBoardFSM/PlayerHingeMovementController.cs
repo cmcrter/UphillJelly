@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 29/11/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 02/03/22
+// Date Last Edited: 06/05/22
 // Brief: A prototype character controller using a board made of 2 RBs with 2 Joints used
 //////////////////////////////////////////////////////////// 
 
@@ -750,6 +750,7 @@ namespace L7Games.Movement
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
             if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
+                ragdollDataContainer.HatObject = ApplyingGameplayData.instance.loadcustomizables.HatObject();
                 spawnedRagdoll.Initalise(ragdollDataContainer);
                 currentRagdoll = spawnedRagdoll;
             }
