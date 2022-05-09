@@ -54,8 +54,8 @@ public static class b_SaveSystem
         string path = Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/ProfileData/Profile" + playerSlot.ToString() + "Data.sdat";
 
         // if a file exists in the "path"
-        if (File.Exists(path)) {
-
+        if (File.Exists(path)) 
+        {
             // new binary formatter
             BinaryFormatter formatter = new BinaryFormatter();
 
@@ -76,8 +76,10 @@ public static class b_SaveSystem
             //  debug log which outputs the save was not found in the "path"
             Debug.LogError("Save file not found in " + path);
 
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile" + playerSlot.ToString());
+
             // return null
-            return null;
+            return new StoredPlayerProfile();
         }
     }
     #endregion

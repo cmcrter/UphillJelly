@@ -117,7 +117,6 @@ public class ProfileSelector : MonoBehaviour
     public void ButtonPressed(int profileSlot)
     {
         LoadingData.playerSlot = profileSlot;
-        StoredPlayerProfile player = b_SaveSystem.LoadPlayer(profileSlot);
 
         // if no directory exists
         if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile" + profileSlot.ToString())) 
@@ -126,12 +125,10 @@ public class ProfileSelector : MonoBehaviour
             Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile" + profileSlot.ToString());
         }
 
-        if(player == null)
-        {
-            player = new StoredPlayerProfile();
-        }
-
+        StoredPlayerProfile player = b_SaveSystem.LoadPlayer(profileSlot);
         LoadingData.player = player;
+
+        b_SaveSystem.SavePlayer(profileSlot);
 
         // set the starting background to false
         StartingBackground.SetActive(false);

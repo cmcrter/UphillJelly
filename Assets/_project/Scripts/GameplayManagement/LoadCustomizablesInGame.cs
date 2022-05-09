@@ -70,14 +70,20 @@ public class LoadCustomizablesInGame
 
     public GameObject HatObject()
     {
-        if(equipItems.Count <= 1)
+        if(LoadingData.shopItems == null)
         {
-            return null;
-        }   
+            if(OverrideValues)
+            {
+                if(equipItems.Count <= 1)
+                {
+                    return null;
+                }
 
-        if(equipItems[1] != null)
-        {
-            return equipItems[1].prefab;
+                if(equipItems[1] != null)
+                {
+                    return equipItems[1].prefab;
+                }
+            }
         }
 
         return null;
