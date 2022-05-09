@@ -68,10 +68,12 @@ namespace L7Games.Movement
         public GameObject boardObject;
         [SerializeField]
         private GameObject boardModel;
+        public Collider boardCollider;
         private Vector3 boardPos;
 
         //Front Rigidbody
         public Rigidbody ModelRB;
+        public Collider rbCollider;
 
         public PlayerInput input;
         public InputHandler inputHandler;
@@ -162,6 +164,7 @@ namespace L7Games.Movement
 
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
+            boardCollider.enabled = true;
             boardModel.transform.localPosition = Vector3.zero;
             boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
 
@@ -230,6 +233,7 @@ namespace L7Games.Movement
 
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
+            boardCollider.enabled = true;
             boardModel.transform.localPosition = Vector3.zero;
             boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
 
