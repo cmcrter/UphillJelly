@@ -37,6 +37,7 @@ namespace L7Games.Movement
         private Timer cooldownTimer;
 
         public float collectableScore = 0;
+        public Rigidbody fRB;
 
         #endregion
 
@@ -84,6 +85,12 @@ namespace L7Games.Movement
                 cooldownTimer.OverrideCurrentTime(cooldownDuration - cooldownTimer.current_time);
             }
         }
+
+        public Rigidbody GetRB()
+        {
+            return fRB;
+        }
+
 
         #region Protected Methods
         protected void CallOnRespawn()

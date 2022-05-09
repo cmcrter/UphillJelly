@@ -41,6 +41,8 @@ public class ProfileSelector : MonoBehaviour
         {
             instance = this;
         }
+
+        LoadingData.currentLevel = LEVEL.MAINMENU;
     }
 
     // Start is called before the first frame update
