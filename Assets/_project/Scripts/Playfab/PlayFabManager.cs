@@ -46,6 +46,18 @@ namespace L7Games
     //    }
     //}
 
+    class LeaderboardData
+    {
+        public LEVEL Level;
+        public leaderboard_value valueToRetrieve;
+
+        public LeaderboardData(LEVEL thisLevel, leaderboard_value thisvalueToRetrieve)
+        {
+            Level = thisLevel;
+            valueToRetrieve = thisvalueToRetrieve;
+        }
+    }
+
     public class PlayFabManager : MonoBehaviour
     {
         [Header("Necessary Variables")]
@@ -84,20 +96,17 @@ namespace L7Games
                     levelname = "OldTown";
                     break;
             }
-
-            Login();
         }
 
         private void OnEnable()
         {
-            
+            Login();
         }
 
-        // Login
-        void Login()
+        public void Login()
         {
             // Login request
-            var request = new LoginWithCustomIDRequest 
+            var request = new LoginWithCustomIDRequest
             {
                 // make a new account with a custom ID
                 CustomId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true,
@@ -119,33 +128,65 @@ namespace L7Games
             {
                 name = result.InfoResultPayload.PlayerProfile.DisplayName;
             }
+
+            if(LoadingData.currentLevel != LEVEL.MAINMENU)
+            {
+                //Triggering this since it cannot run without being logged in anyway
+                FinishedLevelTriggered();
+            }
+            else
+            {
+                //Get all leaderboards and put it in relative sections
+                GetAllLeaderboards();
+            }
         }
 
-        public void GetCurrentLeaderboard(string thislevelname) 
+        //This is specifically for the main menu
+        public void GetAllLeaderboards()
         {
-            Debug.Log("Get Leaderboard 2");
-
-            var Scorerequest = new GetLeaderboardRequest
+            for(int j = (int)LEVEL.TUTORIAL; j < (int)LEVEL.COUNT; ++j)
             {
-                StatisticName = thislevelname + "_Score",
-                StartPosition = 0
-            };
+                for(int i = 0; i < 3; ++i)
+                {
+                    string thisLevelName = "";
+                    string thisFeature = "";
 
-            var Timerequest = new GetLeaderboardRequest
-            {
-                StatisticName = thislevelname + "_Time",
-                StartPosition = 0
-            };
+                    switch(j)
+                    {
+                        case (int)LEVEL.TUTORIAL:
+                            thisLevelName = "Tutorial";
+                            break;
+                        case (int)LEVEL.CITY:
+                            thisLevelName = "City";
+                            break;
+                        case (int)LEVEL.OLDTOWN:
+                            thisLevelName = "OldTown";
+                            break;
+                    }
 
-            var KOsrequest = new GetLeaderboardRequest
-            {
-                StatisticName = thislevelname + "_KOs",
-                StartPosition = 0
-            };
+                    switch(i)
+                    {
+                        case (int)leaderboard_value.SCORE:
+                            thisFeature = "_Score";
+                            break;
+                        case (int)leaderboard_value.TIME:
+                            thisFeature = "_Time";
+                            break;
+                        case (int)leaderboard_value.KOs:
+                            thisFeature = "_KOs";
+                            break;
+                    }
 
-            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError);
-            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError);
+                    GetLeaderboardRequest request = new GetLeaderboardRequest
+                    {
+                        StatisticName = thisLevelName + thisFeature,
+                        StartPosition = 0
+                    };
+
+                    LeaderboardData data = new LeaderboardData((LEVEL)j, (leaderboard_value)i);
+                    PlayFabClientAPI.GetLeaderboard(request, OnLeaderBoardGet, OnError, data);
+                }             
+            }
         }
 
         public void FinishedLevelTriggered()
@@ -176,8 +217,6 @@ namespace L7Games
         {
             Debug.Log("Error login / Creating Account");
             Debug.Log(error.GenerateErrorReport());
-
-            StopAllCoroutines();
         }
 
         public void SendLeaderBoards()
@@ -276,10 +315,36 @@ namespace L7Games
 
         void OnLeaderBoardGet(GetLeaderboardResult result)
         {
+            LeaderboardData data = (LeaderboardData)result.CustomData;
+
             //Populating this leaderboard
             foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
             {
-                GameObject newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)result.CustomData]);
+                GameObject newGO;
+
+                if(LoadingData.currentLevel != LEVEL.MAINMENU)
+                {
+                    newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)data.valueToRetrieve]);
+                }
+                else
+                {
+                    int mapStartVal = 0;
+                    switch(data.Level)
+                    {
+                        case LEVEL.CITY:
+                            mapStartVal = 3;
+                            break;
+                        case LEVEL.OLDTOWN:
+                            mapStartVal = 6;
+                            break;
+                    }
+
+                    int transformIndex = mapStartVal + (int)data.valueToRetrieve;
+
+                    //Debug.Log(transformIndex, this);
+
+                    newGO = Instantiate(rowPrefab, LeaderboardRowObjects[transformIndex]);
+                }
 
                 if(newGO.TryGetComponent(out LeaderBoardRow row))
                 {
