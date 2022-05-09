@@ -3,14 +3,24 @@
 // Author: Charles Carter
 // Date Created: 04/02/2022
 // Last Edited By: Charles Carter
-// Date Last Edited: 13/04/2022
-// Brief: A small script to take over set data from the main menu to load in the loading screen
+// Date Last Edited: 06/05/2022
+// Brief: A small script to take over set data from the main menu to load in the loading screen and vice versa
 //////////////////////////////////////////////////////////// 
 
 using System;
 
-namespace L7.Loading
+namespace L7Games.Loading
 {
+    public enum LEVEL
+    {
+        NONE,
+        MAINMENU,
+        TUTORIAL,
+        CITY,
+        OLDTOWN,
+        COUNT
+    }
+
     [Serializable]
     public class LoadingData
     {
@@ -18,9 +28,32 @@ namespace L7.Loading
         /// The static variable to carry which scene to load in the loading screen
         /// </summary>
         public static string sceneToLoad;
+
         /// <summary>
         /// The static variable for the loading screen to know if something needs to be pressed to go to next scene
         /// </summary>
         public static bool waitForNextScene;
+
+        /// <summary>
+        /// The static variable to know the current level from anywhere
+        /// </summary>
+        public static LEVEL currentLevel;
+
+        /// <summary>
+        /// Knowing which profile is being used and what it contains
+        /// </summary>
+        public static int playerSlot;
+        public static StoredPlayerProfile player;
+
+        /// <summary>
+        ///A variable for the player's equipped shop items
+        /// </summary>
+        public static InventoryItemData[] shopItems;
+
+        /// <summary>
+        ///A variable for the next replay to load
+        /// </summary>
+        public static Ghost replayToLoad;
+       
     }
 }

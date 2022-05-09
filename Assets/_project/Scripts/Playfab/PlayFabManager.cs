@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////
 // File: PlayFabManager.cs
-// Author: Jack Peedle
-// Date Created: 29/01/21
-// Last Edited By: Jack Peedle
-// Date Last Edited: 29/01/22
-// Brief: 
+// Author: Jack Peedle, Charles Carter
+// Date Created: 29/01/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 07/05/22
+// Brief: A script to manage retrieving and sending data for the leaderboards.
 ////////////////////////////////////////////////////////////
 
 using System;
@@ -14,951 +14,317 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
-using UnityEngine.UI;
-using L7Games;
-using L7Games.Movement;
-using System.IO;
+using L7Games.Loading;
+
 
 namespace L7Games
 {
-    public class PlayFabManager : MonoBehaviour//, ITriggerable
+    public enum leaderboard_value
     {
+        SCORE = 0,
+        TIME = 1,
+        KOs = 2,
+        COUNT
+    }
 
-        //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
-        //GameObject ITriggerable.ReturnGameObject() => gameObject;
-        //void ITriggerable.Trigger(PlayerController player) => PlayerEnteredLeaderboard(player);
-        //void ITriggerable.UnTrigger(PlayerController player) => PlayerExitedLeaderboard(player);
+    //public class CompiledLeaderboardRow
+    //{
+    //    public int compiled_rank;
+    //    public string compiled_sessionID;
+    //    public string compiled_name;
+    //    public int compiled_score;
+    //    public int compiled_time;
+    //    public int compiled_KOs;
 
-        //public GameObject leaderboardGO;
+    //    public CompiledLeaderboardRow(string sessionID, string name,  int score, int time, int KOs)
+    //    {
+    //        compiled_sessionID = sessionID;
+    //        compiled_name = name;
+    //        compiled_score = score;
+    //        compiled_time = time;
+    //        compiled_KOs = KOs;
+    //    }
+    //}
 
-        //
+    public class PlayFabManager : MonoBehaviour
+    {
+        [Header("Necessary Variables")]
         public ReplaySaveManager replaySaveManager;
 
-        //
-        public TempScoreSystem tempScoreSystem;
-
+        [Header("This Session")]
         public HUD HUDScript;
+        public RankTimer Timer;
 
-        //
+        [Header("UI Values")]
         public GameObject rowPrefab;
-
-        //
         public Transform rowsParent;
-
-        //
         public TMP_InputField TMPPlayerName;
-
-        //
-        public int score;
-
-        //
-        public int time;
-
-        //
         public int KOs;
-
-        //
         public GameObject SubmittedNameImage;
-
-        //
         public GameObject SubmitNameButtonGameObject;
 
-        public bool hasFetchedLeaderboard;
+        //private List<CompiledLeaderboardRow> allresults = new List<CompiledLeaderboardRow>();
+        //private List<PlayerLeaderboardEntry> allEntires = new List<PlayerLeaderboardEntry>();
+        private string levelname;
 
-        [SerializeField]
-        public static TMP_InputField PlayerName;
-        
+        private leaderboard_value currentLeadboardToPopulate = leaderboard_value.SCORE;
+        public List<Transform> LeaderboardPanels;
+        public List<Transform> LeaderboardRowObjects;
 
-        /*
-        void PlayerEnteredLeaderboard(PlayerController player) {
+        void Start()
+        {
+            levelname = "Tutorial";
 
-            FinishedLevelTriggered();
-            Debug.Log("TRIGGEREDTRIGGERED");
+            switch(LoadingData.currentLevel)
+            {
+                case LEVEL.CITY:
+                    levelname = "City";
+                    break;
+                case LEVEL.OLDTOWN:
+                    levelname = "OldTown";
+                    break;
+            }
 
-        }
-
-        void PlayerExitedLeaderboard(PlayerController player) {
-
-            // do nothing
-
-        }
-        */
-
-        //
-        void Start() {
-
-            //leaderboardGO.SetActive(false);
-
-            //
             Login();
-
-            hasFetchedLeaderboard = false;
-
         }
 
-        public void Update() {
-
-
-            //HUDScript.storedScore.ToString(score);
-            //score = HUDScript.storedScore;
-
-            score = Mathf.RoundToInt(HUDScript.storedScore);
-
-            //Debug.Log(score);
-
-
+        private void OnEnable()
+        {
+            
         }
 
         // Login
-        void Login() {
-
+        void Login()
+        {
             // Login request
-            var request = new LoginWithCustomIDRequest {
-
+            var request = new LoginWithCustomIDRequest 
+            {
                 // make a new account with a custom ID
                 CustomId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true,
-
-                //
-                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams {
-
-                    //
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                {
                     GetPlayerProfile = true
-
                 }
-                //
-
             };
 
             // Loging with ID, request and a success and error function
             PlayFabClientAPI.LoginWithCustomID(request, OnSuccess, OnError);
-
         }
 
-        //
-        void OnSuccess(LoginResult result) {
-
-            //
+        void OnSuccess(LoginResult result)
+        {
             Debug.Log("Successful login / account create!");
-
-            //
             string name = null;
-
-            //
-            if (result.InfoResultPayload.PlayerProfile != null)
-                //
+            if(result.InfoResultPayload.PlayerProfile != null)
+            {
                 name = result.InfoResultPayload.PlayerProfile.DisplayName;
-
+            }
         }
 
-        #region Get Main Menu Leaderboards
-        public void GetMainMenuTutorialLeaderboard() {
+        public void GetCurrentLeaderboard(string thislevelname) 
+        {
+            Debug.Log("Get Leaderboard 2");
 
-            //
-            var TutorialScorerequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "Tutorial_Score",
-                StartPosition = 0 //,
-                                  //MaxResultsCount = 3,
-
+            var Scorerequest = new GetLeaderboardRequest
+            {
+                StatisticName = thislevelname + "_Score",
+                StartPosition = 0
             };
 
-            //
-            var TutorialTimerequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "Tutorial_Time",
-                //StartPosition = 0 //,
-                //MaxResultsCount = 3,
-
+            var Timerequest = new GetLeaderboardRequest
+            {
+                StatisticName = thislevelname + "_Time",
+                StartPosition = 0
             };
 
-            //
-            var TutorialKOsrequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "Tutorial_KOs",
-                StartPosition = 0 //,
-                                  //MaxResultsCount = 3,
-
+            var KOsrequest = new GetLeaderboardRequest
+            {
+                StatisticName = thislevelname + "_KOs",
+                StartPosition = 0
             };
 
-            //
-            PlayFabClientAPI.GetLeaderboard(TutorialScorerequest, OnLeaderBoardGet, OnError);
-
-            //
-            PlayFabClientAPI.GetLeaderboard(TutorialTimerequest, OnLeaderBoardGet, OnError);
-
-            //
-            PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
-
-            Debug.Log("Main menu tutorial leaderboard got");
-
+            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError);
+            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError);
+            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError);
         }
 
-        public void GetMainMenuCityLeaderboard() {
-
-            //
-            var CityScorerequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "City_Score",
-                StartPosition = 0 //,
-                                  //MaxResultsCount = 3,
-
-            };
-
-            //
-            var CityTimerequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "City_Time",
-                //StartPosition = 0 //,
-                //MaxResultsCount = 3,
-
-            };
-
-            //
-            var CityKOsrequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "City_KOs",
-                StartPosition = 0 //,
-                                  //MaxResultsCount = 3,
-
-            };
-
-            //
-            PlayFabClientAPI.GetLeaderboard(CityScorerequest, OnLeaderBoardGet, OnError);
-
-            //
-            PlayFabClientAPI.GetLeaderboard(CityTimerequest, OnLeaderBoardGet, OnError);
-
-            //
-            PlayFabClientAPI.GetLeaderboard(CityKOsrequest, OnLeaderBoardGet, OnError);
-
-            Debug.Log("Main menu city leaderboard got");
-
-        }
-
-        public void GetMainMenuOldTownLeaderboard() {
-
-            //
-            var OldTownScorerequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "OldTown_Score",
-                StartPosition = 0 //,
-                                  //MaxResultsCount = 3,
-
-            };
-
-            //
-            var OldTownTimerequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "OldTown_Time",
-                //StartPosition = 0 //,
-                //MaxResultsCount = 3,
-
-            };
-
-            //
-            var OldTownKOsrequest = new GetLeaderboardRequest {
-
-                //
-                StatisticName = "OldTown_KOs",
-                StartPosition = 0 //,
-                                  //MaxResultsCount = 3,
-
-            };
-
-            //
-            PlayFabClientAPI.GetLeaderboard(OldTownScorerequest, OnLeaderBoardGet, OnError);
-
-            //
-            PlayFabClientAPI.GetLeaderboard(OldTownTimerequest, OnLeaderBoardGet, OnError);
-
-            //
-            PlayFabClientAPI.GetLeaderboard(OldTownKOsrequest, OnLeaderBoardGet, OnError);
-
-            Debug.Log("Main menu old town leaderboard got");
-
-        }
-
-        #endregion
-
-        /*
-        public void TriggerLeaderboardEndMap(PlayerController player) {
-
-            Debug.Log("F");
-
-            // ^^^ how does this know it has hit the map end trigger?
-            //
-            // Money collected by the player = score to send to leaderboard
-            // Submit leaderboard method
-
-            FinishedLevelTriggered();
-
-        }
-
-        public void UnTriggerLeaderboardEndMap() {
-
-            //Doesn't do anything but in-case there's needed functionality later          
-
-
-        }
-        */
-
-        public void FinishedLevelTriggered() {
-
-            //leaderboardGO.SetActive(true);
-
-            Debug.Log("FINISHLEVELTRIGGERED");
-
-            //if (hasFetchedLeaderboard == true) {
-
-            //    return;
-
-            //}
-
-            //
-            SendLeaderBoards();
-
-            Debug.Log("SENTTHEBOARD");
-
-            //
-            GetLeaderBoard();
-            Debug.Log("GETTHEBOARD");
-
-            //hasFetchedLeaderboard = true;
-
-            WaitToUpdateLeaderBoard();
-
-        }
-
-        private IEnumerator WaitToUpdateLeaderBoard() {
-
-            yield return new WaitForSeconds(3f);
-
+        public void FinishedLevelTriggered()
+        {
             SendLeaderBoards();
             GetLeaderBoard();
-
         }
 
-        
-
-        //
-        public void SubmitNameButton() {
-
-            //
-            var request = new UpdateUserTitleDisplayNameRequest {
-
-                //
+        public void SubmitNameButton() 
+        {
+            var request = new UpdateUserTitleDisplayNameRequest
+            {
                 DisplayName = TMPPlayerName.text,
-
             };
 
             PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
 
-            // 
-            //Directory.CreateDirectory(Application.persistentDataPath + "/" + TMPPlayerName.text);
-
-            //File.Create(Application.persistentDataPath + "/" + TMPPlayerName.text);
-
-            //PlayerName.text = Application.persistentDataPath + "/" + TMPPlayerName.text;
-
-            //PlayerName.text = TMPPlayerName.text;
-
-            //Debug.Log(PlayerName.text);
-
-            //
             SubmittedNameImage.SetActive(false);
-
-            //
             SubmitNameButtonGameObject.SetActive(false);
-
         }
 
-        //
-        public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result) {
-
-            //
+        public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
+        {
             Debug.Log("Updated Display Name");
-
         }
 
-        //
-        void OnError(PlayFabError error) {
-
-            //
+        void OnError(PlayFabError error)
+        {
             Debug.Log("Error login / Creating Account");
-
-            //
             Debug.Log(error.GenerateErrorReport());
 
+            StopAllCoroutines();
         }
 
-
-        //
-        public void SetScore() {
-
-            //
-            score = tempScoreSystem.PlayerScore;
-
-            //
-            time = Mathf.RoundToInt(tempScoreSystem.PlayerTime);
-
+        public void SendLeaderBoards()
+        {
+            SendScoreLeaderBoard(Mathf.RoundToInt(HUDScript.storedScore), levelname);
+            SendTimeLeaderBoard((int)Mathf.Abs(Timer.roundTime), levelname);
+            SendKOsLeaderBoard(KOs, levelname);
         }
 
-        //
-        public void SendLeaderBoards() {
-
-            if (replaySaveManager.isMapTutorial) {
-
-                Debug.Log("Tutorial Triggered");
-
-                //
-                SendTutorialScoreLeaderBoard(score);
-
-                //
-                SendTutorialTimeLeaderBoard(time);
-
-                //
-                SendTutorialKOsLeaderBoard(KOs);
-
-
-            }
-
-            if (replaySaveManager.isMapCity) {
-
-                //
-                SendCityScoreLeaderBoard(score);
-
-                //
-                SendCityTimeLeaderBoard(time);
-
-                //
-                SendCityKOsLeaderBoard(KOs);
-
-            }
-
-            if (replaySaveManager.isMapOldTown) {
-
-                //
-                SendOldTownScoreLeaderBoard(score);
-
-                //
-                SendOldTownTimeLeaderBoard(time);
-
-                //
-                SendOldTownKOsLeaderBoard(KOs);
-
-            }
-
-
-        }
-
-
-        //
-        public void SendTutorialScoreLeaderBoard(int score) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "Tutorial_Score",
-
-                        //
+        public void SendScoreLeaderBoard(int score, string levelname)
+        {
+            var request = new UpdatePlayerStatisticsRequest
+            {
+                Statistics = new List<StatisticUpdate>
+                {
+                    new StatisticUpdate 
+                    {
+                        StatisticName = levelname + "_Score",
                         Value = score,
-
                     }
-
                 }
-
-
             };
 
-            //
             PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
         }
 
-        //
-        public void SendCityScoreLeaderBoard(int score) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "City_Score",
-
-                        //
-                        Value = score,
-
-                    }
-
-                }
-
-
-            };
-
-            //
-            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
-        }
-
-        //
-        public void SendOldTownScoreLeaderBoard(int score) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "OldTown_Score",
-
-                        //
-                        Value = score,
-
-                    }
-
-                }
-
-
-            };
-
-            //
-            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
-        }
-
-
-
-
-
-        //
-        public void SendTutorialTimeLeaderBoard(int time) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "Tutorial_Time",
-
-                        //
+        public void SendTimeLeaderBoard(int time, string levelname) 
+        {
+            var request = new UpdatePlayerStatisticsRequest 
+            {
+                Statistics = new List<StatisticUpdate>
+                {
+                    new StatisticUpdate
+                    {
+                        StatisticName = levelname + "_Time",
                         Value = time,
-
                     }
-
-
                 }
-
-
             };
 
-            //
             PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
         }
-
-        //
-        public void SendCityTimeLeaderBoard(int time) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "City_Time",
-
-                        //
-                        Value = time,
-
-                    }
-
-
-                }
-
-
-            };
-
-            //
-            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
-        }
-
-        //
-        public void SendOldTownTimeLeaderBoard(int time) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "OldTown_Time",
-
-                        //
-                        Value = time,
-
-                    }
-
-
-                }
-
-
-            };
-
-            //
-            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
-        }
-        
-
-
-
-
-
-
-
-
-        //
-        public void SendTutorialKOsLeaderBoard(int KOs) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "Tutorial_KOs",
-
-                        //
+       
+        public void SendKOsLeaderBoard(int KOs, string levelname)
+        {
+            var request = new UpdatePlayerStatisticsRequest
+            {
+                Statistics = new List<StatisticUpdate>
+                {
+                    new StatisticUpdate
+                    {
+                        StatisticName = levelname + "_KOs",
                         Value = KOs,
-
                     }
-
-
                 }
-
-
             };
 
-            //
             PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
         }
 
-        //
-        public void SendCityKOsLeaderBoard(int KOs) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "City_KOs",
-
-                        //
-                        Value = KOs,
-
-                    }
-
-
-                }
-
-
-            };
-
-            //
-            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
-        }
-
-
-
-        //
-        public void SendOldTownKOsLeaderBoard(int KOs) {
-
-            //
-            var request = new UpdatePlayerStatisticsRequest {
-
-                //
-                Statistics = new List<StatisticUpdate> {
-
-                    //
-                    new StatisticUpdate {
-
-                        //
-                        StatisticName = "OldTown_KOs",
-
-                        //
-                        Value = KOs,
-
-                    }
-
-
-                }
-
-
-            };
-
-            //
-            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderBoardUpdate, OnError);
-
-        }
-
-
-
-
-
-
-        //
-        void OnLeaderBoardUpdate(UpdatePlayerStatisticsResult result) {
-
-            //
+        void OnLeaderBoardUpdate(UpdatePlayerStatisticsResult result)
+        {
             Debug.Log("Successful leaderboard sent");
-
         }
 
-        //
-        public void GetLeaderBoard() {
-
-            if (replaySaveManager.isMapTutorial) {
-
-                //
-                var TutorialScorerequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "Tutorial_Score",
-                    StartPosition = 0 //,
-                                      //MaxResultsCount = 3,
-                    
-
-                };
-                Debug.Log("GotTutorialScoreRequest");
-
-                //
-                PlayFabClientAPI.GetLeaderboard(TutorialScorerequest, OnLeaderBoardGet, OnError);
-
-                //
-                var TutorialTimerequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "Tutorial_Time",
-                    //StartPosition = 0 //,
-                    //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(TutorialTimerequest, OnLeaderBoardGet, OnError);
-
-                //
-                var TutorialKOsrequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "Tutorial_KOs",
-                    StartPosition = 0 //,
-                                      //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(TutorialKOsrequest, OnLeaderBoardGet, OnError);
-
-
-            }
-
-            if (replaySaveManager.isMapCity) {
-
-                //
-                var CityScorerequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "City_Score",
-                    StartPosition = 0 //,
-                                      //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(CityScorerequest, OnLeaderBoardGet, OnError);
-
-                //
-                var CityTimerequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "City_Time",
-                    //StartPosition = 0 //,
-                    //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(CityTimerequest, OnLeaderBoardGet, OnError);
-
-                //
-                var CityKOsrequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "City_KOs",
-                    StartPosition = 0 //,
-                                      //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(CityKOsrequest, OnLeaderBoardGet, OnError);
-
-            }
-
-
-            if (replaySaveManager.isMapOldTown) {
-
-                //
-                var OldTownScorerequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "OldTown_Score",
-                    StartPosition = 0 //,
-                                      //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(OldTownScorerequest, OnLeaderBoardGet, OnError);
-
-                //
-                var OldTownTimerequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "OldTown_Time",
-                    //StartPosition = 0 //,
-                    //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(OldTownTimerequest, OnLeaderBoardGet, OnError);
-
-                //
-                var OldTownKOsrequest = new GetLeaderboardRequest {
-
-                    //
-                    StatisticName = "OldTown_KOs",
-                    StartPosition = 0 //,
-                                      //MaxResultsCount = 3,
-
-                };
-
-                //
-                PlayFabClientAPI.GetLeaderboard(OldTownKOsrequest, OnLeaderBoardGet, OnError);
-
-            }
-
-
-
-        }
-
-        //
-        void OnLeaderBoardGet(GetLeaderboardResult result) {
-
-            //Debug.Log("TTTTTTTTTTTTTTTTTTTTT");
-
-            // for each row in the leaderboard
-            foreach (Transform item in rowsParent) {
-
-                // destroy them to be instantiated
-                Destroy(item.gameObject);
-
-            }
-
-            //
-            foreach (var item in result.Leaderboard) {
-
-                //
-                GameObject newGO = Instantiate(rowPrefab, rowsParent);
-
-                Debug.Log("INSTANTIATED ROW PREFAB");
-
-                //
-                TMP_Text[] texts = newGO.GetComponentsInChildren<TMP_Text>();
-
-                //
-                texts[0].text = (item.Position + 1).ToString();
-
-                //
-                //texts[1].text = TMPPlayerName.text; //+ item.PlayFabId; //playerName.text + "(" + THIS +")";
-
-                texts[1].text = item.DisplayName;
-
-                //
-                //texts[2].text = score.ToString();
-
-                texts[2].text = item.StatValue.ToString();
-
-                Debug.Log("3 Texts GOT");
-
-                //
-                texts[3].text = time.ToString();
-
-                //
-                texts[4].text = KOs.ToString();
-
-                //
-                Debug.Log(string.Format("RANK: {0} | Text: {1} | VALUE: {2} | VALUE: {3} | VALUE: {4}", item.Position, item.DisplayName, score, time, KOs)); //item.StatValue
-
-                // debug position, ID and score for each item
-                //Debug.Log(item.Position + "" + item.PlayFabId + "" + item.StatValue);
-
-            }
+        public void GetLeaderBoard()
+        {
+            var Scorerequest = new GetLeaderboardRequest
+            {
+                StatisticName = levelname + "_Score",                
+                StartPosition = 0
+            };
+
+            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError, leaderboard_value.SCORE);
+
+            var Timerequest = new GetLeaderboardRequest
+            {
+                StatisticName = levelname + "_Time",
+                StartPosition = 0
+            };
+
+            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError, leaderboard_value.TIME);
+
+            var KOsrequest = new GetLeaderboardRequest
+            {
+                StatisticName = levelname + "_KOs",
+                StartPosition = 0
+            };
 
             
+            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError, leaderboard_value.KOs);
 
+            //Putting all the leaderboards together cohesively (back when it would be 1 leaderboard)
+            //CompileLeadboards();
         }
 
+        void OnLeaderBoardGet(GetLeaderboardResult result)
+        {
+            //Populating this leaderboard
+            foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
+            {
+                GameObject newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)result.CustomData]);
+
+                if(newGO.TryGetComponent(out LeaderBoardRow row))
+                {
+                    row.SetRowTexts(entry);
+                }
+            }
+        }
+       
+        public void SwitchPanel(int newValue)
+        {
+            for(int i = 0; i < LeaderboardPanels.Count; ++i)
+            {
+                LeaderboardPanels[i].gameObject.SetActive(false);
+            }
+
+            LeaderboardPanels[newValue].gameObject.SetActive(true);
+            Debug.Log("Switching panel to: " + (leaderboard_value)newValue);
+        }
+
+        //        private List<CompiledLeaderboardRow> CreateCompiledPosition()
+        //        {
+        //            List<CompiledLeaderboardRow> CompiledPositions = new List<CompiledLeaderboardRow>();
+        //
+        //            foreach(PlayerLeaderboardEntry entry in allEntires)
+        //            {
+        //                //Need a way to remove duplicate runs, so each row has all the stats.
+        //            }
+
+        //            return CompiledPositions;
+        //        }
+
+        //        private void CompileLeadboards()
+        //        {
+        //            //Each this should have a session ID attached, using that you can build a good leaderboard
+        //            foreach(CompiledLeaderboardRow item in allresults)
+        //            {
+        //                GameObject newGO = Instantiate(rowPrefab, rowsParent);
+
+        //                if(newGO.TryGetComponent(out LeaderBoardRow row))
+        //                {
+        //                    row.SetRowTexts(item, KOs);
+        //                }
+
+        //                Debug.Log(string.Format("RANK: {0} | Text: {1} | VALUE: {2} | VALUE: {3} | VALUE: {4}", item.compiled_rank.ToString(), item.compiled_name.ToString()));
+        //            }
+        //        }
     }
 }

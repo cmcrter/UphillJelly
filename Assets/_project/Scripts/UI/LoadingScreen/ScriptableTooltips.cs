@@ -14,7 +14,7 @@ namespace L7Games
     [CreateAssetMenu(fileName = "Tooltips", menuName = "ScriptableObject/LoadingTooltip")]
     public class ScriptableTooltips : ScriptableObject
     {
-        public string name;
+        //public string name;
         public string text;
         public float priority;
         public Sprite texture;
