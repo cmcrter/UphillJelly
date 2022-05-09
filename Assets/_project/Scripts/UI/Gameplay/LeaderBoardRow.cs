@@ -28,7 +28,7 @@ namespace L7Games
         {
             RowTexts[0].text = (entry.Position + 1).ToString();
             RowTexts[1].text = entry.DisplayName;
-            RowTexts[2].text = entry.StatValue.ToString();
+            RowTexts[2].text = Mathf.Abs(entry.StatValue).ToString();
         }
 
         #endregion

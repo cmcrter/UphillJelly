@@ -13,6 +13,7 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
+using L7Games.Loading;
 
 // Static so there won't be multiple versions or instantiations of this script
 public static class b_SaveSystem
@@ -38,7 +39,7 @@ public static class b_SaveSystem
         // create a new filestream taking in the "path" string
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        StoredPlayerProfile data = new StoredPlayerProfile();
+        StoredPlayerProfile data = LoadingData.player;
 
         // serialize the stream and data, data
         formatter.Serialize(stream, data);

@@ -13,6 +13,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class StoredPlayerProfile
 {
+    public string profileName;
+
     // int for currency
     public int iCurrency = 0;
 

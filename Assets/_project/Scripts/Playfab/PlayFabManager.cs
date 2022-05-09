@@ -88,6 +88,11 @@ namespace L7Games
             Login();
         }
 
+        private void OnEnable()
+        {
+            
+        }
+
         // Login
         void Login()
         {
@@ -145,15 +150,8 @@ namespace L7Games
 
         public void FinishedLevelTriggered()
         {
-            StartCoroutine(Co_WaitToUpdateLeaderBoard());
-        }
-
-        private IEnumerator Co_WaitToUpdateLeaderBoard()
-        {
             SendLeaderBoards();
             GetLeaderBoard();
-
-            yield return new WaitForSeconds(3f);
         }
 
         public void SubmitNameButton() 
@@ -178,12 +176,14 @@ namespace L7Games
         {
             Debug.Log("Error login / Creating Account");
             Debug.Log(error.GenerateErrorReport());
+
+            StopAllCoroutines();
         }
 
         public void SendLeaderBoards()
         {
             SendScoreLeaderBoard(Mathf.RoundToInt(HUDScript.storedScore), levelname);
-            SendTimeLeaderBoard((int)Timer.roundTime, levelname);
+            SendTimeLeaderBoard((int)Mathf.Abs(Timer.roundTime), levelname);
             SendKOsLeaderBoard(KOs, levelname);
         }
 
@@ -247,11 +247,11 @@ namespace L7Games
         {
             var Scorerequest = new GetLeaderboardRequest
             {
-                StatisticName = levelname + "_Score",
+                StatisticName = levelname + "_Score",                
                 StartPosition = 0
             };
 
-            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError);
+            PlayFabClientAPI.GetLeaderboard(Scorerequest, OnLeaderBoardGet, OnError, leaderboard_value.SCORE);
 
             var Timerequest = new GetLeaderboardRequest
             {
@@ -259,8 +259,7 @@ namespace L7Games
                 StartPosition = 0
             };
 
-            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError);
-
+            PlayFabClientAPI.GetLeaderboard(Timerequest, OnLeaderBoardGet, OnError, leaderboard_value.TIME);
 
             var KOsrequest = new GetLeaderboardRequest
             {
@@ -268,27 +267,36 @@ namespace L7Games
                 StartPosition = 0
             };
 
-            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError);
+            
+            PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError, leaderboard_value.KOs);
 
-            //Putting all the leaderboards together cohesively
+            //Putting all the leaderboards together cohesively (back when it would be 1 leaderboard)
             //CompileLeadboards();
         }
 
         void OnLeaderBoardGet(GetLeaderboardResult result)
         {
-            Debug.Log(currentLeadboardToPopulate.ToString());
-
+            //Populating this leaderboard
             foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
             {
-                GameObject newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)currentLeadboardToPopulate]);
+                GameObject newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)result.CustomData]);
 
                 if(newGO.TryGetComponent(out LeaderBoardRow row))
                 {
                     row.SetRowTexts(entry);
                 }
             }
+        }
+       
+        public void SwitchPanel(int newValue)
+        {
+            for(int i = 0; i < LeaderboardPanels.Count; ++i)
+            {
+                LeaderboardPanels[i].gameObject.SetActive(false);
+            }
 
-            currentLeadboardToPopulate++;
+            LeaderboardPanels[newValue].gameObject.SetActive(true);
+            Debug.Log("Switching panel to: " + (leaderboard_value)newValue);
         }
 
         //        private List<CompiledLeaderboardRow> CreateCompiledPosition()

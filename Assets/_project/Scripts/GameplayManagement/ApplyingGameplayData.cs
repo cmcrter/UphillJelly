@@ -16,6 +16,8 @@ public class ApplyingGameplayData : MonoBehaviour
 
     public static ApplyingGameplayData instance;
 
+    public StoredPlayerProfile loadingData;
+
     public LoadCustomizablesInGame loadcustomizables;
     public ReplaySaveManager ghostManager;
 
@@ -33,6 +35,8 @@ public class ApplyingGameplayData : MonoBehaviour
         {
             instance = this;
         }
+
+        loadingData = LoadingData.player;
 
         if(loadcustomizables != null)
         {

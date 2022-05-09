@@ -123,11 +123,11 @@ public class ProfileSelector : MonoBehaviour
         {
             // create a directory for "/CurrentProfile"
             Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile" + profileSlot.ToString());
+            b_SaveSystem.SavePlayer(profileSlot);
         }
 
         StoredPlayerProfile player = b_SaveSystem.LoadPlayer(profileSlot);
         LoadingData.player = player;
-
         b_SaveSystem.SavePlayer(profileSlot);
 
         // set the starting background to false
