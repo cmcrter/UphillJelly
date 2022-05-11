@@ -23,12 +23,6 @@ public class ReplaySaveManager : MonoBehaviour
 
     public GameObject RecorderGO;
 
-    [Header("Overriding Level Value")]
-    [SerializeField]
-    private bool overrideLevel = false;
-    [SerializeField]
-    private LEVEL NewLevel = LEVEL.TUTORIAL;
-
     [Header("Overriding Replay Value")]
     [SerializeField]
     private bool overrideReplay = false;
@@ -46,11 +40,6 @@ public class ReplaySaveManager : MonoBehaviour
 
     private void Awake()
     {
-        if(overrideLevel) 
-        {
-            levelActive = NewLevel;
-        }
-
         LoadReplay(LoadingData.playerSlot, 1);
 
         if(overrideReplay)

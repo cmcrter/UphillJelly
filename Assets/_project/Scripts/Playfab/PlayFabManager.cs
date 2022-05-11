@@ -83,6 +83,9 @@ namespace L7Games
         public List<Transform> LeaderboardPanels;
         public List<Transform> LeaderboardRowObjects;
 
+        [SerializeField]
+        int maxLeaderboardRows = 10;
+
         void Start()
         {
             levelname = "Tutorial";
@@ -352,6 +355,7 @@ namespace L7Games
                 {
                     row.SetRowTexts(entry);
                 }
+
             }
         }
        
