@@ -128,6 +128,9 @@ namespace L7Games.Movement
 
             pInput.SwitchCurrentActionMap("WallRiding");
 
+            playerMovement.rbCollider.enabled = false;
+            playerMovement.boardCollider.enabled = false;
+
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
 
@@ -183,6 +186,9 @@ namespace L7Games.Movement
             playerMovement.characterAnimator.SetBool("wallridingMirror", false);
 
             playerMovement.StartAirInfluenctCoroutine();
+
+            playerMovement.rbCollider.enabled = true;
+            playerMovement.boardCollider.enabled = true;
 
             playerMovement.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
             Debug.Log("WR finished");

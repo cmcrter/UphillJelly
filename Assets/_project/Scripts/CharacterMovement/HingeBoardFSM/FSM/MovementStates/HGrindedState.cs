@@ -140,14 +140,15 @@ namespace L7Games.Movement
 
             currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.015f);
 
+            if(bTravelBackwards && Debug.isDebugBuild)
+            {
+                //Debug.Log(Vector3.Dot(movementRB.velocity.normalized, currentSplineDir));
+                //Debug.Log(bTravelBackwards + " " + onGrind.grindDotProduct + " " + movementRB.transform.forward + " " + currentSplineDir + " " + onGrind.angleAllowance);
+            }
+
             if(bTravelBackwards)
             {
                 currentSplineDir *= -1;
-            }
-
-            if(bTravelBackwards && Debug.isDebugBuild)
-            {
-                Debug.Log(bTravelBackwards + " " + onGrind.grindDotProduct);
             }
 
             parentController.transform.forward = currentSplineDir;
