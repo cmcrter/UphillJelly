@@ -292,7 +292,7 @@ namespace L7Games.Movement
 
         private void ForwardMovement()
         {
-            if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 0.95f)
+            if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 0.99f)
             {
                 // Check the length of the next increment
                 Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + Time.deltaTime * tIncrementPerSecond);
@@ -332,7 +332,7 @@ namespace L7Games.Movement
 
         private void BackwardMovement()
         {
-            if(timeAlongGrind - Time.deltaTime * tIncrementPerSecond > 0.03f)
+            if(timeAlongGrind - Time.deltaTime * tIncrementPerSecond > 0.01f)
             {
                 // Clamping it at the max value and min values of a unit interval
 
@@ -360,7 +360,7 @@ namespace L7Games.Movement
                 }
             }
             //if it's at the end
-            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldStartPosition) < 1.2f || timeAlongGrind == 0)
+            else
             {
                 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, 0.45f + 0.0375f, 0);
 
