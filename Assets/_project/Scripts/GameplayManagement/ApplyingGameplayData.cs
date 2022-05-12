@@ -19,6 +19,11 @@ public class ApplyingGameplayData : MonoBehaviour
     public int playerSlot;
     public StoredPlayerProfile loadingData;
 
+    [SerializeField]
+    private bool overrideLevel; 
+    [SerializeField]
+    private LEVEL NewLevel = LEVEL.TUTORIAL;
+
     public LoadCustomizablesInGame loadcustomizables;
     public ReplaySaveManager ghostManager;
 
@@ -39,6 +44,11 @@ public class ApplyingGameplayData : MonoBehaviour
 
         loadingData = LoadingData.player;
         playerSlot = LoadingData.playerSlot;
+
+        if(overrideLevel)
+        {
+            LoadingData.currentLevel = NewLevel;
+        }
 
         if(loadcustomizables != null)
         {

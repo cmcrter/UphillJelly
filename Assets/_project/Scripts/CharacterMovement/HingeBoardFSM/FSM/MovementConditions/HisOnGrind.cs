@@ -25,6 +25,7 @@ namespace L7Games.Movement
 
         private Rigidbody movementRB;
         private InputHandler inputHandler;
+        private PlayerHingeMovementController player;
 
         public SplineWrapper splineCurrentlyGrindingOn;
         public GrindDetails grindDetails;
@@ -53,10 +54,11 @@ namespace L7Games.Movement
 
         }
 
-        public void InitialiseCondition(Rigidbody rb, InputHandler iHandler)
+        public void InitialiseCondition(Rigidbody rb, InputHandler iHandler, PlayerHingeMovementController parent)
         {
             movementRB = rb;
             inputHandler = iHandler;
+            player = parent;
         }
 
         public void SetGrindState(HGrindedState state)
@@ -128,8 +130,11 @@ namespace L7Games.Movement
                 //Put here for testing, could be moved to under the next if
                 float timeAlongGrind;
                 Vector3 point = splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind);
-                
-                grindDotProduct = Vector3.Dot(movementRB.velocity.normalized, splineCurrentlyGrindingOn.GetDirection(timeAlongGrind));
+                Vector3 dir = splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+                Debug.DrawRay(movementRB.position, movementRB.velocity.normalized);
+                Debug.DrawRay(point, dir);
+
+                grindDotProduct = Vector3.Dot(player.transform.forward, dir);
                 grindDotProduct = Mathf.Clamp(grindDotProduct, -1, 1);
 
                 if(/* inputHandler.StartGrindHeld && */ CoyoteCoroutine == null && movementRB.velocity.magnitude > 1f)

@@ -144,6 +144,8 @@ namespace L7Games.Movement
 
             collectableCounter = 0;
 
+            rbCollider.enabled = true;
+
             fRB.isKinematic = false;
             fRB.useGravity = true;
 
@@ -209,6 +211,8 @@ namespace L7Games.Movement
             Time.timeScale = 0;
 
             collectableCounter = 0;
+
+            rbCollider.enabled = true;
 
             fRB.isKinematic = false;
 
@@ -425,7 +429,7 @@ namespace L7Games.Movement
             //Setting up the state machine
             groundBelow.InitialiseCondition(transform);
             nextToWallRun.InitialiseCondition(this, fRB);
-            grindBelow.InitialiseCondition(fRB, inputHandler);
+            grindBelow.InitialiseCondition(fRB, inputHandler, this);
 
             groundedState.InitialiseState(this, fRB, groundBelow, grindBelow);
             aerialState.InitialiseState(this, fRB, groundBelow, nextToWallRun, grindBelow);
