@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using TMPro;
+using FMODUnity;
 
 
 public class PauseMenuOptionsPanel : MonoBehaviour
@@ -14,18 +15,42 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown textureDropdown;
     public TMP_Dropdown aaDropdown;
-    public Slider volumeSlider;
+    public Slider masterVolumeSlider;
     private float currentVolume;
     Resolution[] resolutions;
 
+    public UnityEngine.EventSystems.EventSystem currentEventSYstem;
+
+    private FMOD.Studio.Bus masterBus;
+
+    #region Unity Method
+    private void Awake()
+    {
+        List<string> resolutionOptionsList = new List<string>();
+        Resolution[] resOptions = Screen.resolutions;
+        for (int i = 0; i < resOptions.Length; ++i)
+        {
+            resolutionOptionsList.Add(resOptions[i].ToString());
+        }
+        resolutionDropdown.ClearOptions();
+        resolutionDropdown.AddOptions(resolutionOptionsList);
+
+        masterBus = RuntimeManager.GetBus("bus:/Player Sounds");
+    }
+
+
+    #endregion
+
+    #region Public Methods
     #region Options Section
     /// <summary>
     /// Setting the general master volume (TO DO: Expand this to the FMOD way)
     /// </summary>
-    public void SetVolume(float volume)
+    public void SetVolume()
     {
-        audioMixer.SetFloat("Volume", volume);
-        currentVolume = volume;
+        currentVolume = masterVolumeSlider.value;
+
+        masterBus.setVolume(masterVolumeSlider.value);
     }
     public void SetFullscreen(bool isFullscreen)
     {
@@ -86,6 +111,6 @@ public class PauseMenuOptionsPanel : MonoBehaviour
 
         qualityDropdown.value = qualityIndex;
     }
-
+    #endregion
     #endregion
 }

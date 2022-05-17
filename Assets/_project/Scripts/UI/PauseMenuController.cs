@@ -101,6 +101,17 @@ namespace L7Games.UI
             //eventSystem.sele
             //menuButtons[0].Selec = Selectable.Transition.ColorTint;
         }
+
+        private void OnDrawGizmos()
+        {
+            if (eventSystem != null)
+            {
+                if (eventSystem.currentSelectedGameObject != null)
+                {
+                    Gizmos.DrawSphere(eventSystem.currentSelectedGameObject.transform.position, 20f);
+                }
+            }
+        }
         #endregion
 
         #region Public Method
