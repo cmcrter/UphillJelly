@@ -415,6 +415,7 @@ namespace L7Games.Input
         private void OnEnable()
         {
         }
+
         private void OnDisable()
         {
             UnbindAerialActions();

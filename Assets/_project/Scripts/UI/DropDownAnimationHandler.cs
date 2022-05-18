@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class DropDownAnimationHandler : MonoBehaviour
+public class DropDownAnimationHandler : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     private Animator buttonAnimator;
@@ -21,11 +21,12 @@ public class DropDownAnimationHandler : MonoBehaviour
 
     private bool isDroppedDown = false;
 
+    private bool itemSelectedByMouse;
+
     private void Awake()
     {
         eventSystem = FindObjectOfType<EventSystem>();
     }
-
     private void Update()
     {
         if (expetedChildCount < dropdown.transform.childCount)
@@ -46,7 +47,14 @@ public class DropDownAnimationHandler : MonoBehaviour
 
         if (isDroppedDown)
         {
-            SetPositonBasedOnSelectedItem();
+            if (!itemSelectedByMouse)
+            {
+                SetPositonBasedOnSelectedItem();
+            }
+        }
+        else
+        {
+            itemSelectedByMouse = false;
         }
     }
 
@@ -62,13 +70,26 @@ public class DropDownAnimationHandler : MonoBehaviour
         {
             if (scrollRect.content.GetChild(i).gameObject == eventSystem.currentSelectedGameObject)
             {
-                Debug.Log(scrollRect.content.GetChild(i).GetComponent<RectTransform>().anchoredPosition.y / scrollRect.content.rect.height);
-                RectTransform rectTransform = scrollRect.content.GetChild(i).GetComponent<RectTransform>();
-                scrollRect.verticalNormalizedPosition = (rectTransform.anchoredPosition.y + rectTransform.rect.height) / scrollRect.content.rect.height;
-                //scrollRect.verticalNormalizedPosition = 1f - ((float)i + 1f)/ ((float)scrollRect.content.childCount - 1f);
-                //scrollRect.
+                float hightIndex = scrollRect.content.childCount - 2f;
+                float currentIndex = i - 1;
+                float normalizedPositon = currentIndex / hightIndex;
+
+                //Debug.Log((rectTransform.anchoredPosition.y + rectTransform.rect.height) / scrollRect.content.rect.height);
+
+                scrollRect.verticalNormalizedPosition = 1f - normalizedPositon;
+
+                //RectTransform rectTransform = scrollRect.content.GetChild(i).GetComponent<RectTransform>();
+                //Debug.Log((rectTransform.anchoredPosition.y + rectTransform.rect.height) / scrollRect.content.rect.height);
+                //scrollRect.verticalNormalizedPosition = (rectTransform.anchoredPosition.y + (rectTransform.rect.height * 0.5f)) / scrollRect.content.rect.height;
+                ////scrollRect.verticalNormalizedPosition = 1f - ((float)i + 1f)/ ((float)scrollRect.content.childCount - 1f);
+                ////scrollRect.
                 break;
             }
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        itemSelectedByMouse = true;
     }
 }
