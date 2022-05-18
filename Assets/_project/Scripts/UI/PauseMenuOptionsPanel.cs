@@ -15,13 +15,21 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown textureDropdown;
     public TMP_Dropdown aaDropdown;
+
     public Slider masterVolumeSlider;
+    public Slider musicVolumeSlider;
+    public Slider ambientSlider;
+    public Slider sfxSlider;
+
     private float currentVolume;
     Resolution[] resolutions;
 
     public UnityEngine.EventSystems.EventSystem currentEventSYstem;
 
     private FMOD.Studio.Bus masterBus;
+    private FMOD.Studio.Bus musicBus;
+    private FMOD.Studio.Bus ambientBus;
+    private FMOD.Studio.Bus sfxBus;
 
     #region Unity Method
     private void Awake()
@@ -35,7 +43,18 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         resolutionDropdown.ClearOptions();
         resolutionDropdown.AddOptions(resolutionOptionsList);
 
-        masterBus = RuntimeManager.GetBus("bus:/Player Sounds");
+        masterBus = RuntimeManager.GetBus("bus:/");
+        ambientBus = RuntimeManager.GetBus("bus:/Ambient Sounds");
+        musicBus = RuntimeManager.GetBus("bus:/Music");
+        sfxBus = RuntimeManager.GetBus("bus:/Player Sounds");
+    }
+
+    private void OnEnable()
+    {
+        SetSliderVolumeFromBus(masterVolumeSlider, masterBus);
+        SetSliderVolumeFromBus(musicVolumeSlider, musicBus);
+        SetSliderVolumeFromBus(ambientSlider, ambientBus);
+        SetSliderVolumeFromBus(sfxSlider, sfxBus);
     }
 
 
@@ -46,12 +65,25 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     /// <summary>
     /// Setting the general master volume (TO DO: Expand this to the FMOD way)
     /// </summary>
-    public void SetVolume()
+    public void SetMasterVolume()
     {
-        currentVolume = masterVolumeSlider.value;
-
         masterBus.setVolume(masterVolumeSlider.value);
     }
+    public void SetMusicVolume()
+    {
+        musicBus.setVolume(musicVolumeSlider.value);
+    }
+
+    public void SetAmbientVolume()
+    {
+        ambientBus.setVolume(ambientSlider.value);
+    }
+
+    public void SetSfxVolume()
+    {
+        sfxBus.setVolume(sfxSlider.value);
+    }
+
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
@@ -111,6 +143,21 @@ public class PauseMenuOptionsPanel : MonoBehaviour
 
         qualityDropdown.value = qualityIndex;
     }
+
+
     #endregion
     #endregion
+
+    private void SetSliderVolumeFromBus(Slider slider, FMOD.Studio.Bus bus)
+    {
+        if (bus.getVolume(out float currenVol) == FMOD.RESULT.OK)
+        {
+            slider.value = currenVol;
+        }
+        else
+        {
+            Debug.LogError("Bus Volume not gotten for bus: " + bus.ToString());
+            slider.value = 1f;
+        }
+    }
 }
