@@ -7,36 +7,23 @@
 // Brief:   When the player finishes the level
 //////////////////////////////////////////////////////////// 
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat
+namespace L7Games
 {
+    [Obsolete]
     public class FinishLevel : MonoBehaviour
     {
-
-        //
         public b_Player b_player;
-
-        //
-        //public PlayFabManager playfabManager;
-
-        //
         public GameObject savePlayerNamePanel;
-
-        //
         public GameObject leaderboardPanel;
 
-        //
-        public TempScoreSystem tempScoreSystem;
-
-        //
-        public void Start() {
-
-            //
+        public void Start()
+        {
             leaderboardPanel.SetActive(false);
-
         }
 
         //
@@ -46,23 +33,11 @@ namespace SleepyCat
         void OnTriggerEnter(Collider col) {
 
             // if the ghost collides with this collectable
-            if (col.gameObject.tag == "Player") {
-
-                //
+            if (col.gameObject.tag == "Player") 
+            {
                 b_player.SaveFinalValues();
-
-                //
-                //playfabManager.SetScore();
-
-                //
                 leaderboardPanel.SetActive(true);
-
-                //
-                tempScoreSystem.TimerActive = false;
-
             }
-
         }
-
     }
 }

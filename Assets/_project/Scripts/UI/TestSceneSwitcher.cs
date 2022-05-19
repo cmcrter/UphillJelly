@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////////// 
 
 using UnityEngine;
-using L7.Loading;
+using L7Games.Loading;
 using UnityEngine.SceneManagement;
 
 public class TestSceneSwitcher : MonoBehaviour

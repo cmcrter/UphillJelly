@@ -1,9 +1,9 @@
 //================================================================================================================================================================================================================================================================================================================================================
 // File:                CharacterBone.cs
-// Author:              Matthew Mason
+// Author:              Matthew Mason, Charles Carter
 // Date Created:        15/02/22
-// Last Edited By:      Matthew Mason
-// Date Last Edited:    15/02/22
+// Last Edited By:      Charles Carter
+// Date Last Edited:    06/05/22
 // Brief:               A script used to store information about all the bones in a ragdoll
 //================================================================================================================================================================================================================================================================================================================================================
 
@@ -16,9 +16,10 @@ namespace L7Games
     public class RagdollDataContainer : MonoBehaviour
     {
         public Animator attachedAnimator;
-
         public SkinnedMeshRenderer characterRenderer;
-
+        public Transform HatParent;
+        public GameObject HatObject;
+    
         //public struct Bones
         //{
         //    public Vector3 position;

@@ -111,6 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachedAnimator: {fileID: 533361863209971257}
   characterRenderer: {fileID: 6707967665577530428}
+  HatParent: {fileID: 0}
+  HatObject: {fileID: 0}
 --- !u!95 &533361863209971257
 Animator:
   serializedVersion: 3
@@ -887,8 +889,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.45, y: 1, z: -4.75}
+  m_LocalRotation: {x: -0, y: -0.25881848, z: -0, w: 0.965926}
+  m_LocalPosition: {x: 9.329798, y: -3.2399998, z: -4.804105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1739,8 +1741,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087022926027470659}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.45, y: 1, z: -4.75}
+  m_LocalRotation: {x: -0, y: 0.25881863, z: -0, w: -0.96592593}
+  m_LocalPosition: {x: 9.3298, y: -3.24, z: -4.8041153}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6087022925334976368}
@@ -1776,7 +1778,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7785349, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1831,6 +1833,19 @@ Transform:
   m_Father: {fileID: 9112553975738110850}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &164102550
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6187764250174078217}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9, y: 0.05, z: 0.35}
+  m_Center: {x: -0.0010620377, y: 0.062046204, z: 0.0007471537}
 --- !u!1 &6187807096582182818
 GameObject:
   m_ObjectHideFlags: 0
@@ -2390,8 +2405,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7503020882694562702}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.45, y: 1, z: -4.75}
+  m_LocalRotation: {x: -0, y: -0.25881848, z: -0, w: 0.965926}
+  m_LocalPosition: {x: 9.329798, y: -3.2399998, z: -4.804105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8928391603548691449}
@@ -2427,7 +2442,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7772108, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2801,8 +2816,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9112553975738110861}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.75, y: 0.5, z: -0.75}
+  m_LocalRotation: {x: -0, y: -0.25881854, z: -0, w: 0.965926}
+  m_LocalPosition: {x: 7.07, y: -3.74, z: -1.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 877411814213596288}
@@ -2817,7 +2832,7 @@ Transform:
   - {fileID: 8031386506629756254}
   m_Father: {fileID: 3903168884410509303}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -30, z: 0}
 --- !u!114 &9112553975738110858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2835,6 +2850,7 @@ MonoBehaviour:
   collectableCounter: 0
   cooldownDuration: 1
   collectableScore: 0
+  fRB: {fileID: 9112553977081044591}
   aerialState:
     hasRan: 0
     AerialDrag: 0.125
@@ -2931,8 +2947,9 @@ MonoBehaviour:
   root: {fileID: 7700155234727380410}
   boardObject: {fileID: 532922024646090768}
   boardModel: {fileID: 6187764250174078217}
-  fRB: {fileID: 9112553977081044591}
+  boardCollider: {fileID: 164102550}
   ModelRB: {fileID: 6755519519185260203}
+  rbCollider: {fileID: 9112553977081044584}
   input: {fileID: 9112553975738110848}
   inputHandler: {fileID: 2636407542772683316}
   characterAnimator: {fileID: 533361863209971257}

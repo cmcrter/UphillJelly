@@ -46,6 +46,7 @@ namespace L7Games
         void PlayerEntered(PlayerController player)
         {
             player.OverrideCamera(cameraToUse, true);
+            player.CallOnWipeout(player.GetRB().velocity);
             trackedDolly.enabled = true;
             //player.enabled = false;
 

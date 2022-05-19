@@ -25,6 +25,8 @@ namespace L7Games {
         // public string type???????? (body, hat etc)
         public GameObject prefab;
 
+        public Material material;
+        public Mesh mesh;
     }
 
 }

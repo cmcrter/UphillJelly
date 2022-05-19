@@ -55,7 +55,7 @@ namespace L7Games.Triggerables
 
             if(wipeoutOnHit)
             {
-                player.CallOnWipeout(Vector3.zero);
+                player.CallOnWipeout(player.GetRB().velocity);
             }
             else
             {

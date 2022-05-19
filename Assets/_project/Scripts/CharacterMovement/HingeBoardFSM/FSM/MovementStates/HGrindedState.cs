@@ -102,11 +102,13 @@ namespace L7Games.Movement
         public override void OnStateEnter()
         {
             grindVisualiser.transform.parent = null;
+            parentController.bWipeOutLocked = true;
+            parentController.rbCollider.enabled = false;
 
             // Select Trick
             Trick selectedTrick = grindTricks[UnityEngine.Random.Range(0, grindTricks.Length)];
 
-            parentController.characterAnimator.Play(selectedTrick.TrickAnimStateName);
+            parentController.boardCollider.enabled = false;
 
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.characterAnimator.SetBool("grinding", true);
@@ -118,9 +120,10 @@ namespace L7Games.Movement
             Vector3 closestPoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.465f + 0.0375f, 0);
             //Debug.Log(closestPoint);
 
+            movementRB.detectCollisions = false;
             movementRB.transform.position = closestPoint;
             parentController.transform.position = closestPoint;
-            timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.0075f, 0.9925f);
+            timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.01f, 0.99f);
 
             movementRB.velocity = Vector3.zero;
             movementRB.useGravity = false;
@@ -135,7 +138,13 @@ namespace L7Games.Movement
                 bTravelBackwards = false;
             }
 
-            currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.01f);
+            currentSplineDir = onGrind.splineCurrentlyGrindingOn.GetDirection(timeAlongGrind, 0.015f);
+
+            if(bTravelBackwards && Debug.isDebugBuild)
+            {
+                //Debug.Log(Vector3.Dot(movementRB.velocity.normalized, currentSplineDir));
+                //Debug.Log(bTravelBackwards + " " + onGrind.grindDotProduct + " " + movementRB.transform.forward + " " + currentSplineDir + " " + onGrind.angleAllowance);
+            }
 
             if(bTravelBackwards)
             {
@@ -146,9 +155,13 @@ namespace L7Games.Movement
 
             grindVFXObject.SetActive(true);
 
+            parentController.characterAnimator.Play(selectedTrick.TrickAnimStateName);
+
             currentGrindTrickID = parentController.trickBuffer.AddScoreableActionInProgress(selectedTrick.scoreableDetails);
             GS = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/GrindRail2");
             GS.start();
+
+            parentController.bWipeOutLocked = false;
 
             hasRan = true;
         }
@@ -182,9 +195,11 @@ namespace L7Games.Movement
             timeAlongGrind = 0;
             bTravelBackwards = false;
             bForceExit = false;
-            parentController.bWipeOutLocked = false;
 
             parentController.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
+
+            parentController.boardCollider.enabled = true;
+            parentController.rbCollider.enabled = true;
 
             hasRan = false;
         }
@@ -211,8 +226,13 @@ namespace L7Games.Movement
 
         public override void PhysicsTick(float dT)
         {
-            if(!bForceExit)
+            if(!bForceExit && hasRan)
             {
+                if(pos == Vector3.zero)
+                {
+                    return;
+                }
+
                 movementRB.MovePosition(pos);
                 movementRB.MoveRotation(Quaternion.LookRotation(currentSplineDir, parentController.transform.up));
             }
@@ -273,7 +293,7 @@ namespace L7Games.Movement
 
         private void ForwardMovement()
         {
-            if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 1f)
+            if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 0.99f)
             {
                 // Check the length of the next increment
                 Vector3 nextPoint = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(timeAlongGrind + Time.deltaTime * tIncrementPerSecond);
@@ -298,7 +318,7 @@ namespace L7Games.Movement
                 }
             }
             //if it's at the end
-            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldEndPosition) < 0.7f || timeAlongGrind == 1)
+            else
             {
                 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(1) + new Vector3(0, 0.465f + 0.0375f, 0);
 
@@ -313,7 +333,7 @@ namespace L7Games.Movement
 
         private void BackwardMovement()
         {
-            if(timeAlongGrind - Time.deltaTime * tIncrementPerSecond > 0f)
+            if(timeAlongGrind - Time.deltaTime * tIncrementPerSecond > 0.01f)
             {
                 // Clamping it at the max value and min values of a unit interval
 
@@ -341,7 +361,7 @@ namespace L7Games.Movement
                 }
             }
             //if it's at the end
-            else if(Vector3.Distance(movementRB.transform.position, onGrind.splineCurrentlyGrindingOn.WorldStartPosition) < 0.7f || timeAlongGrind == 0)
+            else
             {
                 pos = onGrind.splineCurrentlyGrindingOn.GetPointAtTime(0) + new Vector3(0, 0.45f + 0.0375f, 0);
 
