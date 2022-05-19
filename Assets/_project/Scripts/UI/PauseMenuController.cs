@@ -40,6 +40,11 @@ namespace L7Games.UI
         [SerializeField]
         [Tooltip("The Event system in the scene")]
         private UnityEngine.EventSystems.EventSystem eventSystem;
+
+        [SerializeField]
+        [Tooltip("The Canvas that warning boxes will be put on")]
+        private Canvas canvasToUse;
+
         #endregion
 
         #region Private Variables
@@ -54,6 +59,7 @@ namespace L7Games.UI
         /// All the action maps that have been switch out of for the menu action map
         /// </summary>
         private InputActionMap[] savedInputActionMaps;
+
         #endregion
 
 
@@ -119,12 +125,12 @@ namespace L7Games.UI
         public void MainMenuButton()
         {
             // This should have a confirmation box (probably)
-            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", SetFirstButtonAsSelected, MoveToMainMenu);
+            WarningBox.CreateConfirmCancelWarningBox(canvasToUse, eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", SetFirstButtonAsSelected, MoveToMainMenu);
         }
         public void RestartLevelButton()
         {
             // This should have a confirmation box (probably)
-            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", SetFirstButtonAsSelected, RestartLevel);
+            WarningBox.CreateConfirmCancelWarningBox(canvasToUse, eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", SetFirstButtonAsSelected, RestartLevel);
         }
         public void ResumeGameButton()
         {
@@ -141,7 +147,7 @@ namespace L7Games.UI
         public void QuitButton()
         {
             // This should have a confirmation box (probably)
-            WarningBox.CreateConfirmCancelWarningBox(transform.root.GetComponent<Canvas>(), eventSystem, "Quit to desktop? Your level progress will not be saved", SetFirstButtonAsSelected, Application.Quit);
+            WarningBox.CreateConfirmCancelWarningBox(canvasToUse, eventSystem, "Quit to desktop? Your level progress will not be saved", SetFirstButtonAsSelected, Application.Quit);
         }
 
         public void OnOptionMenuClose()
@@ -218,6 +224,11 @@ namespace L7Games.UI
         private void MoveToMainMenu()
         {
             UnpauseGame();
+            LoadMainMenu();
+        }
+
+        private static void LoadMainMenu()
+        {
             LoadingData.sceneToLoad = "MainMenu";
             LoadingData.currentLevel = LEVEL.MAINMENU;
 
