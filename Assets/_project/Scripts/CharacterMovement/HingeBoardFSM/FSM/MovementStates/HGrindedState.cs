@@ -65,6 +65,8 @@ namespace L7Games.Movement
         private int currentGrindTrickID;
         private FMOD.Studio.EventInstance GS;
 
+        private float inputTurn;
+
         #endregion
 
         #region Public Methods
@@ -174,6 +176,8 @@ namespace L7Games.Movement
             pos = Vector3.zero;
             currentSplineDir = Vector3.zero;
 
+            inputTurn = inputHandler.TurningAxis;
+
             if(onGrind.grindDetails)
             {
                 //The jumping needs the grind details
@@ -183,7 +187,6 @@ namespace L7Games.Movement
             //Let the condition know to reset
             onGrind.playerExitedGrind();
 
-            parentController.StartAirInfluenctCoroutine();
             parentController.characterAnimator.SetBool("grinding", false);
             parentController.ResetCameraView();
 
@@ -286,7 +289,11 @@ namespace L7Games.Movement
             movementRB.isKinematic = false;
             movementRB.detectCollisions = true;
             movementRB.AddForce(((parentController.transform.up * ExitForce.y) + (parentController.transform.forward * ExitForce.z)) * 100, ForceMode.Impulse);
-   
+
+            inputHandler.TurningAxis = inputTurn;
+
+            parentController.StartAirInfluenctCoroutine();
+
             jumpCoroutine = null;
             yield return true;
         }
