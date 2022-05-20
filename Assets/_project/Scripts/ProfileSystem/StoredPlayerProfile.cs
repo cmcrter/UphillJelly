@@ -28,6 +28,9 @@ public class StoredPlayerProfile
     public int equippedCharacter = 0;
     public int equippedBoard = 0;
 
+    //See if profile has done tutorial
+    public bool doneTutorial = false;
+
     public StoredPlayerProfile()
     {
 

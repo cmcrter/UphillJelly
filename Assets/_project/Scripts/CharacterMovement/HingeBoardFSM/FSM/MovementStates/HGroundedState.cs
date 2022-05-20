@@ -308,7 +308,7 @@ namespace L7Games.Movement
         {
             if(!bPressingDown)
             {
-                movementRB.centerOfMass += new Vector3(0, -0.15f, 0);
+                //movementRB.centerOfMass += new Vector3(0, -0.15f, 0);
                 bPressingDown = true;
 
                 parentController.characterAnimator.SetFloat("crouchingFloat", 1);
@@ -481,7 +481,6 @@ namespace L7Games.Movement
 
             if(bPressingDown)
             {
-                movementRB.centerOfMass += new Vector3(0, 0.15f, 0);
                 bPressingDown = false;
                 parentController.characterAnimator.SetFloat("crouchingFloat", -1);
             }

@@ -54,6 +54,27 @@ namespace L7Games.Loading
         ///A variable for the next replay to load
         /// </summary>
         public static Ghost replayToLoad;
-       
+
+        /// <summary>
+        /// Utility to get a string from each level
+        /// </summary>
+        /// <param name="thisLevel"></param>
+        /// <returns></returns>
+        public static string getSceneName(LEVEL thisLevel)
+        {
+            string levelname = "Tutorial";
+
+            switch(thisLevel)
+            {
+                case LEVEL.CITY:
+                    levelname = "City";
+                    break;
+                case LEVEL.OLDTOWN:
+                    levelname = "OldTown";
+                    break;
+            }
+
+            return levelname;
+        }
     }
 }
