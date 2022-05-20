@@ -173,6 +173,7 @@ namespace L7Games.Movement
         {
             UpdatePositionAndRotation(dT);
 
+            //Switching camera for direction
             if(cameraBackwards)
             {
                 if(!cameraSwitched && movementRB.velocity.magnitude > 2f)
@@ -191,6 +192,7 @@ namespace L7Games.Movement
                 }
             }
 
+            //Playing base movement audio
             if(parentController.audioEmitter)
             {
                 parentController.audioEmitter.SetParameter("Velocity", movementRB.velocity.magnitude / 15f);

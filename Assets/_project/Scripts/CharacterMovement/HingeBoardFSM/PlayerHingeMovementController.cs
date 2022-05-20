@@ -706,17 +706,15 @@ namespace L7Games.Movement
 
                 if(InfluenceDir)
                 {
-                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(-transform.right * airInfluence, ForceMode.Impulse);
                 }
                 else if (inputHandler.TurningAxis != 0 )
                 {
-                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
                 }
 
                 influenceTimer.Tick(Time.fixedDeltaTime);
-                yield return null;
+                yield return new WaitForFixedUpdate();
             }
         }
 
