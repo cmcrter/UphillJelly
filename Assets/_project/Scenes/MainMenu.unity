@@ -792,9 +792,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -2674,17 +2674,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   replaySaveManager: {fileID: 6831927742793373231}
-  tempScoreSystem: {fileID: 1789797231}
-  HUDScript: {fileID: 0}
   rowPrefab: {fileID: 2974526420704827836, guid: 21733a1669ff5824ead5d9d0d0137709, type: 3}
   rowsParent: {fileID: 2563677410024525129}
-  TMPPlayerName: {fileID: 1089540230}
-  score: 0
-  time: 0
-  KOs: 0
-  SubmittedNameImage: {fileID: 0}
-  SubmitNameButtonGameObject: {fileID: 0}
-  hasFetchedLeaderboard: 0
+  LeaderboardPanels: []
+  LeaderboardRowObjects: []
+  maxLeaderboardRows: 10
+  valuesFilledIn: 
+  overrides: 0
+  overrideName: 
 --- !u!114 &262045033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2699,7 +2696,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playFabManager: {fileID: 262045032}
   leaderboardTypeText: {fileID: 2563677410016887929}
+  valueText: {fileID: 0}
   currentLeaderboardInt: 0
+  MapPanels: []
 --- !u!1 &263159349
 GameObject:
   m_ObjectHideFlags: 0
@@ -2896,9 +2895,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -4076,9 +4075,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -4955,9 +4954,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -7227,9 +7226,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -7483,9 +7482,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -11893,9 +11892,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -14746,9 +14745,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -15428,9 +15427,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -17052,7 +17051,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416148603}
-  m_LocalRotation: {x: 0.020394234, y: 0.7068132, z: -0.02039427, w: 0.706812}
+  m_LocalRotation: {x: 0.020394258, y: 0.7068132, z: -0.020394292, w: 0.706812}
   m_LocalPosition: {x: 10.879997, y: -14.34, z: 96.51003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -19056,9 +19055,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -21408,9 +21407,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -21903,17 +21902,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d0edeb6257f83048817597ae51de55d, type: 3}
---- !u!114 &1789797231 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1051075213851692369, guid: 3d0edeb6257f83048817597ae51de55d, type: 3}
-  m_PrefabInstance: {fileID: 1789797230}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e76dd1d46dedfe64a8739d1e00249bce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1789999093
 GameObject:
   m_ObjectHideFlags: 0
@@ -22232,6 +22220,7 @@ GameObject:
   - component: {fileID: 1821724045}
   - component: {fileID: 1821724046}
   - component: {fileID: 1821724047}
+  - component: {fileID: 1821724048}
   m_Layer: 5
   m_Name: HatShopPanel
   m_TagString: Untagged
@@ -22320,6 +22309,36 @@ MonoBehaviour:
   m_Spacing: {x: 2, y: 2}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &1821724048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821724044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: fd8f1b2eb243269459310d0487905fd2, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Controller
+  m_DefaultActionMap: MainMenuNav
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 1751793960}
 --- !u!1 &1828998646
 GameObject:
   m_ObjectHideFlags: 0
@@ -24663,9 +24682,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -25176,9 +25195,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -25527,9 +25546,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -28635,17 +28654,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   replaySaveManager: {fileID: 0}
-  tempScoreSystem: {fileID: 0}
-  HUDScript: {fileID: 0}
   rowPrefab: {fileID: 7186879436008564118, guid: 7a123c17f067d8e4797e3d8e5bdfc249, type: 3}
   rowsParent: {fileID: 0}
-  TMPPlayerName: {fileID: 340821021591818517}
-  score: 0
-  time: 0
-  KOs: 0
-  SubmittedNameImage: {fileID: 340821021519707540}
-  SubmitNameButtonGameObject: {fileID: 340821022202794344}
-  hasFetchedLeaderboard: 0
+  LeaderboardPanels: []
+  LeaderboardRowObjects: []
+  maxLeaderboardRows: 10
+  valuesFilledIn: 
+  overrides: 0
+  overrideName: 
 --- !u!4 &340821020619997635
 Transform:
   m_ObjectHideFlags: 0
@@ -30763,11 +30779,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5d9449eb3f43c04cabaaf34cb654c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outfitChanger: {fileID: 6013952650304028627}
-  shop: {fileID: 340821021978977642}
-  b_player: {fileID: 340821021575515474}
-  tempScoreSystem: {fileID: 0}
-  loadCustomizablesInGame: {fileID: 340821021612150829}
+  b_player:
+    profileName: 
+    iCurrency: 0
+    savedHatList: 
+    savedCharacterList: 
+    savedBoardList: 
+    equippedHat: 0
+    equippedCharacter: 0
+    equippedBoard: 0
+    doneTutorial: 0
   tmp_Input: {fileID: 0}
   StartingBackground: {fileID: 340821021967968347}
   LoadProfile1Text: {fileID: 136786134}
@@ -30817,16 +30838,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   replaySaveManager: {fileID: 6831927742793373231}
-  loadCustomizablesInGame: {fileID: 340821021612150829}
-  replayGhostSaveManager: {fileID: 6831927742793373231}
-  changeCamera: {fileID: 0}
-  outfitChanger: {fileID: 6013952650304028627}
+  loadCustomizablesInGame:
+    catBody: {fileID: 0}
+    catHead: {fileID: 0}
+    catBoardMesh: {fileID: 0}
+    catBoardFilter: {fileID: 0}
+    OverrideValues: 0
+    equipItems: []
   shop: {fileID: 340821021978977642}
   ghostSO1: {fileID: 11400000, guid: ef4c4b59d7524f147ab7df2d5ed06d57, type: 2}
   ghostSO2: {fileID: 11400000, guid: c12dd2e2f17f3db43a2aa479722bc45d, type: 2}
-  isSave1: 0
-  isSave2: 0
-  isSave3: 0
   HatBoughtBools: 
   CharacterBoughtBools: 
   hatBoughtInts: 
@@ -31066,19 +31087,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 045b8a25f8551394aadb4c9773278686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outfitChanger: {fileID: 6013952650304028627}
-  shop: {fileID: 340821021978977642}
-  b_player: {fileID: 340821021575515474}
-  replaySaveManager: {fileID: 6831927742793373231}
-  CurrentPlayerCharacter: 0
-  CurrentGhostCharacter: 0
-  CurrentPlayerHat: 0
-  CurrentGhostHat: 0
-  cMP: {fileID: 0}
-  cHat: {fileID: 0}
-  cHatM: {fileID: 0}
-  CatMeshRef: {fileID: 8551455216067095243}
-  HatRef: {fileID: 1114953679}
 --- !u!1 &340821021621415043
 GameObject:
   m_ObjectHideFlags: 0
@@ -32437,7 +32445,13 @@ MonoBehaviour:
   b_player: {fileID: 340821021575515474}
   outfitChanger: {fileID: 6013952650304028627}
   replaySaveManager: {fileID: 6831927742793373231}
-  loadCustomizablesInGame: {fileID: 0}
+  loadCustomizablesInGame:
+    catBody: {fileID: 0}
+    catHead: {fileID: 0}
+    catBoardMesh: {fileID: 0}
+    catBoardFilter: {fileID: 0}
+    OverrideValues: 0
+    equipItems: []
   SureYouWantToBuyHat: {fileID: 340821021117783466}
   SureYouWantToBuyCharacter: {fileID: 340821022146656731}
   Currency: 500
@@ -46226,9 +46240,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -48210,9 +48224,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.032397628, g: 1, b: 0, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -49333,9 +49347,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 13ddd62d0f47ed84c93574f950bbb8f9, type: 2}
   - {fileID: 2100000, guid: c163869dc01d24c4fb341dd44e378aab, type: 2}
   - {fileID: 2100000, guid: b2d9e77600947e945ba06ffbab1176ca, type: 2}
-  currentGOint: 0
-  currentGOMaterialint: 0
-  currentCharacterint: 0
 --- !u!33 &6013952650304028638
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -51077,12 +51088,10 @@ MonoBehaviour:
   ghost2: {fileID: 11400000, guid: c12dd2e2f17f3db43a2aa479722bc45d, type: 2}
   Ghost1character: {fileID: 1024937622751261825, guid: cb8d5adf084e4244fae3822e1be30c22, type: 3}
   Ghost2character: {fileID: 3879914698915832553, guid: 71bd6b923e354374caeb9564f18ba5d7, type: 3}
-  MAPCHECKER: {fileID: 4271355313014919916, guid: d7ad0d024592e0740a45163609f12767, type: 3}
-  isMainMenu: 0
-  isMapTutorial: 0
-  isMapCity: 0
-  isMapOldTown: 0
   RecorderGO: {fileID: 0}
+  overrideReplay: 0
+  profile: 1
+  replayslot: 1
 --- !u!1 &6892168094478172257
 GameObject:
   m_ObjectHideFlags: 0
@@ -53340,9 +53349,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -54916,9 +54925,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.98929596, g: 1, b: 0, a: 1}
     m_PressedColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.023584902, b: 0.023584902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1

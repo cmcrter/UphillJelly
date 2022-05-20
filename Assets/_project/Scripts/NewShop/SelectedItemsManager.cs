@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-using L7Games.Input;
+//using L7Games.Input;
 using UnityEngine.EventSystems;
 
 namespace L7Games.UI
@@ -15,7 +15,55 @@ namespace L7Games.UI
     public class SelectedItemsManager : MonoBehaviour
     {
 
+        [SerializeField]
+        [Tooltip("The Event system in the scene")]
+        private UnityEngine.EventSystems.EventSystem eventSystem;
 
+
+        [SerializeField]
+        [Tooltip("The buttons in pause menu from top to bottom in layout order")]
+        private Button[] shopTabButtons;
+
+        public PlayerInput playerInput;
+
+        private enum MainMenuTabEnum
+        {
+            Hat,
+            Character,
+            Skateboard
+        };
+        /*
+        private void OnEnable() {
+
+            InputAction.CallbackContext;
+            playerInput.onActionTriggered += MoveTabLeft;
+
+        }
+
+        private void OnDisable() {
+
+            InputAction.CallbackContext
+
+        }
+
+        public void Update() {
+
+            playerInput.actions["TabLeft"].performed += MoveTabLeft;
+            
+
+        }
+        */
+
+
+        private void MoveTabLeft_Performed(InputAction.CallbackContext callBackContext) { 
+
+            if (playerInput.actions["TabLeft"] != null) {
+
+                //playerInput.actions["TabLeft"]();
+
+            }
+
+        }
 
 
         /*
