@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4605368027877931478}
   - component: {fileID: 4605368027877931479}
   - component: {fileID: 4605368027877931476}
-  - component: {fileID: 4605368027877931481}
   m_Layer: 5
   m_Name: Button1
   m_TagString: Untagged
@@ -134,19 +133,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4605368027877931481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4605368027877931474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2706aa80fb5b96e4da6353a267199059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: e3fcb873b0bac344c8b5361f48a81e67, type: 2}
 --- !u!1 &4605368028286547698
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,6 +144,7 @@ GameObject:
   - component: {fileID: 4605368028286547701}
   - component: {fileID: 4605368028286547703}
   - component: {fileID: 4605368028286547700}
+  - component: {fileID: 1733638907731678066}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -222,3 +209,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1733638907731678066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4605368028286547698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2706aa80fb5b96e4da6353a267199059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: e3fcb873b0bac344c8b5361f48a81e67, type: 2}

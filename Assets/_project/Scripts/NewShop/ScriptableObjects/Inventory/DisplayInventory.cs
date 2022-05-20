@@ -10,17 +10,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DisplayInventory : MonoBehaviour
 {
     public InventoryObject PlayerHatInventory;
 
-    public int X_SPACE_BETWEEN_ITEM;
-    public int NUMBER_OF_COLUMNS;
-    public int Y_SPACE_BETWEEN_ITEM;
+    public GameObject inventoryPrefab;
+
     Dictionary<InventorySlot, GameObject> itemsDisplayed = new Dictionary<InventorySlot, GameObject>();
 
     public GameObject HatInventoryLayoutGroup;
+
+    
 
     void Start() {
 
@@ -39,13 +41,18 @@ public class DisplayInventory : MonoBehaviour
 
     public void CreateDisplay() {
 
-        for (int i = 0; i < PlayerHatInventory.container.Count; i++) {
+        for (int i = 0; i < PlayerHatInventory.Container.Items.Count; i++) {
 
-            var obj = Instantiate(PlayerHatInventory.container[i].item.prefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
+            InventorySlot slot = PlayerHatInventory.Container.Items[i];
+
+            var obj = Instantiate(inventoryPrefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
+
+            obj.transform.GetChild(0).GetComponentInChildren<Image>().sprite =
+                PlayerHatInventory.database.GetItem[slot.item.Id].uiDisplay;
 
             obj.transform.SetParent(HatInventoryLayoutGroup.transform);
 
-            itemsDisplayed.Add(PlayerHatInventory.container[i], obj);
+            itemsDisplayed.Add(slot, obj);
 
         }
 
@@ -56,23 +63,28 @@ public class DisplayInventory : MonoBehaviour
 
     public void UpdateDisplay() {
 
-        for (int i = 0; i < PlayerHatInventory.container.Count; i++) {
+        for (int i = 0; i < PlayerHatInventory.Container.Items.Count; i++) {
 
-            if (itemsDisplayed.ContainsKey(PlayerHatInventory.container[i])) {
+            InventorySlot slot = PlayerHatInventory.Container.Items[i];
+
+            if (itemsDisplayed.ContainsKey(slot)) {
 
                 //itemsDisplayed[PlayerHatInventory.container[i]] == PlayerHatInventory.container[i].amountOfItem.ToString(1);
 
-                PlayerHatInventory.container[i].amountOfItem = 1;
+                slot = PlayerHatInventory.Container.Items[i];
 
                 //if (PlayerHatInventory.container[i].item.prefab.)
 
             } else {
 
-                var obj = Instantiate(PlayerHatInventory.container[i].item.prefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
+                var obj = Instantiate(inventoryPrefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
+
+                obj.transform.GetChild(0).GetComponentInChildren<Image>().sprite =
+                    PlayerHatInventory.database.GetItem[slot.item.Id].uiDisplay;
 
                 obj.transform.SetParent(HatInventoryLayoutGroup.transform);
 
-                itemsDisplayed.Add(PlayerHatInventory.container[i], obj);
+                itemsDisplayed.Add(slot, obj);
 
             }
 
@@ -80,30 +92,30 @@ public class DisplayInventory : MonoBehaviour
 
     }
 
-
+    
 
 
 
     /*
     public void CreateDisplay() {
 
-        for (int i = 0; i < PlayerHatInventory.container.Count; i++) {
+        for (int i = 0; i < PlayerHatInventory.Container.Items.Count; i++) {
 
-            if (PlayerHatInventory.container[i].item.prefab.activeInHierarchy) {
+            if (inventoryPrefab.activeInHierarchy) {
 
-                Destroy(PlayerHatInventory.container[i].item.prefab.gameObject);
+                Destroy(inventoryPrefab);
 
                 break; 
 
             }else {
 
-                for (int j = 0; j < PlayerHatInventory.container.Count; j++) {
+                for (int j = 0; j < PlayerHatInventory.Container.Items.Count; j++) {
 
-                    var obj = Instantiate(PlayerHatInventory.container[j].item.prefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
+                    var obj = Instantiate(PlayerHatInventory.Container.Items[j].item.prefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
 
                     obj.transform.SetParent(HatInventoryLayoutGroup.transform);
 
-                    itemsDisplayed.Add(PlayerHatInventory.container[j], obj);
+                    itemsDisplayed.Add(PlayerHatInventory.Container.Items[j], obj);
 
                 }
 
@@ -117,25 +129,25 @@ public class DisplayInventory : MonoBehaviour
 
     }
 
-    */
-    /*
+    
+    
     public void UpdateDisplay() {
 
-        for (int i = 0; i < PlayerHatInventory.container.Count; i++) {
+        for (int i = 0; i < PlayerHatInventory.Container.Items.Count; i++) {
 
-            if (itemsDisplayed.ContainsKey(PlayerHatInventory.container[i])) {
+            if (itemsDisplayed.ContainsKey(PlayerHatInventory.Container.Items[i])) {
 
                 //itemsDisplayed[PlayerHatInventory.container[i]] == PlayerHatInventory.container[i].amountOfItem.ToString(1);
 
-                PlayerHatInventory.container[i].amountOfItem = 1;
+                PlayerHatInventory.Container.Items[i].amountOfItem = 1;
 
             } else {
 
-                var obj = Instantiate(PlayerHatInventory.container[i].item.prefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
+                var obj = Instantiate(PlayerHatInventory.Container.Items[i].item.prefab, HatInventoryLayoutGroup.transform); //, At the position on the layout group
 
                 obj.transform.SetParent(HatInventoryLayoutGroup.transform);
 
-                itemsDisplayed.Add(PlayerHatInventory.container[i], obj);
+                itemsDisplayed.Add(PlayerHatInventory.Container.Items[i], obj);
 
             }
 

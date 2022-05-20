@@ -15,17 +15,13 @@ using UnityEngine;
 public class ItemDatabaseObject : ScriptableObject, ISerializationCallbackReceiver {
 
     public ItemObjectSO[] Items;
-    public Dictionary<ItemObjectSO, int> GetId = new Dictionary<ItemObjectSO, int>();
     public Dictionary<int, ItemObjectSO> GetItem = new Dictionary<int, ItemObjectSO>();
 
     public void OnAfterDeserialize() {
 
-        GetId = new Dictionary<ItemObjectSO, int>();
-        GetItem = new Dictionary<int, ItemObjectSO>();
-
         for (int i = 0; i < Items.Length; i++) {
 
-            GetId.Add(Items[i], i);
+            Items[i].Id = i;   
             GetItem.Add(i, Items[i]);
 
         }
@@ -33,6 +29,8 @@ public class ItemDatabaseObject : ScriptableObject, ISerializationCallbackReceiv
     }
 
     public void OnBeforeSerialize() {
-        
+
+        GetItem = new Dictionary<int, ItemObjectSO>();
+
     }
 }

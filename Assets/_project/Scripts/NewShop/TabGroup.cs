@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace SleepyCat
 {
@@ -20,6 +21,8 @@ namespace SleepyCat
         public Sprite tabIdle;
         public Sprite tabHover;
         public Sprite tabActive;
+        public ShopTabButton selectedTab;
+        public List<GameObject> objectsToSwap;
 
         public void Subscribe(ShopTabButton button) {
 
@@ -33,11 +36,16 @@ namespace SleepyCat
 
         }
 
-        public void OnTabEnter(ShopTabButton button) {
+        public void OnTabHover(ShopTabButton button) {
 
             ResetTabs();
 
-            button.backgroundTabImage.sprite = tabHover;
+            // Only change tab sprite if it is not already selected
+            if (selectedTab == null || button != selectedTab) {
+
+                button.backgroundTabImage.sprite = tabHover;
+
+            }
 
         }
 
@@ -49,15 +57,30 @@ namespace SleepyCat
 
         public void OnTabSelected(ShopTabButton button) {
 
+            selectedTab = button;
+
             ResetTabs();
 
             button.backgroundTabImage.sprite = tabActive;
+
+            int index = button.transform.GetSiblingIndex();
+            for (int i = 0; i < objectsToSwap.Count; i++) {
+
+                if (i == index) {
+                    objectsToSwap[i].SetActive(true);
+                } else {
+                    objectsToSwap[i].SetActive(false);
+                }
+
+            }
 
         }
 
         public void ResetTabs() {
 
             foreach(ShopTabButton button in tabButtons) {
+
+                if (selectedTab!=null && button == selectedTab) { continue; }
 
                 button.backgroundTabImage.sprite = tabIdle;
 

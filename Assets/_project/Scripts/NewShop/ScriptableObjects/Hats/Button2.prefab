@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7795907361015793898}
   - component: {fileID: 7795907361015793908}
   - component: {fileID: 7795907361015793899}
+  - component: {fileID: 3289662446010292389}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -75,6 +76,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3289662446010292389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7795907361015793897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2706aa80fb5b96e4da6353a267199059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 7abc4dd06be1de44caaff4f043094f8f, type: 2}
 --- !u!1 &7795907361189472430
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,7 +101,6 @@ GameObject:
   - component: {fileID: 7795907361189472426}
   - component: {fileID: 7795907361189472425}
   - component: {fileID: 7795907361189472424}
-  - component: {fileID: 7795907361189472427}
   m_Layer: 5
   m_Name: Button2
   m_TagString: Untagged
@@ -209,28 +222,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DisplayInventory, Scripts
-        m_MethodName: CreateDisplay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &7795907361189472427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7795907361189472430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2706aa80fb5b96e4da6353a267199059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 7abc4dd06be1de44caaff4f043094f8f, type: 2}

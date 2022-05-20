@@ -11,12 +11,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ShopInventory : MonoBehaviour
 {
-
+    public int layoutPriority;
     public InventoryObject shopHatInventory;
     public InventoryObject playerHatInventory;
+
+    //
+    public List<ScriptableObject> purchasedItems;
+    public List<ScriptableObject> equippedItems;
+    //
+
 
     public void Start() {
 
@@ -27,12 +34,14 @@ public class ShopInventory : MonoBehaviour
 
     public void BuyItem() {
 
-        var item = EventSystem.current.currentSelectedGameObject.GetComponent<Item>();
+        var item = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>();
 
         if (item) {
 
             //shopHatInventory.AddItem(item.item, 1);
-            playerHatInventory.AddItem(item.item, 1);
+            playerHatInventory.AddItem(new Item(item.item)); //1);
+
+            purchasedItems.Add(item.item);
 
             //shopHatInventory.RemoveItem(item.item, -1);
 
@@ -50,7 +59,7 @@ public class ShopInventory : MonoBehaviour
 
     private void OnApplicationQuit() {
 
-        //playerHatInventory.container.Clear();
+        playerHatInventory.Container.Items.Clear();
 
     }
 

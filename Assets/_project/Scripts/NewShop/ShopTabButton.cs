@@ -16,7 +16,7 @@ using UnityEngine.EventSystems;
 namespace SleepyCat
 {
     [RequireComponent(typeof(Image))]
-    public class ShopTabButton : MonoBehaviour, IPointerDownHandler //IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler, 
+    public class ShopTabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler //IPointerDownHandler
     {
         public TabGroup tabGroup;
 
@@ -29,33 +29,41 @@ namespace SleepyCat
             tabGroup.Subscribe(this);
 
         }
-        /*
+        
         public void OnPointerClick(PointerEventData eventData) {
             tabGroup.OnTabSelected(this);
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
-            tabGroup.OnTabEnter(this);
+            tabGroup.OnTabHover(this);
         }
 
         public void OnPointerExit(PointerEventData eventData) {
             tabGroup.OnTabExit(this);
         }
-        */
+        
+
+        /*
+        public void OnPointerEnter(PointerEventData eventData) {
+            //Output the name of the GameObject that is being clicked
+            Debug.Log(name + "Game Object Click in Progress");
+            tabGroup.OnTabHover(this);
+        }
+
         //Detect current clicks on the GameObject (the one with the script attached)
         public void OnPointerDown(PointerEventData pointerEventData) {
 
             //Output the name of the GameObject that is being clicked
             Debug.Log(name + "Game Object Click in Progress");
-            tabGroup.OnTabEnter(this);
+            tabGroup.OnTabSelected(this);
         }
 
         //Detect if clicks are no longer registering
         public void OnPointerUp(PointerEventData pointerEventData) {
 
             Debug.Log(name + "No longer being clicked");
-            tabGroup.OnTabSelected(this);
+            tabGroup.OnTabExit(this);
         }
-
+        */
     }
 }

@@ -25,12 +25,30 @@ public enum ItemType
 public abstract class ItemObjectSO : ScriptableObject
 {
 
+    public int Id;
     //
-    public GameObject prefab;
+    public Sprite uiDisplay;
     public ItemType type;
+
+    public bool isPurchased;
 
     // item description text area string with a size of 15 and 20
     [TextArea(15,20)]
     public string itemDescription;
+
+}
+
+[System.Serializable]
+public class Item
+{
+
+    public string Name;
+    public int Id;  
+    public Item(ItemObjectSO item) {
+
+        Name = item.name;
+        Id = item.Id;
+
+    }
 
 }
