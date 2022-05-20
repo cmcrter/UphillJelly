@@ -161,9 +161,10 @@ namespace L7Games.Movement
         public override void OnStateExit()
         {
             parentController.StopAirInfluenctCoroutine();
+            parentController.characterAnimator.SetFloat("turnValue", 0);
             parentController.characterAnimator.SetBool("aerial", false);
 
-            if (parentController.trickBuffer.IsTricking)
+            if(parentController.trickBuffer.IsTricking)
             {
                 if (parentController.trickBuffer.WithinInWipeOutTheshold)
                 {

@@ -217,6 +217,7 @@ namespace L7Games.Movement
         {
             pInput.SwitchCurrentActionMap("Grounded");
             parentController.characterAnimator.SetBool("grounded", true);
+            parentController.characterAnimator.SetFloat("turnValue", 0);
 
             movementRB.drag = GroundedDrag;
             parentController.ModelRB.drag = GroundedDrag;

@@ -102,14 +102,17 @@ namespace L7Games.Movement
 
             //Raycast forward to see if board is hitting something
             //If it is, end the wall ride...
-            if(Time.frameCount % 15 == 0)
+            Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+            Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+
+            if(Time.frameCount % 5 == 0)
             {
-                Debug.DrawLine(fRB.transform.position, fRB.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
-                if(Physics.Raycast(fRB.transform.position, playerMovement.transform.forward, out RaycastHit hit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore))
+                if(Physics.Raycast(fRB.transform.position, playerMovement.transform.forward, out RaycastHit hit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore) || Physics.Raycast(playerMovement.transform.position, playerMovement.transform.forward, out RaycastHit bodyhit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore))
                 {
                     Debug.Log(hit.collider.name);
 
                     //Wipeout
+                    playerMovement.bWipeOutLocked = false;
                     playerMovement.WipeOutCharacter(Vector3.down + (playerMovement.transform.forward * 10f));
                 }
             }
@@ -126,9 +129,9 @@ namespace L7Games.Movement
 
         public override void OnStateEnter()
         {
-
             pInput.SwitchCurrentActionMap("WallRiding");
 
+            playerMovement.bWipeOutLocked = true;
             playerMovement.rbCollider.enabled = false;
             playerMovement.boardCollider.enabled = false;
 
@@ -155,8 +158,6 @@ namespace L7Games.Movement
 
             fRB.isKinematic = true;
             fRB.velocity = Vector3.zero;
-
-            playerMovement.bWipeOutLocked = false;
 
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
             currentGrindTrickID = playerMovement.trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
@@ -225,6 +226,7 @@ namespace L7Games.Movement
 
         private void JumpingOff()
         {
+            playerMovement.bWipeOutLocked = false;
             playerMovement.StartCoroutine(Co_InputDelay());
         }
 
