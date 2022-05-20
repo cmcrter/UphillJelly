@@ -889,8 +889,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: 0.965926, z: -0, w: 0.25881848}
-  m_LocalPosition: {x: 35.740204, y: 14, z: 2.3141043}
+  m_LocalRotation: {x: -0, y: -0.25881848, z: -0, w: 0.965926}
+  m_LocalPosition: {x: 2.0097961, y: 1, z: 0.6858957}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -1614,7 +1614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c41ac9245b87c4192012080077d830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Damping: 0.05
+  m_Damping: 0.45
 --- !u!1 &6087022925334976369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,7 +1676,7 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 0.25
+  m_XDamping: 0.2
   m_YDamping: 0.1
   m_ZDamping: 0
   m_TargetMovementOnly: 1
@@ -1715,7 +1715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c41ac9245b87c4192012080077d830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Damping: 0
+  m_Damping: 0.45
 --- !u!1 &6087022926027470659
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,7 +1778,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.935883, y: 1}
+    m_SensorSize: {x: 1.7772021, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2405,8 +2405,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7503020882694562702}
-  m_LocalRotation: {x: -0, y: 0.25881845, z: -0, w: -0.965926}
-  m_LocalPosition: {x: 9.329804, y: -3.24, z: -4.8041043}
+  m_LocalRotation: {x: -0, y: -0.25881848, z: -0, w: 0.965926}
+  m_LocalPosition: {x: 9.329798, y: -3.2399998, z: -4.804105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8928391603548691449}
@@ -2442,7 +2442,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.935883, y: 1}
+    m_SensorSize: {x: 1.7772021, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2870,6 +2870,7 @@ MonoBehaviour:
   cooldownDuration: 1
   collectableScore: 0
   fRB: {fileID: 9112553977081044591}
+  KOCount: 0
   aerialState:
     hasRan: 0
     AerialDrag: 0.125

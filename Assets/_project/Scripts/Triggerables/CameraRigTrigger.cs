@@ -42,16 +42,25 @@ namespace L7Games
         [SerializeField]
         private float waitForTimer = 1f;
 
+        private bool bTriggered = false;
+
         #endregion
 
         #region Private Methods
 
         void PlayerEntered(PlayerController player)
         {
+            if(bTriggered)
+            {
+                return;
+            }
+
             player.OverrideCamera(cameraToUse, true);
             player.CallOnWipeout(player.GetRB().velocity);
             trackedDolly.enabled = true;
             //player.enabled = false;
+
+            bTriggered = true;
 
             StartCoroutine(WaitFor5Seconds());
 

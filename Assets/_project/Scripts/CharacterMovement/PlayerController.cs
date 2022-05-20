@@ -101,6 +101,7 @@ namespace L7Games.Movement
             if (onRespawn != null)
             {
                 onRespawn();
+                KOCount++;
             }
         }
 
@@ -109,7 +110,6 @@ namespace L7Games.Movement
             if(onWipeout != null && !bWipeOutLocked)
             {
                 onWipeout(vel);
-                KOCount++;
                 cameraZ.SwitchOnWipeoutCam(Vector3.zero);
             }
         }

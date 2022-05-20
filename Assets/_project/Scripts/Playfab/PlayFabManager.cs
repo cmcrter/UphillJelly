@@ -67,10 +67,10 @@ namespace L7Games
         [Header("UI Values")]
         public GameObject rowPrefab;
         public Transform rowsParent;
-        public TMP_InputField TMPPlayerName;
-        public int KOs;
-        public GameObject SubmittedNameImage;
-        public GameObject SubmitNameButtonGameObject;
+        //public TMP_InputField TMPPlayerName;
+        //public int KOs;
+        //public GameObject SubmittedNameImage;
+        //public GameObject SubmitNameButtonGameObject;
 
         //private List<CompiledLeaderboardRow> allresults = new List<CompiledLeaderboardRow>();
         //private List<PlayerLeaderboardEntry> allEntires = new List<PlayerLeaderboardEntry>();
@@ -82,6 +82,9 @@ namespace L7Games
 
         [SerializeField]
         int maxLeaderboardRows = 10;
+
+        [SerializeField]
+        private List<leaderboard_value> valuesFilledIn = new List<leaderboard_value>();
 
         [Header("Overrides")]
         [SerializeField]
@@ -192,8 +195,8 @@ namespace L7Games
 
             PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
 
-            SubmittedNameImage.SetActive(false);
-            SubmitNameButtonGameObject.SetActive(false);
+            //SubmittedNameImage.SetActive(false);
+            //SubmitNameButtonGameObject.SetActive(false);
         }
 
         public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
@@ -308,6 +311,12 @@ namespace L7Games
         void OnLeaderBoardGet(GetLeaderboardResult result)
         {
             LeaderboardData data = (LeaderboardData)result.CustomData;
+            int resultCount = 0;
+
+            if(valuesFilledIn.Contains(data.valueToRetrieve))
+            {
+                return;
+            }
 
             //Populating this leaderboard
             foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
@@ -316,6 +325,11 @@ namespace L7Games
 
                 if(LoadingData.currentLevel != LEVEL.MAINMENU)
                 {
+                    if(resultCount == maxLeaderboardRows)
+                    {
+                        continue;
+                    }
+
                     newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)data.valueToRetrieve]);
                 }
                 else
@@ -343,7 +357,10 @@ namespace L7Games
                     row.SetRowTexts(entry);
                 }
 
+                resultCount++;
             }
+
+            valuesFilledIn.Add(data.valueToRetrieve);
         }
        
         public void SwitchPanel(int newValue)

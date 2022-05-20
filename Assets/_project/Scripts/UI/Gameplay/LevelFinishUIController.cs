@@ -69,7 +69,7 @@ namespace L7Games
             bracketToPassThrough.score = HUDScript.storedScore;
             bracketToPassThrough.seconds = (Timer.roundTime * -1);
             //The end trigger always wipes you out
-            bracketToPassThrough.wipeoutThreshold = (player.KOCount - 1);
+            bracketToPassThrough.wipeoutThreshold = player.KOCount;
 
             //Triggering this since it cannot run without being logged in anyway
             leaderboardManager.FinishedLevelTriggered(bracketToPassThrough);
@@ -78,7 +78,7 @@ namespace L7Games
             rankText.text = ratingString;
             scoreText.text = HUDScript.storedScore.ToString();
             timerText.text = ((int)Timer.roundTime * -1).ToString() + "s";
-            wipeoutText.text = (player.KOCount - 1).ToString();
+            wipeoutText.text = player.KOCount.ToString();
         }
 
         public void LoginPlayfab()
