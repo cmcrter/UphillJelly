@@ -26,6 +26,8 @@ namespace L7Games {
         //public string type;
         public GameObject prefab;
 
+        public Material material;
+        public Mesh mesh;
     }
 
 }

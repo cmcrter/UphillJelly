@@ -35,9 +35,14 @@ namespace L7Games
         private UnityEvent endTrigger;
 
         //public b_Player b_player;
-        public PlayFabManager playfabManager;
+        public LevelFinishUIController uiController;
 
         public GameObject LeaderboardGO;
+
+        [SerializeField]
+        private float waitForTimer = 1f;
+
+        private bool bTriggered = false;
 
         #endregion
 
@@ -45,9 +50,17 @@ namespace L7Games
 
         void PlayerEntered(PlayerController player)
         {
+            if(bTriggered)
+            {
+                return;
+            }
+
             player.OverrideCamera(cameraToUse, true);
+            player.CallOnWipeout(player.GetRB().velocity);
             trackedDolly.enabled = true;
             //player.enabled = false;
+
+            bTriggered = true;
 
             StartCoroutine(WaitFor5Seconds());
 
@@ -57,12 +70,16 @@ namespace L7Games
             }      
         }
 
-        IEnumerator WaitFor5Seconds() {
+        private IEnumerator WaitFor5Seconds() 
+        {
+            uiController.LoginPlayfab();
 
-            yield return new WaitForSeconds(5f);
-            gameObject.SetActive(false);
+            yield return new WaitForSeconds(waitForTimer);
+
+            uiController.PopulateInformation();
+            yield return new WaitForSeconds(0.1f);
+
             LeaderboardGO.SetActive(true);
-            //playfabManager.FinishedLevelTriggered();
         }
 
         void PlayerExited(PlayerController player)

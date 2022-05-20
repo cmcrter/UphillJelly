@@ -410,18 +410,12 @@ namespace L7Games.Input
             {
                 turningUpdated(TurningAxis);
             }
-
-
-
         }
 
         private void OnEnable()
         {
-            if (PauseManager.instance != null)
-            {
-                PauseManager.instance.OnUnpaused += OnUnpause;
-            }
         }
+
         private void OnDisable()
         {
             UnbindAerialActions();
@@ -431,10 +425,6 @@ namespace L7Games.Input
             UnbindWipeOutAction();
             UnbindMenuActions();
 
-            if (PauseManager.instance != null)
-            {
-                PauseManager.instance.OnUnpaused -= OnUnpause;
-            }
         }
         #endregion
 
@@ -466,12 +456,9 @@ namespace L7Games.Input
         /// <param name="callbackContext">Grinding Jump Action's CallbackContext</param>
         private void GrindingJumpUpAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            if (!PauseManager.IsInstancePaused)
+            if (grindingJumpUpActionPerformed != null)
             {
-                if (grindingJumpUpActionPerformed != null)
-                {
-                    grindingJumpUpActionPerformed();
-                }
+                grindingJumpUpActionPerformed();
             }
         }
         /// <summary>
@@ -480,12 +467,9 @@ namespace L7Games.Input
         /// <param name="callbackContext">Jump Action's CallbackContext</param>
         private void GroundedJumpUpAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            if (!PauseManager.IsInstancePaused)
+            if (groundedJumpUpPerformed != null)
             {
-                if (groundedJumpUpPerformed != null)
-                {
-                    groundedJumpUpPerformed();
-                }
+                groundedJumpUpPerformed();
             }
         }
 
@@ -495,12 +479,9 @@ namespace L7Games.Input
         /// <param name="callbackContext">Jump Action's CallbackContext</param>
         private void GroundedJumpUpAction_Cancelled(InputAction.CallbackContext callbackContext)
         {
-            if (!PauseManager.IsInstancePaused)
+            if (groundedJumpUpCancelled != null)
             {
-                if (groundedJumpUpCancelled != null)
-                {
-                    groundedJumpUpCancelled();
-                }
+                groundedJumpUpCancelled();
             }
         }
 
@@ -510,12 +491,9 @@ namespace L7Games.Input
         /// <param name="callbackContext">Jump Action's CallbackContext</param>
         private void WallRidingJumpUpAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            if (!PauseManager.IsInstancePaused)
+            if (wallRidingJumpUpAction != null)
             {
-                if (wallRidingJumpUpAction != null)
-                {
-                    wallRidingJumpUpAction();
-                }
+                wallRidingJumpUpAction();
             }
         }
         #endregion
@@ -527,14 +505,10 @@ namespace L7Games.Input
         /// <param name="callbackContext">Input action callback context</param>
         private void PressDownAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            pauselessPressedDownHeld = true;
-            if (!PauseManager.IsInstancePaused) // Don't start a press down if paused
+            PressDownHeldDown = true;
+            if (pressDownStarted != null)
             {
-                PressDownHeldDown = true;
-                if (pressDownStarted != null)
-                {
-                    pressDownStarted();
-                }
+                pressDownStarted();
             }
         }
         /// <summary>
@@ -543,15 +517,11 @@ namespace L7Games.Input
         /// <param name="callbackContext">Input action callback context</param>
         private void PressDownAction_Canceled(InputAction.CallbackContext callbackContext)
         {
-            pauselessPressedDownHeld = false;
-            if (!PauseManager.IsInstancePaused)
+            PressDownHeldDown = false;
+            if (pressDownEnded != null)
             {
-                PressDownHeldDown = false;
-                if (pressDownEnded != null)
-                {
-                    pressDownEnded();
-                    Debug.Log("PressDownEndedCalled");
-                }
+                pressDownEnded();
+                Debug.Log("PressDownEndedCalled");
             }
         }
         #endregion
@@ -601,14 +571,10 @@ namespace L7Games.Input
         /// <param name="callbackContext">The brake action's CallbackContext</param>
         private void BrakeAction_Canceled(InputAction.CallbackContext callbackContext)
         {
-            pauselessBrakeHeldDown = false;
-            if (!PauseManager.IsInstancePaused)
+            BrakeHeldDown = false;
+            if (brakeEnded != null)
             {
-                BrakeHeldDown = false;
-                if (brakeEnded != null)
-                {
-                    brakeEnded();
-                }
+                brakeEnded();
             }
         }
 
@@ -618,14 +584,10 @@ namespace L7Games.Input
         /// <param name="callbackContext">The brake action's CallbackContext</param>
         private void BrakeAction_Peformed(InputAction.CallbackContext callbackContext)
         {
-            pauselessBrakeHeldDown = true;
-            if (!PauseManager.IsInstancePaused)
+            BrakeHeldDown = true;
+            if (brakeStarted != null)
             {
-                BrakeHeldDown = true;
-                if (brakeStarted != null)
-                {
-                    brakeStarted();
-                }
+                brakeStarted();
             }
         }
         #endregion
@@ -637,14 +599,10 @@ namespace L7Games.Input
         /// <param name="callbackContext">start grind action's CallbackContext</param>
         private void StartGrindAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            pauselessStartGrindHeldDown = true;
-            if (!PauseManager.IsInstancePaused)
+            StartGrindHeld = true;
+            if (startGrindStarted != null)
             {
-                StartGrindHeld = true;
-                if (startGrindStarted != null)
-                {
-                    startGrindStarted();
-                }
+                startGrindStarted();
             }
         }
 
@@ -654,14 +612,10 @@ namespace L7Games.Input
         /// <param name="callbackContext">The brake action's CallbackContext</param>
         private void StartGrindAction_Canceled(InputAction.CallbackContext callbackContext)
         {
-            pauselessStartGrindHeldDown = false;
-            if (!PauseManager.IsInstancePaused)
+            StartGrindHeld = false;
+            if (startGrindEnded != null)
             {
-                StartGrindHeld = false;
-                if (startGrindEnded != null)
-                {
-                    startGrindEnded();
-                }
+                startGrindEnded();
             }
         }
         #endregion
@@ -673,14 +627,10 @@ namespace L7Games.Input
         /// <param name="callbackContext">start grind action's CallbackContext</param>
         private void WipeOutResetAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            pauselessWipeoutResetHeldDown = true;
-            if (!PauseManager.IsInstancePaused)
+            WipeOutResetHeld = true;
+            if (wipeoutResetStarted != null)
             {
-                WipeOutResetHeld = true;
-                if (wipeoutResetStarted != null)
-                {
-                    wipeoutResetStarted();
-                }
+                wipeoutResetStarted();
             }
         }
 
@@ -690,14 +640,10 @@ namespace L7Games.Input
         /// <param name="callbackContext">The brake action's CallbackContext</param>
         private void WipeOutReset_Canceled(InputAction.CallbackContext callbackContext)
         {
-            pauselessWipeoutResetHeldDown = false;
-            if (!PauseManager.IsInstancePaused)
+            WipeOutResetHeld = false;
+            if (wipeoutResetEnded != null)
             {
-                WipeOutResetHeld = false;
-                if (wipeoutResetEnded != null)
-                {
-                    wipeoutResetEnded();
-                }
+                wipeoutResetEnded();
             }
         }
         #endregion
@@ -709,11 +655,7 @@ namespace L7Games.Input
         /// <param name="callbackContext">The turning action's CallbackContext</param>
         private void TurningAction_Canceled(InputAction.CallbackContext callbackContext)
         {
-            if (!PauseManager.IsInstancePaused)
-            {
-                TurningAxis = callbackContext.ReadValue<float>();
-            }
-
+            TurningAxis = callbackContext.ReadValue<float>();
         }
         /// <summary>
         /// Called when the player performs the turning action
@@ -721,43 +663,27 @@ namespace L7Games.Input
         /// <param name="callbackContext">The turning action's CallbackContext</param>
         private void TurningAction_Peformed(InputAction.CallbackContext callbackContext)
         {
-            pauselessTurnAxis = callbackContext.ReadValue<float>();
-            if (!PauseManager.IsInstancePaused)
-            {
-                TurningAxis = pauselessTurnAxis;
-            }
+            TurningAxis = callbackContext.ReadValue<float>();
         }
         private void TurningActionLeftTurn_Performed(InputAction.CallbackContext callbackContext)
         {
             leftTurnAxisValue = callbackContext.ReadValue<float>();
-            if (!PauseManager.IsInstancePaused)
-            {
-                UpateTurnAxisFromLeftAndRight();
-            }
+            UpateTurnAxisFromLeftAndRight();
         }
         private void TurningActionLeftTurn_Canceled(InputAction.CallbackContext callbackContext)
         {
             leftTurnAxisValue = callbackContext.ReadValue<float>();
-            if (!PauseManager.IsInstancePaused)
-            {
-                UpateTurnAxisFromLeftAndRight();
-            }
+            UpateTurnAxisFromLeftAndRight();
         }
         private void TurningActionRightTurn_Performed(InputAction.CallbackContext callbackContext)
         {
             rightTurnAxisValue = callbackContext.ReadValue<float>();
-            if (!PauseManager.IsInstancePaused)
-            {
-                UpateTurnAxisFromLeftAndRight();
-            }
+            UpateTurnAxisFromLeftAndRight();
         }
         private void TurningActionRightTurn_Canceled(InputAction.CallbackContext callbackContext)
         {
             rightTurnAxisValue = callbackContext.ReadValue<float>();
-            if (!PauseManager.IsInstancePaused)
-            {
-                UpateTurnAxisFromLeftAndRight();
-            }
+            UpateTurnAxisFromLeftAndRight();
         }
         #endregion
 
@@ -769,6 +695,7 @@ namespace L7Games.Input
         {
             if (MenuConfirmedPerformed != null)
             {
+                Debug.Log("MenuConfirmPerformed");
                 MenuConfirmedPerformed();
             }
         }
@@ -857,17 +784,10 @@ namespace L7Games.Input
 
         private void TestInput0_performed(InputAction.CallbackContext obj)
         {
-            //trickInputBuffer.AddHeldInput(0);
-            //Debug.Log("Trick0 performed");
-
-            if (!PauseManager.IsInstancePaused)
+            if (trickPressed != null)
             {
-                if (trickPressed != null)
-                {
-                    trickPressed();
-                }
+                trickPressed();
             }
-
         }
 
         private void TestInput1_Canceled(InputAction.CallbackContext obj)
@@ -1122,107 +1042,6 @@ namespace L7Games.Input
         private void UpateTurnAxisFromLeftAndRight()
         {
             TurningAxis = rightTurnAxisValue - leftTurnAxisValue;
-        }
-
-        private void OnUnpause()
-        {
-            // Reset value so nothing continues
-            if (PressDownHeldDown)
-            {
-                PressDownAction_Canceled(new InputAction.CallbackContext());
-            }
-            if (BrakeHeldDown)
-            {
-                BrakeAction_Canceled(new InputAction.CallbackContext());
-            }
-            if (PushHeldDown)
-            {
-                PushAction_Canceled(new InputAction.CallbackContext());
-            }
-            if (StartGrindHeld)
-            {
-                StartGrindAction_Canceled(new InputAction.CallbackContext());
-            }
-            if (WipeOutResetHeld)
-            {
-                WipeOutReset_Canceled(new InputAction.CallbackContext());
-            }
-            leftTurnAxisValue = 0f;
-            rightTurnAxisValue = 0f;
-            TurningAxis = 0f;
-
-            //// If the state of press down held changed while paused react accordingly
-            //if (pauselessPressedDownHeld != PressDownHeldDown)
-            //{
-            //    if (pauselessPressedDownHeld)
-            //    {
-            //        Debug.Log("PressDownStart");
-            //        PressDownAction_Performed(new InputAction.CallbackContext());
-            //    }
-            //    else
-            //    {
-            //        PressDownAction_Canceled(new InputAction.CallbackContext());
-            //    }
-            //}
-            //// If the state of press down held changed while paused react accordingly
-            //if (pauselessBrakeHeldDown != BrakeHeldDown)
-            //{
-            //    if (pauselessBrakeHeldDown)
-            //    {
-            //        BrakeAction_Peformed(new InputAction.CallbackContext());
-            //    }
-            //    else
-            //    {
-            //        BrakeAction_Canceled(new InputAction.CallbackContext());
-            //    }
-            //}
-            //// If the state of press down held changed while paused react accordingly
-            //if (pauselessPushHeldDown != PushHeldDown)
-            //{
-            //    if (pauselessPushHeldDown)
-            //    {
-            //        PushAction_Performed(new InputAction.CallbackContext());
-            //    }
-            //    else
-            //    {
-            //        PushAction_Canceled(new InputAction.CallbackContext());
-            //    }
-            //}
-
-            //// If the state of press down held changed while paused react accordingly
-            //if (pauselessStartGrindHeldDown != StartGrindHeld)
-            //{
-            //    if (pauselessStartGrindHeldDown)
-            //    {
-            //        StartGrindAction_Performed(new InputAction.CallbackContext());
-            //    }
-            //    else
-            //    {
-            //        StartGrindAction_Canceled(new InputAction.CallbackContext());
-            //    }
-            //}
-
-            //// If the state of press down held changed while paused react accordingly
-            //if (pauselessWipeoutResetHeldDown != WipeOutResetHeld)
-            //{
-            //    if (pauselessWipeoutResetHeldDown)
-            //    {
-            //        WipeOutResetAction_Performed(new InputAction.CallbackContext());
-            //    }
-            //    else
-            //    {
-            //        WipeOutReset_Canceled(new InputAction.CallbackContext());
-            //    }
-            //}
-
-            //if (leftTurnAxisValue > 0f || rightTurnAxisValue > 0f)
-            //{
-            //    UpateTurnAxisFromLeftAndRight();
-            //}
-            //else
-            //{
-            //    TurningAxis = pauselessTurnAxis;
-            //}
         }
     }
 }

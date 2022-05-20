@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 01/04/22
 // Last Edited By: Charles Carter
-// Date Last Edited: 01/04/22
+// Date Last Edited: 19/05/22
 // Brief: The trigger when the player has finished the map
 //////////////////////////////////////////////////////////// 
 
@@ -27,7 +27,6 @@ namespace L7Games
         #region Variables
 
         //public b_Player b_player;
-        //public PlayFabManager playfabManager;
 
         [SerializeField]
         private GameObject endUI;
@@ -36,11 +35,14 @@ namespace L7Games
         [SerializeField]
         private RankTimer timer;
 
+        [SerializeField]
+        private PlayFabManager leaderboardController;
+
         #endregion
 
         #region Unity Methods
 
-        void Start()
+        void Awake()
         {
 
         }
@@ -52,17 +54,20 @@ namespace L7Games
         //Can be called by cinematics too
         public void MapFinished(PlayerController player)
         {
-            //Show End UI
-            if (endUI)
-            {
-                endUI.SetActive(true);
-            }
-
+            //Stopping the timer
             if(timer)
             {
                 timer.LockTimer();
             }
-           
+
+            //Getting the leaderboard
+            leaderboardController.Login();
+
+            //Show End UI
+            if (endUI)
+            {
+                endUI.SetActive(true);
+            }   
         }
 
         //shouldn't do anything

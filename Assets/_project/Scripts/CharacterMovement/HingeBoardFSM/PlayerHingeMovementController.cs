@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 29/11/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 02/03/22
+// Date Last Edited: 06/05/22
 // Brief: A prototype character controller using a board made of 2 RBs with 2 Joints used
 //////////////////////////////////////////////////////////// 
 
@@ -68,12 +68,12 @@ namespace L7Games.Movement
         public GameObject boardObject;
         [SerializeField]
         private GameObject boardModel;
+        public Collider boardCollider;
         private Vector3 boardPos;
 
         //Front Rigidbody
-        [SerializeField]
-        private Rigidbody fRB;
         public Rigidbody ModelRB;
+        public Collider rbCollider;
 
         public PlayerInput input;
         public InputHandler inputHandler;
@@ -144,6 +144,8 @@ namespace L7Games.Movement
 
             collectableCounter = 0;
 
+            rbCollider.enabled = true;
+
             fRB.isKinematic = false;
             fRB.useGravity = true;
 
@@ -164,6 +166,7 @@ namespace L7Games.Movement
 
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
+            boardCollider.enabled = true;
             boardModel.transform.localPosition = Vector3.zero;
             boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
 
@@ -209,6 +212,8 @@ namespace L7Games.Movement
 
             collectableCounter = 0;
 
+            rbCollider.enabled = true;
+
             fRB.isKinematic = false;
 
             fRB.useGravity = true;
@@ -232,6 +237,7 @@ namespace L7Games.Movement
 
             Destroy(boardModel.GetComponent<Rigidbody>());
             boardModel.transform.SetParent(root);
+            boardCollider.enabled = true;
             boardModel.transform.localPosition = Vector3.zero;
             boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
 
@@ -423,7 +429,7 @@ namespace L7Games.Movement
             //Setting up the state machine
             groundBelow.InitialiseCondition(transform);
             nextToWallRun.InitialiseCondition(this, fRB);
-            grindBelow.InitialiseCondition(fRB, inputHandler);
+            grindBelow.InitialiseCondition(fRB, inputHandler, this);
 
             groundedState.InitialiseState(this, fRB, groundBelow, grindBelow);
             aerialState.InitialiseState(this, fRB, groundBelow, nextToWallRun, grindBelow);
@@ -677,7 +683,7 @@ namespace L7Games.Movement
         public void PlayRespawnSound()
         {
             respawnSound.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
-
+            //Debug.Log(state);
             //if(state != FMOD.Studio.PLAYBACK_STATE.STOPPED)
             //    return;
 
@@ -750,6 +756,11 @@ namespace L7Games.Movement
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
             if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
+                if(ApplyingGameplayData.instance)
+                {
+                    ragdollDataContainer.HatObject = ApplyingGameplayData.instance.loadcustomizables.HatObject();
+                }
+
                 spawnedRagdoll.Initalise(ragdollDataContainer);
                 currentRagdoll = spawnedRagdoll;
             }

@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-namespace L7.Loading
+namespace L7Games.Loading
 {
     public class LoadingScreen : MonoBehaviour
     {
@@ -29,6 +29,8 @@ namespace L7.Loading
         private string sceneToLoad;
         [SerializeField]
         private bool waitForNextScene;
+        [SerializeField]
+        private LEVEL levelToLoad;
 
         #endregion
 
@@ -40,6 +42,7 @@ namespace L7.Loading
             {
                 LoadingData.sceneToLoad = sceneToLoad;
                 LoadingData.waitForNextScene = waitForNextScene;
+                LoadingData.currentLevel = levelToLoad;
             }
         }
 
@@ -59,6 +62,7 @@ namespace L7.Loading
             if(LoadingData.sceneToLoad == null)
             {
                 LoadingData.sceneToLoad = "MainMenu";
+                LoadingData.currentLevel = LEVEL.MAINMENU;
                 LoadingData.waitForNextScene = false;
             }
 

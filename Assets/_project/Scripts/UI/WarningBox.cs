@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using TMPro;
 using L7Games.Input;
 
@@ -41,8 +42,6 @@ public class WarningBox : MonoBehaviour
     [SerializeField]
     [Tooltip("The UI text mesh showing the warning text")]
     private TextMeshProUGUI textMesh;
-
-
     #endregion
 
     #region Private Variables
@@ -112,40 +111,70 @@ public class WarningBox : MonoBehaviour
     /// <summary>
     /// Creates a warning box by loading a prefab of one from resources, will have no text or buttons until added
     /// </summary>
-    /// <returns>The new warning box component attached to the newly spawned GameObject</returns>
-    public static WarningBox CreateWarningBox(Canvas canvasShownOn)
+    /// <param name="canvasShownOn">The Canvas that the warning box will be spawned and shown from</param>
+    /// <param name="eventSystemInScene">The event system controlling all the UI events in the scene</param>
+    /// <returns>The new warning box component attached to the newly spawned UI GameObject</returns>
+    public static WarningBox CreateWarningBox(Canvas canvasShownOn, EventSystem eventSystemInScene, string boxText)
     {
         GameObject warningBoxPrefab = GameObject.Instantiate(Resources.Load<GameObject>("WarningBox"), canvasShownOn.transform);
-        return warningBoxPrefab.GetComponent<WarningBox>();
+        WarningBox returnedWarningBox = warningBoxPrefab.GetComponent<WarningBox>();
+        returnedWarningBox.eventSystem = eventSystemInScene;
+        returnedWarningBox.SetText(boxText);
+        return returnedWarningBox;
     }
 
     /// <summary>
     /// Creates a warning box that has only one button for confirming and closing the message
     /// </summary>
+    /// <param name="canvasShownOn">The Canvas that the warning box will be spawned and shown from</param>
+    /// <param name="eventSystemInScene">The event system controlling all the UI events in the scene</param>
     /// <param name="boxText">The text that will be shown in the box</param>
     /// <param name="confirmAction">The action that will happen once the confirm button is pressed</param>
     /// <param name="confirmButtonText">The text that will be shown on the confirm button</param>
-    /// <returns>The new warning box component attached to the newly spawned GameObject</returns>
-    public static WarningBox CreateConfirmOnlyWarningBox(Canvas canvasShownOn, string boxText, UnityAction confirmAction, string confirmButtonText = "Confirm")
+    /// <returns>The new warning box component attached to the newly spawned UI GameObject</returns>
+    public static WarningBox CreateConfirmOnlyWarningBox(Canvas canvasShownOn, EventSystem eventSystemInScene, 
+        string boxText, UnityAction confirmAction, string confirmButtonText = "Confirm")
     {
-        WarningBox newWarningBox = CreateWarningBox(canvasShownOn);
-        newWarningBox.InitaliseConfirmOnlyBox(boxText, confirmAction, confirmButtonText);
+        WarningBox newWarningBox = CreateWarningBox(canvasShownOn, eventSystemInScene, boxText);
+        Button confirmButton = newWarningBox.AddConfirmButton(confirmButtonText);
+        confirmButton.onClick.AddListener(confirmAction);
+        confirmButton.onClick.AddListener(newWarningBox.CloseBox);
         return newWarningBox;
     }
 
     /// <summary>
     /// Creates a warning box that has two buttons for confirming or cancelling the message
     /// </summary>
+    /// <param name="canvasShownOn">The Canvas that the warning box will be spawned and shown from</param>
+    /// <param name="eventSystemInScene">The event system controlling all the UI events in the scene</param>
     /// <param name="boxText">The text that will be shown in the box</param>
     /// <param name="cancelAction">The action that will happen once the cancel button is pressed</param>
     /// <param name="confirmAction">The action that will happen once the confirm button is pressed</param>
     /// <param name="cancelButtonText">Text that will be shown on the cancel button</param>
     /// <param name="confirmButtonText">Text that will be shown on the confirm button</param>
-    /// <returns></returns>
-    public static WarningBox CreateConfirmCancelWarningBox(Canvas canvasShownOn, string boxText, UnityAction cancelAction, UnityAction confirmAction, string cancelButtonText = "Cancel", string confirmButtonText = "Confirm")
+    /// <returns>The new warning box component attached to the newly spawned UI GameObject</returns>
+    public static WarningBox CreateConfirmCancelWarningBox(Canvas canvasShownOn, EventSystem eventSystemInScene, 
+        string boxText, UnityAction cancelAction, UnityAction confirmAction, string cancelButtonText = "Cancel", 
+        string confirmButtonText = "Confirm")
     {
-        WarningBox newWarningBox = CreateWarningBox(canvasShownOn);
-        newWarningBox.InitaliseConfirmCancelBox(boxText, cancelAction, confirmAction, cancelButtonText, confirmButtonText);
+        WarningBox newWarningBox = CreateWarningBox(canvasShownOn, eventSystemInScene, boxText);
+
+        // Adding the Cancel Buttons
+        Button cancelButton = newWarningBox.AddCancelButton(cancelButtonText);
+        if (cancelAction != null)
+        {
+            cancelButton.onClick.AddListener(cancelAction);
+        }
+        cancelButton.onClick.AddListener(newWarningBox.CloseBox);
+
+        // Adding the Confirm Button
+        Button confirmButton = newWarningBox.AddConfirmButton(confirmButtonText);
+        if (confirmAction != null)
+        {
+            confirmButton.onClick.AddListener(confirmAction);
+        }
+        confirmButton.onClick.AddListener(newWarningBox.CloseBox);
+
         return newWarningBox;
     }
     #endregion
@@ -167,6 +196,8 @@ public class WarningBox : MonoBehaviour
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = buttonText;
         boxButtons.Add(newButton);
         // If the new button is the first one added to the warning box
+        // Once the button the navigation is set up so the buttons will navigate the too the buttons to the left and right,
+        // with navigation that reaches either end of the box wrapping around to the other side
         if (boxButtons.Count == 1)
         {
             eventSystem.SetSelectedGameObject(gameObjectButton);
@@ -218,44 +249,6 @@ public class WarningBox : MonoBehaviour
         return cancelButton;
     }
 
-    /// <summary>
-    /// Sets up everything needed for a confirm and cancel warning box
-    /// </summary>
-    /// <param name="boxText">The text that will be shown in the box</param>
-    /// <param name="cancelAction">The action that will be called when cancel is selected</param>
-    /// <param name="confirmAction">The action that will be called when confirm is selected</param>
-    /// <param name="cancelButtonText">The text to show on the cancel button</param>
-    /// <param name="confirmButtonText">The text to show on the confirm button</param>
-    public void InitaliseConfirmCancelBox(string boxText, UnityAction cancelAction, UnityAction confirmAction, string cancelButtonText = "Cancel", string confirmButtonText = "Confirm")
-    {
-        SetText(boxText);
-        Button cancelButton = AddCancelButton(cancelButtonText);
-        if (cancelAction != null)
-        {
-            cancelButton.onClick.AddListener(cancelAction);
-        }
-        cancelButton.onClick.AddListener(CloseBox);
-
-        Button confirmButton = AddConfirmButton(confirmButtonText);
-        if (confirmAction != null)
-        {
-            confirmButton.onClick.AddListener(confirmAction);
-        }
-        confirmButton.onClick.AddListener(CloseBox);
-    }
-    /// <summary>
-    /// Sets up everything needed for a confirm and cancel warning box
-    /// </summary>
-    /// <param name="boxText">The text that will be shown in the box</param>
-    /// <param name="confirmAction">The action that will be called when confirm is selected</param>
-    /// <param name="confirmButtonText">The text to show on the confirm button</param>
-    public void InitaliseConfirmOnlyBox(string boxText, UnityAction confirmAction, string confirmButtonText = "Confirm")
-    {
-        SetText(boxText);
-        Button confirmButton = AddConfirmButton(confirmButtonText);
-        confirmButton.onClick.AddListener(confirmAction);
-        confirmButton.onClick.AddListener(CloseBox);
-    }
     /// <summary>
     /// Sets the main text of the warning box to a given value
     /// </summary>

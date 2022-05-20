@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 22/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 02/03/22
+// Date Last Edited: 19/05/22
 // Brief: A script for prototype and current player controllers to inherit from (to keep debugging and test scripts easy)
 //////////////////////////////////////////////////////////// 
 
@@ -37,6 +37,9 @@ namespace L7Games.Movement
         private Timer cooldownTimer;
 
         public float collectableScore = 0;
+        public Rigidbody fRB;
+
+        public int KOCount = 0;
 
         #endregion
 
@@ -85,12 +88,20 @@ namespace L7Games.Movement
             }
         }
 
+        public Rigidbody GetRB()
+        {
+            return fRB;
+        }
+
+
         #region Protected Methods
+
         protected void CallOnRespawn()
         {
             if (onRespawn != null)
             {
                 onRespawn();
+                KOCount++;
             }
         }
 
