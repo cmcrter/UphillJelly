@@ -612,7 +612,6 @@ namespace L7Games.Movement
 
         public void StartAirInfluenctCoroutine()
         {
-            StopAirInfluenctCoroutine();
             AirturningCo = StartCoroutine(Co_AirInfluence());
         }
 
@@ -716,6 +715,8 @@ namespace L7Games.Movement
                 influenceTimer.Tick(Time.fixedDeltaTime);
                 yield return new WaitForFixedUpdate();
             }
+
+            AirturningCo = null;
         }
 
         private float CalculateSignedSlopeAngle(Vector3 startingPoint, Vector3 endPoint, Vector3 flatPlaneNormal)
