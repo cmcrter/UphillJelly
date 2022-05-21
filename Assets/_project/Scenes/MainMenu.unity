@@ -1228,6 +1228,82 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7795907361189472431, guid: d50288538b05e3346a3a99d14c34240f, type: 3}
   m_PrefabInstance: {fileID: 100871851}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &109506671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 109506674}
+  - component: {fileID: 109506673}
+  - component: {fileID: 109506672}
+  m_Layer: 0
+  m_Name: PlayerInputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &109506672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109506671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 0e2331c9c8494e64c9d6cf0d612305aa, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Menu
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 1751793960}
+--- !u!114 &109506673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109506671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593b5afb87d4b904ab26718f0ca6f8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInput: {fileID: 109506672}
+  analogueStickPatterns: []
+--- !u!4 &109506674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109506671}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 41
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &115276009
 GameObject:
   m_ObjectHideFlags: 0
@@ -6250,7 +6326,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9121406, y: 1}
+    m_SensorSize: {x: 1.859425, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7020,7 +7096,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9121406, y: 1}
+    m_SensorSize: {x: 1.859425, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -14024,9 +14100,14 @@ MonoBehaviour:
   playerHatInventory: {fileID: 11400000, guid: fc5e8b19b35386e46b917309155139fa, type: 2}
   purchasedItems: []
   equippedItems: []
-  currentlySelectedButton: {fileID: 0}
+  itemButtons: []
+  eventSystem: {fileID: 577072223}
+  inputHandlerInScene: {fileID: 109506673}
+  currentlySelectedButton: {fileID: 1278063189}
   objectDescription: {fileID: 0}
   descriptionItemImage: {fileID: 0}
+  currentTabSelected: 0
+  mainTabs: []
 --- !u!1 &1178574172
 GameObject:
   m_ObjectHideFlags: 0
@@ -15112,7 +15193,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9121406, y: 1}
+    m_SensorSize: {x: 1.859425, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -15882,7 +15963,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9121406, y: 1}
+    m_SensorSize: {x: 1.859425, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -17858,49 +17939,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585010951}
   m_CullTransparentMesh: 1
---- !u!1 &1586480485
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1586480487}
-  - component: {fileID: 1586480486}
-  m_Layer: 0
-  m_Name: GameObject (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1586480486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1586480485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93f9704c7a6b08f42a2f42e65ffc4562, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1586480487
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1586480485}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 41
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600452544
 GameObject:
   m_ObjectHideFlags: 0
@@ -19581,7 +19619,6 @@ GameObject:
   - component: {fileID: 1751793959}
   - component: {fileID: 1751793958}
   - component: {fileID: 1751793957}
-  - component: {fileID: 1751793962}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: Untagged
@@ -19721,36 +19758,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1751793962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751793956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 0e2331c9c8494e64c9d6cf0d612305aa, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Menu
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 1751793960}
 --- !u!1 &1768346185
 GameObject:
   m_ObjectHideFlags: 0
@@ -20080,7 +20087,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9121406, y: 1}
+    m_SensorSize: {x: 1.859425, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -20890,9 +20897,27 @@ MonoBehaviour:
   playerHatInventory: {fileID: 11400000, guid: fc5e8b19b35386e46b917309155139fa, type: 2}
   purchasedItems: []
   equippedItems: []
-  currentlySelectedButton: {fileID: 0}
+  itemButtons:
+  - {fileID: 4605368027886862626}
+  - {fileID: 7795907362070861423}
+  - {fileID: 2500370842621450284}
+  - {fileID: 9138643721004691650}
+  - {fileID: 2033028572}
+  - {fileID: 263429005}
+  - {fileID: 568800494}
+  - {fileID: 956366901}
+  - {fileID: 554533361}
+  - {fileID: 1161320223}
+  eventSystem: {fileID: 577072223}
+  inputHandlerInScene: {fileID: 109506673}
+  currentlySelectedButton: {fileID: 4605368027886862628}
   objectDescription: {fileID: 7840440}
   descriptionItemImage: {fileID: 115276012}
+  currentTabSelected: 0
+  mainTabs:
+  - {fileID: 1821724044}
+  - {fileID: 1176535581}
+  - {fileID: 1980556141}
 --- !u!114 &1821724047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22686,9 +22711,14 @@ MonoBehaviour:
   playerHatInventory: {fileID: 11400000, guid: fc5e8b19b35386e46b917309155139fa, type: 2}
   purchasedItems: []
   equippedItems: []
-  currentlySelectedButton: {fileID: 0}
+  itemButtons: []
+  eventSystem: {fileID: 577072223}
+  inputHandlerInScene: {fileID: 109506673}
+  currentlySelectedButton: {fileID: 1215548160}
   objectDescription: {fileID: 0}
   descriptionItemImage: {fileID: 0}
+  currentTabSelected: 0
+  mainTabs: []
 --- !u!1 &2005026325
 GameObject:
   m_ObjectHideFlags: 0
@@ -23762,7 +23792,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9121406, y: 1}
+    m_SensorSize: {x: 1.859425, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -34481,36 +34511,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1631196268159917613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1631196268159917616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: UI
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!4 &1631196268159917614
 Transform:
   m_ObjectHideFlags: 0
@@ -34540,8 +34540,8 @@ MonoBehaviour:
   cameraParent: {fileID: 1631196269256276947}
   _camera: {fileID: 1751793960}
   currentPoint: {fileID: 1631196270102969495}
-  playerInput: {fileID: 1631196268159917613}
-  eventSystem: {fileID: 0}
+  playerInput: {fileID: 109506672}
+  eventSystem: {fileID: 577072223}
   transitionTime: 0.5
   RotationObject: {fileID: 1631196269704770213}
   initialRotLocalPos: {x: 0, y: 0, z: 60}
@@ -34564,7 +34564,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1631196268159917614}
   - component: {fileID: 1631196268159917615}
-  - component: {fileID: 1631196268159917613}
   m_Layer: 0
   m_Name: MainMenuNavigator
   m_TagString: Untagged
