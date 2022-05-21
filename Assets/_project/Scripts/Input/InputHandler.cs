@@ -424,7 +424,7 @@ namespace L7Games.Input
             UnbindWallRidingAction();
             UnbindWipeOutAction();
             UnbindMenuActions();
-
+            MethodsBoundToPlayerEvents = false;
         }
         #endregion
 

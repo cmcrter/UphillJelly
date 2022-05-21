@@ -212,8 +212,10 @@ namespace L7Games.UI
         private void RestartLevel()
         {
             UnpauseGame();
+            Time.timeScale = 1f;
             LoadingData.sceneToLoad = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene("LoadingScene");
+
         }
         private void MoveToMainMenu()
         {
