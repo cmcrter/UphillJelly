@@ -98,7 +98,7 @@ namespace L7Games.Movement
         private Quaternion initialRot;
         private Quaternion initialRootRotation;
 
-        private Coroutine AirturningCo;
+        private IEnumerator AirturningCo;
         public float turnClamp = 1f;
         [SerializeField]
         private float turnSmoothness = 1.25f;
@@ -190,6 +190,7 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
+                StopAirInfluenctCoroutine();
                 StopAllCoroutines();
             }
 
@@ -264,6 +265,7 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
+                StopAirInfluenctCoroutine();
                 StopAllCoroutines();
             }
 
@@ -442,6 +444,8 @@ namespace L7Games.Movement
             trickBuffer = trickBuffer ?? GetComponent<TrickBuffer>();
 
             masterBus = FMODUnity.RuntimeManager.GetBus("bus:/Player Sounds");
+
+            AirturningCo = Co_AirInfluence();
         }
 
         //Adding the inputs to the finite state machine
@@ -515,11 +519,6 @@ namespace L7Games.Movement
             }
 
             currentTurnInput = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
-
-            if(AirturningCo != null || groundedState.hasRan)
-            {
-                characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
-            }
         }
 
         private void FixedUpdate()
@@ -538,7 +537,7 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(bWipeOutLocked)
+            if(bWipeOutLocked || grindingState.hasRan)
                 return;
 
             if (characterModel.activeSelf)
@@ -612,17 +611,12 @@ namespace L7Games.Movement
 
         public void StartAirInfluenctCoroutine()
         {
-            StopAirInfluenctCoroutine();
-            AirturningCo = StartCoroutine(Co_AirInfluence());
+           StartCoroutine(AirturningCo);
         }
 
         public void StopAirInfluenctCoroutine()
         {
-            if(AirturningCo != null)
-            {
-                StopCoroutine(AirturningCo);
-                AirturningCo = null;
-            }
+            StopCoroutine(AirturningCo);
         }
 
         public void ResetCameraView()
@@ -697,26 +691,34 @@ namespace L7Games.Movement
         private IEnumerator Co_AirInfluence()
         {
             bool InfluenceDir;
-            Timer influenceTimer = new Timer(2.5f);
 
-            while (influenceTimer.isActive)
+            if(!aerialState.hasRan)
+            {
+                Debug.Log("No Influence Because no Aerial State", this);
+            }
+
+            while (aerialState.hasRan)
             {
                 InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
                 //Debug.Log("Influence Up", this);
 
                 if(InfluenceDir)
                 {
-                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(-transform.right * airInfluence, ForceMode.Impulse);
                 }
-                else if (inputHandler.TurningAxis != 0 )
+                else if(inputHandler.TurningAxis != 0)
                 {
-                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
                 }
+                else
+                {
+                    //No input
+                    //Debug.Log("No Influence", this);
+                }
 
-                influenceTimer.Tick(Time.fixedDeltaTime);
-                yield return null;
+                characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
+
+                yield return new WaitForFixedUpdate();
             }
         }
 

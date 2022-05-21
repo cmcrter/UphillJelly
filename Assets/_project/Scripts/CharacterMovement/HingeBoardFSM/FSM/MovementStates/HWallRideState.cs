@@ -49,6 +49,7 @@ namespace L7Games.Movement
         private ScoreableAction wallrideScoreableAction;
 
         private int currentGrindTrickID;
+        private float inputTurn;
 
         #region Public Methods
 
@@ -74,7 +75,7 @@ namespace L7Games.Movement
                 return playerMovement.groundedState;
             }
 
-            if(!nextToWallRun.isConditionTrue()) 
+            if(!nextToWallRun.isConditionTrue())
             {
                 return playerMovement.aerialState;
             }
@@ -85,7 +86,7 @@ namespace L7Games.Movement
         public void RegisterInputs()
         {
             //Register functions
-            inputManager.wallRidingJumpUpAction += JumpOffWallRide;          
+            inputManager.wallRidingJumpUpAction += JumpOffWallRide;
         }
 
         public void UnRegisterInputs()
@@ -101,14 +102,17 @@ namespace L7Games.Movement
 
             //Raycast forward to see if board is hitting something
             //If it is, end the wall ride...
-            if(Time.frameCount % 15 == 0)
+            Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+            Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+
+            if(Time.frameCount % 5 == 0)
             {
-                Debug.DrawLine(fRB.transform.position, fRB.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
-                if(Physics.Raycast(fRB.transform.position, playerMovement.transform.forward, out RaycastHit hit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore))
+                if(Physics.Raycast(fRB.transform.position, playerMovement.transform.forward, out RaycastHit hit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore) || Physics.Raycast(playerMovement.transform.position, playerMovement.transform.forward, out RaycastHit bodyhit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore))
                 {
                     Debug.Log(hit.collider.name);
 
                     //Wipeout
+                    playerMovement.bWipeOutLocked = false;
                     playerMovement.WipeOutCharacter(Vector3.down + (playerMovement.transform.forward * 10f));
                 }
             }
@@ -125,9 +129,9 @@ namespace L7Games.Movement
 
         public override void OnStateEnter()
         {
-
             pInput.SwitchCurrentActionMap("WallRiding");
 
+            playerMovement.bWipeOutLocked = true;
             playerMovement.rbCollider.enabled = false;
             playerMovement.boardCollider.enabled = false;
 
@@ -141,7 +145,7 @@ namespace L7Games.Movement
 
             playerMovement.characterAnimator.SetBool("wallriding", true);
             playerMovement.bWipeOutLocked = true;
-            
+
             //Debug.Log(nextToWallRun.dotProductWithWall + " " + wallForward);
 
             rideSpeed = nextToWallRun.wallSpeed;
@@ -150,23 +154,21 @@ namespace L7Games.Movement
             playerMovement.transform.rotation = Quaternion.LookRotation(wallForward, Vector3.up);
 
             playerMovement.AlignWheels();
-            playerMovement.ResetWheelPos();           
+            playerMovement.ResetWheelPos();
 
             fRB.isKinematic = true;
             fRB.velocity = Vector3.zero;
 
-            playerMovement.bWipeOutLocked = false;
-
             Co_CoyoteCoroutine = playerMovement.StartCoroutine(Co_CoyoteTime());
-
             currentGrindTrickID = playerMovement.trickBuffer.AddScoreableActionInProgress(wallrideScoreableAction);
-            Debug.Log("WR Start");
 
             hasRan = true;
         }
 
         public override void OnStateExit()
         {
+            inputTurn = inputManager.TurningAxis;
+
             if(Co_CoyoteCoroutine != null)
             {
                 playerMovement.StopCoroutine(Co_CoyoteCoroutine);
@@ -185,13 +187,11 @@ namespace L7Games.Movement
             playerMovement.characterAnimator.SetBool("wallriding", false);
             playerMovement.characterAnimator.SetBool("wallridingMirror", false);
 
-            playerMovement.StartAirInfluenctCoroutine();
-
             playerMovement.rbCollider.enabled = true;
             playerMovement.boardCollider.enabled = true;
 
             playerMovement.trickBuffer.FinishScorableActionInProgress(currentGrindTrickID);
-            Debug.Log("WR finished");
+            JumpingOff();
 
             hasRan = false;
         }
@@ -224,14 +224,20 @@ namespace L7Games.Movement
             Co_CoyoteCoroutine = null;
         }
 
+        private void JumpingOff()
+        {
+            playerMovement.bWipeOutLocked = false;
+            playerMovement.StartCoroutine(Co_InputDelay());
+        }
+
         private void JumpOffWallRide()
         {
             bJumping = true;
             //Debug.Log("Jumping off wall ride");
 
             fRB.isKinematic = false;
-            playerMovement.StartCoroutine(Co_WallRideJump());
 
+            playerMovement.StartCoroutine(Co_WallRideJump());
         }
 
         private IEnumerator Co_WallRideJump()
@@ -242,7 +248,7 @@ namespace L7Games.Movement
             playerMovement.ModelRB.velocity = Vector3.zero;
             fRB.velocity = Vector3.zero;
 
-            if (!nextToWallRun.currentWallRide)
+            if(!nextToWallRun.currentWallRide)
             {
                 fRB.AddForce(playerMovement.transform.up * 350f, ForceMode.Impulse);
             }
@@ -254,8 +260,14 @@ namespace L7Games.Movement
             fRB.AddForce(playerMovement.transform.forward * intialMagnitude * 50f, ForceMode.Impulse);
         }
 
+        private IEnumerator Co_InputDelay()
+        {
+            inputTurn = inputManager.TurningAxis;
+            yield return new WaitForFixedUpdate();
+            inputManager.TurningAxis = inputTurn;
+            playerMovement.StartAirInfluenctCoroutine();
+        }
+
         #endregion
     }
-
-
 }

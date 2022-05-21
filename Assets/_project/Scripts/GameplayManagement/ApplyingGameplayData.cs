@@ -14,16 +14,19 @@ public class ApplyingGameplayData : MonoBehaviour
 {
     #region Variables
 
+    [Header("General Information")]
     public static ApplyingGameplayData instance;
 
     public int playerSlot;
     public StoredPlayerProfile loadingData;
 
+    [Header("Overriding Values")]
     [SerializeField]
     private bool overrideLevel; 
     [SerializeField]
     private LEVEL NewLevel = LEVEL.TUTORIAL;
 
+    [Header("Applying Classes")]
     public LoadCustomizablesInGame loadcustomizables;
     public ReplaySaveManager ghostManager;
 
@@ -42,14 +45,17 @@ public class ApplyingGameplayData : MonoBehaviour
             instance = this;
         }
 
+        //Getting the relevant info
         loadingData = LoadingData.player;
         playerSlot = LoadingData.playerSlot;
 
+        //GOverriding if need be
         if(overrideLevel)
         {
             LoadingData.currentLevel = NewLevel;
         }
 
+        //Using the applying classes
         if(loadcustomizables != null)
         {
             loadcustomizables.ApplyCustomization();

@@ -15,7 +15,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
 using L7Games.Loading;
-
+using L7Games.Movement;
 
 namespace L7Games
 {
@@ -46,7 +46,8 @@ namespace L7Games
     //    }
     //}
 
-    class LeaderboardData
+    //A data container for the 
+    public class LeaderboardData
     {
         public LEVEL Level;
         public leaderboard_value valueToRetrieve;
@@ -63,17 +64,13 @@ namespace L7Games
         [Header("Necessary Variables")]
         public ReplaySaveManager replaySaveManager;
 
-        [Header("This Session")]
-        public HUD HUDScript;
-        public RankTimer Timer;
-
         [Header("UI Values")]
         public GameObject rowPrefab;
         public Transform rowsParent;
-        public TMP_InputField TMPPlayerName;
-        public int KOs;
-        public GameObject SubmittedNameImage;
-        public GameObject SubmitNameButtonGameObject;
+        //public TMP_InputField TMPPlayerName;
+        //public int KOs;
+        //public GameObject SubmittedNameImage;
+        //public GameObject SubmitNameButtonGameObject;
 
         //private List<CompiledLeaderboardRow> allresults = new List<CompiledLeaderboardRow>();
         //private List<PlayerLeaderboardEntry> allEntires = new List<PlayerLeaderboardEntry>();
@@ -86,24 +83,25 @@ namespace L7Games
         [SerializeField]
         int maxLeaderboardRows = 10;
 
+        [SerializeField]
+        private List<leaderboard_value> valuesFilledIn = new List<leaderboard_value>();
+
+        [Header("Overrides")]
+        [SerializeField]
+        private bool overrides;
+        [SerializeField]
+        private string overrideName;
+
         void Start()
         {
-            levelname = "Tutorial";
+            levelname = LoadingData.getSceneName(LoadingData.currentLevel);
 
-            switch(LoadingData.currentLevel)
-            {
-                case LEVEL.CITY:
-                    levelname = "City";
-                    break;
-                case LEVEL.OLDTOWN:
-                    levelname = "OldTown";
-                    break;
-            }
+            Login();
         }
 
         private void OnEnable()
         {
-            Login();
+            //Login();
         }
 
         public void Login()
@@ -131,13 +129,9 @@ namespace L7Games
             {
                 name = result.InfoResultPayload.PlayerProfile.DisplayName;
             }
-
-            if(LoadingData.currentLevel != LEVEL.MAINMENU)
-            {
-                //Triggering this since it cannot run without being logged in anyway
-                FinishedLevelTriggered();
-            }
-            else
+    
+            //The map is finished
+            if(LoadingData.currentLevel == LEVEL.MAINMENU)
             {
                 //Get all leaderboards and put it in relative sections
                 GetAllLeaderboards();
@@ -151,21 +145,8 @@ namespace L7Games
             {
                 for(int i = 0; i < 3; ++i)
                 {
-                    string thisLevelName = "";
                     string thisFeature = "";
-
-                    switch(j)
-                    {
-                        case (int)LEVEL.TUTORIAL:
-                            thisLevelName = "Tutorial";
-                            break;
-                        case (int)LEVEL.CITY:
-                            thisLevelName = "City";
-                            break;
-                        case (int)LEVEL.OLDTOWN:
-                            thisLevelName = "OldTown";
-                            break;
-                    }
+                    string thisLevelName = LoadingData.getSceneName((LEVEL)j);
 
                     switch(i)
                     {
@@ -192,23 +173,30 @@ namespace L7Games
             }
         }
 
-        public void FinishedLevelTriggered()
+        public void FinishedLevelTriggered(RankBrackets sessionBracket)
         {
-            SendLeaderBoards();
+            SendLeaderBoards(sessionBracket);
             GetLeaderBoard();
         }
 
         public void SubmitNameButton() 
         {
+            string name = LoadingData.player.profileName != null ? LoadingData.player.profileName : overrideName;
+
+            if(overrides)
+            {
+                name = overrideName;
+            }
+
             var request = new UpdateUserTitleDisplayNameRequest
             {
-                DisplayName = TMPPlayerName.text,
+                DisplayName = name,
             };
 
             PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
 
-            SubmittedNameImage.SetActive(false);
-            SubmitNameButtonGameObject.SetActive(false);
+            //SubmittedNameImage.SetActive(false);
+            //SubmitNameButtonGameObject.SetActive(false);
         }
 
         public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
@@ -222,11 +210,13 @@ namespace L7Games
             Debug.Log(error.GenerateErrorReport());
         }
 
-        public void SendLeaderBoards()
+        public void SendLeaderBoards(RankBrackets bracket)
         {
-            SendScoreLeaderBoard(Mathf.RoundToInt(HUDScript.storedScore), levelname);
-            SendTimeLeaderBoard((int)Mathf.Abs(Timer.roundTime), levelname);
-            SendKOsLeaderBoard(KOs, levelname);
+            SendScoreLeaderBoard((int)bracket.score, levelname);
+            SendTimeLeaderBoard((int)bracket.seconds, levelname);
+
+            //The threshold is being used to store the count in this
+            SendKOsLeaderBoard(bracket.wipeoutThreshold, levelname);
         }
 
         public void SendScoreLeaderBoard(int score, string levelname)
@@ -321,6 +311,12 @@ namespace L7Games
         void OnLeaderBoardGet(GetLeaderboardResult result)
         {
             LeaderboardData data = (LeaderboardData)result.CustomData;
+            int resultCount = 0;
+
+            if(valuesFilledIn.Contains(data.valueToRetrieve))
+            {
+                return;
+            }
 
             //Populating this leaderboard
             foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
@@ -329,6 +325,11 @@ namespace L7Games
 
                 if(LoadingData.currentLevel != LEVEL.MAINMENU)
                 {
+                    if(resultCount == maxLeaderboardRows)
+                    {
+                        continue;
+                    }
+
                     newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)data.valueToRetrieve]);
                 }
                 else
@@ -356,7 +357,10 @@ namespace L7Games
                     row.SetRowTexts(entry);
                 }
 
+                resultCount++;
             }
+
+            valuesFilledIn.Add(data.valueToRetrieve);
         }
        
         public void SwitchPanel(int newValue)

@@ -52,18 +52,20 @@ public class ReplaySaveManager : MonoBehaviour
     {
         levelActive = LoadingData.currentLevel;
 
+        string levelName = LoadingData.getSceneName(levelActive);
+
         switch(levelActive)
         {
             case LEVEL.MAINMENU:
                 return;
             case LEVEL.TUTORIAL:
-                levelString = "Tutorial_Map";
+                levelString = levelName + "_Map";
                 break;
             case LEVEL.CITY:
-                levelString = "City_Map";
+                levelString = levelName + "_Map";
                 break;
             case LEVEL.OLDTOWN:
-                levelString = "Oldtown_Map";
+                levelString = levelName + "_Map";
                 break;
             default:
                 levelString = "";

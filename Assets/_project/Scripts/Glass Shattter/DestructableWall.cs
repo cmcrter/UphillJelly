@@ -20,10 +20,11 @@ namespace SleepyCat
 
         //private Vector3 forceApplied = new Vector3(0, 50, 0);
 
-        private void Start() {
+        private FMOD.Studio.EventInstance shatterSound;
 
-            //shrinkWallBool = false;
-
+        private void Start() 
+        {
+            shatterSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/ObjectHitGlass");
         }
 
         public void BreakGlassWall() {
@@ -31,7 +32,7 @@ namespace SleepyCat
             //Destroy(gameObject);
             gameObject.transform.position = new Vector3(1000, 1000, 1000);
             Debug.Log("Glass Destroyed");
-
+            shatterSound.start();
             //pfGlassWallBroken.gameObject.GetComponent<Rigidbody>().AddExplosionForce(0, forceApplied, 0);
         }
 

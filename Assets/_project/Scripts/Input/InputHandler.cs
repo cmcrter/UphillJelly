@@ -139,7 +139,7 @@ namespace L7Games.Input
         /// <summary>
         /// The axis value for the turning actions
         /// </summary>
-        public float TurningAxis { get; private set; } = 0f;
+        public float TurningAxis { get; set; } = 0f;
 
         public PlayerInput AttachedPlayerInput
         {
