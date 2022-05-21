@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 10/04/22
 // Last Edited By: Jack Peedle
-// Date Last Edited: 10/04/22
+// Date Last Edited: 21/05/22
 // Brief: 
 //////////////////////////////////////////////////////////// 
 
@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 namespace SleepyCat
 {
@@ -24,6 +25,21 @@ namespace SleepyCat
         public ShopTabButton selectedTab;
         public List<GameObject> objectsToSwap;
 
+        public int currentTabInt;
+
+        //public TextMeshProUGUI objectDescription;
+
+        public enum ShopTabEnum
+        {
+
+            Hat,
+            Character,
+            Skateboard
+
+        };
+
+        public ShopTabEnum shopTabEnum;
+
         public void Subscribe(ShopTabButton button) {
 
             if (tabButtons == null) {
@@ -33,6 +49,7 @@ namespace SleepyCat
             }
 
             tabButtons.Add(button);
+
 
         }
 
@@ -89,4 +106,85 @@ namespace SleepyCat
         }
 
     }
+
+    [SerializeField]
+    public class ShopItemGroup : MonoBehaviour
+    {
+        public List<ShopItemButton> shopButtons;
+        public ShopItemButton selectedTab;
+        public GameObject selectedButtonGO;
+        public List<GameObject> objectsToSwap;
+
+        public TextMeshProUGUI objectDescription;
+
+        //public TextMeshProUGUI objectDescription;
+
+
+        public void Subscribe(ShopItemButton button) {
+
+            if (shopButtons == null) {
+
+                shopButtons = new List<ShopItemButton>();
+
+            }
+
+            shopButtons.Add(button);
+
+        }
+
+        public void OnTabHover(ShopItemButton button) {
+
+            ResetTabs();
+
+            // Only change tab sprite if it is not already selected
+            if (selectedTab == null || button != selectedTab) {
+
+                selectedButtonGO = selectedTab.gameObject;
+                selectedButtonGO = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>().gameObject;
+                objectDescription.text = selectedTab.GetComponent<HatItem>().item.itemDescription;
+
+            }
+
+        }
+
+        public void OnTabExit(ShopItemButton button) {
+
+            ResetTabs();
+
+        }
+
+        public void OnTabSelected(ShopItemButton button) {
+
+            selectedTab = button;
+
+            ResetTabs();
+
+            int index = button.transform.GetSiblingIndex();
+            for (int i = 0; i < objectsToSwap.Count; i++) {
+
+                if (i == index) {
+                    objectsToSwap[i].SetActive(true);
+                } else {
+                    objectsToSwap[i].SetActive(false);
+                }
+
+            }
+
+        }
+
+        public void ResetTabs() {
+
+            foreach (ShopItemButton button in shopButtons) {
+
+                if (selectedTab != null && button == selectedTab) { continue; }
+
+
+            }
+
+        }
+
+    }
+
+
+
 }

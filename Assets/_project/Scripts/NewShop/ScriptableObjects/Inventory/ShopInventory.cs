@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class ShopInventory : MonoBehaviour
 {
@@ -25,10 +26,29 @@ public class ShopInventory : MonoBehaviour
     //
 
 
+    //public List<Button> shopButtons;
+    public GameObject currentlySelectedButton;
+
+    public TextMeshProUGUI objectDescription;
+    public Image descriptionItemImage;
+
+
     public void Start() {
 
         //shopHatInventory.Load();
         playerHatInventory.Load();   
+
+    }
+
+    public void Update() {
+
+        currentlySelectedButton = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>().gameObject;
+        objectDescription.text = currentlySelectedButton.GetComponent<HatItem>().item.itemDescription;
+        descriptionItemImage.sprite = currentlySelectedButton.GetComponent<HatItem>().item.uiDisplay;
+
+        //if (EventSystem.current.currentSelectedGameObject == shopButtons[1]) {
+        //    Debug.Log(this.shopButtons.name + " was selected");
+        //}
 
     }
 
