@@ -51,6 +51,11 @@ public class ReplaySaveManager : MonoBehaviour
         {
             LoadingData.playerSlot = profile;
         }
+        else if(LoadingData.playerSlot == -1)
+        {
+            enabled = false;
+            return;
+        }
 
         ghost.isRecording = bRecordGhost;
         ghost2.isReplaying = bPlaybackGhost;
