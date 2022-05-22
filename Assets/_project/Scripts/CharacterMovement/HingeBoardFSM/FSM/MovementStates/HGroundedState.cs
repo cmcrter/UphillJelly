@@ -167,6 +167,15 @@ namespace L7Games.Movement
             }
 
             parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
+
+            float animValue = inputHandler.TurningAxis;
+
+            if(animValue >= 0.95)
+            {
+                animValue = 1f;
+            }
+
+            parentController.characterAnimator.SetFloat("turnValue", animValue);
         }
 
         public override void PhysicsTick(float dT)

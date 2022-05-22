@@ -129,7 +129,7 @@ namespace L7Games.Movement
         {
             get
             {
-                return characterModel.activeSelf;
+                return !characterModel.activeSelf;
             }
         }
         #endregion

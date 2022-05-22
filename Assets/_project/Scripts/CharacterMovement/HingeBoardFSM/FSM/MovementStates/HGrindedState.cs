@@ -300,6 +300,10 @@ namespace L7Games.Movement
 
         private void ForwardMovement()
         {
+            if (Time.timeScale <= 0f)
+            {
+                return;
+            }
             if(timeAlongGrind + Time.deltaTime * tIncrementPerSecond < 0.99f)
             {
                 // Check the length of the next increment
@@ -340,7 +344,11 @@ namespace L7Games.Movement
 
         private void BackwardMovement()
         {
-            if(timeAlongGrind - Time.deltaTime * tIncrementPerSecond > 0.01f)
+            if (Time.timeScale <= 0f)
+            {
+                return;
+            }
+            if (timeAlongGrind - Time.deltaTime * tIncrementPerSecond > 0.01f)
             {
                 // Clamping it at the max value and min values of a unit interval
 
