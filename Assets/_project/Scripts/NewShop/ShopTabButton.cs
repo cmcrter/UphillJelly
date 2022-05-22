@@ -18,7 +18,8 @@ namespace SleepyCat
     [RequireComponent(typeof(Image))]
     public class ShopTabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler //IPointerDownHandler
     {
-        public TabGroup tabGroup;
+        //public TabGroup tabGroup;
+        public ShopManager shopManager;
 
         public Image backgroundTabImage;
 
@@ -26,20 +27,20 @@ namespace SleepyCat
         void Start() {
 
             backgroundTabImage = GetComponent<Image>();
-            tabGroup.Subscribe(this);
+            shopManager.Subscribe(this);
 
         }
         
         public void OnPointerClick(PointerEventData eventData) {
-            tabGroup.OnTabSelected(this);
+            shopManager.OnTabSelected(this);
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
-            tabGroup.OnTabHover(this);
+            shopManager.OnTabHover(this);
         }
 
         public void OnPointerExit(PointerEventData eventData) {
-            tabGroup.OnTabExit(this);
+            shopManager.OnTabExit(this);
         }
         
 
@@ -67,6 +68,7 @@ namespace SleepyCat
         */
     }
 
+    /*
     [SerializeField]
     [RequireComponent(typeof(Image))]
     public class ShopItemButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler //IPointerDownHandler
@@ -96,7 +98,7 @@ namespace SleepyCat
         }
 
     }
-
+    */
 
 
 

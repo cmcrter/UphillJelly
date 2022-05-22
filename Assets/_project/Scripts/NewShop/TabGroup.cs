@@ -25,6 +25,8 @@ namespace SleepyCat
         public ShopTabButton selectedTab;
         public List<GameObject> objectsToSwap;
 
+        public ShopInventory shopInventory;
+
         public int currentTabInt;
 
         //public TextMeshProUGUI objectDescription;
@@ -56,6 +58,10 @@ namespace SleepyCat
         public void OnTabHover(ShopTabButton button) {
 
             ResetTabs();
+
+            shopInventory.currentlySelectedButton = button.gameObject;
+
+            Debug.Log("Hovered over button");
 
             // Only change tab sprite if it is not already selected
             if (selectedTab == null || button != selectedTab) {
@@ -107,6 +113,7 @@ namespace SleepyCat
 
     }
 
+    /*
     [SerializeField]
     public class ShopItemGroup : MonoBehaviour
     {
@@ -184,7 +191,7 @@ namespace SleepyCat
         }
 
     }
-
+    */
 
 
 }

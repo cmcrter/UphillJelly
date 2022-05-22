@@ -32,6 +32,8 @@ public abstract class ItemObjectSO : ScriptableObject
 
     public bool isPurchased;
 
+    public GameObject objectPrefab;
+
     // item description text area string with a size of 15 and 20
     [TextArea(15,20)]
     public string itemDescription;

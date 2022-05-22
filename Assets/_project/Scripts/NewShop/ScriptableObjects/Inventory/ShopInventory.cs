@@ -39,8 +39,8 @@ public class ShopInventory : MonoBehaviour
     //public List<Button> shopButtons;
     public GameObject currentlySelectedButton;
 
-    public TextMeshProUGUI objectDescription;
-    public Image descriptionItemImage;
+    public TextMeshProUGUI[] objectDescription;
+    public Image[] descriptionItemImage;
 
 
 
@@ -48,7 +48,7 @@ public class ShopInventory : MonoBehaviour
     public int currentTabSelected;
     public GameObject[] mainTabs;
 
-
+    public Sprite boughtSprite;
 
     public void OnEnable() {
 
@@ -86,10 +86,18 @@ public class ShopInventory : MonoBehaviour
 
     public void Update() {
 
-        currentlySelectedButton = itemButtons[0].gameObject;
+        //currentlySelectedButton = itemButtons[0].gameObject;
         ///currentlySelectedButton = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>().gameObject;
-        objectDescription.text = currentlySelectedButton.GetComponent<HatItem>().item.itemDescription;
-        descriptionItemImage.sprite = currentlySelectedButton.GetComponent<HatItem>().item.uiDisplay;
+        objectDescription[0].text = currentlySelectedButton.GetComponent<HatItem>().item.itemDescription;
+        descriptionItemImage[0].sprite = currentlySelectedButton.GetComponent<HatItem>().item.uiDisplay;
+
+        ///REMOVE AND REPLACE FOR MORE EFFICIENT
+        ///TEST********
+        objectDescription[1].text = currentlySelectedButton.GetComponent<CharacterItem>().item.itemDescription;
+        descriptionItemImage[1].sprite = currentlySelectedButton.GetComponent<CharacterItem>().item.uiDisplay;
+
+        objectDescription[2].text = currentlySelectedButton.GetComponent<SkateboardItem>().item.itemDescription;
+        descriptionItemImage[2].sprite = currentlySelectedButton.GetComponent<SkateboardItem>().item.uiDisplay;
 
         //if (EventSystem.current.currentSelectedGameObject == shopButtons[1]) {
         //    Debug.Log(this.shopButtons.name + " was selected");
@@ -172,6 +180,35 @@ public class ShopInventory : MonoBehaviour
 
     }
 
+    public void hasBoughtItem() {
+
+        //var item = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>();
+        var hatItem = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>();
+        var characterItem = EventSystem.current.currentSelectedGameObject.GetComponent<CharacterItem>();
+        var skateboardItem = EventSystem.current.currentSelectedGameObject.GetComponent<SkateboardItem>();
+
+        if (hatItem) {
+
+            hatItem.item.isPurchased = true;
+            hatItem.item.uiDisplay = boughtSprite;
+
+        }
+
+        if (characterItem) {
+
+            characterItem.item.isPurchased = true;
+            characterItem.item.uiDisplay = boughtSprite;
+
+        }
+
+        if (skateboardItem) {
+
+            skateboardItem.item.isPurchased = true;
+            skateboardItem.item.uiDisplay = boughtSprite;
+
+        }
+
+    }
     public void BuyItem() {
 
         var item = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>();
