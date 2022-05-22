@@ -2,8 +2,8 @@
 // File: ReplaySaveManager.cs
 // Author: Jack Peedle, Charles Carter
 // Date Created: 04/10/21
-// Last Edited By: Jack Peedle
-// Date Last Edited: 06/05/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 22/05/22
 // Brief: Script to store the data of the ghosts poisition and rotation 
 //////////////////////////////////////////////////////////// 
 
@@ -43,7 +43,7 @@ public class ReplaySaveManager : MonoBehaviour
 
     #endregion
 
-    #region Methods
+    #region Unity Methods
 
     private void Awake()
     {
@@ -55,12 +55,22 @@ public class ReplaySaveManager : MonoBehaviour
         ghost.isRecording = bRecordGhost;
         ghost2.isReplaying = bPlaybackGhost;
 
+        if(!goPlaybacking || !goRecording || !goToRecord)
+        {
+            return;
+        }
+
         goPlaybacking.transform.position = goToRecord.transform.position;
         goRecording.transform.position = goToRecord.transform.position;
     }
 
     private void Start()
     {
+        if(LoadingData.currentLevel == LEVEL.MAINMENU)
+        {
+            return;
+        }
+
         level = LoadingData.getSceneName(LoadingData.currentLevel) + "_Map";
 
         if(bPlaybackGhost)
@@ -71,6 +81,10 @@ public class ReplaySaveManager : MonoBehaviour
 
         Debug.Log(level);
     }
+
+    #endregion
+
+    #region Public Methods
 
     // bool for if there is a save file
     public static bool IsReplaySaveFile(int playerSlot)

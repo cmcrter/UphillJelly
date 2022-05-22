@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////
 // File: GhostPlayer.cs
-// Author: Jack Peedle
+// Author: Jack Peedle, Charles Carter
 // Date Created: 30/09/21
-// Last Edited By: Jack Peedle
-// Date Last Edited: 08/01/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 22/05/22
 // Brief: Script in charge of controlling the ghost of the player with the movement and positioning
 //////////////////////////////////////////////////////////// 
 
