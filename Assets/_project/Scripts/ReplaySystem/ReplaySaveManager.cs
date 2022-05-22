@@ -34,6 +34,10 @@ public class ReplaySaveManager : MonoBehaviour
     private LEVEL levelActive;
     private string levelString;
 
+    [Header("Recording/Playback of Ghosts")]
+    [SerializeField]
+    private bool bRecordGhost;
+
     #endregion
 
     #region Methods
