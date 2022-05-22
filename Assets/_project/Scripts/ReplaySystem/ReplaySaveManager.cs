@@ -21,22 +21,25 @@ public class ReplaySaveManager : MonoBehaviour
     public GameObject Ghost1character;
     public GameObject Ghost2character;
 
-    public GameObject RecorderGO;
+    public GameObject goPlaybacking;
+    public GameObject goRecording;
 
-    [Header("Overriding Replay Value")]
+    [Tooltip("This is the object which has the skinned mesh renderer on the player")]
+    public GameObject goToRecord;
+
+    [Header("Overriding Replay Value. mainly to see replays from different player slots on map")]
     [SerializeField]
     private bool overrideReplay = false;
     [SerializeField]
     private int profile = 1;
-    [SerializeField]
-    private int replayslot = 1;
 
-    private LEVEL levelActive;
-    private string levelString;
+    private static string level;
 
     [Header("Recording/Playback of Ghosts")]
     [SerializeField]
     private bool bRecordGhost;
+    [SerializeField]
+    private bool bPlaybackGhost;
 
     #endregion
 
@@ -44,44 +47,43 @@ public class ReplaySaveManager : MonoBehaviour
 
     private void Awake()
     {
-        LoadReplay(LoadingData.playerSlot, 1);
-
         if(overrideReplay)
         {
-            LoadReplay(profile, replayslot);
+            LoadingData.playerSlot = profile;
         }
+
+        ghost.isRecording = bRecordGhost;
+        ghost2.isReplaying = bPlaybackGhost;
+
+        goPlaybacking.transform.position = goToRecord.transform.position;
+        goRecording.transform.position = goToRecord.transform.position;
     }
 
     private void Start()
     {
-        levelActive = LoadingData.currentLevel;
+        level = LoadingData.getSceneName(LoadingData.currentLevel) + "_Map";
 
-        string levelName = LoadingData.getSceneName(levelActive);
-
-        switch(levelActive)
+        if(bPlaybackGhost)
         {
-            case LEVEL.MAINMENU:
-                return;
-            case LEVEL.TUTORIAL:
-                levelString = levelName + "_Map";
-                break;
-            case LEVEL.CITY:
-                levelString = levelName + "_Map";
-                break;
-            case LEVEL.OLDTOWN:
-                levelString = levelName + "_Map";
-                break;
-            default:
-                levelString = "";
-                break;
+            LoadReplay(LoadingData.playerSlot, ((LEVEL.TUTORIAL - LoadingData.currentLevel) * -1));
+            Debug.Log("Playback from player: " + LoadingData.playerSlot + " on map: " + LoadingData.currentLevel.ToString() + " index being: " + ((LEVEL.TUTORIAL - LoadingData.currentLevel) * -1).ToString());
         }
+
+        Debug.Log(level);
     }
 
     // bool for if there is a save file
-    public bool IsReplaySaveFile(int playerSlot)
+    public static bool IsReplaySaveFile(int playerSlot)
     {
         // return the applications persistent data path of the replay save if the save file exists
         return Directory.Exists(Application.persistentDataPath + "/Profile" + playerSlot.ToString() +"/Replays");
+    }
+
+    public void SaveCurrentReplay()
+    {
+        Debug.Log("Saving Replay from player: " + LoadingData.playerSlot + " from level: " + ((LEVEL.TUTORIAL - LoadingData.currentLevel) * -1).ToString());
+        ghost.isRecording = false;
+        SaveReplay(LoadingData.playerSlot, ((LEVEL.TUTORIAL - LoadingData.currentLevel) * -1));
     }
 
     // public void for save replay
@@ -91,21 +93,21 @@ public class ReplaySaveManager : MonoBehaviour
         if(!IsReplaySaveFile(playerSlot))
         {
             // create a save file in the data path folder called /replay_save
-            Directory.CreateDirectory(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + levelString);
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + level);
         }
 
         // if a directory doesn't exists for "/replay_save/replay_data"
-        if(!Directory.Exists(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + levelString))
+        if(!Directory.Exists(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + level))
         {
             // create a directory for "/replay_save/replay_data"
-            Directory.CreateDirectory(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + levelString);
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + level);
         }
 
         // create a new binary formatter called replay_bf
         BinaryFormatter replay_bf = new BinaryFormatter();
 
         // create a filestream in the replay data and call it "replay_SavedData"
-        FileStream replay_file = File.Create(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + levelString + "/Replay_SavedData" + replaySlot.ToString() + ".sdat");
+        FileStream replay_file = File.Create(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + level + "/Replay_SavedData" + replaySlot.ToString() + ".sdat");
 
         // pass in ghost object and save public variables
         var json = JsonUtility.ToJson(ghost);
@@ -131,19 +133,18 @@ public class ReplaySaveManager : MonoBehaviour
         BinaryFormatter replay_secondBF = new BinaryFormatter();
 
         // if a file exists called "/replay_save/replay_data/replay_SavedData.txt"
-        if(File.Exists(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + levelString + "/Replay_SavedData" + replaySlot.ToString() + ".sdat"))
+        if(File.Exists(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + level + "/Replay_SavedData" + replaySlot.ToString() + ".sdat"))
         {
             // open the file "/replay_save/replay_data/replay_SavedData.txt"
-            FileStream replay_secondFile = File.Open(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + levelString + "/Replay_SavedData" + replaySlot.ToString() + ".sdat", FileMode.Open);
+            FileStream replay_secondFile = File.Open(Application.persistentDataPath + "/Profile" + playerSlot.ToString() + "/Replays/" + level + "/Replay_SavedData" + replaySlot.ToString() + ".sdat", FileMode.Open);
 
             //deseralize the ghost file 
             JsonUtility.FromJsonOverwrite((string)replay_secondBF.Deserialize(replay_secondFile), ghost2);
+            ghost2.isReplaying = true;
 
             // close the file
             replay_secondFile.Close();
         }
-
-        Debug.Log("Loaded Second Save");
     }
 
     #endregion

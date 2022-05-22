@@ -61,10 +61,10 @@ public class ApplyingGameplayData : MonoBehaviour
             loadcustomizables.ApplyCustomization();
         }
 
-        if(LoadingData.playerSlot != 0)
-        {
-            ghostManager.LoadReplay(LoadingData.playerSlot, 1);
-        }
+        //if(LoadingData.playerSlot != 0)
+        //{
+        //    ghostManager.LoadReplay(LoadingData.playerSlot, 1);
+        //}
     }
 
     #endregion

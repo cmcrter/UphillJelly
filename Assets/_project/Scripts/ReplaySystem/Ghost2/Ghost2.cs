@@ -20,7 +20,7 @@ public class Ghost2 : ScriptableObject
 
     // public bool for if the scene is recording the ghosts movement or if Unity is replaying the Ghosts movement
     public bool isRecording;
-    public bool isReplaying;
+    public bool isReplaying = true;
 
     // Frequency of recording, how many times it is recording per second 10fps, 20fps etc, higher the frequency the smoother the ghost will be (Larger file size if exported)
     public float recordFrequency;
@@ -36,23 +36,13 @@ public class Ghost2 : ScriptableObject
 
     #region Unity Methods
 
-    // On start put the recording to false and replaying to true
-    public void Start() {
-
-        isRecording = false;
-
-        isReplaying = true;
-
-    }
-
     // On command reset the ghosts data
-    public void ResetGhostData() {
-
+    public void ResetGhostData() 
+    {
         // Reset the saved ghost data for a new ghost to be recorded
         timeStamp.Clear();
         position.Clear();
         rotation.Clear();
-
     }
 
 
