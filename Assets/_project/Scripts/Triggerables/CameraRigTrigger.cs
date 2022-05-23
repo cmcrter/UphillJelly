@@ -12,6 +12,7 @@ using Cinemachine;
 using L7Games.Movement;
 using UnityEngine.Events;
 using System.Collections;
+using L7Games.Loading;
 
 namespace L7Games
 {
@@ -44,6 +45,9 @@ namespace L7Games
 
         private bool bTriggered = false;
 
+        [SerializeField]
+        private bool bSavePlayerOverride = false;
+
         #endregion
 
         #region Private Methods
@@ -67,7 +71,13 @@ namespace L7Games
             if(endTrigger != null)
             {
                 endTrigger.Invoke();
-            }      
+            }
+
+            //Saving the player if need be
+            //if(LoadingData.playerSlot != -1 && !bSavePlayerOverride || bSavePlayerOverride)
+            //{
+            //    StartCoroutine(b_SaveSystem.Co_SavePlayer(LoadingData.playerSlot));
+            //}
         }
 
         private IEnumerator WaitFor5Seconds() 

@@ -31,6 +31,8 @@ namespace L7Games.Loading
         private bool waitForNextScene;
         [SerializeField]
         private LEVEL levelToLoad;
+        [SerializeField]
+        private bool bSaveProfile;
 
         #endregion
 
@@ -43,6 +45,7 @@ namespace L7Games.Loading
                 LoadingData.sceneToLoad = sceneToLoad;
                 LoadingData.waitForNextScene = waitForNextScene;
                 LoadingData.currentLevel = levelToLoad;
+                LoadingData.SavePlayer = bSaveProfile;
             }
         }
 
@@ -64,9 +67,17 @@ namespace L7Games.Loading
                 LoadingData.sceneToLoad = "MainMenu";
                 LoadingData.currentLevel = LEVEL.MAINMENU;
                 LoadingData.waitForNextScene = false;
+                LoadingData.SavePlayer = false;
             }
 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(LoadingData.sceneToLoad);
+
+            //Saving the player profile if need be (after levels)
+            //if(LoadingData.SavePlayer)
+            //{
+            //    yield return StartCoroutine(b_SaveSystem.Co_SavePlayer(LoadingData.playerSlot));
+            //}
+
             asyncLoad.allowSceneActivation = false;
             bool bTextShowing = false;
 

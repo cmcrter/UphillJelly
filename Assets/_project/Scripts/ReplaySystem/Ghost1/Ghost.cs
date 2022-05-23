@@ -43,24 +43,19 @@ public class Ghost : ScriptableObject
         timeStamp.Clear();
         position.Clear();
         rotation.Clear();
-
-
-        Debug.Log("543211");
-
     }
 
     // On command reset the ghosts data
-    public void ResetGhostData() {
+    public void ResetGhostData() 
+    {
 
         // Reset the saved ghost data for a new ghost to be recorded
         timeStamp.Clear();
         position.Clear();
         rotation.Clear();
 
-        Debug.Log("12345");
-
+        Debug.Log("Ghost Ready To Record");
     }
-
 
     #endregion
 

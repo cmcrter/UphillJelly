@@ -376,6 +376,12 @@ public class MainMenuNavigation : MonoBehaviour
             }
             else
             {
+                if(!_camera)
+                {
+                    gameObject.SetActive(false);
+                    yield return true;
+                }
+
                 //We use Lerp to smoothly transiton from our current position to the next.
                 _camera.transform.position = Vector3.Lerp(_camera.transform.position, targetPosition, (timeToMove / movementDecay) * Time.deltaTime);
                 RotationObject.transform.position = Vector3.Lerp(RotationObject.transform.position, rotTargetPosition, (timeToMove / movementDecay) * Time.deltaTime);

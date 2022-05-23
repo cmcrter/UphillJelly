@@ -31,42 +31,38 @@ public class GhostRecorder : MonoBehaviour
     #region Unity Methods
 
     // On awake
-    private void Awake() {
-        
+    private void Start()
+    {
         // if the ghost is currently recording
-        if (ghost.isRecording) {
-
+        if(ghost.isRecording)
+        {
             //reset the ghost data to allow for new data to be recorded
             ghost.ResetGhostData();
 
             // set time value and timer to 0
             timeValue = 0f;
             timer = 0f;
-
         }
-
     }
 
     // Update
-    public void Update() {
-
-
-
+    public void Update()
+    {
         // calculates the most recent frame of the timer and time value in intervals of seconds relevant to time
         timer += Time.unscaledDeltaTime;
         timeValue += Time.unscaledDeltaTime;
 
         // if the ghost is recording and the timer is less than or = to 1 divided by the ghost recording frequency and the players position has changed
-        if (ghost.isRecording & timer >= 1 / ghost.recordFrequency && HasChangedGO.transform.hasChanged) {
-
+        if (ghost.isRecording & timer >= 1 / ghost.recordFrequency && HasChangedGO.transform.hasChanged)
+        {
             //add the time value to the time stamp of the ghost
             ghost.timeStamp.Add(timeValue);
 
             // add this position onto the ghost depending on the timestamp
-            ghost.position.Add(this.transform.position);
+            ghost.position.Add(HasChangedGO.transform.position);
 
             // add this rotation onto the ghost depending on the timestamp
-            ghost.rotation.Add(this.transform.eulerAngles);
+            ghost.rotation.Add(HasChangedGO.transform.eulerAngles);
 
             // set the timer to 0
             timer = 0f;
@@ -75,16 +71,14 @@ public class GhostRecorder : MonoBehaviour
             HasChangedGO.transform.hasChanged = false;
             
             // else if the players position has not changed
-        } else if (!HasChangedGO.transform.hasChanged) {
-
-            // print debug log
-            if (Debug.isDebugBuild) {
-
+        } 
+        else if (!HasChangedGO.transform.hasChanged)
+        {
+            if (Debug.isDebugBuild)
+            {
 
             }
-
         }
-
     }
 
     #endregion

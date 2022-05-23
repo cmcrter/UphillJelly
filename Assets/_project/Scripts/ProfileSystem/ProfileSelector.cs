@@ -2,8 +2,8 @@
 // File: ProfileSelector.cs
 // Author: Jack Peedle, Charles Carter
 // Date Created: 20/11/21
-// Last Edited By: Jack Peedle
-// Date Last Edited: 06/05/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 23/05/22
 // Brief: A script to control the text for all of the profiles
 //////////////////////////////////////////////////////////// 
 
@@ -11,24 +11,24 @@ using UnityEngine;
 using TMPro;
 using System.IO;
 using L7Games.Loading;
+using System.Collections.Generic;
 
 public class ProfileSelector : MonoBehaviour
 {
-    static ProfileSelector instance;
+    public const int MAX_PROFILE_AMOUNT = 3;
 
-    // Reference to the scripts
+    static ProfileSelector instance;
     public StoredPlayerProfile b_player;
 
     // text input field
     public TMP_InputField tmp_Input;
 
-    // gameobject panel for the starting background
-    public GameObject StartingBackground;
+    [SerializeField]
+    private GameObject profileCreationScreen;
 
     [Header("Profile Selection UI Buttons")]
-    public TMP_Text LoadProfile1Text;
-    public TMP_Text LoadProfile2Text;
-    public TMP_Text LoadProfile3Text;
+    [SerializeField]
+    private List<TMP_Text> ProfileButtonTexts = new List<TMP_Text>();
 
     private void Awake()
     {
@@ -48,92 +48,39 @@ public class ProfileSelector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // if Profile 2 directory exists
-        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile1")) 
+        //Going through and making the right local file and text changes
+        for(int i = 0; i < MAX_PROFILE_AMOUNT; ++i)
         {
-            // Delete the file
-            Directory.Delete(Application.persistentDataPath + "/CurrentProfile1");
-        }
+            if(Directory.Exists(Application.persistentDataPath + "/CurrentProfile" + (i + 1).ToString()))
+            {
+                // Delete the file
+                Directory.Delete(Application.persistentDataPath + "/CurrentProfile" + (i + 1).ToString());
+            }
 
-        // if Profile 2 directory exists
-        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile2"))
-        {
-            // Delete the file
-            Directory.Delete(Application.persistentDataPath + "/CurrentProfile2");
-        }
+            // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
+            string path = Application.persistentDataPath + "/Profile" + (i + 1).ToString() + "/ProfileData/Profile" + (i + 1).ToString() + "Data.sdat";
 
-        // if Profile 2 directory exists
-        if (Directory.Exists(Application.persistentDataPath + "/CurrentProfile3"))
-        {
-            // Delete the file
-            Directory.Delete(Application.persistentDataPath + "/CurrentProfile3");
-        }
-
-        // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path1 = Application.persistentDataPath + "/Profile1/ProfileData/Profile1Data.sdat";
-
-        // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path2 = Application.persistentDataPath + "/Profile2/ProfileData/Profile2Data.sdat";
-
-        // create a string called "path" which is the persistent data path %AppData% and call the file Player.txt
-        string path3 = Application.persistentDataPath + "/Profile3/ProfileData/Profile3Data.sdat";
-
-        // if a file exists in the "path"
-        if (File.Exists(path1))
-        {
-            // profile 1 text = Load Profile 1
-            LoadProfile1Text.text = "Load Profile 1";
-        }
-        else
-        {
-            // load profile 1 text = new game
-            LoadProfile1Text.text = "New Game";
-        }
-
-        // if a file exists in the "path"
-        if (File.Exists(path2)) {
-
-            // profile 2 text = Load Profile 2
-            LoadProfile2Text.text = "Load Profile 2";
-
-        } else {
-
-            // load profile 2 text = new game
-            LoadProfile2Text.text = "New Game";
-        }
-
-        // if a file exists in the "path"
-        if (File.Exists(path3)) 
-        {
-            // profile 3 text = Load Profile 3
-            LoadProfile3Text.text = "Load Profile 3";
-        } 
-        else
-        {
-            // load profile 3 text = new game
-            LoadProfile3Text.text = "New Game";
+            // if a file exists in the "path"
+            if(File.Exists(path))
+            {
+                // profile text = Load Profile 1
+                ProfileButtonTexts[i].text = "Load Profile" + (i + 1).ToString();
+            }
+            else
+            {
+                // load profile text = new game
+                ProfileButtonTexts[i].text = "New Game";
+            }
         }
     }
 
-    //Profile Loading Button Pressed
-    public void ButtonPressed(int profileSlot)
+    //Profile Selected On Initial Screen
+    public void ProfileSelected(int profileSlot)
     {
         LoadingData.playerSlot = profileSlot;
 
-        // if no directory exists
-        if (!Directory.Exists(Application.persistentDataPath + "/CurrentProfile" + profileSlot.ToString())) 
-        {
-            // create a directory for "/CurrentProfile"
-            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile" + profileSlot.ToString());
-            b_SaveSystem.SavePlayer(profileSlot);
-        }
-
-        StoredPlayerProfile player = b_SaveSystem.LoadPlayer(profileSlot);
-        LoadingData.player = player;
-        b_SaveSystem.SavePlayer(profileSlot);
-
         // set the starting background to false
-        StartingBackground.SetActive(false);
+        profileCreationScreen.SetActive(false);        
     }
 
     //Being able to change a profile name based on text input
@@ -141,5 +88,28 @@ public class ProfileSelector : MonoBehaviour
     {
         LoadingData.player.profileName = newName;
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
+    }
+
+    public void BackButton()
+    {
+        profileCreationScreen.SetActive(false);
+    }
+
+    public void ConfirmProfile()
+    {
+        // if no directory exists
+        if(!Directory.Exists(Application.persistentDataPath + "/CurrentProfile" + LoadingData.playerSlot.ToString()))
+        {
+            // create a directory for "/CurrentProfile"
+            Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile" + LoadingData.playerSlot.ToString());
+            b_SaveSystem.SavePlayer(LoadingData.playerSlot);
+        }
+
+        StoredPlayerProfile player = b_SaveSystem.LoadPlayer(LoadingData.playerSlot);
+        LoadingData.player = player;
+        b_SaveSystem.SavePlayer(LoadingData.playerSlot);
+
+        // set the starting background to false
+        profileCreationScreen.SetActive(false);
     }
 }

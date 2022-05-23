@@ -1,5 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+////////////////////////////////////////////////////////////
+// File: BrokenWallForce.cs
+// Author: Jack Peedle, Charles Carter
+// Date Created: 29/11/21
+// Last Edited By: Charles Carter
+// Date Last Edited: 22/05/22
+// Brief: The shatterable glasses' trigger script
+//////////////////////////////////////////////////////////// 
+
 using UnityEngine;
 using L7Games;
 using L7Games.Movement;
@@ -8,118 +15,56 @@ namespace SleepyCat
 {
     public class BrokenWallForce : MonoBehaviour, ITriggerable
     {
+        #region Interface Contracts 
 
         //The interfaces have specific functions that need to be fulfilled within this script and any child of the script
         GameObject ITriggerable.ReturnGameObject() => gameObject;
-
         void ITriggerable.Trigger(PlayerController player) => TriggerWallBreak(player);
         void ITriggerable.UnTrigger(PlayerController player) => UnTriggerWallBreak();
 
+        #endregion
+
+        #region Variables
+
         public Rigidbody GlassBreakerRigidbody;
-
         public DestructableWall destructableWall;
-
         public GameObject explosionGO;
 
         public float radius = 5f;
         public float power = 10f;
 
-        //public bool shrink = false;
-        //public float targetscale = 0;
-        //public float shrinkSpeed = 2f;
+        [SerializeField]
+        private LayerMask glassMask;
 
-        public virtual void TriggerWallBreak(PlayerController player) {
+        #endregion
 
+        #region Public Methods
 
+        public virtual void TriggerWallBreak(PlayerController player)
+        {
             explosionGO.transform.position = player.transform.position + new Vector3(0, 0, 3f);
+            GameObject wall = destructableWall.BreakGlassWall();
 
-            destructableWall.BreakGlassWall();
-
-            Vector3 explosionPosition = transform.position;
-
-            //explosionGO.GetComponent<Rigidbody>().AddExplosionForce(power, explosionPosition, radius, 5f);
-
+            //Adding a force so the window drops fast
             explosionGO.GetComponent<Rigidbody>().AddForce(transform.forward * 10000f);
 
-            //shrink = true;
-
-            
-
-            
-
-            //explosionGO.GetComponent<Rigidbody>().AddExplosionForce(power, explosionPosition, radius, 5f);
-            //explosionGO.GetComponent<Rigidbody>().AddForce(transform.forward * 4000f);
-
-
-
+            //going through the shards near the player and pushing them further
+            for(int i = 0; i < wall.transform.childCount; ++i)
+            {
+                Transform child = wall.transform.GetChild(i);
+                if(Vector3.Distance(child.transform.position, player.transform.position) < (radius * 0.5) && child.TryGetComponent(out Rigidbody rb))
+                {
+                    rb.AddForce(player.transform.forward * player.GetRB().velocity.magnitude * 1.5f);
+                }
+            }
         }
 
-        public virtual void UnTriggerWallBreak() {
+        public virtual void UnTriggerWallBreak()
+        {
             //Doesn't do anything but in-case there's needed functionality later          
-
             StartCoroutine(destructableWall.WaitForAirTime());
-
-        }
-        /*
-        public void Update() {
-            
-            if (!shrink) {
-                // do nothing
-            }
-
-            if (shrink) {
-                explosionGO.transform.localScale = Vector3.Lerp(explosionGO.transform.localScale, new Vector3(targetscale, targetscale,
-                    targetscale), Time.deltaTime * shrinkSpeed);
-            }
-
-            if (explosionGO.transform.localScale.x <= 0) {
-
-                shrink = false;
-
-            }
-
-
-        }
-        */
-        public void OnCollisionEnter(Collision collision) {
-
-            //playerHingeController.bWipeOutLocked = true;
-
-            //if (collision = gameObject.characterReference) {
-            //
-            //}
-
-            //Instantiate(pfGlassWallBroken, transform.position, transform.rotation);
-            //Destroy(gameObject);
-            Debug.Log("Collided with something M8");
-
-            //collision.gameObject.GetComponent<Rigidbody>().AddExplosionForce(0, forceApplied, 0);
-
-
         }
 
-        
-
-        /*
-        private void OnTriggerEnter(Collider other) {
-
-            if (other.gameObject.tag == "Player") {
-                Debug.Log("CollidedWithPlayer");
-
-                StartCoroutine(WaitForAirTime());
-            }
-
-            if (other.GetComponent<Collider>().gameObject.layer == LayerMask.NameToLayer("Character")) {
-
-                
-
-            }
-
-
-        }
-
-        */
-        
-
+        #endregion
     }
 }
