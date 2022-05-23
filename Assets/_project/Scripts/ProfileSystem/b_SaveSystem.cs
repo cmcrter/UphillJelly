@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////
 // File: b_SaveSystem.cs
-// Author: Jack Peedle
+// Author: Jack Peedle, Charles Carter
 // Date Created: 24/10/21
-// Last Edited By: Jack Peedle
-// Date Last Edited: 13/03/22
+// Last Edited By: Charles Carter
+// Date Last Edited: 23/05/22
 // Brief: A script to control the binary formatters to save and load data using filestreams 
 //////////////////////////////////////////////////////////// 
 
@@ -19,6 +19,12 @@ using L7Games.Loading;
 public static class b_SaveSystem
 {
     #region Methods
+
+    public static IEnumerator Co_SavePlayer(int playerSlot)
+    {
+        SavePlayer(playerSlot);
+        yield return true;
+    }
 
     // Save the player and take in data from the b_Player script
     public static void SavePlayer(int playerSlot)
