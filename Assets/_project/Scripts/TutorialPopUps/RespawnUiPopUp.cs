@@ -35,6 +35,10 @@ public class RespawnUiPopUp : UiPopUp
 
     private void TriggeringPlayerInputHandler_wipeoutResetStarted()
     {
+        if (triggeringPlayerInputHandler != null)
+        {
+            triggeringPlayerInputHandler.wipeoutResetStarted -= TriggeringPlayerInputHandler_wipeoutResetStarted;
+        }
         ClosePopUp();
     }
 

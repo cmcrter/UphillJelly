@@ -42,11 +42,20 @@ public class TutoiralPopUpManager : MonoBehaviour
 
     private void Start()
     {
-        if (LoadingData.player.doneTutorial && tutorialDoneOverride)
+        if (LoadingData.player != null)
+        {
+            if (LoadingData.player.doneTutorial)
+            {
+                CleanUpPopUps();
+                return;
+            }
+        }
+        if (tutorialDoneOverride)
         {
             CleanUpPopUps();
             return;
         }
+
 
         if (playerHinge == null)
         {

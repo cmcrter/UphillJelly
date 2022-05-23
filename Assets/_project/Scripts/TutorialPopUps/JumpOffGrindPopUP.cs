@@ -24,7 +24,8 @@ public class JumpOffGrindPopUP : UiPopUp
         if (playerHinge.playerStateMachine.currentState != playerHinge.grindingState)
         {
             playerHinge.inputHandler.enabled = true;
-            ClosePopUp();
+            Destroy(gameObject);
+            CallPopUpFinished();
         }
     }
 
