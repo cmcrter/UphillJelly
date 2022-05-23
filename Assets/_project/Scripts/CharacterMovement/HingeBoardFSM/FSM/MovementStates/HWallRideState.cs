@@ -113,7 +113,8 @@ namespace L7Games.Movement
 
                     //Wipeout
                     playerMovement.bWipeOutLocked = false;
-                    playerMovement.WipeOutCharacter(Vector3.down + (playerMovement.transform.forward * 10f));
+                    playerMovement.CallOnWipeout(fRB.velocity);
+                    return;
                 }
             }
         }

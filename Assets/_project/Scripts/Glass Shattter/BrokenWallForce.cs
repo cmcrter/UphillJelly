@@ -44,6 +44,8 @@ namespace SleepyCat
         {
             explosionGO.transform.position = player.transform.position + new Vector3(0, 0, 3f);
             GameObject wall = destructableWall.BreakGlassWall();
+
+            //Adding a force so the window drops fast
             explosionGO.GetComponent<Rigidbody>().AddForce(transform.forward * 10000f);
 
             //going through the shards near the player and pushing them further
@@ -52,7 +54,7 @@ namespace SleepyCat
                 Transform child = wall.transform.GetChild(i);
                 if(Vector3.Distance(child.transform.position, player.transform.position) < (radius * 0.5) && child.TryGetComponent(out Rigidbody rb))
                 {
-                    rb.AddForce(player.transform.forward * 100f);
+                    rb.AddForce(player.transform.forward * player.GetRB().velocity.magnitude * 1.5f);
                 }
             }
         }
