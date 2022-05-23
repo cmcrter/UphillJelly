@@ -10,6 +10,8 @@ public abstract class UiPopUp : MonoBehaviour
 
     protected InputHandler triggeringPlayerInputHandler;
 
+    public event System.Action popUpFinished;
+
     public virtual void Initalise(InputHandler inputHandler)
     {
         initalised = true;
@@ -21,7 +23,19 @@ public abstract class UiPopUp : MonoBehaviour
     {
         PauseManager.instance.UnpauseGame();
         Destroy(gameObject);
+        if (popUpFinished != null)
+        {
+            popUpFinished();
+        }
     }
 
     public abstract bool CheckCondition(PlayerHingeMovementController player);
+
+    protected void CallPopUpFinished()
+    {
+        if (popUpFinished != null)
+        {
+            popUpFinished();
+        }
+    }
 }

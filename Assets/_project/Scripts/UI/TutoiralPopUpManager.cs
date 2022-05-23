@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using L7Games.Movement;
 using L7Games.Input;
+using L7Games.Loading;
 
 public class TutoiralPopUpManager : MonoBehaviour
 {
+
+
+    [Header("Triggers")]
     [SerializeField]
     private PopUpTrigger xTrickTrigger;
 
+    [Header("PopUps")]
     [SerializeField]
     private RespawnUiPopUp respawnPopUp;
 
@@ -22,15 +27,36 @@ public class TutoiralPopUpManager : MonoBehaviour
     private JumpOffGrindsEarlyPopUp jumpOffGrindsEarlyPopUp;
 
     [SerializeField]
+    private WipingOutPopUp wipingOutPopUp;
+
+    [Header("Misc")]
+    [SerializeField]
     private PlayerHingeMovementController playerHinge;
 
     [SerializeField]
     private InputHandler playerInputHandler;
+    [SerializeField]
+    private bool tutorialDoneOverride;
 
     private Coroutine respawnWaitCoroutine;
 
     private void Start()
     {
+        if (LoadingData.player != null)
+        {
+            if (LoadingData.player.doneTutorial)
+            {
+                CleanUpPopUps();
+                return;
+            }
+        }
+        if (tutorialDoneOverride)
+        {
+            CleanUpPopUps();
+            return;
+        }
+
+
         if (playerHinge == null)
         {
             // Get the player from the scene
@@ -48,6 +74,11 @@ public class TutoiralPopUpManager : MonoBehaviour
         else
         {
             StartCoroutine(WaitForGrindTillGrindJump());
+        }
+
+        if (wipingOutPopUp != null)
+        {
+            wipingOutPopUp.Initalise(playerInputHandler);
         }
     }
 
@@ -136,5 +167,41 @@ public class TutoiralPopUpManager : MonoBehaviour
     private bool isPlayerGrinding()
     {
         return playerHinge.grindingState.hasRan;
+    }
+
+    private void CleanUpPopUps()
+    {
+        Destroy(xTrickTrigger.gameObject);
+        Destroy(respawnPopUp.gameObject);
+        Destroy(xToTrickUiPop.gameObject);
+        Destroy(jumpOffGrindPop.gameObject);
+        Destroy(jumpOffGrindsEarlyPopUp.gameObject);
+        Destroy(wipingOutPopUp.gameObject);
+        Destroy(gameObject);
+    }
+
+    private void CheckIfTutorialsCompleted()
+    {
+        if (respawnPopUp != null)
+        {
+            return;
+        }
+        if (xToTrickUiPop != null)
+        {
+            return;
+        }
+        if (jumpOffGrindPop != null)
+        {
+            return;
+        }
+        if (jumpOffGrindsEarlyPopUp != null)
+        {
+            return;
+        }
+        if (wipingOutPopUp != null)
+        {
+            return;
+        }
+        CleanUpPopUps();
     }
 }

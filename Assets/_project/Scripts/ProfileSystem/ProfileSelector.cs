@@ -94,20 +94,26 @@ public class ProfileSelector : MonoBehaviour
         {
             // create a directory for "/CurrentProfile"
             Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile" + LoadingData.playerSlot.ToString());
-            b_SaveSystem.SavePlayer(LoadingData.playerSlot);
+            //b_SaveSystem.SavePlayer(LoadingData.playerSlot);
         }
 
-        StoredPlayerProfile player = b_SaveSystem.LoadPlayer(LoadingData.playerSlot);
-        LoadingData.player = player;
+        LoadingData.player = b_SaveSystem.LoadPlayer(LoadingData.playerSlot);
 
-        tmp_Input.text = player.profileName;
+        if(LoadingData.player == null)
+        {
+            LoadingData.player = new StoredPlayerProfile();
+        }
+
+        tmp_Input.text = LoadingData.player.profileName;
+        tmp_Input.textComponent.text = LoadingData.player.profileName;
+
+        thisName = LoadingData.player.profileName;
     }
 
     //Being able to change a profile name based on text input
     public void ChangePlayerName(string newName)
     {
         thisName = newName;
-        b_SaveSystem.SavePlayer(LoadingData.playerSlot);
     }
 
     public void BackButton()
@@ -119,7 +125,6 @@ public class ProfileSelector : MonoBehaviour
     public void ConfirmProfile()
     {
         LoadingData.player.profileName = thisName;
-
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
         // set the starting background to false
