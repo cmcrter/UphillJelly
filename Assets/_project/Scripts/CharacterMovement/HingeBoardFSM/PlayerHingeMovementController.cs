@@ -505,7 +505,7 @@ namespace L7Games.Movement
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
 
-            if (characterModel.activeSelf)
+            if (characterModel.activeSelf && playerStateMachine != null)
             {
                 playerStateMachine.RunMachine(Time.deltaTime);
             }
