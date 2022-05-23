@@ -139,9 +139,13 @@ namespace L7Games.Movement
             //Currently only works correctly due to the triggerable collider being a capsule, with a box collider this would cause issues
             wallForward = nextToWallRun.dotProductWithWall > 0 ? nextToWallRun.currentWallRide.transform.right : nextToWallRun.currentWallRide.transform.right * -1;
 
-            if(Vector3.Dot(wallForward, playerMovement.transform.right) > 0)
+            if(nextToWallRun.dotProductWithWall <= 0)
             {
                 playerMovement.characterAnimator.SetBool("wallridingMirror", true);
+            }
+            else
+            {
+                playerMovement.characterAnimator.SetBool("wallridingMirror", false);
             }
 
             playerMovement.characterAnimator.SetBool("wallriding", true);
