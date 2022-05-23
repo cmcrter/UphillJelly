@@ -22,6 +22,11 @@ public class LoadCustomizablesInGame
     public MeshRenderer catBoardMesh;
     public MeshFilter catBoardFilter;
 
+    public SkinnedMeshRenderer ghostCatBody;
+    public Transform ghostCatHead;
+    public MeshRenderer ghostCatBoardMesh;
+    public MeshFilter ghostCatBoardFilter;
+
     [Header("Override Values")]
     [SerializeField]
     private bool OverrideValues = false;
