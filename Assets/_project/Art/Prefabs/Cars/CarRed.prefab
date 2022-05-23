@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6239632341251625809}
   - component: {fileID: 8174974264161036187}
   - component: {fileID: -8421760558315191620}
+  - component: {fileID: 7873130548726220666}
   m_Layer: 7
   m_Name: CarRed
   m_TagString: Untagged
@@ -97,3 +98,26 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 32303b1c2a6ed0c4580645820da25bd1, type: 3}
+--- !u!114 &7873130548726220666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7670663396868015694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/AmbientSounds/CarEngine
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20

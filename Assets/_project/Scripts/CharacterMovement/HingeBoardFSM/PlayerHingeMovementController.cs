@@ -122,6 +122,9 @@ namespace L7Games.Movement
         private FMOD.Studio.EventInstance respawnSound;
         private FMOD.Studio.Bus masterBus;
 
+        [SerializeField]
+        private List<TrailRenderer> trails = new List<TrailRenderer>();
+
         #endregion
 
         #region Public Properties
@@ -202,6 +205,11 @@ namespace L7Games.Movement
 
             OverrideCamera(camBrain);
 
+            foreach (TrailRenderer trail in trails)
+            {
+                trail.Clear();
+            }
+
             bWipeOutLocked = false;
             Time.timeScale = 1;
         }
@@ -276,6 +284,11 @@ namespace L7Games.Movement
             characterAnimator.SetFloat("crouchingFloat", -1);
 
             OverrideCamera(camBrain);
+
+            foreach(TrailRenderer trail in trails)
+            {
+                trail.Clear();
+            }
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -505,7 +518,7 @@ namespace L7Games.Movement
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
 
-            if (characterModel.activeSelf)
+            if (characterModel.activeSelf && playerStateMachine != null)
             {
                 playerStateMachine.RunMachine(Time.deltaTime);
             }

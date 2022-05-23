@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2192566368761138573}
   - component: {fileID: 4145977109831563591}
   - component: {fileID: 1862466234105076938}
+  - component: {fileID: 7267472925362143118}
   m_Layer: 7
   m_Name: Car2Green
   m_TagString: Untagged
@@ -97,3 +98,26 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1550514412580984892, guid: 4b52bd26a66c00f4995335ab146e9b65, type: 3}
+--- !u!114 &7267472925362143118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2488665710528993426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/AmbientSounds/VanEngine
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20

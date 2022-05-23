@@ -12,6 +12,8 @@ using TMPro;
 using System.IO;
 using L7Games.Loading;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class ProfileSelector : MonoBehaviour
 {
@@ -24,11 +26,15 @@ public class ProfileSelector : MonoBehaviour
     public TMP_InputField tmp_Input;
 
     [SerializeField]
-    private GameObject profileCreationScreen;
+    private GameObject profileSelectionScreen;
+    [SerializeField]
+    private GameObject profileEditingScreen;
 
     [Header("Profile Selection UI Buttons")]
     [SerializeField]
     private List<TMP_Text> ProfileButtonTexts = new List<TMP_Text>();
+
+    string thisName;
 
     private void Awake()
     {
@@ -64,7 +70,7 @@ public class ProfileSelector : MonoBehaviour
             if(File.Exists(path))
             {
                 // profile text = Load Profile 1
-                ProfileButtonTexts[i].text = "Load Profile" + (i + 1).ToString();
+                ProfileButtonTexts[i].text = "Load Profile" + " " + (i + 1).ToString();
             }
             else
             {
@@ -80,23 +86,9 @@ public class ProfileSelector : MonoBehaviour
         LoadingData.playerSlot = profileSlot;
 
         // set the starting background to false
-        profileCreationScreen.SetActive(false);        
-    }
+        profileSelectionScreen.SetActive(false);
+        profileEditingScreen.SetActive(true);
 
-    //Being able to change a profile name based on text input
-    public void ChangePlayerName(string newName)
-    {
-        LoadingData.player.profileName = newName;
-        b_SaveSystem.SavePlayer(LoadingData.playerSlot);
-    }
-
-    public void BackButton()
-    {
-        profileCreationScreen.SetActive(false);
-    }
-
-    public void ConfirmProfile()
-    {
         // if no directory exists
         if(!Directory.Exists(Application.persistentDataPath + "/CurrentProfile" + LoadingData.playerSlot.ToString()))
         {
@@ -107,9 +99,30 @@ public class ProfileSelector : MonoBehaviour
 
         StoredPlayerProfile player = b_SaveSystem.LoadPlayer(LoadingData.playerSlot);
         LoadingData.player = player;
+
+        tmp_Input.text = player.profileName;
+    }
+
+    //Being able to change a profile name based on text input
+    public void ChangePlayerName(string newName)
+    {
+        thisName = newName;
+        b_SaveSystem.SavePlayer(LoadingData.playerSlot);
+    }
+
+    public void BackButton()
+    {
+        profileEditingScreen.SetActive(false);
+        profileSelectionScreen.SetActive(true);
+    }
+
+    public void ConfirmProfile()
+    {
+        LoadingData.player.profileName = thisName;
+
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
         // set the starting background to false
-        profileCreationScreen.SetActive(false);
+        profileSelectionScreen.SetActive(false);
     }
 }
