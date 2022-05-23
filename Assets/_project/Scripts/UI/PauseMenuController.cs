@@ -174,7 +174,6 @@ namespace L7Games.UI
                 for (int i = 0; i < inputHandlersInScene.Length; ++i)
                 {
                     savedInputActionMaps[i] = inputHandlersInScene[i].AttachedPlayerInput.currentActionMap;
-                    Debug.Log(savedInputActionMaps[i].name);
                     inputHandlersInScene[i].AttachedPlayerInput.SwitchCurrentActionMap("Menu");
                 }
             }
@@ -206,13 +205,16 @@ namespace L7Games.UI
         /// </summary>
         private void PauseMenuController_PauseActionPerformed()
         {
-            if (menuUiElement.activeSelf)
+            if (Time.timeScale > 0f)
             {
-                UnpauseGame();
-            }
-            else
-            {
-                PauseGame();
+                if (menuUiElement.activeSelf)
+                {
+                    UnpauseGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
             }
         }
         private void RestartLevel()

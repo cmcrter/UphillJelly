@@ -16,6 +16,8 @@ namespace L7Games.Movement
 {
     public abstract class PlayerController : MonoBehaviour
     {
+        public bool ignoreNextWipeoutOnWipeoutCount;
+
         #region Public Events
         /// <summary>
         /// Called when the player re spawns
@@ -101,7 +103,12 @@ namespace L7Games.Movement
             if (onRespawn != null)
             {
                 onRespawn();
-                KOCount++;
+                if (!ignoreNextWipeoutOnWipeoutCount)
+                {
+                    KOCount++;
+                    ignoreNextWipeoutOnWipeoutCount = false;
+                }
+
             }
         }
 

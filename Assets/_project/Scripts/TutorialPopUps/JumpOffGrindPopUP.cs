@@ -8,8 +8,6 @@ public class JumpOffGrindPopUP : UiPopUp
 {
     private PlayerHingeMovementController playerHinge;
 
-    public event System.Action popUpFinished;
-
     public override bool CheckCondition(PlayerHingeMovementController player)
     {
         playerHinge = player;
@@ -26,11 +24,8 @@ public class JumpOffGrindPopUP : UiPopUp
         if (playerHinge.playerStateMachine.currentState != playerHinge.grindingState)
         {
             playerHinge.inputHandler.enabled = true;
-            if (popUpFinished != null)
-            {
-                popUpFinished();
-            }
-            ClosePopUp();
+            Destroy(gameObject);
+            CallPopUpFinished();
         }
     }
 

@@ -100,18 +100,17 @@ public class PauseManager : MonoBehaviour
                 // Set the time scale to what it was before the pause
                 Time.timeScale = originalTimeScale;
 
-                --pausingFactorsCount;
+                if (pausingFactorsCount > 0)
+                {
+                    --pausingFactorsCount;
+                }
+
                 if (OnUnpaused != null)
                 {
                     OnUnpaused();
                 }
             }
         }
-        else
-        {
-            --pausingFactorsCount;
-        }
-
     }
     #endregion
 
