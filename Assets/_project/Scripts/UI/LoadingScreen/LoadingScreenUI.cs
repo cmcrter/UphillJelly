@@ -64,7 +64,8 @@ namespace L7Games.Loading
             _angle += RotateSpeed * Time.deltaTime;
 
             var offset = new Vector3(Mathf.Sin(_angle), Mathf.Cos(_angle), 0) * circleDist;
-            SmallerCircle.transform.position = CenterCircle.transform.position + offset;          
+            SmallerCircle.transform.position = CenterCircle.transform.position + offset;
+            SmallerCircle.transform.Rotate(0, 0, (RotateSpeed * Time.deltaTime * 20f) *-1f);
         }
 
         #endregion
