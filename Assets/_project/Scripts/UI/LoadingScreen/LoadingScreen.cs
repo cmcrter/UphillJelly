@@ -73,10 +73,11 @@ namespace L7Games.Loading
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(LoadingData.sceneToLoad);
 
             //Saving the player profile if need be (after levels)
-            //if(LoadingData.SavePlayer)
-            //{
-            //    yield return StartCoroutine(b_SaveSystem.Co_SavePlayer(LoadingData.playerSlot));
-            //}
+            if(LoadingData.SavePlayer && LoadingData.playerSlot > 0 && LoadingData.playerSlot < 4)
+            {
+                yield return StartCoroutine(b_SaveSystem.Co_SavePlayer(LoadingData.playerSlot));
+                LoadingData.SavePlayer = false;
+            }
 
             asyncLoad.allowSceneActivation = false;
             bool bTextShowing = false;

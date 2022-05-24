@@ -1,9 +1,9 @@
 //========================================================================================================================================================================================================================================================================
 // File:                PauseMenuController.cs
-// Author:              Matthew Mason
+// Author:              Matthew Mason, Charles Carter
 // Date Created:        03/05/2022
-// Last Edited By:      Matthew Mason
-// Date Last Edited:    03/05/2022
+// Last Edited By:      Charles Carter
+// Date Last Edited:    24/05/2022
 // Brief:               The controller for the in-game pause menu, is in charge if operations for the menu as well as pausing the games functions
 //========================================================================================================================================================================================================================================================================
 
@@ -61,8 +61,6 @@ namespace L7Games.UI
         private InputActionMap[] savedInputActionMaps;
 
         #endregion
-
-
 
         #region Unity Methods
         public void Start()
@@ -127,6 +125,34 @@ namespace L7Games.UI
             // This should have a confirmation box (probably)
             WarningBox.CreateConfirmCancelWarningBox(canvasToUse, eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", SetFirstButtonAsSelected, MoveToMainMenu);
         }
+
+        public static void GoToTutorial(bool save)
+        {
+            LoadingData.sceneToLoad = "TutorialTrackWhitebox";
+            LoadingData.currentLevel = LEVEL.TUTORIAL;
+            LoadingData.SavePlayer = save;
+
+            SceneManager.LoadScene("LoadingScene");
+        }
+
+        public static void GoToCity(bool save)
+        {
+            LoadingData.sceneToLoad = "XanmanCity";
+            LoadingData.currentLevel = LEVEL.CITY;
+            LoadingData.SavePlayer = save;
+
+            SceneManager.LoadScene("LoadingScene");
+        }
+
+        public static void GoToOldTown(bool save)
+        {
+            LoadingData.sceneToLoad = "OldTown_Whitebox";
+            LoadingData.currentLevel = LEVEL.OLDTOWN;
+            LoadingData.SavePlayer = save;
+
+            SceneManager.LoadScene("LoadingScene");
+        }
+
         public void RestartLevelButton()
         {
             // This should have a confirmation box (probably)
@@ -197,6 +223,7 @@ namespace L7Games.UI
                 }
             }
         }
+
         #endregion
 
         #region Private Methods
@@ -235,6 +262,15 @@ namespace L7Games.UI
         {
             LoadingData.sceneToLoad = "MainMenu";
             LoadingData.currentLevel = LEVEL.MAINMENU;
+
+            SceneManager.LoadScene("LoadingScene");
+        }
+
+        private static void LoadMainMenu(bool save)
+        {
+            LoadingData.sceneToLoad = "MainMenu";
+            LoadingData.currentLevel = LEVEL.MAINMENU;
+            LoadingData.SavePlayer = save;
 
             SceneManager.LoadScene("LoadingScene");
         }
