@@ -34,6 +34,12 @@ namespace L7Games
         [SerializeField]
         private List<PanelData> MapPanels = new List<PanelData>();
 
+        private void Awake()
+        {
+            LoadingData.currentLevel = LEVEL.MAINMENU;
+            playFabManager.Login();
+        }
+
         private void Start() 
         {
             currentLeaderboardInt = 0;

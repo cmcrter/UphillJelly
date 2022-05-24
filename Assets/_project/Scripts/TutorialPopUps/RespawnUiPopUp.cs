@@ -39,7 +39,6 @@ public class RespawnUiPopUp : UiPopUp
         {
             triggeringPlayerInputHandler.wipeoutResetStarted -= TriggeringPlayerInputHandler_wipeoutResetStarted;
         }
-        Debug.Log("Unpause wipeout Reset");
         ClosePopUp();
     }
 

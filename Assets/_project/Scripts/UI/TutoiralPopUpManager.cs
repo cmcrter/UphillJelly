@@ -13,6 +13,7 @@ public class TutoiralPopUpManager : MonoBehaviour
     [SerializeField]
     private PopUpTrigger xTrickTrigger;
 
+    [Header("PopUps")]
     [SerializeField]
     [Tooltip("The Trigger used triggering the jump off grind early tutorial pop up.")]
     private PopUpTrigger grindEarlyJumpOffTrigger;
@@ -131,6 +132,11 @@ public class TutoiralPopUpManager : MonoBehaviour
         if (jumpOffGrindsEarlyPopUp != null)
         {
             StartCoroutine(EarlyJumpPopUpCoroutine());
+        }
+
+        if (wipingOutPopUp != null)
+        {
+            wipingOutPopUp.Initalise(playerInputHandler);
         }
 
         if (wipingOutPopUp != null)
