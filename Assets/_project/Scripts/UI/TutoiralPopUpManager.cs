@@ -163,7 +163,10 @@ public class TutoiralPopUpManager : MonoBehaviour
         }
     }
 
-
+    private void Update()
+    {
+        CheckIfTutorialsCompleted();
+    }
 
     private void GrindEndJumpOffTrigger_triggerHit(PlayerController obj)
     {
@@ -201,6 +204,8 @@ public class TutoiralPopUpManager : MonoBehaviour
     private void PlayerInputHandler_wipeoutResetStarted()
     {
         StopCoroutine(respawnWaitCoroutine);
+        Destroy(respawnPopUp.gameObject);
+        CheckIfTutorialsCompleted();
         playerInputHandler.wipeoutResetStarted -= PlayerInputHandler_wipeoutResetStarted;
     }
 
@@ -210,13 +215,9 @@ public class TutoiralPopUpManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator WaitThenShowRespawnPopUp()
     {
-        Debug.Log("Wait then show re spawn");
         yield return new WaitForSeconds(3f);
-        if (respawnPopUp.CheckCondition(playerHinge))
-        {
-            Debug.Log("Respawns pop up Initalise");
-            respawnPopUp.Initalise(playerInputHandler);
-        }
+        playerInputHandler.wipeoutResetStarted -= PlayerInputHandler_wipeoutResetStarted;
+        respawnPopUp.Initalise(playerInputHandler);
     }
 
     private void XTrickTrigger_triggerHit(PlayerController player)
@@ -262,9 +263,9 @@ public class TutoiralPopUpManager : MonoBehaviour
             {
                 // Keep waiting for a grind until no long waiting for 
                 do
+
                 {
                     yield return new WaitUntil(isPlayerGrinding);
-                    Debug.Log("Grind Started endJumpWaitingforGrind: " + endJumpWaitingforGrind);
                 } while (endJumpWaitingforGrind || !jumpOffGrindsEarlyPopUp.CheckCondition(playerHinge));
             }
             else
@@ -303,12 +304,26 @@ public class TutoiralPopUpManager : MonoBehaviour
 
     private void CleanUpPopUps()
     {
-        Destroy(xTrickTrigger.gameObject);
-        Destroy(respawnPopUp.gameObject);
-        Destroy(xToTrickUiPop.gameObject);
-        Destroy(jumpOffGrindEndPopUp.gameObject);
-        Destroy(jumpOffGrindsEarlyPopUp.gameObject);
-        Destroy(wipingOutPopUp.gameObject);
+        if (respawnPopUp != null)
+        {
+            Destroy(respawnPopUp.gameObject);
+        }
+        if (xToTrickUiPop != null)
+        {
+            Destroy(xTrickTrigger.gameObject);
+        }
+        if (jumpOffGrindEndPopUp != null)
+        {
+            Destroy(jumpOffGrindEndPopUp.gameObject);
+        }
+        if (jumpOffGrindsEarlyPopUp != null)
+        {
+            Destroy(jumpOffGrindsEarlyPopUp.gameObject);
+        }
+        if (wipingOutPopUp != null)
+        {
+            Destroy(wipingOutPopUp.gameObject);
+        }
         Destroy(gameObject);
     }
 
@@ -333,6 +348,10 @@ public class TutoiralPopUpManager : MonoBehaviour
         if (wipingOutPopUp != null)
         {
             return;
+        }
+        if (LoadingData.player != null)
+        {
+            LoadingData.player.doneTutorial = true;
         }
         CleanUpPopUps();
     }

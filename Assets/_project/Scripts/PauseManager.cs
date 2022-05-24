@@ -110,6 +110,10 @@ public class PauseManager : MonoBehaviour
                     OnUnpaused();
                 }
             }
+            else
+            {
+                pausingFactorsCount = 0;
+            }
         }
     }
     #endregion
