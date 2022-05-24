@@ -138,11 +138,6 @@ public class TutoiralPopUpManager : MonoBehaviour
         {
             wipingOutPopUp.Initalise(playerInputHandler);
         }
-
-        if (wipingOutPopUp != null)
-        {
-            wipingOutPopUp.Initalise(playerInputHandler);
-        }
     }
 
     private void OnEnable()
@@ -269,7 +264,6 @@ public class TutoiralPopUpManager : MonoBehaviour
             {
                 // Keep waiting for a grind until no long waiting for 
                 do
-
                 {
                     yield return new WaitUntil(isPlayerGrinding);
                 } while (endJumpWaitingforGrind || !jumpOffGrindsEarlyPopUp.CheckCondition(playerHinge));

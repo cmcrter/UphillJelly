@@ -30,7 +30,6 @@ public class RespawnUiPopUp : UiPopUp
     public override void Initalise(InputHandler inputHandler)
     {
         base.Initalise(inputHandler);
-        PauseManager.instance.PauseGame();
     }
 
     private void TriggeringPlayerInputHandler_wipeoutResetStarted()
@@ -39,7 +38,8 @@ public class RespawnUiPopUp : UiPopUp
         {
             triggeringPlayerInputHandler.wipeoutResetStarted -= TriggeringPlayerInputHandler_wipeoutResetStarted;
         }
-        ClosePopUp();
+        Destroy(gameObject);
+        CallPopUpFinished();
     }
 
     // Update is called once per frame
