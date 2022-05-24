@@ -275,6 +275,8 @@ namespace L7Games.Input
 
         public event System.Action TabLeftPerformed;
         public event System.Action TabRightPerformed;
+        public event System.Action RotateLeftPerformed;
+        public event System.Action RotateRightPerformed;
 
 
         #endregion
@@ -775,7 +777,24 @@ namespace L7Games.Input
             }
         }
 
+        private void RotateLeft_Performed(InputAction.CallbackContext callbackContext) {
+            if (RotateLeftPerformed != null) {
 
+                Debug.Log("RotateLeftPerformed");
+                RotateLeftPerformed();
+
+            }
+        }
+
+
+        private void RotateRight_Performed(InputAction.CallbackContext callbackContext) {
+            if (RotateRightPerformed != null) {
+
+                Debug.Log("RotateRightPerformed");
+                RotateRightPerformed();
+
+            }
+        }
 
 
         #endregion
@@ -922,6 +941,9 @@ namespace L7Games.Input
             playerInput.actions["TabLeft"].performed        += TabLeft_Performed;
             playerInput.actions["TabRight"].performed       += TabRight_Performed;
 
+            playerInput.actions["RotateLeft"].performed     += RotateLeft_Performed;
+            playerInput.actions["RotateRight"].performed    += RotateRight_Performed;
+
         }
 
 
@@ -1028,6 +1050,8 @@ namespace L7Games.Input
             playerInput.actions["TabLeft"].performed        -= TabLeft_Performed;
             playerInput.actions["TabRight"].performed       -= TabRight_Performed;
 
+            playerInput.actions["RotateLeft"].performed     -= RotateLeft_Performed;
+            playerInput.actions["RotateRight"].performed    -= RotateRight_Performed;
         }
         #endregion
         /// <summary>

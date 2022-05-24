@@ -18,6 +18,7 @@ namespace SleepyCat
 {
     public class TabGroup : MonoBehaviour
     {
+        /*
         public List<ShopTabButton> tabButtons;
         public Sprite tabIdle;
         public Sprite tabHover;
@@ -110,6 +111,7 @@ namespace SleepyCat
             }
 
         }
+        */
 
     }
 

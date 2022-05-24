@@ -14,9 +14,16 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using L7Games.Input;
+using SleepyCat;
+using System;
 
 public class ShopManager : MonoBehaviour
 {
+    public GameObject hatShopItem;
+    public GameObject characterShopMesh;
+    public GameObject skateboardShopItem;
+
+    
 
     public ScriptableObject[] hatSOs;
     public ScriptableObject[] characterSOs;
@@ -33,11 +40,11 @@ public class ShopManager : MonoBehaviour
 
 
     //
-    public List<Button> tabButtons;
+    public List<ShopTabButton> tabButtons;
     public Sprite tabIdle;
     public Sprite tabHover;
     public Sprite tabActive;
-    public Button selectedButton;
+    public ShopTabButton selectedButton;
     public List<GameObject> objectsToSwap;
 
     public ShopInventory shopInventory;
@@ -45,11 +52,16 @@ public class ShopManager : MonoBehaviour
     public int currentTabInt;
     //
 
+    public TextMeshProUGUI[] objectDescription;
+    public Image[] descriptionItemImage;
+
 
     public void Start() {
 
-        //hatSOs = (HatObject)ScriptableObject.FindObjectsOfType(ScriptableObject);
+        selectedButton = eventSystem.firstSelectedGameObject.GetComponent<ShopTabButton>();
 
+        //hatSOs = (HatObject)ScriptableObject.FindObjectsOfType(ScriptableObject);
+        //Material characterShopMaterial = characterShopObject.GetComponent<Material>();
     }
 
     public void hasBoughtItem() {
@@ -66,6 +78,9 @@ public class ShopManager : MonoBehaviour
 
             currentEquippedHat = hatItem.item;
 
+            hatShopItem.GetComponent<MeshFilter>().sharedMesh = hatItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            hatShopItem.GetComponent<MeshRenderer>().material = hatItem.item.material;
+
         }
 
         if (characterItem) {
@@ -75,6 +90,9 @@ public class ShopManager : MonoBehaviour
 
             currentEquippedCharacter = characterItem.item;
 
+            //characterShopMaterial = characterItem.item.material;
+            characterShopMesh.gameObject.GetComponent<SkinnedMeshRenderer>().material = characterItem.item.material;
+            //characterShopObject = characterItem.item.material;
         }
 
         if (skateboardItem) {
@@ -83,6 +101,9 @@ public class ShopManager : MonoBehaviour
             //skateboardItem.item.uiDisplay = boughtSprite;
 
             currentEquippedSkateboard = skateboardItem.item;
+
+            skateboardShopItem.GetComponent<MeshFilter>().sharedMesh = skateboardItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            skateboardShopItem.GetComponent<MeshRenderer>().material = skateboardItem.item.material;
 
         }
 
@@ -97,11 +118,11 @@ public class ShopManager : MonoBehaviour
 
 
 
-    public void Subscribe(Button button) {
+    public void Subscribe(ShopTabButton button) {
 
         if (tabButtons == null) {
 
-            tabButtons = new List<Button>();
+            tabButtons = new List<ShopTabButton>();
 
         }
 
@@ -110,11 +131,13 @@ public class ShopManager : MonoBehaviour
 
     }
 
-    public void OnTabHover(Button button) {
+    public void OnTabHover(ShopTabButton button) {
 
         ResetTabs();
 
-        shopInventory.currentlySelectedButton = button.gameObject;
+        
+
+        selectedButton = button;
 
         Debug.Log("Hovered over button");
 
@@ -127,15 +150,34 @@ public class ShopManager : MonoBehaviour
 
     }
 
-    public void OnTabExit(Button button) {
+    public void OnTabExit(ShopTabButton button) {
 
         ResetTabs();
 
     }
+    
+    public void OnTabSelected(ShopTabButton button) {
 
-    public void OnTabSelected(Button button) {
+        selectedButton = button.GetComponent<ShopTabButton>();
 
-        selectedButton = button;
+        ///REMOVE AND REPLACE FOR MORE EFFICIENT
+        ///TEST********
+
+        if (selectedButton.GetComponent<HatItem>()) {
+            objectDescription[0].text = selectedButton.GetComponent<HatItem>().item.itemDescription;
+            descriptionItemImage[0].sprite = selectedButton.GetComponent<HatItem>().item.uiDisplay;
+        }
+        if (selectedButton.GetComponent<CharacterItem>()) {
+            objectDescription[1].text = selectedButton.GetComponent<CharacterItem>().item.itemDescription;
+            descriptionItemImage[1].sprite = selectedButton.GetComponent<CharacterItem>().item.uiDisplay;
+        }
+        if (selectedButton.GetComponent<SkateboardItem>()) {
+            objectDescription[2].text = selectedButton.GetComponent<SkateboardItem>().item.itemDescription;
+            descriptionItemImage[2].sprite = selectedButton.GetComponent<SkateboardItem>().item.uiDisplay;
+        }
+
+        ///
+        ///
 
         ResetTabs();
 
@@ -153,10 +195,10 @@ public class ShopManager : MonoBehaviour
         }
 
     }
-
+    
     public void ResetTabs() {
 
-        foreach (Button button in tabButtons) {
+        foreach (ShopTabButton button in tabButtons) {
 
             if (selectedButton != null && button == selectedButton) { continue; }
 

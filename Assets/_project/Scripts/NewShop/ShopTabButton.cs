@@ -21,13 +21,13 @@ namespace SleepyCat
         //public TabGroup tabGroup;
         public ShopManager shopManager;
 
-        public Image backgroundTabImage;
+        ///public Image backgroundTabImage;
 
         // Start is called before the first frame update
         void Start() {
 
-            backgroundTabImage = GetComponent<Image>();
-            shopManager.Subscribe(this);
+            ///backgroundTabImage = GetComponent<Image>();
+            shopManager.Subscribe(this); //this.GetComponent<Button>()
 
         }
         
@@ -37,6 +37,7 @@ namespace SleepyCat
 
         public void OnPointerEnter(PointerEventData eventData) {
             shopManager.OnTabHover(this);
+            Debug.Log(this);
         }
 
         public void OnPointerExit(PointerEventData eventData) {

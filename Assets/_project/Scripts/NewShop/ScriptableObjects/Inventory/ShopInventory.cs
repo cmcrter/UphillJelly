@@ -18,12 +18,14 @@ using L7Games.Input;
 public class ShopInventory : MonoBehaviour
 {
     public int layoutPriority;
-    public InventoryObject shopHatInventory;
-    public InventoryObject playerHatInventory;
+    //public InventoryObject shopHatInventory;
+    //public InventoryObject playerHatInventory;
 
     //
     public List<ScriptableObject> purchasedItems;
     public List<ScriptableObject> equippedItems;
+
+    public Transform physicalCharacter;
 
     public Button[] itemButtons;
     //
@@ -34,15 +36,16 @@ public class ShopInventory : MonoBehaviour
 
     [SerializeField]
     private InputHandler inputHandlerInScene;
-    
+
 
     //public List<Button> shopButtons;
-    public GameObject currentlySelectedButton;
+    //public GameObject currentlySelectedButton;
+    public ShopManager shopManager;
 
-    public TextMeshProUGUI[] objectDescription;
-    public Image[] descriptionItemImage;
+    ///public TextMeshProUGUI[] objectDescription;
+    ///public Image[] descriptionItemImage;
 
-
+    private int rotationSpeed = 25;
 
 
     public int currentTabSelected;
@@ -66,6 +69,10 @@ public class ShopInventory : MonoBehaviour
 
         //eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
 
+        inputHandlerInScene.RotateLeftPerformed += MainMenuController_RotateLeftAction_Performed;
+
+        inputHandlerInScene.RotateRightPerformed += MainMenuController_RotateRightAction_Performed;
+
     }
 
 
@@ -80,28 +87,35 @@ public class ShopInventory : MonoBehaviour
 
         currentTabSelected = 0;
         //shopHatInventory.Load();
-        playerHatInventory.Load();
+        ///playerHatInventory.Load();
         //inputHandlersInScene[i].TabLeftPerformed += MainMenuController_TabLeftAction_Performed;
     }
 
     public void Update() {
 
+        /*
         //currentlySelectedButton = itemButtons[0].gameObject;
         ///currentlySelectedButton = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>().gameObject;
-        objectDescription[0].text = currentlySelectedButton.GetComponent<HatItem>().item.itemDescription;
-        descriptionItemImage[0].sprite = currentlySelectedButton.GetComponent<HatItem>().item.uiDisplay;
+        objectDescription[0].text = shopManager.selectedButton.GetComponent<HatItem>().item.itemDescription;
+        descriptionItemImage[0].sprite = shopManager.selectedButton.GetComponent<HatItem>().item.uiDisplay;
 
         ///REMOVE AND REPLACE FOR MORE EFFICIENT
         ///TEST********
-        objectDescription[1].text = currentlySelectedButton.GetComponent<CharacterItem>().item.itemDescription;
-        descriptionItemImage[1].sprite = currentlySelectedButton.GetComponent<CharacterItem>().item.uiDisplay;
+        objectDescription[1].text = shopManager.selectedButton.GetComponent<CharacterItem>().item.itemDescription;
+        descriptionItemImage[1].sprite = shopManager.selectedButton.GetComponent<CharacterItem>().item.uiDisplay;
 
-        objectDescription[2].text = currentlySelectedButton.GetComponent<SkateboardItem>().item.itemDescription;
-        descriptionItemImage[2].sprite = currentlySelectedButton.GetComponent<SkateboardItem>().item.uiDisplay;
+        objectDescription[2].text = shopManager.selectedButton.GetComponent<SkateboardItem>().item.itemDescription;
+        descriptionItemImage[2].sprite = shopManager.selectedButton.GetComponent<SkateboardItem>().item.uiDisplay;
 
         //if (EventSystem.current.currentSelectedGameObject == shopButtons[1]) {
         //    Debug.Log(this.shopButtons.name + " was selected");
         //}
+
+        */
+
+        ///objectDescription[2].text = currentlySelectedButton.GetComponent<SkateboardItem>().item.itemDescription;
+        ///descriptionItemImage[2].sprite = currentlySelectedButton.GetComponent<SkateboardItem>().item.uiDisplay;
+
 
     }
 
@@ -135,6 +149,20 @@ public class ShopInventory : MonoBehaviour
         //currentTabSelected++;
         UpdateTabUI();
         
+    }
+
+    private void MainMenuController_RotateLeftAction_Performed() {
+
+        Debug.Log("RotateLeft");
+        physicalCharacter.transform.Rotate(new Vector3(0f, -50f, 0f) * rotationSpeed);
+
+    }
+
+    private void MainMenuController_RotateRightAction_Performed() {
+
+        Debug.Log("RotateRight");
+        physicalCharacter.transform.Rotate(new Vector3(0f, 50f, 0f) * rotationSpeed);
+
     }
 
     public void UpdateTabUI() {
@@ -209,6 +237,7 @@ public class ShopInventory : MonoBehaviour
         }
 
     }
+    /*
     public void BuyItem() {
 
         var item = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>();
@@ -233,10 +262,10 @@ public class ShopInventory : MonoBehaviour
 
 
     }
-
+    */
     private void OnApplicationQuit() {
 
-        playerHatInventory.Container.Items.Clear();
+        ///playerHatInventory.Container.Items.Clear();
 
     }
 
