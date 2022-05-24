@@ -33,12 +33,14 @@ public class JumpOffGrindsEarlyPopUp : UiPopUp
     {
         triggeringPlayerInputHandler.grindingJumpUpActionPerformed -= TriggeringPlayerInputHandler_grindingJumpUpActionPerformed;
         ClosePopUp();
+        triggeringPlayerInputHandler.disableWipeoutInput = false;
     }
 
     public override void Initalise(InputHandler inputHandler)
     {
         base.Initalise(inputHandler); 
         PauseManager.instance.PauseGame();
+
     }
 
     private void Update()
