@@ -47,6 +47,7 @@ public class XToTrickUiPopUp : UiPopUp
     {
         ClosePopUp();
         triggeringPlayerInputHandler.trickPressed -= TriggeringPlayerInputHandler_trickPressed;
+        triggeringPlayerInputHandler.disableWipeoutInput = false;
     }
 
     private IEnumerator WaitUntilPlayerIsAtJumpApex()
@@ -54,6 +55,7 @@ public class XToTrickUiPopUp : UiPopUp
         yield return new WaitUntil(IsAtJumpApex);
         grahpicsChildren.SetActive(true);
         PauseManager.instance.PauseGame();
+        triggeringPlayerInputHandler.disableWipeoutInput = true;
     }
 
     private bool IsAtJumpApex()

@@ -277,6 +277,7 @@ public class TutoiralPopUpManager : MonoBehaviour
         if (jumpOffGrindsEarlyPopUp.CheckCondition(playerHinge))
         {
             jumpOffGrindsEarlyPopUp.Initalise(playerInputHandler);
+            playerInputHandler.disableWipeoutInput = true;
         }
     }
 

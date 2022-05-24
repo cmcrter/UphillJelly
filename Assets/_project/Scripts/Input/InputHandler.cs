@@ -317,6 +317,8 @@ namespace L7Games.Input
 
         #endregion
 
+        public bool disableWipeoutInput = false;
+
         #region Unity Methods
         private void Awake()
         {
@@ -627,10 +629,13 @@ namespace L7Games.Input
         /// <param name="callbackContext">start grind action's CallbackContext</param>
         private void WipeOutResetAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            WipeOutResetHeld = true;
-            if (wipeoutResetStarted != null)
+            if (!disableWipeoutInput)
             {
-                wipeoutResetStarted();
+                WipeOutResetHeld = true;
+                if (wipeoutResetStarted != null)
+                {
+                    wipeoutResetStarted();
+                }
             }
         }
 
