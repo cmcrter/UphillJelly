@@ -23,7 +23,7 @@ namespace L7Games
     {
         SCORE = 0,
         TIME = 1,
-        KOs = 2,
+        WIPEOUTs = 2,
         COUNT
     }
 
@@ -157,7 +157,7 @@ namespace L7Games
                         case (int)leaderboard_value.TIME:
                             thisFeature = "_Time";
                             break;
-                        case (int)leaderboard_value.KOs:
+                        case (int)leaderboard_value.WIPEOUTs:
                             thisFeature = "_KOs";
                             break;
                     }
@@ -301,7 +301,7 @@ namespace L7Games
                 StartPosition = 0
             };
 
-            data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.KOs);
+            data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.WIPEOUTs);
             PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError, data);
 
             //Putting all the leaderboards together cohesively (back when it would be 1 leaderboard)

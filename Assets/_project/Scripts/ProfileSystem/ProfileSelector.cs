@@ -130,4 +130,16 @@ public class ProfileSelector : MonoBehaviour
         // set the starting background to false
         profileSelectionScreen.SetActive(false);
     }
+
+    //Definitely making a new profile (overwrite functionality)
+    public void NewProfile()
+    {
+        LoadingData.player = new StoredPlayerProfile();
+
+        LoadingData.player.profileName = thisName;
+        b_SaveSystem.SavePlayer(LoadingData.playerSlot);
+
+        // set the starting background to false
+        profileSelectionScreen.SetActive(false);
+    }
 }
