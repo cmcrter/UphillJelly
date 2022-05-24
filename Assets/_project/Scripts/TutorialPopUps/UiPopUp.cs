@@ -6,7 +6,12 @@ using L7Games.Movement;
 
 public abstract class UiPopUp : MonoBehaviour
 {
-    protected bool initalised;
+    
+    public bool initalised
+    {
+        get;
+        protected set;
+    }
 
     protected InputHandler triggeringPlayerInputHandler;
 

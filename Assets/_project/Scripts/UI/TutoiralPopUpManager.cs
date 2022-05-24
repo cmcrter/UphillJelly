@@ -15,13 +15,22 @@ public class TutoiralPopUpManager : MonoBehaviour
 
     [Header("PopUps")]
     [SerializeField]
+    [Tooltip("The Trigger used triggering the jump off grind early tutorial pop up.")]
+    private PopUpTrigger grindEarlyJumpOffTrigger;
+
+    [SerializeField]
+    [Tooltip("The Trigger used triggering the jump off grind at the end tutorial pop up")]
+    private PopUpTrigger grindEndJumpOffTrigger;
+
+    [Header("PopUps")]
+    [SerializeField]
     private RespawnUiPopUp respawnPopUp;
 
     [SerializeField]
     private XToTrickUiPopUp xToTrickUiPop;
 
     [SerializeField]
-    private JumpOffGrindPopUP jumpOffGrindPop;
+    private JumpOffGrindPopUP jumpOffGrindEndPopUp;
 
     [SerializeField]
     private JumpOffGrindsEarlyPopUp jumpOffGrindsEarlyPopUp;
@@ -40,6 +49,16 @@ public class TutoiralPopUpManager : MonoBehaviour
 
     private Coroutine respawnWaitCoroutine;
 
+    private bool endJumpTriggerPassed;
+    private bool earlyJumpTriggerPassed;
+
+    private bool endJumpHasPriority;
+
+    private bool endJumpWaitingforGrind;
+    private bool earlyJumpWaitingforGrind;
+
+    private bool endJumpCompleted;
+
     private void Start()
     {
         if (LoadingData.player != null)
@@ -56,7 +75,6 @@ public class TutoiralPopUpManager : MonoBehaviour
             return;
         }
 
-
         if (playerHinge == null)
         {
             // Get the player from the scene
@@ -67,13 +85,58 @@ public class TutoiralPopUpManager : MonoBehaviour
         {
             playerInputHandler = playerHinge.GetComponent<InputHandler>();
         }
-        if (jumpOffGrindPop != null)
+
+        // Set up end and early grind jump coroutines 
+        // Setting up trigger passing
+        if (grindEndJumpOffTrigger != null)
         {
-            StartCoroutine(WaitForGrindTillEndPopUpTrigger());
+            endJumpTriggerPassed = false;
+            grindEndJumpOffTrigger.triggerHit += GrindEndJumpOffTrigger_triggerHit;
         }
         else
         {
-            StartCoroutine(WaitForGrindTillGrindJump());
+            endJumpTriggerPassed = true;
+        }
+        if (grindEarlyJumpOffTrigger != null)
+        {
+            earlyJumpTriggerPassed = false;
+            grindEarlyJumpOffTrigger.triggerHit += GrindEarlyJumpOffTrigger_triggerHit;
+        }
+        else
+        {
+            earlyJumpTriggerPassed = true;
+        }
+
+        // Sorting out if end jump has priority
+        if (grindEndJumpOffTrigger == null && grindEarlyJumpOffTrigger != null)
+        {
+            endJumpHasPriority = false;
+        }
+        else
+        {
+            endJumpHasPriority = true;
+        }
+        // Setting up waiting for grind bools
+        endJumpWaitingforGrind = false;
+        earlyJumpWaitingforGrind = false;
+        // Starting the main Coroutines
+        if (jumpOffGrindEndPopUp != null)
+        {
+            endJumpCompleted = false;
+            StartCoroutine(EndJumpPopUpCoroutine());
+        }
+        else
+        {
+            endJumpCompleted = true;
+        }
+        if (jumpOffGrindsEarlyPopUp != null)
+        {
+            StartCoroutine(EarlyJumpPopUpCoroutine());
+        }
+
+        if (wipingOutPopUp != null)
+        {
+            wipingOutPopUp.Initalise(playerInputHandler);
         }
 
         if (wipingOutPopUp != null)
@@ -94,17 +157,44 @@ public class TutoiralPopUpManager : MonoBehaviour
         if (xTrickTrigger != null)
         {
             xTrickTrigger.triggerHit += XTrickTrigger_triggerHit;
-        }    
-
-        if (jumpOffGrindPop != null)
-        {
-            jumpOffGrindPop.popUpFinished += JumpOffGrindPop_popUpFinished;
         }
+
+        if (jumpOffGrindEndPopUp != null)
+        {
+            jumpOffGrindEndPopUp.popUpFinished += JumpOffGrindPop_popUpFinished;
+        }
+        if (jumpOffGrindsEarlyPopUp != null)
+        {
+            jumpOffGrindsEarlyPopUp.popUpFinished += JumpOffGrindsEarlyPopUp_popUpFinished;
+        }
+    }
+
+    private void Update()
+    {
+        CheckIfTutorialsCompleted();
+    }
+
+    private void GrindEndJumpOffTrigger_triggerHit(PlayerController obj)
+    {
+        endJumpTriggerPassed = true;
+        endJumpWaitingforGrind = true;
+    }
+
+    private void GrindEarlyJumpOffTrigger_triggerHit(PlayerController obj)
+    {
+        earlyJumpTriggerPassed = true;
+        earlyJumpWaitingforGrind = true;
     }
 
     private void JumpOffGrindPop_popUpFinished()
     {
-        StartCoroutine(WaitForGrindTillGrindJump());
+        endJumpCompleted = true;
+        endJumpWaitingforGrind = false;
+    }
+
+    private void JumpOffGrindsEarlyPopUp_popUpFinished()
+    {
+        earlyJumpWaitingforGrind = false;
     }
 
     private void PlayerHinge_onWipeout(Vector3 obj)
@@ -120,6 +210,8 @@ public class TutoiralPopUpManager : MonoBehaviour
     private void PlayerInputHandler_wipeoutResetStarted()
     {
         StopCoroutine(respawnWaitCoroutine);
+        Destroy(respawnPopUp.gameObject);
+        CheckIfTutorialsCompleted();
         playerInputHandler.wipeoutResetStarted -= PlayerInputHandler_wipeoutResetStarted;
     }
 
@@ -129,13 +221,9 @@ public class TutoiralPopUpManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator WaitThenShowRespawnPopUp()
     {
-        Debug.Log("Wait then show re spawn");
         yield return new WaitForSeconds(3f);
-        if (respawnPopUp.CheckCondition(playerHinge))
-        {
-            Debug.Log("Respawns pop up Initalise");
-            respawnPopUp.Initalise(playerInputHandler);
-        }
+        playerInputHandler.wipeoutResetStarted -= PlayerInputHandler_wipeoutResetStarted;
+        respawnPopUp.Initalise(playerInputHandler);
     }
 
     private void XTrickTrigger_triggerHit(PlayerController player)
@@ -143,25 +231,76 @@ public class TutoiralPopUpManager : MonoBehaviour
         xToTrickUiPop.Initalise(playerInputHandler);
     }
 
-    private IEnumerator WaitForGrindTillEndPopUpTrigger()
+    private IEnumerator EndJumpPopUpCoroutine()
     {
-        yield return new WaitUntil(isPlayerGrinding);
-        // Disable the player input
+        yield return new WaitUntil(isEndJumpTriggerPassed);
+        if (endJumpHasPriority)
+        {
+            yield return new WaitUntil(isPlayerGrinding);
+        }
+        else
+        {
+            // Keep waiting for a grind until no long waiting for 
+            do
+            {
+                yield return new WaitUntil(isPlayerGrinding);
+            } while (earlyJumpWaitingforGrind || !isPlayerGrinding());
+        }
 
+        // Once the player is grinding and it is end jumps turn
+        // Disable the player input
         playerInputHandler.enabled = false;
-        jumpOffGrindPop.Initalise(playerInputHandler);
+        // Start the pop-up
+        jumpOffGrindEndPopUp.Initalise(playerInputHandler);
     }
 
-    private IEnumerator WaitForGrindTillGrindJump()
+    private IEnumerator EarlyJumpPopUpCoroutine()
     {
-        yield return new WaitUntil(isPlayerGrinding);
-        //yield return new WaitForSeconds(0.2f);
-        // Disable the player input
+        // If neither early nor end jump has a collider this must wait for end jump
+        if (grindEarlyJumpOffTrigger == null && grindEndJumpOffTrigger == null)
+        {
+            yield return new WaitUntil(IsEndJumpCompleted);
+            yield return new WaitUntil(isPlayerGrinding);
+        }
+        else
+        {
+            yield return new WaitUntil(IsEarlyJumpTriggerPassed);
+            if (endJumpHasPriority)
+            {
+                // Keep waiting for a grind until no long waiting for 
+                do
+
+                {
+                    yield return new WaitUntil(isPlayerGrinding);
+                } while (endJumpWaitingforGrind || !jumpOffGrindsEarlyPopUp.CheckCondition(playerHinge));
+            }
+            else
+            {
+                yield return new WaitUntil(isPlayerGrinding);
+            }
+        }
+
         if (jumpOffGrindsEarlyPopUp.CheckCondition(playerHinge))
         {
             jumpOffGrindsEarlyPopUp.Initalise(playerInputHandler);
         }
+    }
 
+    private bool isEndJumpTriggerPassed()
+    {
+        return endJumpTriggerPassed;
+    }
+    private bool IsEarlyJumpTriggerPassed()
+    {
+        return earlyJumpTriggerPassed;
+    }
+    private bool IsEarlyJumpWaitingForGrind()
+    {
+        return earlyJumpWaitingforGrind;
+    }
+    private bool IsEndJumpCompleted()
+    {
+        return endJumpCompleted;
     }
 
     private bool isPlayerGrinding()
@@ -171,12 +310,26 @@ public class TutoiralPopUpManager : MonoBehaviour
 
     private void CleanUpPopUps()
     {
-        Destroy(xTrickTrigger.gameObject);
-        Destroy(respawnPopUp.gameObject);
-        Destroy(xToTrickUiPop.gameObject);
-        Destroy(jumpOffGrindPop.gameObject);
-        Destroy(jumpOffGrindsEarlyPopUp.gameObject);
-        Destroy(wipingOutPopUp.gameObject);
+        if (respawnPopUp != null)
+        {
+            Destroy(respawnPopUp.gameObject);
+        }
+        if (xToTrickUiPop != null)
+        {
+            Destroy(xTrickTrigger.gameObject);
+        }
+        if (jumpOffGrindEndPopUp != null)
+        {
+            Destroy(jumpOffGrindEndPopUp.gameObject);
+        }
+        if (jumpOffGrindsEarlyPopUp != null)
+        {
+            Destroy(jumpOffGrindsEarlyPopUp.gameObject);
+        }
+        if (wipingOutPopUp != null)
+        {
+            Destroy(wipingOutPopUp.gameObject);
+        }
         Destroy(gameObject);
     }
 
@@ -190,7 +343,7 @@ public class TutoiralPopUpManager : MonoBehaviour
         {
             return;
         }
-        if (jumpOffGrindPop != null)
+        if (jumpOffGrindEndPopUp != null)
         {
             return;
         }
@@ -201,6 +354,10 @@ public class TutoiralPopUpManager : MonoBehaviour
         if (wipingOutPopUp != null)
         {
             return;
+        }
+        if (LoadingData.player != null)
+        {
+            LoadingData.player.doneTutorial = true;
         }
         CleanUpPopUps();
     }
