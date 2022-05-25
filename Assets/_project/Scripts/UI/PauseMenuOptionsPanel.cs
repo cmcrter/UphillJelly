@@ -42,7 +42,9 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     [SerializeField]
     private UITransitionManager uITransitionManager;
     [SerializeField]
-    private CinemachineVirtualCamera virtualCameraReturnedToo; 
+    private CinemachineVirtualCamera virtualCameraReturnedToo;
+    [SerializeField]
+    private GameObject firstMenuButtonToSelect;
 
     private FMOD.Studio.Bus masterBus;
     private FMOD.Studio.Bus musicBus;
@@ -250,6 +252,7 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         Button noButton = warningBox.AddCancelButton("No");
         noButton.onClick.AddListener(OnRevert);
         noButton.onClick.AddListener(CameraReturn);
+        noButton.onClick.AddListener(CameraReturn);
         noButton.onClick.AddListener(warningBox.CloseBox);
         Button yesButton = warningBox.AddCancelButton("Yes");
         yesButton.onClick.AddListener(OnApply);
@@ -260,6 +263,7 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     public void CameraReturn()
     {
         uITransitionManager.UpdateCamera(virtualCameraReturnedToo);
+        currentEventSystem.SetSelectedGameObject(firstMenuButtonToSelect);
     }
 
     public void OnWarningBoxCancel()

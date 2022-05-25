@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Cinemachine;
 using L7Games.Loading;
 
@@ -22,6 +23,8 @@ namespace L7Games
 
         public CinemachineVirtualCamera currentCamera;
         public CinemachineVirtualCamera secondaryCamera;
+
+        public EventSystem eventSystemInScene;
 
         #endregion
 
@@ -50,7 +53,6 @@ namespace L7Games
 
             currentCamera.Priority++;
         }
-
         #endregion
     }
 }
