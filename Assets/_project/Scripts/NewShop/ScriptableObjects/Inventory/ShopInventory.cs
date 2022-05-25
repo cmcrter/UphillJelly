@@ -41,46 +41,67 @@ public class ShopInventory : MonoBehaviour
     //public List<Button> shopButtons;
     //public GameObject currentlySelectedButton;
     public ShopManager shopManager;
-
-    ///public TextMeshProUGUI[] objectDescription;
-    ///public Image[] descriptionItemImage;
-
-    private int rotationSpeed = 25;
+    private int rotationSpeed = 3;
 
 
     public int currentTabSelected;
     public GameObject[] mainTabs;
 
     public Sprite boughtSprite;
+    
 
+    public enum CurrentTabEnum
+    {
+        currentTabHat = 0,
+        currentTabCharacter = 1,
+        currentTabSkateboard = 2,
+    };
+
+    #region OnEnable and OnDisable
     public void OnEnable() {
 
 
-        inputHandlerInScene.TabLeftPerformed += MainMenuController_TabLeftAction_Performed;
+        inputHandlerInScene.TabLeftPerformed        += MainMenuController_TabLeftAction_Performed;
 
-        inputHandlerInScene.TabRightPerformed += MainMenuController_TabRightAction_Performed;
+        inputHandlerInScene.TabRightPerformed       += MainMenuController_TabRightAction_Performed;
 
-        inputHandlerInScene.MenuUpPerformed += MainMenuController_Up_Performed;
-        inputHandlerInScene.MenuDownPerformed += MainMenuController_Down_Performed;
-        inputHandlerInScene.MenuLeftPerformed += MainMenuController_Left_Performed;
-        inputHandlerInScene.MenuRightPerformed += MainMenuController_Right_Performed;
-        inputHandlerInScene.MenuConfirmedPerformed += MainMenuController_Confirm_Performed;
-        inputHandlerInScene.MenuCancelPerformed += MainMenuController_Cancel_Performed;
+        inputHandlerInScene.MenuUpPerformed         += MainMenuController_Up_Performed;
+        inputHandlerInScene.MenuDownPerformed       += MainMenuController_Down_Performed;
+        inputHandlerInScene.MenuLeftPerformed       += MainMenuController_Left_Performed;
+        inputHandlerInScene.MenuRightPerformed      += MainMenuController_Right_Performed;
+        inputHandlerInScene.MenuConfirmedPerformed  += MainMenuController_Confirm_Performed;
+        inputHandlerInScene.MenuCancelPerformed     += MainMenuController_Cancel_Performed;
 
         //eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
 
-        inputHandlerInScene.RotateLeftPerformed += MainMenuController_RotateLeftAction_Performed;
+        inputHandlerInScene.RotateLeftPerformed     += MainMenuController_RotateLeftAction_Performed;
 
-        inputHandlerInScene.RotateRightPerformed += MainMenuController_RotateRightAction_Performed;
+        inputHandlerInScene.RotateRightPerformed    += MainMenuController_RotateRightAction_Performed;
 
     }
 
 
     public void OnDisable() {
-        
+
+        inputHandlerInScene.TabLeftPerformed        -= MainMenuController_TabLeftAction_Performed;
+
+        inputHandlerInScene.TabRightPerformed       -= MainMenuController_TabRightAction_Performed;
+
+        inputHandlerInScene.MenuUpPerformed         -= MainMenuController_Up_Performed;
+        inputHandlerInScene.MenuDownPerformed       -= MainMenuController_Down_Performed;
+        inputHandlerInScene.MenuLeftPerformed       -= MainMenuController_Left_Performed;
+        inputHandlerInScene.MenuRightPerformed      -= MainMenuController_Right_Performed;
+        inputHandlerInScene.MenuConfirmedPerformed  -= MainMenuController_Confirm_Performed;
+        inputHandlerInScene.MenuCancelPerformed     -= MainMenuController_Cancel_Performed;
+
+        //eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
+
+        inputHandlerInScene.RotateLeftPerformed     -= MainMenuController_RotateLeftAction_Performed;
+
+        inputHandlerInScene.RotateRightPerformed    -= MainMenuController_RotateRightAction_Performed;
 
     }
-
+    #endregion
 
 
     public void Start() {
@@ -154,27 +175,33 @@ public class ShopInventory : MonoBehaviour
     private void MainMenuController_RotateLeftAction_Performed() {
 
         Debug.Log("RotateLeft");
-        physicalCharacter.transform.Rotate(new Vector3(0f, -50f, 0f) * rotationSpeed);
+        physicalCharacter.transform.Rotate(new Vector3(0f, -1f, 0f) * rotationSpeed);
 
     }
 
     private void MainMenuController_RotateRightAction_Performed() {
 
         Debug.Log("RotateRight");
-        physicalCharacter.transform.Rotate(new Vector3(0f, 50f, 0f) * rotationSpeed);
+        physicalCharacter.transform.Rotate(new Vector3(0f, 1f, 0f) * rotationSpeed);
 
     }
 
     public void UpdateTabUI() {
 
+        
 
+        
         for (int i = 0; i < mainTabs.Length; i++) {
             if (currentTabSelected == i) {
                 mainTabs[i].gameObject.SetActive(true);
+                //mainTabs[i].GetComponent<Button>().enabled = true;
             } else {
                 mainTabs[i].gameObject.SetActive(false);
+                //mainTabs[i].GetComponent<Button>().enabled = false;
             }
         }
+        
+
 
         ///Tabs[3].gameObject.SetActive(false);
 
@@ -185,19 +212,19 @@ public class ShopInventory : MonoBehaviour
     }
 
     private void MainMenuController_Up_Performed() {
-
+        Debug.Log("UP");
     }
 
     private void MainMenuController_Down_Performed() {
-
+        Debug.Log("DOWN");
     }
 
     private void MainMenuController_Left_Performed() {
-
+        Debug.Log("LEFT");
     }
 
     private void MainMenuController_Right_Performed() {
-
+        Debug.Log("RIGHT");
     }
 
     private void MainMenuController_Confirm_Performed() {
@@ -207,7 +234,7 @@ public class ShopInventory : MonoBehaviour
     private void MainMenuController_Cancel_Performed() {
 
     }
-
+    /*
     public void hasBoughtItem() {
 
         //var item = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>();
@@ -237,6 +264,7 @@ public class ShopInventory : MonoBehaviour
         }
 
     }
+    */
     /*
     public void BuyItem() {
 

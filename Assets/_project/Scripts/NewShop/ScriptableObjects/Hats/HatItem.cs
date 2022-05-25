@@ -16,4 +16,6 @@ public class HatItem : MonoBehaviour
 
     public ItemObjectSO item;
 
+    
+
 }

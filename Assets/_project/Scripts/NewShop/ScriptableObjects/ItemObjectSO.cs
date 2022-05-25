@@ -28,12 +28,14 @@ public abstract class ItemObjectSO : ScriptableObject
     public int Id;
     //
     public Sprite uiDisplay;
+    ///public Sprite boughtUIDisplay;
     public ItemType type;
 
     public bool isPurchased;
 
     public GameObject objectPrefab;
     public Material material;
+    public int ItemPrice;
 
     // item description text area string with a size of 15 and 20
     [TextArea(15,20)]

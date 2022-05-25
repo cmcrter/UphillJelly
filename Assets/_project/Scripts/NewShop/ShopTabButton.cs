@@ -37,7 +37,7 @@ namespace SleepyCat
 
         public void OnPointerEnter(PointerEventData eventData) {
             shopManager.OnTabHover(this);
-            Debug.Log(this);
+            ///Debug.Log(this);
         }
 
         public void OnPointerExit(PointerEventData eventData) {
