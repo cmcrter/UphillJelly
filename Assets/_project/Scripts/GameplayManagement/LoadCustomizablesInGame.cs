@@ -19,6 +19,9 @@ public class LoadCustomizablesInGame
     [Header("Needed Objects and Meshes")]
     public SkinnedMeshRenderer catBody;
     public Transform catHead;
+
+    public GameObject defaultBoard;
+
     public MeshRenderer catBoardMesh;
     public MeshFilter catBoardFilter;
 
@@ -31,7 +34,7 @@ public class LoadCustomizablesInGame
     [SerializeField]
     private bool OverrideValues = false;
     [SerializeField]
-    private List<InventoryItemData> equipItems = new List<InventoryItemData>(3);
+    private List<ItemObjectSO> equipItems = new List<ItemObjectSO>(3);
 
     public void ApplyCustomization()
     {
@@ -48,13 +51,15 @@ public class LoadCustomizablesInGame
                 if(equipItems[1] != null)
                 {
                     //Adding Hat
-                    GameObject.Instantiate<GameObject>(equipItems[1].prefab, catHead);
+                    GameObject.Instantiate<GameObject>(equipItems[1].objectPrefab, catHead);
                 }
 
                 if(equipItems[2] != null)
                 {
+                    defaultBoard.SetActive(false);
+
                     //Swapping Out Board
-                    catBoardFilter.sharedMesh = equipItems[2].mesh;
+                    catBoardFilter.sharedMesh = equipItems[2].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
                     catBoardMesh.material = equipItems[2].material;
                 }
             }
@@ -62,15 +67,28 @@ public class LoadCustomizablesInGame
             return;
         }
 
-        //Applying Material To Body
-        catBody.material = LoadingData.shopItems[0].material;
+        //Personally this way is super inefficient but it's the only way it works with the shop system as currently is
+        if (LoadingData.shopItems[0])
+        {
+            //Applying Material To Body
+            catBody.material = LoadingData.shopItems[0].material;
+        }
 
-        //Adding Hat
-        GameObject.Instantiate<GameObject>(LoadingData.shopItems[1].prefab, catHead);
+        if (LoadingData.shopItems[1])
+        {
+            //Adding Hat
+            catHead.GetComponent<MeshFilter>().sharedMesh = LoadingData.shopItems[1].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            catHead.GetComponent<MeshRenderer>().material = LoadingData.shopItems[1].material;
+        }
 
-        //Swapping Out Board
-        catBoardFilter.sharedMesh = LoadingData.shopItems[2].mesh;
-        catBoardMesh.material = LoadingData.shopItems[2].material;
+        if (LoadingData.shopItems[2])
+        {
+            defaultBoard.SetActive(false);
+
+            //Swapping Out Board
+            catBoardFilter.sharedMesh = LoadingData.shopItems[2].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            catBoardMesh.material = LoadingData.shopItems[2].material;
+        }
     }
 
     public GameObject HatObject()
@@ -86,7 +104,7 @@ public class LoadCustomizablesInGame
 
                 if(equipItems[1] != null)
                 {
-                    return equipItems[1].prefab;
+                    return equipItems[1].objectPrefab;
                 }
             }
         }

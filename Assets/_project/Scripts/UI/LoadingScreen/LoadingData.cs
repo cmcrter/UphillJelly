@@ -53,7 +53,7 @@ namespace L7Games.Loading
         /// <summary>
         ///A variable for the player's equipped shop items
         /// </summary>
-        public static InventoryItemData[] shopItems;
+        public static ItemObjectSO[] shopItems;
 
         /// <summary>
         ///A variable for the next replay to load

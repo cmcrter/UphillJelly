@@ -68,6 +68,8 @@ namespace L7Games.Movement
         public GameObject boardObject;
         [SerializeField]
         private GameObject boardModel;
+        [SerializeField]
+        private GameObject customBoardModel;
         public Collider boardCollider;
         private Vector3 boardPos;
 
@@ -166,11 +168,22 @@ namespace L7Games.Movement
 
             root.rotation = initialRootRotation;
 
-            Destroy(boardModel.GetComponent<Rigidbody>());
-            boardModel.transform.SetParent(root);
-            boardCollider.enabled = true;
-            boardModel.transform.localPosition = Vector3.zero;
-            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
+            if (boardModel.activeInHierarchy)
+            {
+                Destroy(boardModel.GetComponent<Rigidbody>());
+                boardModel.transform.SetParent(root);
+                boardCollider.enabled = true;
+                boardModel.transform.localPosition = Vector3.zero;
+                boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
+            }
+
+            if (customBoardModel.activeInHierarchy)
+            {
+                Destroy(customBoardModel.GetComponent<Rigidbody>());
+                customBoardModel.transform.SetParent(root);
+                customBoardModel.transform.localPosition = Vector3.zero;
+                customBoardModel.transform.localRotation = Quaternion.Euler(new Vector3(180, 0, -90));
+            }
 
             transform.rotation = initialRot;
             transform.position = initalPos;
@@ -243,11 +256,22 @@ namespace L7Games.Movement
 
             root.rotation = initialRootRotation;
 
-            Destroy(boardModel.GetComponent<Rigidbody>());
-            boardModel.transform.SetParent(root);
-            boardCollider.enabled = true;
-            boardModel.transform.localPosition = Vector3.zero;
-            boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
+            if (boardModel.activeInHierarchy)
+            {
+                Destroy(boardModel.GetComponent<Rigidbody>());
+                boardModel.transform.SetParent(root);
+                boardCollider.enabled = true;
+                boardModel.transform.localPosition = Vector3.zero;
+                boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
+            }
+
+            if (customBoardModel.activeInHierarchy)
+            {
+                Destroy(customBoardModel.GetComponent<Rigidbody>());
+                customBoardModel.transform.SetParent(root);
+                customBoardModel.transform.localPosition = Vector3.zero;
+                customBoardModel.transform.localRotation = Quaternion.Euler(new Vector3(180, 0, -90));
+            }
 
             transform.rotation = point.rotation;
             transform.position = point.position;
@@ -681,10 +705,22 @@ namespace L7Games.Movement
             }
             ragdollComponent.AddForceToRagdollAllRigidbody(currentVelocity, ForceMode.Impulse);
 
-            boardModel.transform.SetParent(null);
-            Rigidbody boardRb =  boardModel.AddComponent<Rigidbody>();
-            boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            boardRb.AddForce(Vector3.up);
+            if (boardModel.activeInHierarchy)
+            {
+                boardModel.transform.SetParent(null);
+                Rigidbody boardRb = boardModel.AddComponent<Rigidbody>();
+                boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                boardRb.AddForce(Vector3.up);
+            }
+
+            if (customBoardModel.activeInHierarchy)
+            {
+                customBoardModel.transform.SetParent(null);
+                Rigidbody boardRb = customBoardModel.AddComponent<Rigidbody>();
+                boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                boardRb.AddForce(Vector3.up);
+            }
+
             fRB.isKinematic = true;
 
             characterAnimator.Play("Wipeout");
