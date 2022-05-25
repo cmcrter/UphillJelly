@@ -76,7 +76,7 @@ namespace L7Games
 
             //Updating general panel text's
             rankText.text = ratingString;
-            scoreText.text = HUDScript.storedScore.ToString();
+            scoreText.text = Mathf.FloorToInt(HUDScript.storedScore).ToString();
             timerText.text = ((int)Timer.roundTime * -1).ToString() + "s";
             wipeoutText.text = player.KOCount.ToString();
         }
