@@ -66,10 +66,8 @@ public class SliderControllerSupport : MonoBehaviour
 
     private void InputHandler_MenuConfirmedPerformed()
     {
-        Debug.Log("Confirm Pressed");
         if (sceneEventSystem.currentSelectedGameObject == sliderControlled.gameObject)
         {
-            Debug.Log("Confirm Pressed 2");
             if (!isSliderBeingControlled)
             {
                 SetupControl();
@@ -91,7 +89,6 @@ public class SliderControllerSupport : MonoBehaviour
 
     private void SetupControl()
     {
-        Debug.Log("Control Setup");
         Navigation navigation = new Navigation();
         navigation.mode = Navigation.Mode.Explicit;
         navigation.selectOnDown = sliderControlled.navigation.selectOnDown;
@@ -105,7 +102,6 @@ public class SliderControllerSupport : MonoBehaviour
 
     private void RemoveControl()
     {
-        Debug.Log("Control removed");
         Navigation navigation = new Navigation();
         navigation.mode = Navigation.Mode.Explicit;
         navigation.selectOnDown = sliderControlled.navigation.selectOnDown;
@@ -122,7 +118,7 @@ public class SliderControllerSupport : MonoBehaviour
     private void UpdateInputHandlersFromScene()
     {
         inputHandlers = FindObjectsOfType<InputHandler>();
-        #if DEBUG || UNITY_EDITOR
+#if DEBUG || UNITY_EDITOR
         if (inputHandlers.Length == 0)
         {
             Debug.LogWarning("No input handlers could be found in scene by the pause menu controller");

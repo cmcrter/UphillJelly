@@ -25,7 +25,8 @@ namespace L7Games
         public CinemachineVirtualCamera secondaryCamera;
 
         public EventSystem eventSystemInScene;
-
+        [Tooltip("The object that starts selected if the secondary camera starts in use")]
+        public GameObject secondaryStartingSelectedable;
         #endregion
 
         #region Unity Methods
@@ -33,11 +34,11 @@ namespace L7Games
         // Start is called before the first frame update
         void Start()
         {
-            if(LoadingData.player != null)
+            if (LoadingData.player != null)
             {
                 currentCamera = secondaryCamera;
+                eventSystemInScene.SetSelectedGameObject(secondaryStartingSelectedable);
             }
-
             currentCamera.Priority++;
         }
 
