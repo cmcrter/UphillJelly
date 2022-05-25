@@ -142,4 +142,9 @@ public class ProfileSelector : MonoBehaviour
         // set the starting background to false
         profileSelectionScreen.SetActive(false);
     }
+
+    public static void QuitButton()
+    {
+        Application.Quit();
+    }
 }
