@@ -219,7 +219,11 @@ namespace L7Games.UI
                 for (int i = 0; i < inputHandlersInScene.Length; ++i)
                 {
                     inputHandlersInScene[i].AttachedPlayerInput.SwitchCurrentActionMap(savedInputActionMaps[i].name);
-                    Debug.Log(savedInputActionMaps[i].name);
+
+                    if(Debug.isDebugBuild)
+                    {
+                        Debug.Log(savedInputActionMaps[i].name);
+                    }
                 }
             }
         }

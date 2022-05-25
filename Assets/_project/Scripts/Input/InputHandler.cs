@@ -523,7 +523,11 @@ namespace L7Games.Input
             if (pressDownEnded != null)
             {
                 pressDownEnded();
-                Debug.Log("PressDownEndedCalled");
+
+                if(Debug.isDebugBuild)
+                {
+                    Debug.Log("PressDownEndedCalled");
+                }
             }
         }
         #endregion
@@ -700,7 +704,11 @@ namespace L7Games.Input
         {
             if (MenuConfirmedPerformed != null)
             {
-                Debug.Log("MenuConfirmPerformed");
+                if(Debug.isDebugBuild)
+                {
+                    Debug.Log("MenuConfirmPerformed");
+                }
+
                 MenuConfirmedPerformed();
             }
         }
@@ -1018,7 +1026,11 @@ namespace L7Games.Input
                         }
                         else
                         {
-                            Debug.Log("Pattern Completed with Id: " + analogueStickPatterns[i].ID.ToString());
+                            if(Debug.isDebugBuild)
+                            {
+                                Debug.Log("Pattern Completed with Id: " + analogueStickPatterns[i].ID.ToString());
+                            }
+
                             if (analogueStickPatternCompleted != null)
                             {
                                 analogueStickPatternCompleted(analogueStickPatterns[i].ID);

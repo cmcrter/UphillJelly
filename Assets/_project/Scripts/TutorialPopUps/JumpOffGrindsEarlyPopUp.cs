@@ -40,7 +40,6 @@ public class JumpOffGrindsEarlyPopUp : UiPopUp
     {
         base.Initalise(inputHandler); 
         PauseManager.instance.PauseGame();
-
     }
 
     private void Update()

@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-namespace SleepyCat
+namespace L7Games
 {
     public class MainMenuLevelSelect : MonoBehaviour
     {

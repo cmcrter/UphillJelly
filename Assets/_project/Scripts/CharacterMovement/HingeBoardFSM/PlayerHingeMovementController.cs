@@ -76,7 +76,6 @@ namespace L7Games.Movement
         public Collider rbCollider;
 
         public PlayerInput input;
-        public InputHandler inputHandler;
         public Animator characterAnimator;
         public TriggerableTrigger triggerObject;
         public TrickBuffer trickBuffer;
@@ -566,8 +565,11 @@ namespace L7Games.Movement
                             float value = Vector3.Dot(collision.relativeVelocity.normalized, transform.up);
                             verticalCheck = verticalCollisionTheshold > value;
                             //Debug.Log(value);
-                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + collision.relativeVelocity.normalized, Color.black);
-                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + transform.up, Color.magenta);
+                            if(Debug.isDebugBuild)
+                            {
+                                Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + collision.relativeVelocity.normalized, Color.black);
+                                Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + transform.up, Color.magenta);
+                            }
                         }
 
                         if (verticalCheck)
@@ -584,7 +586,11 @@ namespace L7Games.Movement
 
                                 if (collision.relativeVelocity.magnitude > characterCollider.forceRequiredToWipeOut)
                                 {
-                                    Debug.Log(collision.relativeVelocity.magnitude + " + " + characterCollider.forceRequiredToWipeOut + " + " + characterCollider.name);
+                                    if(Debug.isDebugBuild)
+                                    {
+                                        Debug.Log(collision.relativeVelocity.magnitude + " + " + characterCollider.forceRequiredToWipeOut + " + " + characterCollider.name);
+                                    }
+
                                     CallOnWipeout(-collision.relativeVelocity);
                                     break;
                                 }
@@ -705,7 +711,7 @@ namespace L7Games.Movement
         {
             bool InfluenceDir;
 
-            if(!aerialState.hasRan)
+            if(!aerialState.hasRan && Debug.isDebugBuild)
             {
                 Debug.Log("No Influence Because no Aerial State", this);
             }

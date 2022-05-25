@@ -11,6 +11,7 @@ using UnityEngine;
 using L7Games.Triggerables;
 using Cinemachine;
 using System.Collections;
+using L7Games.Input;
 
 namespace L7Games.Movement
 {
@@ -19,11 +20,18 @@ namespace L7Games.Movement
         public bool ignoreNextWipeoutOnWipeoutCount;
 
         #region Public Events
+
         /// <summary>
         /// Called when the player re spawns
         /// </summary>
         public event System.Action onRespawn;
         public event System.Action<Vector3> onWipeout;
+
+        #endregion
+
+        #region Variables
+
+        public InputHandler inputHandler; 
 
         [SerializeField]
         private CineLockCameraZ cameraZ;

@@ -6,7 +6,7 @@ using FMODUnity;
 using L7Games.Movement;
 using UnityEngine.UI;
 
-namespace SleepyCat
+namespace L7Games
 {
     public class EnvAudioManager : MonoBehaviour
     {

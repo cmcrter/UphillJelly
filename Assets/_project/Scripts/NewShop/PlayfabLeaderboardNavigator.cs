@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////
 // File: PlayfabLeaderboardNavigator.cs
-// Author: Jack Peedle
+// Author: Jack Peedle, Charles Carter
 // Date Created: 30/04/22
-// Last Edited By: Jack Peedle
-// Date Last Edited: 30/04/22
-// Brief: 
+// Last Edited By: Charles Carter
+// Date Last Edited: 23/05/22
+// Brief: A script to change panels in the main menu for the leaderboards
 ////////////////////////////////////////////////////////////
 
 using System;
@@ -15,6 +15,7 @@ using L7Games.Loading;
 
 namespace L7Games 
 {
+    //A class to contain the data which each panel represents
     [Serializable]
     class PanelData
     {
@@ -25,6 +26,8 @@ namespace L7Games
 
     public class PlayfabLeaderboardNavigator : MonoBehaviour
     {
+        #region Variables
+
         public PlayFabManager playFabManager;
         public TextMeshProUGUI leaderboardTypeText;
         public TextMeshProUGUI valueText;
@@ -34,9 +37,15 @@ namespace L7Games
         [SerializeField]
         private List<PanelData> MapPanels = new List<PanelData>();
 
+        #endregion
+
+        #region Unity Methods
+
         private void Awake()
         {
             LoadingData.currentLevel = LEVEL.MAINMENU;
+
+            //Unneccessary but making sure there's a login
             playFabManager.Login();
         }
 
@@ -46,8 +55,13 @@ namespace L7Games
             UpdatePanels();
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void UpdatePanels()
         {
+            //Going through the panels and shutting any on panels off just in case
             for(int i = 0; i < MapPanels.Count; ++i)
             {
                 MapPanels[i].levelPanel.gameObject.SetActive(false);
@@ -58,6 +72,10 @@ namespace L7Games
             valueText.text = MapPanels[currentLeaderboardInt].value.ToString();
             MapPanels[currentLeaderboardInt].levelPanel.gameObject.SetActive(true);
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void NextLeaderboardOption() 
         {
@@ -93,5 +111,7 @@ namespace L7Games
 
             playFabManager.LeaderboardPanels[(int)value].gameObject.SetActive(true);
         }
+
+        #endregion
     }
 }

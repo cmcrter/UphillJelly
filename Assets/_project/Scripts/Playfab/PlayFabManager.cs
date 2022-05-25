@@ -124,7 +124,11 @@ namespace L7Games
 
         void OnSuccess(LoginResult result)
         {
-            Debug.Log("Successful login / account create!");
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Successful login / account create!");
+            }
+
             string name = null;
             if(result.InfoResultPayload.PlayerProfile != null)
             {
@@ -201,13 +205,19 @@ namespace L7Games
 
         public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
         {
-            Debug.Log("Updated Display Name");
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Updated Display Name");
+            }
         }
 
         void OnError(PlayFabError error)
         {
-            Debug.Log("Error login / Creating Account");
-            Debug.Log(error.GenerateErrorReport());
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Error login / Creating Account");
+                Debug.Log(error.GenerateErrorReport());
+            }
         }
 
         public void SendLeaderBoards(RankBrackets bracket)
@@ -374,7 +384,11 @@ namespace L7Games
             }
 
             LeaderboardPanels[newValue].gameObject.SetActive(true);
-            Debug.Log("Switching panel to: " + (leaderboard_value)newValue);
+
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Switching panel to: " + (leaderboard_value)newValue);
+            }
         }
 
         //        private List<CompiledLeaderboardRow> CreateCompiledPosition()

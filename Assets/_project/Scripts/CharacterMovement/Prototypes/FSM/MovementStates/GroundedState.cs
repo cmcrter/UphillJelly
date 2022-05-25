@@ -259,7 +259,7 @@ namespace L7Games.Movement
         {
             if(jumpCoroutine == null && hasRan)
             {
-                Debug.Log("Jumping");
+                //Debug.Log("Jumping");
                 StartJumpTimer();
             }
         }

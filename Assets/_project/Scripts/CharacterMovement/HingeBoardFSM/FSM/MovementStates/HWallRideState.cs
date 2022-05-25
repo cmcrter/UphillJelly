@@ -102,14 +102,17 @@ namespace L7Games.Movement
 
             //Raycast forward to see if board is hitting something
             //If it is, end the wall ride...
-            Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
-            Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+            if(Debug.isDebugBuild)
+            {
+                Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+                Debug.DrawLine(playerMovement.transform.position, playerMovement.transform.position + (playerMovement.transform.forward * 0.5f), Color.green);
+            }
 
             if(Time.frameCount % 5 == 0)
             {
                 if(Physics.Raycast(fRB.transform.position, playerMovement.transform.forward, out RaycastHit hit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore) || Physics.Raycast(playerMovement.transform.position, playerMovement.transform.forward, out RaycastHit bodyhit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore))
                 {
-                    Debug.Log(hit.collider.name);
+                    //Debug.Log(hit.collider.name);
 
                     //Wipeout
                     playerMovement.bWipeOutLocked = false;
