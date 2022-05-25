@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 06/05/22
 // Last Edited By: Charles Carter
-// Date Last Edited: 06/05/22
+// Date Last Edited: 22/05/22
 // Brief: A place to see the currently loaded data, and also tell the relevant scripts to load it on awake
 //////////////////////////////////////////////////////////// 
 
@@ -61,10 +61,10 @@ public class ApplyingGameplayData : MonoBehaviour
             loadcustomizables.ApplyCustomization();
         }
 
-        if(LoadingData.playerSlot != 0)
-        {
-            ghostManager.LoadReplay(LoadingData.playerSlot, 1);
-        }
+        //if(LoadingData.playerSlot != 0)
+        //{
+        //    ghostManager.LoadReplay(LoadingData.playerSlot, 1);
+        //}
     }
 
     #endregion

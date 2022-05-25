@@ -6,7 +6,7 @@ using FMODUnity;
 using L7Games.Movement;
 using UnityEngine.UI;
 
-namespace SleepyCat
+namespace L7Games
 {
     public class EnvAudioManager : MonoBehaviour
     {
@@ -211,19 +211,19 @@ namespace SleepyCat
 
             PlayMusicForMap();
 
-            Debug.Log("WaitedForTwoSeconds");
+            //Debug.Log("WaitedForTwoSeconds");
 
         }
 
         public void PlayerWipeOut(Vector3 death) {
-            Debug.Log("12345");
+            //Debug.Log("12345");
 
             fDeath = 5;
         }
 
         public void LevelEnd() {
 
-            Debug.Log("12345");
+            //Debug.Log("12345");
 
             fDeath = 5;
 

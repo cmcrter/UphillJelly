@@ -31,7 +31,8 @@ public class GhostRecorder2 : MonoBehaviour
     #region Unity Methods
 
     // On awake
-    private void Awake() {
+    private void Start()
+    {
         
         // if the ghost is currently recording
         if (ghost2.isRecording) {

@@ -98,7 +98,7 @@ namespace L7Games.Movement
         private Quaternion initialRot;
         private Quaternion initialRootRotation;
 
-        private Coroutine AirturningCo;
+        private IEnumerator AirturningCo;
         public float turnClamp = 1f;
         [SerializeField]
         private float turnSmoothness = 1.25f;
@@ -122,6 +122,9 @@ namespace L7Games.Movement
         private FMOD.Studio.EventInstance respawnSound;
         private FMOD.Studio.Bus masterBus;
 
+        [SerializeField]
+        private List<TrailRenderer> trails = new List<TrailRenderer>();
+
         #endregion
 
         #region Public Properties
@@ -129,7 +132,7 @@ namespace L7Games.Movement
         {
             get
             {
-                return characterModel.activeSelf;
+                return !characterModel.activeSelf;
             }
         }
         #endregion
@@ -190,6 +193,7 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
+                StopAirInfluenctCoroutine();
                 StopAllCoroutines();
             }
 
@@ -200,6 +204,11 @@ namespace L7Games.Movement
             characterAnimator.SetFloat("crouchingFloat", -1);
 
             OverrideCamera(camBrain);
+
+            foreach (TrailRenderer trail in trails)
+            {
+                trail.Clear();
+            }
 
             bWipeOutLocked = false;
             Time.timeScale = 1;
@@ -264,6 +273,7 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
+                StopAirInfluenctCoroutine();
                 StopAllCoroutines();
             }
 
@@ -274,6 +284,11 @@ namespace L7Games.Movement
             characterAnimator.SetFloat("crouchingFloat", -1);
 
             OverrideCamera(camBrain);
+
+            foreach(TrailRenderer trail in trails)
+            {
+                trail.Clear();
+            }
 
             Time.timeScale = 1;
             bWipeOutLocked = false;
@@ -442,6 +457,8 @@ namespace L7Games.Movement
             trickBuffer = trickBuffer ?? GetComponent<TrickBuffer>();
 
             masterBus = FMODUnity.RuntimeManager.GetBus("bus:/Player Sounds");
+
+            AirturningCo = Co_AirInfluence();
         }
 
         //Adding the inputs to the finite state machine
@@ -501,7 +518,7 @@ namespace L7Games.Movement
                 Time.timeScale += 0.1f * Time.unscaledDeltaTime;
             }
 
-            if (characterModel.activeSelf)
+            if (characterModel.activeSelf && playerStateMachine != null)
             {
                 playerStateMachine.RunMachine(Time.deltaTime);
             }
@@ -515,11 +532,6 @@ namespace L7Games.Movement
             }
 
             currentTurnInput = Mathf.Clamp(inputHandler.TurningAxis, -turnClamp, turnClamp);
-
-            if(AirturningCo != null || groundedState.hasRan)
-            {
-                characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
-            }
         }
 
         private void FixedUpdate()
@@ -538,7 +550,7 @@ namespace L7Games.Movement
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(bWipeOutLocked)
+            if(bWipeOutLocked || grindingState.hasRan)
                 return;
 
             if (characterModel.activeSelf)
@@ -554,8 +566,11 @@ namespace L7Games.Movement
                             float value = Vector3.Dot(collision.relativeVelocity.normalized, transform.up);
                             verticalCheck = verticalCollisionTheshold > value;
                             //Debug.Log(value);
-                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + collision.relativeVelocity.normalized, Color.black);
-                            Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + transform.up, Color.magenta);
+                            if(Debug.isDebugBuild)
+                            {
+                                Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + collision.relativeVelocity.normalized, Color.black);
+                                Debug.DrawLine(collision.contacts[i].point, collision.contacts[i].point + transform.up, Color.magenta);
+                            }
                         }
 
                         if (verticalCheck)
@@ -572,7 +587,11 @@ namespace L7Games.Movement
 
                                 if (collision.relativeVelocity.magnitude > characterCollider.forceRequiredToWipeOut)
                                 {
-                                    Debug.Log(collision.relativeVelocity.magnitude + " + " + characterCollider.forceRequiredToWipeOut + " + " + characterCollider.name);
+                                    if(Debug.isDebugBuild)
+                                    {
+                                        Debug.Log(collision.relativeVelocity.magnitude + " + " + characterCollider.forceRequiredToWipeOut + " + " + characterCollider.name);
+                                    }
+
                                     CallOnWipeout(-collision.relativeVelocity);
                                     break;
                                 }
@@ -612,17 +631,12 @@ namespace L7Games.Movement
 
         public void StartAirInfluenctCoroutine()
         {
-            StopAirInfluenctCoroutine();
-            AirturningCo = StartCoroutine(Co_AirInfluence());
+           StartCoroutine(AirturningCo);
         }
 
         public void StopAirInfluenctCoroutine()
         {
-            if(AirturningCo != null)
-            {
-                StopCoroutine(AirturningCo);
-                AirturningCo = null;
-            }
+            StopCoroutine(AirturningCo);
         }
 
         public void ResetCameraView()
@@ -697,26 +711,34 @@ namespace L7Games.Movement
         private IEnumerator Co_AirInfluence()
         {
             bool InfluenceDir;
-            Timer influenceTimer = new Timer(2.5f);
 
-            while (influenceTimer.isActive)
+            if(!aerialState.hasRan && Debug.isDebugBuild)
+            {
+                Debug.Log("No Influence Because no Aerial State", this);
+            }
+
+            while (aerialState.hasRan)
             {
                 InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
                 //Debug.Log("Influence Up", this);
 
                 if(InfluenceDir)
                 {
-                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(-transform.right * airInfluence, ForceMode.Impulse);
                 }
-                else if (inputHandler.TurningAxis != 0 )
+                else if(inputHandler.TurningAxis != 0)
                 {
-                    yield return new WaitForFixedUpdate();
                     fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
                 }
+                else
+                {
+                    //No input
+                    //Debug.Log("No Influence", this);
+                }
 
-                influenceTimer.Tick(Time.fixedDeltaTime);
-                yield return null;
+                characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
+
+                yield return new WaitForFixedUpdate();
             }
         }
 

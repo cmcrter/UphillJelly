@@ -52,8 +52,8 @@ public class b_Player : MonoBehaviour
         ghostSO1.isReplaying = false;
 
         // set ghost 2 replaying and replaying to false
-        ghostSO2.isReplaying = false;
-        ghostSO2.isRecording = false;
+        //ghostSO2.isReplaying = false;
+        //ghostSO2.isRecording = false;
 
         // reset ghost 1 data
         ghostSO1.ResetGhostData();
@@ -77,8 +77,8 @@ public class b_Player : MonoBehaviour
         ghostSO1.isRecording = false;
         ghostSO1.isReplaying = false;
 
-        ghostSO2.isRecording = false;
-        ghostSO2.isReplaying = false;
+        //ghostSO2.isRecording = false;
+        //ghostSO2.isReplaying = false;
 
         // Save Replay 1 as replay 2 (ghost 1 only records (check if better than the ghost replay 2),
         // Ghost 2 replays best time 
@@ -126,7 +126,10 @@ public class b_Player : MonoBehaviour
         // save the replay 1 through the ghost save manager
         replaySaveManager.SaveReplay(playerSlot, replaySlot);
 
-        Debug.Log("Saved Player: " + playerSlot.ToString() + "in replay slot: " + replaySlot.ToString());
+        if(Debug.isDebugBuild)
+        {
+            Debug.Log("Saved Player: " + playerSlot.ToString() + "in replay slot: " + replaySlot.ToString());
+        }
     }
 
     // play button pressed
@@ -136,7 +139,7 @@ public class b_Player : MonoBehaviour
         ghostSO2.ResetGhostData();
 
         // Load the first second replay for ghost 2
-        replaySaveManager.LoadReplay(playerSlot, replaySlot);
+        //replaySaveManager.LoadReplay(playerSlot, replaySlot);
 
         // set the ghost 1 to recording = true and replaying = false
         ghostSO1.isRecording = true;

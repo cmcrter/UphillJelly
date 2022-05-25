@@ -167,12 +167,22 @@ namespace L7Games.Movement
             }
 
             parentController.SmoothToGroundRotation(false, groundAdjustSmoothness, turnSpeed, groundedCondition);
+
+            float animValue = inputHandler.TurningAxis;
+
+            if(animValue >= 0.95)
+            {
+                animValue = 1f;
+            }
+
+            parentController.characterAnimator.SetFloat("turnValue", animValue);
         }
 
         public override void PhysicsTick(float dT)
         {
             UpdatePositionAndRotation(dT);
 
+            //Switching camera for direction
             if(cameraBackwards)
             {
                 if(!cameraSwitched && movementRB.velocity.magnitude > 2f)
@@ -191,6 +201,7 @@ namespace L7Games.Movement
                 }
             }
 
+            //Playing base movement audio
             if(parentController.audioEmitter)
             {
                 parentController.audioEmitter.SetParameter("Velocity", movementRB.velocity.magnitude / 15f);
@@ -215,6 +226,7 @@ namespace L7Games.Movement
         {
             pInput.SwitchCurrentActionMap("Grounded");
             parentController.characterAnimator.SetBool("grounded", true);
+            parentController.characterAnimator.SetFloat("turnValue", 0);
 
             movementRB.drag = GroundedDrag;
             parentController.ModelRB.drag = GroundedDrag;

@@ -15,6 +15,7 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown textureDropdown;
     public TMP_Dropdown aaDropdown;
+    public Toggle fullScreenToggle;
 
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
@@ -34,14 +35,40 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     #region Unity Method
     private void Awake()
     {
+        Debug.Log(Mathf.Pow(8, -3));
         List<string> resolutionOptionsList = new List<string>();
-        Resolution[] resOptions = Screen.resolutions;
-        for (int i = 0; i < resOptions.Length; ++i)
+        resolutions = Screen.resolutions;
+        int currentResIndex = 0;
+        for (int i = 0; i < resolutions.Length; ++i)
         {
-            resolutionOptionsList.Add(resOptions[i].ToString());
+            if (resolutions[i].height == Screen.currentResolution.height &&
+                resolutions[i].width == Screen.currentResolution.width &&
+                resolutions[i].refreshRate == Screen.currentResolution.refreshRate)
+            {
+                currentResIndex = i;
+            }
+            resolutionOptionsList.Add(resolutions[i].ToString());
         }
         resolutionDropdown.ClearOptions();
         resolutionDropdown.AddOptions(resolutionOptionsList);
+        resolutionDropdown.SetValueWithoutNotify(currentResIndex);
+
+        List<string> qualityOptions = new List<string>(QualitySettings.names);
+        qualityDropdown.ClearOptions();
+        qualityDropdown.AddOptions(qualityOptions);
+        qualityDropdown.AddOptions(new List<string>() { "Custom" });
+        qualityDropdown.SetValueWithoutNotify(QualitySettings.GetQualityLevel());
+
+        List<string> textureOptions = new List<string>() {"High", "Medium", "Low", "Lowest" };
+        textureDropdown.ClearOptions();
+        textureDropdown.AddOptions(textureOptions);
+        textureDropdown.SetValueWithoutNotify(QualitySettings.masterTextureLimit);
+
+        List<string> aaOptions = new List<string>() { "0", "2", "4", "8"};
+        aaDropdown.ClearOptions();
+        aaDropdown.AddOptions(aaOptions);
+        aaDropdown.SetValueWithoutNotify(GetIndexFromSample(QualitySettings.antiAliasing));
+
 
         masterBus = RuntimeManager.GetBus("bus:/");
         ambientBus = RuntimeManager.GetBus("bus:/Ambient Sounds");
@@ -56,8 +83,6 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         SetSliderVolumeFromBus(ambientSlider, ambientBus);
         SetSliderVolumeFromBus(sfxSlider, sfxBus);
     }
-
-
     #endregion
 
     #region Public Methods
@@ -84,6 +109,31 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         sfxBus.setVolume(sfxSlider.value);
     }
 
+    public void OnResolutionSelectionChanged()
+    {
+        SetResolution(resolutionDropdown.value);
+    }
+
+    public void OnQualitySelectionChanged()
+    {
+        SetQuality(qualityDropdown.value);
+    }
+
+    public void OnTextureQualitySelectedChanged()
+    {
+        SetTextureQuality(textureDropdown.value);
+    }
+
+    public void OnAASelectedChanged()
+    {
+        SetAntiAliasing(aaDropdown.value);
+    }
+
+    public void OnFullScreenValueChanged()
+    {
+        Screen.fullScreen = fullScreenToggle.isOn;
+    }
+
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
@@ -92,18 +142,18 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     public void SetResolution(int resolutionIndex)
     {
         Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        Screen.SetResolution(resolution.width, resolution.height, fullScreenToggle.isOn);
     }
 
     public void SetTextureQuality(int textureIndex)
     {
         QualitySettings.masterTextureLimit = textureIndex;
-        qualityDropdown.value = 6;
+        qualityDropdown.SetValueWithoutNotify(qualityDropdown.options.Count - 1);
     }
     public void SetAntiAliasing(int aaIndex)
     {
-        QualitySettings.antiAliasing = aaIndex;
-        qualityDropdown.value = 6;
+        QualitySettings.antiAliasing = GetSampleFromIndex(aaIndex);
+        qualityDropdown.SetValueWithoutNotify(qualityDropdown.options.Count - 1);
     }
 
     public void SetQuality(int qualityIndex)
@@ -113,38 +163,37 @@ public class PauseMenuOptionsPanel : MonoBehaviour
             QualitySettings.SetQualityLevel(qualityIndex);
         }
 
-        switch (qualityIndex)
-        {
-            case 0: // quality level - very low
-                textureDropdown.value = 3;
-                aaDropdown.value = 0;
-                break;
-            case 1: // quality level - low
-                textureDropdown.value = 2;
-                aaDropdown.value = 0;
-                break;
-            case 2: // quality level - medium
-                textureDropdown.value = 1;
-                aaDropdown.value = 0;
-                break;
-            case 3: // quality level - high
-                textureDropdown.value = 0;
-                aaDropdown.value = 0;
-                break;
-            case 4: // quality level - very high
-                textureDropdown.value = 0;
-                aaDropdown.value = 1;
-                break;
-            case 5: // quality level - ultra
-                textureDropdown.value = 0;
-                aaDropdown.value = 2;
-                break;
-        }
-
+        //switch (qualityIndex)
+        //{
+        //    case 0: // quality level - very low
+        //        textureDropdown.SetValueWithoutNotify(3);
+        //        aaDropdown.SetValueWithoutNotify(0);
+        //        break;
+        //    case 1: // quality level - low
+        //        textureDropdown.SetValueWithoutNotify(2);
+        //        aaDropdown.SetValueWithoutNotify(0);
+        //        break;
+        //    case 2: // quality level - medium
+        //        textureDropdown.SetValueWithoutNotify(1);
+        //        aaDropdown.SetValueWithoutNotify(0);
+        //        break;
+        //    case 3: // quality level - high
+        //        textureDropdown.SetValueWithoutNotify(0);
+        //        aaDropdown.SetValueWithoutNotify(0);
+        //        break;
+        //    case 4: // quality level - very high
+        //        textureDropdown.SetValueWithoutNotify(0);
+        //        aaDropdown.SetValueWithoutNotify(1);
+        //        break;
+        //    case 5: // quality level - ultra
+        //        textureDropdown.SetValueWithoutNotify(0);
+        //        aaDropdown.SetValueWithoutNotify(2);
+        //        break;
+        //}
+        textureDropdown.SetValueWithoutNotify(QualitySettings.masterTextureLimit);
+        aaDropdown.SetValueWithoutNotify(GetIndexFromSample(QualitySettings.antiAliasing));
         qualityDropdown.value = qualityIndex;
     }
-
-
     #endregion
     #endregion
 
@@ -158,6 +207,40 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         {
             Debug.LogError("Bus Volume not gotten for bus: " + bus.ToString());
             slider.value = 1f;
+        }
+    }
+
+    private int GetIndexFromSample(int sampleCount)
+    {
+        switch (sampleCount)
+        {
+            case (0):
+                return 0;
+            case (2):
+                return 1;
+            case (4):
+                return 2;
+            case (8):
+                return 3;
+            default:
+                return -1;
+        }
+    }
+
+    private int GetSampleFromIndex(int index)
+    {
+        switch (index)
+        {
+            case (0):
+                return 0;
+            case (1):
+                return 2;
+            case (2):
+                return 4;
+            case (3):
+                return 8;
+            default:
+                return 0;
         }
     }
 }

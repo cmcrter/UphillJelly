@@ -98,7 +98,7 @@ Transform:
   m_GameObject: {fileID: 443726680718143080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.74, y: 6.9250565, z: -33.66214}
-  m_LocalScale: {x: 15, y: 10, z: 1}
+  m_LocalScale: {x: 15, y: 15, z: 1}
   m_Children:
   - {fileID: 443726681684984726}
   m_Father: {fileID: 443726680772386812}
@@ -348,9 +348,35 @@ MonoBehaviour:
   trackedDolly: {fileID: 443726681660936319}
   endTrigger:
     m_PersistentCalls:
-      m_Calls: []
-  playfabManager: {fileID: 0}
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: L7Games.LevelFinishUIController, Scripts
+        m_MethodName: PopulateInformation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ReplaySaveManager, Scripts
+        m_MethodName: SaveCurrentReplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  uiController: {fileID: 0}
   LeaderboardGO: {fileID: 0}
+  waitForTimer: 1
+  bSavePlayerOverride: 0
 --- !u!1 &443726681660936313
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +538,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a9094d45d6b99b8459b9bced4c537f1a, type: 2}
+  - {fileID: 2100000, guid: e4cae86f46ef5bc4ca0b168af0c4f1e3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -546,7 +572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1208bbe937c3a54488f1d85a7931055a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecalAsset: {fileID: 11400000, guid: 57f6e95b5c9a320439fcf55f6aa3724e, type: 2}
+  DecalAsset: {fileID: 11400000, guid: 76fb089972264774580cf9163d5313ac, type: 2}
   Opacity: 1
   ZFadeDistance: 0.004
   MinAngleFadeDegrees: 83
@@ -558,9 +584,9 @@ MonoBehaviour:
   MeshesToProjectAgainst:
   - {fileID: 443726680718143084}
   ShouldReprojectOnMove: 0
-  positionOfProjection: {x: 192.8732, y: -71.24154, z: -34.83996}
+  positionOfProjection: {x: 193.33015, y: -70.39686, z: -35.680443}
   scaleOfProjection: {x: 1, y: 1, z: 1}
-  rotationOfProjection: {x: 5.820766e-11, y: 1, z: -0, w: 0}
+  rotationOfProjection: {x: -0, y: 1, z: -0, w: 0}
   isMeshUnprojected: 0
 --- !u!1 &443726682084429971
 GameObject:

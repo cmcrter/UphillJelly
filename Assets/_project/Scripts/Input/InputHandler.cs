@@ -139,7 +139,7 @@ namespace L7Games.Input
         /// <summary>
         /// The axis value for the turning actions
         /// </summary>
-        public float TurningAxis { get; private set; } = 0f;
+        public float TurningAxis { get; set; } = 0f;
 
         public PlayerInput AttachedPlayerInput
         {
@@ -325,6 +325,8 @@ namespace L7Games.Input
 
         #endregion
 
+        public bool disableWipeoutInput = false;
+
         #region Unity Methods
         private void Awake()
         {
@@ -432,7 +434,7 @@ namespace L7Games.Input
             UnbindWallRidingAction();
             UnbindWipeOutAction();
             UnbindMenuActions();
-
+            MethodsBoundToPlayerEvents = false;
         }
         #endregion
 
@@ -529,7 +531,11 @@ namespace L7Games.Input
             if (pressDownEnded != null)
             {
                 pressDownEnded();
-                Debug.Log("PressDownEndedCalled");
+
+                if(Debug.isDebugBuild)
+                {
+                    Debug.Log("PressDownEndedCalled");
+                }
             }
         }
         #endregion
@@ -635,10 +641,13 @@ namespace L7Games.Input
         /// <param name="callbackContext">start grind action's CallbackContext</param>
         private void WipeOutResetAction_Performed(InputAction.CallbackContext callbackContext)
         {
-            WipeOutResetHeld = true;
-            if (wipeoutResetStarted != null)
+            if (!disableWipeoutInput)
             {
-                wipeoutResetStarted();
+                WipeOutResetHeld = true;
+                if (wipeoutResetStarted != null)
+                {
+                    wipeoutResetStarted();
+                }
             }
         }
 
@@ -703,7 +712,11 @@ namespace L7Games.Input
         {
             if (MenuConfirmedPerformed != null)
             {
-                Debug.Log("MenuConfirmPerformed");
+                if(Debug.isDebugBuild)
+                {
+                    Debug.Log("MenuConfirmPerformed");
+                }
+
                 MenuConfirmedPerformed();
             }
         }
@@ -1075,7 +1088,11 @@ namespace L7Games.Input
                         }
                         else
                         {
-                            Debug.Log("Pattern Completed with Id: " + analogueStickPatterns[i].ID.ToString());
+                            if(Debug.isDebugBuild)
+                            {
+                                Debug.Log("Pattern Completed with Id: " + analogueStickPatterns[i].ID.ToString());
+                            }
+
                             if (analogueStickPatternCompleted != null)
                             {
                                 analogueStickPatternCompleted(analogueStickPatterns[i].ID);

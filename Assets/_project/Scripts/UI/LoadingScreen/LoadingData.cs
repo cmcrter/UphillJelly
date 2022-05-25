@@ -46,6 +46,11 @@ namespace L7Games.Loading
         public static StoredPlayerProfile player;
 
         /// <summary>
+        /// Whether in the loading screen the players' profile will be saved
+        /// </summary>
+        public static bool SavePlayer;
+
+        /// <summary>
         ///A variable for the player's equipped shop items
         /// </summary>
         public static InventoryItemData[] shopItems;

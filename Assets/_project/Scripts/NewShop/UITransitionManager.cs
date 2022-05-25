@@ -12,29 +12,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using L7Games.Loading;
 
-namespace SleepyCat
+namespace L7Games
 {
     public class UITransitionManager : MonoBehaviour
     {
+        #region Variables
+
         public CinemachineVirtualCamera currentCamera;
+        public CinemachineVirtualCamera secondaryCamera;
+
+        #endregion
+
+        #region Unity Methods
 
         // Start is called before the first frame update
-        void Start() {
+        void Start()
+        {
+            if(LoadingData.player != null)
+            {
+                currentCamera = secondaryCamera;
+            }
 
             currentCamera.Priority++;
-
         }
 
-        public void UpdateCamera(CinemachineVirtualCamera target) {
+        #endregion
 
+        #region Public Methods
+
+        public void UpdateCamera(CinemachineVirtualCamera target) 
+        {
             currentCamera.Priority--;
 
             currentCamera = target;
 
             currentCamera.Priority++;
-
         }
 
+        #endregion
     }
 }

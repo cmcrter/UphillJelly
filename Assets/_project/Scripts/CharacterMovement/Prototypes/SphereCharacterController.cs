@@ -236,7 +236,7 @@ namespace L7Games.Movement
             float dotAngle = Vector3.Dot(rb.velocity.normalized, transform.forward.normalized);
             dotAngle = Mathf.Abs(dotAngle);
 
-            if (bShowDriftVal)
+            if (bShowDriftVal && Debug.isDebugBuild)
             {
                 Debug.Log(dotAngle);
             }
@@ -325,7 +325,7 @@ namespace L7Games.Movement
 
         private void Jump()
         {
-            Debug.Log("Jumping");
+            //Debug.Log("Jumping");
             StartJumpTimer();
         }
 

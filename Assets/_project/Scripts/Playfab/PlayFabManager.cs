@@ -23,7 +23,7 @@ namespace L7Games
     {
         SCORE = 0,
         TIME = 1,
-        KOs = 2,
+        WIPEOUTs = 2,
         COUNT
     }
 
@@ -47,6 +47,7 @@ namespace L7Games
     //}
 
     //A data container for the 
+    [System.Serializable]
     public class LeaderboardData
     {
         public LEVEL Level;
@@ -84,7 +85,7 @@ namespace L7Games
         int maxLeaderboardRows = 10;
 
         [SerializeField]
-        private List<leaderboard_value> valuesFilledIn = new List<leaderboard_value>();
+        private List<LeaderboardData> valuesFilledIn = new List<LeaderboardData>();
 
         [Header("Overrides")]
         [SerializeField]
@@ -123,7 +124,11 @@ namespace L7Games
 
         void OnSuccess(LoginResult result)
         {
-            Debug.Log("Successful login / account create!");
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Successful login / account create!");
+            }
+
             string name = null;
             if(result.InfoResultPayload.PlayerProfile != null)
             {
@@ -156,7 +161,7 @@ namespace L7Games
                         case (int)leaderboard_value.TIME:
                             thisFeature = "_Time";
                             break;
-                        case (int)leaderboard_value.KOs:
+                        case (int)leaderboard_value.WIPEOUTs:
                             thisFeature = "_KOs";
                             break;
                     }
@@ -166,6 +171,8 @@ namespace L7Games
                         StatisticName = thisLevelName + thisFeature,
                         StartPosition = 0
                     };
+
+                    //Debug.Log("Getting values for: " + ((LEVEL)j).ToString() + " on value: " + ((leaderboard_value)i).ToString());
 
                     LeaderboardData data = new LeaderboardData((LEVEL)j, (leaderboard_value)i);
                     PlayFabClientAPI.GetLeaderboard(request, OnLeaderBoardGet, OnError, data);
@@ -194,20 +201,23 @@ namespace L7Games
             };
 
             PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
-
-            //SubmittedNameImage.SetActive(false);
-            //SubmitNameButtonGameObject.SetActive(false);
         }
 
         public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
         {
-            Debug.Log("Updated Display Name");
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Updated Display Name");
+            }
         }
 
         void OnError(PlayFabError error)
         {
-            Debug.Log("Error login / Creating Account");
-            Debug.Log(error.GenerateErrorReport());
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Error login / Creating Account");
+                Debug.Log(error.GenerateErrorReport());
+            }
         }
 
         public void SendLeaderBoards(RankBrackets bracket)
@@ -301,7 +311,7 @@ namespace L7Games
                 StartPosition = 0
             };
 
-            data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.KOs);
+            data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.WIPEOUTs);
             PlayFabClientAPI.GetLeaderboard(KOsrequest, OnLeaderBoardGet, OnError, data);
 
             //Putting all the leaderboards together cohesively (back when it would be 1 leaderboard)
@@ -313,9 +323,12 @@ namespace L7Games
             LeaderboardData data = (LeaderboardData)result.CustomData;
             int resultCount = 0;
 
-            if(valuesFilledIn.Contains(data.valueToRetrieve))
+            for(int i = 0; i < valuesFilledIn.Count; ++i)
             {
-                return;
+                if(valuesFilledIn[i].Level == data.Level && valuesFilledIn[i].valueToRetrieve == data.valueToRetrieve)
+                {
+                    return;
+                }
             }
 
             //Populating this leaderboard
@@ -325,7 +338,7 @@ namespace L7Games
 
                 if(LoadingData.currentLevel != LEVEL.MAINMENU)
                 {
-                    if(resultCount == maxLeaderboardRows)
+                    if(resultCount == maxLeaderboardRows || data.Level != LoadingData.currentLevel)
                     {
                         continue;
                     }
@@ -360,7 +373,7 @@ namespace L7Games
                 resultCount++;
             }
 
-            valuesFilledIn.Add(data.valueToRetrieve);
+            valuesFilledIn.Add(data);
         }
        
         public void SwitchPanel(int newValue)
@@ -371,7 +384,11 @@ namespace L7Games
             }
 
             LeaderboardPanels[newValue].gameObject.SetActive(true);
-            Debug.Log("Switching panel to: " + (leaderboard_value)newValue);
+
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("Switching panel to: " + (leaderboard_value)newValue);
+            }
         }
 
         //        private List<CompiledLeaderboardRow> CreateCompiledPosition()
