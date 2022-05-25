@@ -9,6 +9,8 @@ using FMODUnity;
 
 public class PauseMenuOptionsPanel : MonoBehaviour
 {
+    public OptionsMenuSettingData currentOptionsData;
+
     [Header("Options Variables")]
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
@@ -35,7 +37,6 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     #region Unity Method
     private void Awake()
     {
-        Debug.Log(Mathf.Pow(8, -3));
         List<string> resolutionOptionsList = new List<string>();
         resolutions = Screen.resolutions;
         int currentResIndex = 0;
@@ -82,6 +83,18 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         SetSliderVolumeFromBus(musicVolumeSlider, musicBus);
         SetSliderVolumeFromBus(ambientSlider, ambientBus);
         SetSliderVolumeFromBus(sfxSlider, sfxBus);
+
+        //currentOptionsData = new OptionsMenuSettingData();
+        //for (int i = 0; i < resolutions.Length; ++i)
+        //{
+        //    if (resolutions[i].height == Screen.currentResolution.height &&
+        //        resolutions[i].width == Screen.currentResolution.width &&
+        //        resolutions[i].refreshRate == Screen.currentResolution.refreshRate)
+        //    {
+        //        currentResIndex = i;
+        //    }
+        //}
+        //currentOptionsData.resolution = 
     }
     #endregion
 
@@ -131,12 +144,28 @@ public class PauseMenuOptionsPanel : MonoBehaviour
 
     public void OnFullScreenValueChanged()
     {
-        Screen.fullScreen = fullScreenToggle.isOn;
+        //Screen.fullScreen = fullScreenToggle.isOn;
+        if (fullScreenToggle.isOn)
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+        }
     }
 
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+        if (Screen.fullScreen)
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+        }
     }
 
     public void SetResolution(int resolutionIndex)
