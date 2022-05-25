@@ -61,24 +61,44 @@ public class ShopManager : MonoBehaviour
     [SerializeField]
     private int playerCurrency;
 
+    public GameObject lastSelectedGO;
+
     public void Start() {
 
         playerCurrencyText.text = "£" + playerCurrency;
 
-        /*
-        var hatItem = EventSystem.current.currentSelectedGameObject.GetComponent<HatItem>();
-        var characterItem = EventSystem.current.currentSelectedGameObject.GetComponent<CharacterItem>();
-        var skateboardItem = EventSystem.current.currentSelectedGameObject.GetComponent<SkateboardItem>();
+        /// Set the event system everytime goes over to shop
+        ///selectedButton = eventSystem.firstSelectedGameObject.GetComponent<ShopTabButton>();
 
+        
 
-        if (hatItem.item.isPurchased == true) {
+    }
 
-            hatItem.item.uiDisplay = hatItem.item.boughtUIDisplay;
+    public void Update() {
+        
+        if (lastSelectedGO != eventSystem.currentSelectedGameObject) {
+            Debug.Log("ChangedItem0");
+            //
+            if (eventSystem.currentSelectedGameObject != null) {
+                Debug.Log("ChangedItem1");
+                if (eventSystem.currentSelectedGameObject.TryGetComponent<ShopTabButton>(out ShopTabButton button)) {
+                    Debug.Log("ChangedItem2");
+                    OnTabHover(button);
+
+                }
+
+            }
 
         }
-        */
-        selectedButton = eventSystem.firstSelectedGameObject.GetComponent<ShopTabButton>();
 
+        lastSelectedGO = eventSystem.currentSelectedGameObject;
+        
+    }
+
+    public void SwitchToShop() {
+
+        eventSystem.SetSelectedGameObject(selectedButton.gameObject);
+        
     }
 
     public void hasBoughtItem() {
@@ -88,7 +108,56 @@ public class ShopManager : MonoBehaviour
         var characterItem = EventSystem.current.currentSelectedGameObject.GetComponent<CharacterItem>();
         var skateboardItem = EventSystem.current.currentSelectedGameObject.GetComponent<SkateboardItem>();
 
-        if (hatItem) {
+        /*
+        ///
+        ///
+        if (hatItem == eventSystem.currentSelectedGameObject.GetComponent<HatItem>() && 
+            eventSystem.currentSelectedGameObject.GetComponent<HatItem>().item.isPurchased) {
+
+            hatShopItem.GetComponent<MeshFilter>().sharedMesh = hatItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            hatShopItem.GetComponent<MeshRenderer>().material = hatItem.item.material;
+
+        } else if (hatItem == eventSystem.currentSelectedGameObject.GetComponent<HatItem>() &&
+            !eventSystem.currentSelectedGameObject.GetComponent<HatItem>().item.isPurchased) {
+
+            //do nothing
+
+        }
+        ///
+        ///
+
+        if (characterItem == eventSystem.currentSelectedGameObject.GetComponent<CharacterItem>() &&
+            eventSystem.currentSelectedGameObject.GetComponent<CharacterItem>().item.isPurchased) {
+
+            characterShopMesh.gameObject.GetComponent<SkinnedMeshRenderer>().material = characterItem.item.material;
+
+        } else if (characterItem == eventSystem.currentSelectedGameObject.GetComponent<CharacterItem>() &&
+            !eventSystem.currentSelectedGameObject.GetComponent<CharacterItem>().item.isPurchased) {
+
+            //do nothing
+
+        }
+
+        if (skateboardItem == eventSystem.currentSelectedGameObject.GetComponent<SkateboardItem>() &&
+            eventSystem.currentSelectedGameObject.GetComponent<SkateboardItem>().item.isPurchased) {
+
+            skateboardShopItem.GetComponent<MeshFilter>().sharedMesh = skateboardItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            skateboardShopItem.GetComponent<MeshRenderer>().material = skateboardItem.item.material;
+
+        } else if (skateboardItem == eventSystem.currentSelectedGameObject.GetComponent<SkateboardItem>() &&
+            !eventSystem.currentSelectedGameObject.GetComponent<SkateboardItem>().item.isPurchased) {
+
+            //do nothing
+
+        }
+        */
+
+
+
+
+
+
+        if (hatItem && !hatItem.item.isPurchased) {
 
             if (playerCurrency >= hatItem.item.ItemPrice) {
 
@@ -103,15 +172,23 @@ public class ShopManager : MonoBehaviour
                 hatShopItem.GetComponent<MeshFilter>().sharedMesh = hatItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
                 hatShopItem.GetComponent<MeshRenderer>().material = hatItem.item.material;
 
+                currentEquippedHat = selectedButton.GetComponent<HatItem>().item;
+
             } else if (playerCurrency < hatItem.item.ItemPrice) {
 
                 Debug.Log("Doesn't have enough to buy");
-
+                
             }
 
+        } else if (hatItem && hatItem.item.isPurchased) {
+
+            hatShopItem.GetComponent<MeshFilter>().sharedMesh = hatItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            hatShopItem.GetComponent<MeshRenderer>().material = hatItem.item.material;
+            currentEquippedHat = selectedButton.GetComponent<HatItem>().item;
         }
 
-        if (characterItem) {
+
+        if (characterItem && !characterItem.item.isPurchased) {
 
             if (playerCurrency >= characterItem.item.ItemPrice) {
 
@@ -126,15 +203,30 @@ public class ShopManager : MonoBehaviour
 
                 characterShopMesh.gameObject.GetComponent<SkinnedMeshRenderer>().material = characterItem.item.material;
 
+                currentEquippedCharacter = selectedButton.GetComponent<CharacterItem>().item;
+
             } else if (playerCurrency < characterItem.item.ItemPrice) {
 
                 Debug.Log("Doesn't have enough to buy");
 
             }
 
+        } else if (characterItem && characterItem.item.isPurchased) {
+
+            characterShopMesh.gameObject.GetComponent<SkinnedMeshRenderer>().material = characterItem.item.material;
+            currentEquippedCharacter = selectedButton.GetComponent<CharacterItem>().item;
+        }
+        /*
+        if (characterItem.item.isPurchased) {
+            characterShopMesh.gameObject.GetComponent<SkinnedMeshRenderer>().material = characterItem.item.material;
+        }
+        if (skateboardItem.item.isPurchased) {
+            skateboardShopItem.GetComponent<MeshFilter>().sharedMesh = skateboardItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            skateboardShopItem.GetComponent<MeshRenderer>().material = skateboardItem.item.material;
         }
 
-        if (skateboardItem) {
+        8*/
+        if (skateboardItem && !skateboardItem.item.isPurchased) {
 
             if (playerCurrency >= skateboardItem.item.ItemPrice) {
 
@@ -150,39 +242,20 @@ public class ShopManager : MonoBehaviour
                 skateboardShopItem.GetComponent<MeshFilter>().sharedMesh = skateboardItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
                 skateboardShopItem.GetComponent<MeshRenderer>().material = skateboardItem.item.material;
 
+                currentEquippedSkateboard = selectedButton.GetComponent<SkateboardItem>().item;
+
             } else if (playerCurrency < skateboardItem.item.ItemPrice) {
 
                 Debug.Log("Doesn't have enough to buy");
 
             }
 
-        }
-        /*
-        if (characterItem) {
-
-            characterItem.item.isPurchased = true;
-            //characterItem.item.uiDisplay = boughtSprite;
-
-            currentEquippedCharacter = characterItem.item;
-
-            //characterShopMaterial = characterItem.item.material;
-            
-            //characterShopObject = characterItem.item.material;
-        }
-
-        if (skateboardItem) {
-
-            skateboardItem.item.isPurchased = true;
-            //skateboardItem.item.uiDisplay = boughtSprite;
-
-            currentEquippedSkateboard = skateboardItem.item;
+        } else if (skateboardItem && skateboardItem.item.isPurchased) {
 
             skateboardShopItem.GetComponent<MeshFilter>().sharedMesh = skateboardItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
             skateboardShopItem.GetComponent<MeshRenderer>().material = skateboardItem.item.material;
-
+            currentEquippedSkateboard = selectedButton.GetComponent<SkateboardItem>().item;
         }
-        */
-        
 
 
     }
@@ -211,9 +284,9 @@ public class ShopManager : MonoBehaviour
 
     public void OnTabHover(ShopTabButton button) {
 
-        
+        ///eventSystem.SetSelectedGameObject(selectedButton.gameObject);
         selectedButton = button.GetComponent<ShopTabButton>();
-
+        //eventSystem.SetSelectedGameObject(selectedButton.gameObject);
 
         ///REMOVE AND REPLACE FOR MORE EFFICIENT
         ///TEST********
@@ -231,6 +304,7 @@ public class ShopManager : MonoBehaviour
 
             }
         }
+        Debug.Log("ChangedItem4");
         if (selectedButton.GetComponent<CharacterItem>()) {
             objectDescription[1].text = selectedButton.GetComponent<CharacterItem>().item.itemDescription;
             descriptionItemImage[1].sprite = selectedButton.GetComponent<CharacterItem>().item.uiDisplay;
@@ -244,6 +318,7 @@ public class ShopManager : MonoBehaviour
 
             }
         }
+        Debug.Log("ChangedItem5");
         if (selectedButton.GetComponent<SkateboardItem>()) {
             objectDescription[2].text = selectedButton.GetComponent<SkateboardItem>().item.itemDescription;
             descriptionItemImage[2].sprite = selectedButton.GetComponent<SkateboardItem>().item.uiDisplay;
@@ -287,79 +362,13 @@ public class ShopManager : MonoBehaviour
 
         selectedButton = button.GetComponent<ShopTabButton>();
 
-        /*
-        if (selectedButton.GetComponent<HatItem>().item.isPurchased && selectedButton.GetComponent<HatItem>()) {
-
-            buyOwnedText.text = "Owned";
-            // Do not let them purchase again
-            Debug.Log("Already Purchased Item");
-
-            currentEquippedHat = selectedButton.GetComponent<HatItem>().item;
-
-            hatShopItem.GetComponent<MeshFilter>().sharedMesh = 
-                selectedButton.GetComponent<HatItem>().item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
-            hatShopItem.GetComponent<MeshRenderer>().material = 
-                selectedButton.GetComponent<HatItem>().item.material;
-
-
-        } else {
-
-            if (!selectedButton.GetComponent<HatItem>().item.isPurchased) {
-                hasBoughtItem();
-            }
-
-        }
-
-        if (selectedButton.GetComponent<CharacterItem>().item.isPurchased && selectedButton.GetComponent<CharacterItem>()) {
-
-            buyOwnedText.text = "Owned";
-            // Do not let them purchase again
-            Debug.Log("Already Purchased Item");
-
-            currentEquippedCharacter = selectedButton.GetComponent<CharacterItem>().item;
-
-            characterShopMesh.gameObject.GetComponent<SkinnedMeshRenderer>().material = 
-                selectedButton.GetComponent<CharacterItem>().item.material;
-
-
-        } else {
-
-            if (!selectedButton.GetComponent<CharacterItem>().item.isPurchased) {
-                hasBoughtItem();
-            }
-
-        }
-
-        if (selectedButton.GetComponent<SkateboardItem>().item.isPurchased && selectedButton.GetComponent<SkateboardItem>()) {
-
-            buyOwnedText.text = "Owned";
-            // Do not let them purchase again
-            Debug.Log("Already Purchased Item");
-
-            currentEquippedSkateboard = selectedButton.GetComponent<SkateboardItem>().item;
-            
-            skateboardShopItem.GetComponent<MeshFilter>().sharedMesh =
-                selectedButton.GetComponent<SkateboardItem>().item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
-
-            skateboardShopItem.GetComponent<MeshRenderer>().material = 
-                selectedButton.GetComponent<SkateboardItem>().item.material;
-
-
-        } else {
-
-            if (!selectedButton.GetComponent<SkateboardItem>().item.isPurchased) {
-                hasBoughtItem();
-            }
-
-        }
-        */
         ///
         /// go to buy button, check if have enough money, change buy button text
         ///
+
+
         hasBoughtItem();
         ResetTabs();
-
-        //button.backgroundTabImage.sprite = tabActive;
 
         int index = button.transform.GetSiblingIndex();
         for (int i = 0; i < objectsToSwap.Count; i++) {
@@ -380,12 +389,20 @@ public class ShopManager : MonoBehaviour
 
             if (selectedButton != null && button == selectedButton) { continue; }
 
-            //button.backgroundTabImage.sprite = tabIdle;
-
         }
 
     }
 
+    public void OnDrawGizmos() {
+
+        if (eventSystem.currentSelectedGameObject != null) {
+            Gizmos.DrawSphere(eventSystem.currentSelectedGameObject.transform.position, 2);
+        }
+
+        
+        
+
+    }
 
 
 }

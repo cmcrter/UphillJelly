@@ -46,6 +46,9 @@ public class ShopInventory : MonoBehaviour
 
     public int currentTabSelected;
     public GameObject[] mainTabs;
+    public GameObject[] TMPdescriptions;
+    public GameObject[] goDescriptions;
+    public GameObject[] startingButtons;
 
     public Sprite boughtSprite;
     
@@ -146,7 +149,7 @@ public class ShopInventory : MonoBehaviour
         ///mainTabs[0].SetActive(false);
         ///mainTabs[1].SetActive(false);
         ///mainTabs[2].SetActive(true);
-
+        Debug.Log("TabLeft");
         currentTabSelected -= 1;
 
         if (currentTabSelected < 0) {
@@ -161,7 +164,7 @@ public class ShopInventory : MonoBehaviour
         ///mainTabs[0].SetActive(false);
         ///mainTabs[1].SetActive(true);
         ///mainTabs[2].SetActive(false);
-        
+        Debug.Log("TabRight");
         currentTabSelected += 1;
 
         if (currentTabSelected > 2) {
@@ -192,13 +195,19 @@ public class ShopInventory : MonoBehaviour
         for (int i = 0; i < mainTabs.Length; i++) {
             if (currentTabSelected == i) {
                 mainTabs[i].gameObject.SetActive(true);
+                TMPdescriptions[i].gameObject.SetActive(true);
+                goDescriptions[i].gameObject.SetActive(true);
                 //mainTabs[i].GetComponent<Button>().enabled = true;
             } else {
                 mainTabs[i].gameObject.SetActive(false);
+                TMPdescriptions[i].gameObject.SetActive(false);
+                goDescriptions[i].gameObject.SetActive(false);
                 //mainTabs[i].GetComponent<Button>().enabled = false;
             }
         }
-        
+
+        eventSystem.SetSelectedGameObject(startingButtons[currentTabSelected]);
+
         ///Tabs[3].gameObject.SetActive(false);
 
         ///for (int i = 0; i < Tabs.Length; i++) {
