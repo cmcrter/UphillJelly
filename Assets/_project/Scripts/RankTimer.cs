@@ -109,6 +109,11 @@ namespace L7Games
             return rankString;
         }
 
+        public void TurnOffText()
+        {
+            timerText.enabled = false;
+        }
+
         #endregion
     }
 }

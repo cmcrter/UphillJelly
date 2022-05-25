@@ -151,6 +151,12 @@ public class HUD : MonoBehaviour
 
     #region Public Methods
 
+    public void TurnOffHUD()
+    {
+        ScoreText.enabled = false;
+        trickComboText.enabled = false;
+    }
+
     #endregion
 
     #region Private Methods

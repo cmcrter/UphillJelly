@@ -76,7 +76,6 @@ namespace L7Games.Movement
         public Collider rbCollider;
 
         public PlayerInput input;
-        public InputHandler inputHandler;
         public Animator characterAnimator;
         public TriggerableTrigger triggerObject;
         public TrickBuffer trickBuffer;

@@ -66,6 +66,8 @@ namespace L7Games
 
             bTriggered = true;
 
+            player.inputHandler.enabled = false;
+
             StartCoroutine(WaitFor5Seconds());
 
             if(endTrigger != null)
