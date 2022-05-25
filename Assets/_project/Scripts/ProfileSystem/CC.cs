@@ -45,6 +45,6 @@ public class CC : MonoBehaviour
         // enable the game camera
         GameCam.enabled = true;
 
-        Debug.Log("WorkyWorky");
+        //Debug.Log("WorkyWorky");
     }
 }

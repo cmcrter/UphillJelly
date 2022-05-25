@@ -126,7 +126,10 @@ public class b_Player : MonoBehaviour
         // save the replay 1 through the ghost save manager
         replaySaveManager.SaveReplay(playerSlot, replaySlot);
 
-        Debug.Log("Saved Player: " + playerSlot.ToString() + "in replay slot: " + replaySlot.ToString());
+        if(Debug.isDebugBuild)
+        {
+            Debug.Log("Saved Player: " + playerSlot.ToString() + "in replay slot: " + replaySlot.ToString());
+        }
     }
 
     // play button pressed

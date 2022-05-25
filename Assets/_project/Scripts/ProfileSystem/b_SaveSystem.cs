@@ -85,7 +85,10 @@ public static class b_SaveSystem
         else 
         {
             //  debug log which outputs the save was not found in the "path"
-            Debug.LogError("Save file not found in " + path);
+            if(Debug.isDebugBuild)
+            {
+                Debug.LogError("Save file not found in " + path);
+            }
 
             Directory.CreateDirectory(Application.persistentDataPath + "/CurrentProfile" + playerSlot.ToString());
 

@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SleepyCat
+namespace L7Games
 {
     public class DestructableWall : MonoBehaviour 
     {
@@ -53,7 +53,7 @@ namespace SleepyCat
         public void DestroyForceCollider()
         {
             Destroy(explosionGO);
-            Debug.Log("DestroyedExplosionGO");
+            //Debug.Log("DestroyedExplosionGO");
         }
 
         #endregion

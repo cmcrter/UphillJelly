@@ -20,7 +20,11 @@ public class ToCloseToPlayerCondition : Condition
     }
     public void PlayerExitedRadius(PlayerHingeMovementController playerPosition)
     {
-        Debug.Log("Removing Player");
+        if(Debug.isDebugBuild)
+        {
+            Debug.Log("Removing Player");
+        }
+
         playersWithinRadius.Remove(playerPosition);
     }
 

@@ -11,7 +11,7 @@ using UnityEngine;
 using L7Games;
 using L7Games.Movement;
 
-namespace SleepyCat
+namespace L7Games
 {
     public class BrokenWallForce : MonoBehaviour, ITriggerable
     {
