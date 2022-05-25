@@ -76,7 +76,7 @@ public class ReplaySaveManager : MonoBehaviour
             return;
         }
 
-        level = LoadingData.getSceneName(LoadingData.currentLevel) + "_Map";
+        level = LoadingData.getLevelString(LoadingData.currentLevel) + "_Map";
 
         if(bPlaybackGhost)
         {

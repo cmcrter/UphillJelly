@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////
 // File: MainMenuLevelSelect.cs
-// Author: Jack Peedle
+// Author: Jack Peedle, Charles Carter
 // Date Created: 29/02/22
-// Last Edited By: Jack Peedle
-// Date Last Edited: 29/02/22
-// Brief: 
+// Last Edited By: Charles Carter
+// Date Last Edited: 25/05/22
+// Brief: A script to select which level is wanted within the main menu
 ////////////////////////////////////////////////////////////
 
 using System.Collections;
@@ -12,136 +12,84 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using L7Games.Loading;
 
 namespace L7Games
 {
     public class MainMenuLevelSelect : MonoBehaviour
     {
+        #region Variables
 
-        public Sprite tutorialImage;
-        public Sprite cityImage;
-        public Sprite oldTownImage;
-
-        public GameObject playTutorialButton;
-        public GameObject playCityButton;
-        public GameObject playOldTownButton;
+        public List<Sprite> levelImages;
+        public GameObject playButton;
 
         public Image displayMap;
+        public LEVEL currentLevelSelected;
 
-        public int currentLevelInt;
+        #endregion
 
-        private void Start() {
+        #region Unity Methods
 
-            currentLevelInt = 0;
-            playTutorialButton.SetActive(true);
-            playCityButton.SetActive(false);
-            playOldTownButton.SetActive(false);
-
+        private void Start() 
+        {
+            currentLevelSelected = LEVEL.TUTORIAL;
+            UpdateImage();
         }
 
-        //
-        public void NextLevelOption() {
+        #endregion
 
-            // 
-            currentLevelInt++;
+        #region Public Methods
 
-            // 
-            if (currentLevelInt >= 3) {
-
-                // 
-                currentLevelInt = 0;
-
+        //Updating the shown sprite
+        public void UpdateImage()
+        {
+            for(int i = 0; i < 3; ++i)
+            {
+                if(i == currentLevelSelected - LEVEL.TUTORIAL)
+                {
+                    displayMap.sprite = levelImages[i];
+                }
             }
+        }
 
+        public void ButtonPressed()
+        {
+            GoToSelectedMap(true);
+        }
+
+        public void IncrementMap()
+        {
+            currentLevelSelected++;
+
+            if(currentLevelSelected > LEVEL.OLDTOWN)
+            {
+                currentLevelSelected = LEVEL.TUTORIAL;
+            }
 
             UpdateImage();
-
         }
 
+        public void DeIncrementMap()
+        {
+            currentLevelSelected--;
 
-        //
-        public void PreviousLevelOption() {
-
-            //
-            currentLevelInt--;
-
-            //
-            if (currentLevelInt <= -1) {
-
-                //
-                currentLevelInt = 2;
-
+            if(currentLevelSelected < LEVEL.TUTORIAL)
+            {
+                currentLevelSelected = LEVEL.OLDTOWN;
             }
-
 
             UpdateImage();
-
         }
 
-        //
-        public void UpdateImage() {
+        public void GoToSelectedMap(bool save)
+        {
+            LoadingData.sceneToLoad = LoadingData.getSceneString(currentLevelSelected);
+            LoadingData.currentLevel = currentLevelSelected;
+            LoadingData.SavePlayer = save;
 
-            if (currentLevelInt == 0) {
-
-                //
-                displayMap.sprite = tutorialImage;
-
-                playTutorialButton.SetActive(true);
-                playCityButton.SetActive(false);
-                playOldTownButton.SetActive(false);
-
-            }
-
-            if (currentLevelInt == 1) {
-
-                //
-                displayMap.sprite = cityImage;
-
-                playTutorialButton.SetActive(false);
-                playCityButton.SetActive(true);
-                playOldTownButton.SetActive(false);
-
-            }
-
-            if (currentLevelInt == 2) {
-
-                //
-                displayMap.sprite = oldTownImage;
-
-                playTutorialButton.SetActive(false);
-                playCityButton.SetActive(false);
-                playOldTownButton.SetActive(true);
-
-            }
-
+            SceneManager.LoadScene("LoadingScene");
         }
 
-        public void LoadTutorialMap() {
-
-            //
-            Debug.Log("LOADEDTUTORIAL");
-
-            SceneManager.LoadScene("TutorialTrackWhitebox");
-
-        }
-
-        public void LoadCityMap() {
-
-            //
-            Debug.Log("LOADEDCITY");
-
-            SceneManager.LoadScene("XanmanCity");
-
-        }
-
-        public void LoadOldTownMap() {
-
-            //
-            Debug.Log("LOADEDOLDTOWN");
-
-            SceneManager.LoadScene("OldTown_Whitebox");
-
-        }
-
+        #endregion
     }
 }

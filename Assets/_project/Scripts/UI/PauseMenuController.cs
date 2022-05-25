@@ -129,7 +129,7 @@ namespace L7Games.UI
 
         public static void GoToTutorial(bool save)
         {
-            LoadingData.sceneToLoad = "TutorialTrackWhitebox";
+            LoadingData.sceneToLoad = LoadingData.getSceneString(LEVEL.TUTORIAL);
             LoadingData.currentLevel = LEVEL.TUTORIAL;
             LoadingData.SavePlayer = save;
 
@@ -138,7 +138,7 @@ namespace L7Games.UI
 
         public static void GoToCity(bool save)
         {
-            LoadingData.sceneToLoad = "XanmanCity";
+            LoadingData.sceneToLoad = LoadingData.getSceneString(LEVEL.CITY);
             LoadingData.currentLevel = LEVEL.CITY;
             LoadingData.SavePlayer = save;
 
@@ -147,7 +147,7 @@ namespace L7Games.UI
 
         public static void GoToOldTown(bool save)
         {
-            LoadingData.sceneToLoad = "OldTown_Whitebox";
+            LoadingData.sceneToLoad = LoadingData.getSceneString(LEVEL.OLDTOWN);
             LoadingData.currentLevel = LEVEL.OLDTOWN;
             LoadingData.SavePlayer = save;
 

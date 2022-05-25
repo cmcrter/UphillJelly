@@ -95,7 +95,7 @@ namespace L7Games
 
         void Start()
         {
-            levelname = LoadingData.getSceneName(LoadingData.currentLevel);
+            levelname = LoadingData.getLevelString(LoadingData.currentLevel);
 
             Login();
         }
@@ -151,7 +151,7 @@ namespace L7Games
                 for(int i = 0; i < 3; ++i)
                 {
                     string thisFeature = "";
-                    string thisLevelName = LoadingData.getSceneName((LEVEL)j);
+                    string thisLevelName = LoadingData.getLevelString((LEVEL)j);
 
                     switch(i)
                     {

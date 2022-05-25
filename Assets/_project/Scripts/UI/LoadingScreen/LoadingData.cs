@@ -65,7 +65,7 @@ namespace L7Games.Loading
         /// </summary>
         /// <param name="thisLevel"></param>
         /// <returns></returns>
-        public static string getSceneName(LEVEL thisLevel)
+        public static string getLevelString(LEVEL thisLevel)
         {
             string levelname = "Tutorial";
 
@@ -80,6 +80,31 @@ namespace L7Games.Loading
             }
 
             return levelname;
+        }
+
+        /// <summary>
+        /// Utility o get scene name when loading
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static string getSceneString(LEVEL level)
+        {
+            string levelName = " ";
+
+            switch(level)
+            {
+                case LEVEL.TUTORIAL:
+                    levelName = "TutorialTrackWhitebox";
+                    break;
+                case LEVEL.CITY:
+                    levelName = "XanmanCity";
+                    break;
+                case LEVEL.OLDTOWN:
+                    levelName = "OldTown_Whitebox";
+                    break;
+            }
+
+            return levelName;
         }
     }
 }
