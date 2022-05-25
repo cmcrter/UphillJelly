@@ -109,7 +109,7 @@ namespace L7Games.Movement
             {
                 if(Physics.Raycast(fRB.transform.position, playerMovement.transform.forward, out RaycastHit hit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore) || Physics.Raycast(playerMovement.transform.position, playerMovement.transform.forward, out RaycastHit bodyhit, 1.0f, ~collisionCheckMask, QueryTriggerInteraction.Ignore))
                 {
-                    Debug.Log(hit.collider.name);
+                    //Debug.Log(hit.collider.name);
 
                     //Wipeout
                     playerMovement.bWipeOutLocked = false;

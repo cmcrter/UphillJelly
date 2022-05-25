@@ -994,7 +994,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -1.2345002, y: -0.25}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7449464334011475377
 CanvasRenderer:
@@ -1349,7 +1349,7 @@ GameObject:
   - component: {fileID: 4031842807038598825}
   - component: {fileID: 4961657380089571021}
   m_Layer: 5
-  m_Name: Score (TMP)
+  m_Name: Time (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1372,7 +1372,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -1.2345002, y: -0.25}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4031842807038598825
 CanvasRenderer:
@@ -1402,7 +1402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Score
+  m_text: Time (s)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f237780dde64b5c48b24580cd443b100, type: 2}
   m_sharedMaterial: {fileID: -113288212102913694, guid: f237780dde64b5c48b24580cd443b100, type: 2}
@@ -2307,7 +2307,7 @@ GameObject:
   - component: {fileID: 3664525949856722038}
   - component: {fileID: 3664525949856722039}
   m_Layer: 5
-  m_Name: Score (TMP)
+  m_Name: Wipeouts (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2330,7 +2330,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -1.2345002, y: -0.25}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3664525949856722038
 CanvasRenderer:
@@ -2360,7 +2360,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Score
+  m_text: Wipeouts
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f237780dde64b5c48b24580cd443b100, type: 2}
   m_sharedMaterial: {fileID: -113288212102913694, guid: f237780dde64b5c48b24580cd443b100, type: 2}
@@ -3374,7 +3374,7 @@ MonoBehaviour:
   - {fileID: 6328539702141485529}
   - {fileID: 3664525950662466722}
   maxLeaderboardRows: 8
-  valuesFilledIn: 
+  valuesFilledIn: []
   overrides: 0
   overrideName: 
 --- !u!1 &3664525950833090046
