@@ -92,7 +92,11 @@ public class WarningBox : MonoBehaviour
         {
         }
 
-        eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
+        if (eventSystem == null)
+        {
+            eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
+        }
+
     }
 
     public void OnDisable()
@@ -200,6 +204,8 @@ public class WarningBox : MonoBehaviour
         // with navigation that reaches either end of the box wrapping around to the other side
         if (boxButtons.Count == 1)
         {
+            Debug.Log("Event System: " + eventSystem);
+            Debug.Log("gameObjectButton: " + gameObjectButton);
             eventSystem.SetSelectedGameObject(gameObjectButton);
             Navigation newNavigation = new Navigation();
             newNavigation.mode = Navigation.Mode.Explicit;
@@ -263,7 +269,7 @@ public class WarningBox : MonoBehaviour
     #endregion
 
     #region Private Methods
-    private void CloseBox()
+    public void CloseBox()
     {
         Destroy(gameObject);
     }

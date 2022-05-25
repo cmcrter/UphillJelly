@@ -5,11 +5,12 @@ using UnityEngine.Audio;
 using UnityEngine.UI;
 using TMPro;
 using FMODUnity;
+using L7Games.UI;
 
 
 public class PauseMenuOptionsPanel : MonoBehaviour
 {
-    public OptionsMenuSettingData currentOptionsData;
+    public OptionsMenuSettingData lastSavedOptionsData;
 
     [Header("Options Variables")]
     public AudioMixer audioMixer;
@@ -24,10 +25,15 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     public Slider ambientSlider;
     public Slider sfxSlider;
 
+    [SerializeField]
+    private Canvas UiCanvas;
+
     private float currentVolume;
     Resolution[] resolutions;
 
-    public UnityEngine.EventSystems.EventSystem currentEventSYstem;
+    public UnityEngine.EventSystems.EventSystem currentEventSystem;
+    [SerializeField]
+    private PauseMenuController pauseMenuController;
 
     private FMOD.Studio.Bus masterBus;
     private FMOD.Studio.Bus musicBus;
@@ -39,36 +45,26 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     {
         List<string> resolutionOptionsList = new List<string>();
         resolutions = Screen.resolutions;
-        int currentResIndex = 0;
         for (int i = 0; i < resolutions.Length; ++i)
         {
-            if (resolutions[i].height == Screen.currentResolution.height &&
-                resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].refreshRate == Screen.currentResolution.refreshRate)
-            {
-                currentResIndex = i;
-            }
             resolutionOptionsList.Add(resolutions[i].ToString());
         }
         resolutionDropdown.ClearOptions();
         resolutionDropdown.AddOptions(resolutionOptionsList);
-        resolutionDropdown.SetValueWithoutNotify(currentResIndex);
+
 
         List<string> qualityOptions = new List<string>(QualitySettings.names);
         qualityDropdown.ClearOptions();
         qualityDropdown.AddOptions(qualityOptions);
         qualityDropdown.AddOptions(new List<string>() { "Custom" });
-        qualityDropdown.SetValueWithoutNotify(QualitySettings.GetQualityLevel());
 
         List<string> textureOptions = new List<string>() {"High", "Medium", "Low", "Lowest" };
         textureDropdown.ClearOptions();
         textureDropdown.AddOptions(textureOptions);
-        textureDropdown.SetValueWithoutNotify(QualitySettings.masterTextureLimit);
 
         List<string> aaOptions = new List<string>() { "0", "2", "4", "8"};
         aaDropdown.ClearOptions();
         aaDropdown.AddOptions(aaOptions);
-        aaDropdown.SetValueWithoutNotify(GetIndexFromSample(QualitySettings.antiAliasing));
 
 
         masterBus = RuntimeManager.GetBus("bus:/");
@@ -79,22 +75,41 @@ public class PauseMenuOptionsPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        SetSliderVolumeFromBus(masterVolumeSlider, masterBus);
-        SetSliderVolumeFromBus(musicVolumeSlider, musicBus);
-        SetSliderVolumeFromBus(ambientSlider, ambientBus);
-        SetSliderVolumeFromBus(sfxSlider, sfxBus);
+        //SetSliderVolumeFromBus(masterVolumeSlider, masterBus);
+        //SetSliderVolumeFromBus(musicVolumeSlider, musicBus);
+        //SetSliderVolumeFromBus(ambientSlider, ambientBus);
+        //SetSliderVolumeFromBus(sfxSlider, sfxBus);
 
-        //currentOptionsData = new OptionsMenuSettingData();
-        //for (int i = 0; i < resolutions.Length; ++i)
-        //{
-        //    if (resolutions[i].height == Screen.currentResolution.height &&
-        //        resolutions[i].width == Screen.currentResolution.width &&
-        //        resolutions[i].refreshRate == Screen.currentResolution.refreshRate)
-        //    {
-        //        currentResIndex = i;
-        //    }
-        //}
-        //currentOptionsData.resolution = 
+
+
+        // Pull from player prefs
+        lastSavedOptionsData = OptionsMenuSettingData.LoadOptionsFromPlayerPrefs();
+        List<string> resolutionOptionsList = new List<string>();
+        resolutions = Screen.resolutions;
+        int currentResIndex = 0;
+        for (int i = 0; i < resolutions.Length; ++i)
+        {
+            if (resolutions[i].height == lastSavedOptionsData.resolution.height &&
+                resolutions[i].width == lastSavedOptionsData.resolution.width &&
+                resolutions[i].refreshRate == lastSavedOptionsData.resolution.refreshRate)
+            {
+                currentResIndex = i;
+            }
+            resolutionOptionsList.Add(resolutions[i].ToString());
+        }
+        resolutionDropdown.SetValueWithoutNotify(currentResIndex);
+        qualityDropdown.SetValueWithoutNotify(lastSavedOptionsData.qualityIndex);
+        textureDropdown.SetValueWithoutNotify(lastSavedOptionsData.textureQuailityIndex);
+        aaDropdown.SetValueWithoutNotify(lastSavedOptionsData.aaOptionIndex);
+        masterVolumeSlider.SetValueWithoutNotify(lastSavedOptionsData.masterVolume);
+        musicVolumeSlider.SetValueWithoutNotify(lastSavedOptionsData.musicVolume);
+        ambientSlider.SetValueWithoutNotify(lastSavedOptionsData.ambientVolume);
+        sfxSlider.SetValueWithoutNotify(lastSavedOptionsData.sfxVolume);
+    }
+
+    private void Start()
+    {
+        currentEventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
     }
     #endregion
 
@@ -153,6 +168,77 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         {
             Screen.fullScreenMode = FullScreenMode.Windowed;
         }
+    }
+
+    private void SetSettingBasedOnData(OptionsMenuSettingData optionsMenuSettingData)
+    {
+        resolutions = Screen.resolutions;
+        int currentResIndex = 0;
+        for (int i = 0; i < resolutions.Length; ++i)
+        {
+            if (resolutions[i].height == optionsMenuSettingData.resolution.height &&
+                resolutions[i].width == optionsMenuSettingData.resolution.width &&
+                resolutions[i].refreshRate == optionsMenuSettingData.resolution.refreshRate)
+            {
+                currentResIndex = i;
+            }
+        }
+        resolutionDropdown.value = currentResIndex;
+        qualityDropdown.value = optionsMenuSettingData.qualityIndex;
+        textureDropdown.value = optionsMenuSettingData.textureQuailityIndex;
+        aaDropdown.value = optionsMenuSettingData.aaOptionIndex;
+        masterVolumeSlider.value = optionsMenuSettingData.masterVolume;
+        musicVolumeSlider.value = optionsMenuSettingData.musicVolume;
+        ambientSlider.value = optionsMenuSettingData.ambientVolume;
+        sfxSlider.value = optionsMenuSettingData.sfxVolume;
+    }
+
+    public void OnRevert()
+    {
+        SetSettingBasedOnData(lastSavedOptionsData);
+    }
+
+    public void OnApply()
+    {
+        lastSavedOptionsData = new OptionsMenuSettingData();
+        Resolution resolution = resolutions[resolutionDropdown.value];
+        lastSavedOptionsData.resolution = resolution;
+        lastSavedOptionsData.qualityIndex = qualityDropdown.value;
+        lastSavedOptionsData.textureQuailityIndex = textureDropdown.value;
+        lastSavedOptionsData.aaOptionIndex = aaDropdown.value;
+
+        lastSavedOptionsData.masterVolume = masterVolumeSlider.value;
+        lastSavedOptionsData.musicVolume = musicVolumeSlider.value;
+        lastSavedOptionsData.ambientVolume = ambientSlider.value;
+        lastSavedOptionsData.sfxVolume = sfxSlider.value;
+        OptionsMenuSettingData.SaveToPlayerPrefs(lastSavedOptionsData);
+    }
+
+    public void OnWindowCloseButton()
+    {
+        WarningBox warningBox = WarningBox.CreateWarningBox(UiCanvas, currentEventSystem, "Do you want to save new setting");
+        Button cancelButton = warningBox.AddButton("Cancel");
+        cancelButton.onClick.AddListener(OnWarningBoxCancel);
+        cancelButton.onClick.AddListener(warningBox.CloseBox);
+        Button noButton = warningBox.AddCancelButton("No");
+        noButton.onClick.AddListener(OnRevert);
+        noButton.onClick.AddListener(CloseOption);
+        noButton.onClick.AddListener(pauseMenuController.OnOptionMenuClose);
+        noButton.onClick.AddListener(warningBox.CloseBox);
+        Button yesButton = warningBox.AddCancelButton("Yes");
+        yesButton.onClick.AddListener(OnApply);
+        yesButton.onClick.AddListener(CloseOption);
+        yesButton.onClick.AddListener(pauseMenuController.OnOptionMenuClose);
+        yesButton.onClick.AddListener(warningBox.CloseBox);
+    }
+    public void OnWarningBoxCancel()
+    {
+        currentEventSystem.SetSelectedGameObject(resolutionDropdown.gameObject);
+    }
+
+    public void CloseOption()
+    {
+        gameObject.SetActive(false);
     }
 
     public void SetFullscreen(bool isFullscreen)

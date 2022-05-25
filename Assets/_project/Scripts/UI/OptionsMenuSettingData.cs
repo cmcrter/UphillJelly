@@ -25,8 +25,24 @@ public class OptionsMenuSettingData
 
     public float masterVolume;
     public float musicVolume;
-    public float ambientSlider;
-    public float sfxSlider;
+    public float ambientVolume;
+    public float sfxVolume;
+
+    /// <summary>
+    /// Constructor with defaults
+    /// </summary>
+    public OptionsMenuSettingData()
+    {
+        resolution = Screen.currentResolution;
+        qualityIndex = QualitySettings.GetQualityLevel();
+        textureQuailityIndex = QualitySettings.masterTextureLimit;
+        aaOptionIndex = QualitySettings.antiAliasing;
+
+        masterVolume = 0.5f;
+        musicVolume = 0.5f;
+        ambientVolume = 0.5f;
+        sfxVolume = 0.5f;
+    }
 
     public static void SaveToPlayerPrefs(OptionsMenuSettingData optionsMenuSettingData)
     {
@@ -40,8 +56,8 @@ public class OptionsMenuSettingData
 
         PlayerPrefs.SetFloat(masterVolumePrefName,  optionsMenuSettingData.masterVolume);
         PlayerPrefs.SetFloat(musicVolumePrefName,   optionsMenuSettingData.musicVolume);
-        PlayerPrefs.SetFloat(ambientVolumePrefName, optionsMenuSettingData.ambientSlider);
-        PlayerPrefs.SetFloat(sfxVolumePrefName,     optionsMenuSettingData.sfxSlider);
+        PlayerPrefs.SetFloat(ambientVolumePrefName, optionsMenuSettingData.ambientVolume);
+        PlayerPrefs.SetFloat(sfxVolumePrefName,     optionsMenuSettingData.sfxVolume);
 
         PlayerPrefs.Save();
     }
@@ -49,18 +65,47 @@ public class OptionsMenuSettingData
     public static OptionsMenuSettingData LoadOptionsFromPlayerPrefs()
     {
         OptionsMenuSettingData newData = new OptionsMenuSettingData();
-        newData.resolution.width = PlayerPrefs.GetInt(ResolutionWidthPrefName);
-        newData.resolution.height = PlayerPrefs.GetInt(ResolutionHeightPrefName);
-        newData.resolution.refreshRate = PlayerPrefs.GetInt(ResolutionRefeshRatePrefName);
+        if (PlayerPrefs.HasKey(ResolutionWidthPrefName))
+        {
+            newData.resolution.width = PlayerPrefs.GetInt(ResolutionWidthPrefName);
+        }
+        if (PlayerPrefs.HasKey(ResolutionHeightPrefName))
+        {
+            newData.resolution.height = PlayerPrefs.GetInt(ResolutionHeightPrefName);
+        }
+        if (PlayerPrefs.HasKey(ResolutionRefeshRatePrefName))
+        {
+            newData.resolution.refreshRate = PlayerPrefs.GetInt(ResolutionRefeshRatePrefName);
+        }
+        if (PlayerPrefs.HasKey(QualityPrefName))
+        {
+            newData.qualityIndex = PlayerPrefs.GetInt(QualityPrefName);
+        }
+        if (PlayerPrefs.HasKey(TexturePrefName))
+        {
+            newData.textureQuailityIndex = PlayerPrefs.GetInt(TexturePrefName);
+        }
+        if (PlayerPrefs.HasKey(AAPrefName))
+        {
+            newData.aaOptionIndex = PlayerPrefs.GetInt(AAPrefName);
+        }
 
-        newData.qualityIndex = PlayerPrefs.GetInt(QualityPrefName);
-        newData.textureQuailityIndex = PlayerPrefs.GetInt(TexturePrefName);
-        newData.aaOptionIndex = PlayerPrefs.GetInt(AAPrefName);
-
-        newData.masterVolume = PlayerPrefs.GetInt(masterVolumePrefName);
-        newData.musicVolume = PlayerPrefs.GetInt(musicVolumePrefName);
-        newData.ambientSlider = PlayerPrefs.GetInt(ambientVolumePrefName);
-        newData.sfxSlider = PlayerPrefs.GetInt(sfxVolumePrefName);
+        if (PlayerPrefs.HasKey(masterVolumePrefName))
+        {
+            newData.masterVolume = PlayerPrefs.GetFloat(masterVolumePrefName);
+        }
+        if (PlayerPrefs.HasKey(musicVolumePrefName))
+        {
+            newData.musicVolume = PlayerPrefs.GetFloat(musicVolumePrefName);
+        }
+        if (PlayerPrefs.HasKey(ambientVolumePrefName))
+        {
+            newData.ambientVolume = PlayerPrefs.GetFloat(ambientVolumePrefName);
+        }
+        if (PlayerPrefs.HasKey(sfxVolumePrefName))
+        {
+            newData.sfxVolume = PlayerPrefs.GetFloat(sfxVolumePrefName);
+        }
         return newData;
     }
 }
