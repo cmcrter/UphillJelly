@@ -85,6 +85,7 @@ namespace L7Games
         {
             LoadingData.sceneToLoad = LoadingData.getSceneString(currentLevelSelected);
             LoadingData.currentLevel = currentLevelSelected;
+            LoadingData.waitForNextScene = true;
             LoadingData.SavePlayer = save;
 
             SceneManager.LoadScene("LoadingScene");
