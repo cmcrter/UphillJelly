@@ -64,6 +64,8 @@ public class OptionsMenuSettingData
 
     public static OptionsMenuSettingData LoadOptionsFromPlayerPrefs()
     {
+
+
         OptionsMenuSettingData newData = new OptionsMenuSettingData();
         if (PlayerPrefs.HasKey(ResolutionWidthPrefName))
         {

@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using TMPro;
 using FMODUnity;
 using L7Games.UI;
+using L7Games;
+using Cinemachine;
 
 
 public class PauseMenuOptionsPanel : MonoBehaviour
@@ -32,8 +34,15 @@ public class PauseMenuOptionsPanel : MonoBehaviour
     Resolution[] resolutions;
 
     public UnityEngine.EventSystems.EventSystem currentEventSystem;
+    [Header("In-game Options")]
     [SerializeField]
     private PauseMenuController pauseMenuController;
+
+    [Header("Main Menu Options")]
+    [SerializeField]
+    private UITransitionManager uITransitionManager;
+    [SerializeField]
+    private CinemachineVirtualCamera virtualCameraReturnedToo; 
 
     private FMOD.Studio.Bus masterBus;
     private FMOD.Studio.Bus musicBus;
@@ -214,7 +223,7 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         OptionsMenuSettingData.SaveToPlayerPrefs(lastSavedOptionsData);
     }
 
-    public void OnWindowCloseButton()
+    public void OnInGameWindowCloseButton()
     {
         WarningBox warningBox = WarningBox.CreateWarningBox(UiCanvas, currentEventSystem, "Do you want to save new setting");
         Button cancelButton = warningBox.AddButton("Cancel");
@@ -231,6 +240,28 @@ public class PauseMenuOptionsPanel : MonoBehaviour
         yesButton.onClick.AddListener(pauseMenuController.OnOptionMenuClose);
         yesButton.onClick.AddListener(warningBox.CloseBox);
     }
+
+    public void OnMainMenuWindowCloseButton()
+    {
+        WarningBox warningBox = WarningBox.CreateWarningBox(UiCanvas, currentEventSystem, "Do you want to save new setting");
+        Button cancelButton = warningBox.AddButton("Cancel");
+        cancelButton.onClick.AddListener(OnWarningBoxCancel);
+        cancelButton.onClick.AddListener(warningBox.CloseBox);
+        Button noButton = warningBox.AddCancelButton("No");
+        noButton.onClick.AddListener(OnRevert);
+        noButton.onClick.AddListener(CameraReturn);
+        noButton.onClick.AddListener(warningBox.CloseBox);
+        Button yesButton = warningBox.AddCancelButton("Yes");
+        yesButton.onClick.AddListener(OnApply);
+        yesButton.onClick.AddListener(CameraReturn);
+        yesButton.onClick.AddListener(warningBox.CloseBox);
+    }
+
+    public void CameraReturn()
+    {
+        uITransitionManager.UpdateCamera(virtualCameraReturnedToo);
+    }
+
     public void OnWarningBoxCancel()
     {
         currentEventSystem.SetSelectedGameObject(resolutionDropdown.gameObject);
