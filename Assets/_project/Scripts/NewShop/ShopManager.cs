@@ -3,7 +3,7 @@
 // Author: Jack Peedle
 // Date Created: 22/05/22
 // Last Edited By: Jack Peedle
-// Date Last Edited: 22/05/22
+// Date Last Edited: 25/05/22
 // Brief: 
 //////////////////////////////////////////////////////////// 
 
@@ -79,8 +79,6 @@ public class ShopManager : MonoBehaviour
         */
         selectedButton = eventSystem.firstSelectedGameObject.GetComponent<ShopTabButton>();
 
-        //hatSOs = (HatObject)ScriptableObject.FindObjectsOfType(ScriptableObject);
-        //Material characterShopMaterial = characterShopObject.GetComponent<Material>();
     }
 
     public void hasBoughtItem() {
@@ -100,8 +98,6 @@ public class ShopManager : MonoBehaviour
                 buyOwnedText.text = "Owned";
 
                 hatItem.item.isPurchased = true;
-                //hatItem.item.uiDisplay = boughtSprite;
-
                 currentEquippedHat = hatItem.item;
 
                 hatShopItem.GetComponent<MeshFilter>().sharedMesh = hatItem.item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
@@ -125,7 +121,6 @@ public class ShopManager : MonoBehaviour
                 buyOwnedText.text = "Owned";
 
                 characterItem.item.isPurchased = true;
-                //hatItem.item.uiDisplay = boughtSprite;
 
                 currentEquippedCharacter = characterItem.item;
 
@@ -292,11 +287,20 @@ public class ShopManager : MonoBehaviour
 
         selectedButton = button.GetComponent<ShopTabButton>();
 
-        if (selectedButton.GetComponent<HatItem>().item.isPurchased) {
+        /*
+        if (selectedButton.GetComponent<HatItem>().item.isPurchased && selectedButton.GetComponent<HatItem>()) {
 
             buyOwnedText.text = "Owned";
             // Do not let them purchase again
             Debug.Log("Already Purchased Item");
+
+            currentEquippedHat = selectedButton.GetComponent<HatItem>().item;
+
+            hatShopItem.GetComponent<MeshFilter>().sharedMesh = 
+                selectedButton.GetComponent<HatItem>().item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            hatShopItem.GetComponent<MeshRenderer>().material = 
+                selectedButton.GetComponent<HatItem>().item.material;
+
 
         } else {
 
@@ -306,10 +310,53 @@ public class ShopManager : MonoBehaviour
 
         }
 
+        if (selectedButton.GetComponent<CharacterItem>().item.isPurchased && selectedButton.GetComponent<CharacterItem>()) {
+
+            buyOwnedText.text = "Owned";
+            // Do not let them purchase again
+            Debug.Log("Already Purchased Item");
+
+            currentEquippedCharacter = selectedButton.GetComponent<CharacterItem>().item;
+
+            characterShopMesh.gameObject.GetComponent<SkinnedMeshRenderer>().material = 
+                selectedButton.GetComponent<CharacterItem>().item.material;
+
+
+        } else {
+
+            if (!selectedButton.GetComponent<CharacterItem>().item.isPurchased) {
+                hasBoughtItem();
+            }
+
+        }
+
+        if (selectedButton.GetComponent<SkateboardItem>().item.isPurchased && selectedButton.GetComponent<SkateboardItem>()) {
+
+            buyOwnedText.text = "Owned";
+            // Do not let them purchase again
+            Debug.Log("Already Purchased Item");
+
+            currentEquippedSkateboard = selectedButton.GetComponent<SkateboardItem>().item;
+            
+            skateboardShopItem.GetComponent<MeshFilter>().sharedMesh =
+                selectedButton.GetComponent<SkateboardItem>().item.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+
+            skateboardShopItem.GetComponent<MeshRenderer>().material = 
+                selectedButton.GetComponent<SkateboardItem>().item.material;
+
+
+        } else {
+
+            if (!selectedButton.GetComponent<SkateboardItem>().item.isPurchased) {
+                hasBoughtItem();
+            }
+
+        }
+        */
         ///
         /// go to buy button, check if have enough money, change buy button text
         ///
-
+        hasBoughtItem();
         ResetTabs();
 
         //button.backgroundTabImage.sprite = tabActive;

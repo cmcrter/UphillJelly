@@ -110,6 +110,7 @@ public class ShopInventory : MonoBehaviour
         //shopHatInventory.Load();
         ///playerHatInventory.Load();
         //inputHandlersInScene[i].TabLeftPerformed += MainMenuController_TabLeftAction_Performed;
+        
     }
 
     public void Update() {
@@ -188,9 +189,6 @@ public class ShopInventory : MonoBehaviour
 
     public void UpdateTabUI() {
 
-        
-
-        
         for (int i = 0; i < mainTabs.Length; i++) {
             if (currentTabSelected == i) {
                 mainTabs[i].gameObject.SetActive(true);
@@ -201,8 +199,6 @@ public class ShopInventory : MonoBehaviour
             }
         }
         
-
-
         ///Tabs[3].gameObject.SetActive(false);
 
         ///for (int i = 0; i < Tabs.Length; i++) {
