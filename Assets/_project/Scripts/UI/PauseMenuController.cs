@@ -95,6 +95,7 @@ namespace L7Games.UI
                 for (int i = 0; i < inputHandlersInScene.Length; ++i)
                 {
                     inputHandlersInScene[i].PauseActionPerformed -= PauseMenuController_PauseActionPerformed;
+                    
                 }
             }
         }
@@ -248,6 +249,9 @@ namespace L7Games.UI
                 }
             }
         }
+
+        
+
         private void RestartLevel()
         {
             UnpauseGame();

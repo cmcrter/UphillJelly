@@ -13,6 +13,7 @@ using L7Games.Loading;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Obsolete]
 public class Shop : MonoBehaviour
 {
     #region Variables

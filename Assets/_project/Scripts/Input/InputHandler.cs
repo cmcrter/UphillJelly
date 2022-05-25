@@ -271,6 +271,14 @@ namespace L7Games.Input
         /// Called when the navigate up button is pressed from the menu action map
         /// </summary>
         public event System.Action MenuUpPerformed;
+
+
+        public event System.Action TabLeftPerformed;
+        public event System.Action TabRightPerformed;
+        public event System.Action RotateLeftPerformed;
+        public event System.Action RotateRightPerformed;
+
+
         #endregion
 
         /// <summary>
@@ -755,13 +763,53 @@ namespace L7Games.Input
         /// <summary>
         /// Calls the MenuLeftPerformed event when the playerInput Menu_Left control was performed
         /// </summary>
-        private void MenuLeft_Performed(InputAction.CallbackContext callbackContext)
-        {
-            if (MenuLeftPerformed != null)
-            {
+        private void MenuLeft_Performed(InputAction.CallbackContext callbackContext) {
+            if (MenuLeftPerformed != null) {
                 MenuLeftPerformed();
             }
         }
+
+
+
+        private void TabLeft_Performed(InputAction.CallbackContext callbackContext) {
+            if (TabLeftPerformed != null) {
+
+                Debug.Log("TabLeftPerformed");
+                TabLeftPerformed();
+                
+            }
+        }
+
+
+        private void TabRight_Performed(InputAction.CallbackContext callbackContext) {
+            if (TabRightPerformed != null) {
+
+                Debug.Log("TabRightPerformed");
+                TabRightPerformed();
+                
+            }
+        }
+
+        private void RotateLeft_Performed(InputAction.CallbackContext callbackContext) {
+            if (RotateLeftPerformed != null) {
+
+                Debug.Log("RotateLeftPerformed");
+                RotateLeftPerformed();
+
+            }
+        }
+
+
+        private void RotateRight_Performed(InputAction.CallbackContext callbackContext) {
+            if (RotateRightPerformed != null) {
+
+                Debug.Log("RotateRightPerformed");
+                RotateRightPerformed();
+
+            }
+        }
+
+
         #endregion
 
         #region Binding And Unbinding
@@ -902,6 +950,13 @@ namespace L7Games.Input
             playerInput.actions["Menu_Down"].performed      += MenuDown_Performed;
             playerInput.actions["Menu_left"].performed      += MenuLeft_Performed;
             playerInput.actions["Menu_Unpause"].performed   += PauseAction_Performed;
+
+            playerInput.actions["TabLeft"].performed        += TabLeft_Performed;
+            playerInput.actions["TabRight"].performed       += TabRight_Performed;
+
+            playerInput.actions["RotateLeft"].performed     += RotateLeft_Performed;
+            playerInput.actions["RotateRight"].performed    += RotateRight_Performed;
+
         }
 
 
@@ -1003,6 +1058,13 @@ namespace L7Games.Input
             playerInput.actions["Menu_Down"].performed      -= MenuDown_Performed;
             playerInput.actions["Menu_left"].performed      -= MenuLeft_Performed;
             playerInput.actions["Menu_Unpause"].performed   -= PauseAction_Performed;
+
+
+            playerInput.actions["TabLeft"].performed        -= TabLeft_Performed;
+            playerInput.actions["TabRight"].performed       -= TabRight_Performed;
+
+            playerInput.actions["RotateLeft"].performed     -= RotateLeft_Performed;
+            playerInput.actions["RotateRight"].performed    -= RotateRight_Performed;
         }
         #endregion
         /// <summary>

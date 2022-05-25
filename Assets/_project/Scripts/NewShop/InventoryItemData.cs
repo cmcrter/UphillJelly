@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace L7Games {
 
@@ -21,8 +22,8 @@ namespace L7Games {
         public string displayName;
         public Sprite icon;
         public int price;
-        // public Text description???????
-        // public string type???????? (body, hat etc)
+        //public Text description;
+        //public string type;
         public GameObject prefab;
 
         public Material material;
