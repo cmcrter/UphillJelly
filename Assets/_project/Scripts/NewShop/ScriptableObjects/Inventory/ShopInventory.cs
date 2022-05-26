@@ -45,7 +45,8 @@ public class ShopInventory : MonoBehaviour
 
 
     public int currentTabSelected;
-    public GameObject[] mainTabs;
+    public GameObject[] mainPanels;
+    public GameObject[] mainTabButtons;
     public GameObject[] TMPdescriptions;
     public GameObject[] goDescriptions;
     public GameObject[] startingButtons;
@@ -113,7 +114,7 @@ public class ShopInventory : MonoBehaviour
         //shopHatInventory.Load();
         ///playerHatInventory.Load();
         //inputHandlersInScene[i].TabLeftPerformed += MainMenuController_TabLeftAction_Performed;
-        
+        mainTabButtons[0].gameObject.GetComponent<Button>().image.color = Color.magenta;
     }
 
     public void Update() {
@@ -192,14 +193,16 @@ public class ShopInventory : MonoBehaviour
 
     public void UpdateTabUI() {
 
-        for (int i = 0; i < mainTabs.Length; i++) {
+        for (int i = 0; i < mainPanels.Length; i++) {
             if (currentTabSelected == i) {
-                mainTabs[i].gameObject.SetActive(true);
+                mainPanels[i].gameObject.SetActive(true);
+                mainTabButtons[i].gameObject.GetComponent<Button>().image.color = Color.magenta;
                 TMPdescriptions[i].gameObject.SetActive(true);
                 goDescriptions[i].gameObject.SetActive(true);
                 //mainTabs[i].GetComponent<Button>().enabled = true;
             } else {
-                mainTabs[i].gameObject.SetActive(false);
+                mainPanels[i].gameObject.SetActive(false);
+                mainTabButtons[i].gameObject.GetComponent<Button>().image.color = Color.gray;
                 TMPdescriptions[i].gameObject.SetActive(false);
                 goDescriptions[i].gameObject.SetActive(false);
                 //mainTabs[i].GetComponent<Button>().enabled = false;

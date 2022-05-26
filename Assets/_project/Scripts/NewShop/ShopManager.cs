@@ -70,14 +70,10 @@ public class ShopManager : MonoBehaviour
     {      
         if (lastSelectedGO != eventSystem.currentSelectedGameObject) 
         {
-            Debug.Log("ChangedItem0");
-            //
             if (eventSystem.currentSelectedGameObject != null) 
             {
-                Debug.Log("ChangedItem1");
                 if (eventSystem.currentSelectedGameObject.TryGetComponent<ShopTabButton>(out ShopTabButton button))
                 {
-                    Debug.Log("ChangedItem2");
                     OnTabHover(button);
                 }
             }
@@ -233,7 +229,6 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        Debug.Log("ChangedItem4");
 
         if (selectedButton.GetComponent<CharacterItem>())
         {
@@ -251,7 +246,6 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        Debug.Log("ChangedItem5");
 
         if (selectedButton.GetComponent<SkateboardItem>()) 
         {
