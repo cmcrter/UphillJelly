@@ -7,6 +7,7 @@
 // Brief: A controller for the UI at the end of a level
 //////////////////////////////////////////////////////////// 
 
+using L7Games.Loading;
 using L7Games.Movement;
 using TMPro;
 using UnityEngine;
@@ -79,6 +80,11 @@ namespace L7Games
             scoreText.text = Mathf.FloorToInt(HUDScript.storedScore).ToString();
             timerText.text = ((int)Timer.roundTime * -1).ToString() + "s";
             wipeoutText.text = player.KOCount.ToString();
+
+            if(LoadingData.player != null)
+            {
+                LoadingData.player.iCurrency += (int)(HUDScript.storedScore * 0.1f);
+            }
         }
 
         public void LoginPlayfab()

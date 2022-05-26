@@ -99,6 +99,8 @@ namespace L7Games.Movement
         private Quaternion initialRot;
         private Quaternion initialRootRotation;
 
+        private Vector3 initialCustomLocalPos;
+
         private IEnumerator AirturningCo;
         public float turnClamp = 1f;
         [SerializeField]
@@ -269,7 +271,7 @@ namespace L7Games.Movement
             {
                 Destroy(customBoardModel.GetComponent<Rigidbody>());
                 customBoardModel.transform.SetParent(root);
-                customBoardModel.transform.localPosition = Vector3.zero;
+                customBoardModel.transform.localPosition = initialCustomLocalPos;
                 customBoardModel.transform.localRotation = Quaternion.Euler(new Vector3(180, 0, -90));
             }
 
@@ -516,6 +518,7 @@ namespace L7Games.Movement
             fRB.transform.parent = null;
             boardPos = boardModel.transform.position;
             initialRootRotation = root.rotation;
+            initialCustomLocalPos = customBoardModel.transform.localPosition;
 
             //characterInitalBones = GetBonesFromObject(characterModel);
 
