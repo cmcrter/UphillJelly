@@ -272,7 +272,7 @@ namespace L7Games.Movement
                 Destroy(customBoardModel.GetComponent<Rigidbody>());
                 customBoardModel.transform.SetParent(root);
                 customBoardModel.transform.localPosition = initialCustomLocalPos;
-                customBoardModel.transform.localRotation = Quaternion.Euler(new Vector3(180, 0, -90));
+                customBoardModel.transform.localRotation = Quaternion.Euler(new Vector3(180, 0, 90));
             }
 
             transform.rotation = point.rotation;

@@ -84,6 +84,11 @@ public class ProfileSelector : MonoBehaviour
                 ProfileButtonTexts[i].text = "New Game";
             }
         }
+
+        if(LoadingData.player != null)
+        {
+            PushValuesToShop();
+        }
     }
 
     //Profile Selected On Initial Screen
