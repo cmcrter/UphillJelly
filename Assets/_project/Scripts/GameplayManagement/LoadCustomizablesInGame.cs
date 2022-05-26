@@ -77,8 +77,7 @@ public class LoadCustomizablesInGame
         if (LoadingData.shopItems[1])
         {
             //Adding Hat
-            catHead.GetComponent<MeshFilter>().sharedMesh = LoadingData.shopItems[1].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
-            catHead.GetComponent<MeshRenderer>().material = LoadingData.shopItems[1].material;
+            GameObject.Instantiate<GameObject>(LoadingData.shopItems[1].ingamePrefab, catHead);
         }
 
         if (LoadingData.shopItems[2])
@@ -104,7 +103,7 @@ public class LoadCustomizablesInGame
 
                 if(equipItems[1] != null)
                 {
-                    return equipItems[1].objectPrefab;
+                    return equipItems[1].ingamePrefab;
                 }
             }
         }
