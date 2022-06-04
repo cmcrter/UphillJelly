@@ -320,6 +320,11 @@ public class SplineTraffic : MonoBehaviour
     /// <param name="indexMoved">The index of the object to move along the spline</param>
     private void UpdateMovedObject(int indexMoved)
     {
+        if (Time.deltaTime <= 0f)
+        {
+            return;
+        }
+
         // The object or objects don't exist then there is nothing to move
         if (objectsMoved == null)
         {
