@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press Select or ` Key to respawn
+  m_text: Press Select or R Key to respawn
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f237780dde64b5c48b24580cd443b100, type: 2}
   m_sharedMaterial: {fileID: -113288212102913694, guid: f237780dde64b5c48b24580cd443b100, type: 2}
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press A or Space Key to jump off grinds early
+  m_text: Press A or Up Arrow Key to jump off grinds early
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f237780dde64b5c48b24580cd443b100, type: 2}
   m_sharedMaterial: {fileID: -113288212102913694, guid: f237780dde64b5c48b24580cd443b100, type: 2}
@@ -1157,7 +1157,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press Select or ` Key to Wipeout
+  m_text: Press Select or R Key to Wipeout
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f237780dde64b5c48b24580cd443b100, type: 2}
   m_sharedMaterial: {fileID: -113288212102913694, guid: f237780dde64b5c48b24580cd443b100, type: 2}
@@ -1595,9 +1595,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xTrickTrigger: {fileID: 0}
+  grindEarlyJumpOffTrigger: {fileID: 0}
+  grindEndJumpOffTrigger: {fileID: 0}
   respawnPopUp: {fileID: 1123095913520894392}
   xToTrickUiPop: {fileID: 84515174}
-  jumpOffGrindPop: {fileID: 1204774660}
+  jumpOffGrindEndPopUp: {fileID: 0}
   jumpOffGrindsEarlyPopUp: {fileID: 1247562203}
   wipingOutPopUp: {fileID: 281793657}
   playerHinge: {fileID: 0}
