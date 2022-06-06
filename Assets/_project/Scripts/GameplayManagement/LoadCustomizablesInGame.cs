@@ -22,6 +22,7 @@ public class LoadCustomizablesInGame
 
     public GameObject defaultBoard;
 
+    public Transform customBoardParent;
     public MeshRenderer catBoardMesh;
     public MeshFilter catBoardFilter;
 
@@ -59,8 +60,10 @@ public class LoadCustomizablesInGame
                     defaultBoard.SetActive(false);
 
                     //Swapping Out Board
-                    catBoardFilter.sharedMesh = equipItems[2].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
-                    catBoardMesh.material = equipItems[2].material;
+                    GameObject custBoard = GameObject.Instantiate(equipItems[2].ingamePrefab, customBoardParent);
+                    custBoard.transform.localPosition = Vector3.zero;
+                    //catBoardFilter.sharedMesh = equipItems[2].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+                    //catBoardMesh.material = equipItems[2].material;
                 }
             }
 
@@ -68,25 +71,27 @@ public class LoadCustomizablesInGame
         }
 
         //Personally this way is super inefficient but it's the only way it works with the shop system as currently is
-        if (LoadingData.shopItems[0])
+        if (LoadingData.shopItems[0] != null)
         {
             //Applying Material To Body
             catBody.material = LoadingData.shopItems[0].material;
         }
 
-        if (LoadingData.shopItems[1])
+        if (LoadingData.shopItems[1] != null)
         {
             //Adding Hat
             GameObject.Instantiate<GameObject>(LoadingData.shopItems[1].ingamePrefab, catHead);
         }
 
-        if (LoadingData.shopItems[2])
+        if (LoadingData.shopItems[2] != null)
         {
             defaultBoard.SetActive(false);
 
+            GameObject.Instantiate(LoadingData.shopItems[2].ingamePrefab, customBoardParent);
+
             //Swapping Out Board
-            catBoardFilter.sharedMesh = LoadingData.shopItems[2].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
-            catBoardMesh.material = LoadingData.shopItems[2].material;
+            //catBoardFilter.sharedMesh = LoadingData.shopItems[2].objectPrefab.GetComponent<MeshFilter>().sharedMesh;
+            //catBoardMesh.material = LoadingData.shopItems[2].material;
         }
     }
 

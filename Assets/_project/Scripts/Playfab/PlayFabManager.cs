@@ -194,6 +194,10 @@ namespace L7Games
             {
                 name = overrideName;
             }
+            else if(LoadingData.player.profileName == null)
+            {
+                name = "Dev";
+            }
 
             var request = new UpdateUserTitleDisplayNameRequest
             {

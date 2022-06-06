@@ -14,6 +14,8 @@ using L7Games.Loading;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using L7Games;
+using Cinemachine;
 
 public class ProfileSelector : MonoBehaviour
 {
@@ -41,6 +43,18 @@ public class ProfileSelector : MonoBehaviour
 
     [SerializeField]
     private int defaultStartingAmount = 15;
+
+    [Header("Variables for warning box")]
+    [SerializeField]
+    private UITransitionManager transitionManager;
+    [SerializeField]
+    private CinemachineVirtualCamera mainCamera;
+    [SerializeField]
+    private Canvas profileCanvas;
+    [SerializeField]
+    private EventSystem eventSystem;
+    [SerializeField]
+    private GameObject levelButton;
 
     private void Awake()
     {
@@ -135,28 +149,41 @@ public class ProfileSelector : MonoBehaviour
 
     public void ConfirmProfile()
     {
+        if(thisName.Length == 0)
+        {
+            WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Must Include A Name", Empty);
+            return;
+        }
+
         LoadingData.player.profileName = thisName;
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
         PushValuesToShop();
-
-        // set the starting background to false
-        profileSelectionScreen.SetActive(false);
+        MoveToMenu();
     }
 
     //Definitely making a new profile (overwrite functionality)
     public void NewProfile()
     {
-        LoadingData.player = new StoredPlayerProfile();
-        LoadingData.player.profileName = thisName;
-        LoadingData.player.iCurrency = defaultStartingAmount;
+        if(thisName.Length == 0)
+        {
+            WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Must Include A Name", Empty);
+            return;
+        }
+
+        LoadingData.player = new StoredPlayerProfile
+        {
+            profileName = thisName,
+            iCurrency = defaultStartingAmount
+        };
 
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
-        PushValuesToShop();
+        //Slow way of doing it right now
+        shop.ResetItemPurchases();
 
-        // set the starting background to false
-        profileSelectionScreen.SetActive(false);
+        PushValuesToShop();
+        MoveToMenu();
     }
 
     public static void QuitButton()
@@ -189,6 +216,8 @@ public class ProfileSelector : MonoBehaviour
         {
             shop.shopInventory.purchasedItems.Add(shop.FindSkateboard(i));
         }
+
+        //shop.
     }
 
     public void GetValuesFromShop()
@@ -235,5 +264,18 @@ public class ProfileSelector : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void MoveToMenu()
+    {
+        // set the starting background to false
+        profileSelectionScreen.SetActive(false);
+        eventSystem.SetSelectedGameObject(levelButton);
+        transitionManager.UpdateCamera(mainCamera);
+    }
+
+    private void Empty()
+    {
+
     }
 }
