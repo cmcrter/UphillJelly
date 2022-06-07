@@ -351,6 +351,24 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    public void ResetItemPurchases()
+    {
+        for(int i = 0; i < hatSOs.Length; ++i)
+        {
+            ((ItemObjectSO)hatSOs[i]).isPurchased = false;
+        }
+
+        for(int i = 0; i < characterSOs.Length; ++i)
+        {
+            ((ItemObjectSO)characterSOs[i]).isPurchased = false;
+        }
+
+        for(int i = 0; i < skateboardSOs.Length; ++i)
+        {
+            ((ItemObjectSO)skateboardSOs[i]).isPurchased = false;
+        }
+    }
+
     public ItemObjectSO[] ReturnEquippedObjects()
     {
         ItemObjectSO[] returnItems = new ItemObjectSO[3];

@@ -46,6 +46,10 @@ using UnityEngine.InputSystem;
         // on update
         void Update() 
         {
+            if (PauseManager.IsInstancePaused)
+            {
+                return;
+            }
             // calculates the most recent frame of the timer and time value in intervals of seconds relevant to time
             timeValue += Time.unscaledDeltaTime;
 

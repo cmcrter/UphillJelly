@@ -92,6 +92,7 @@ namespace L7Games
             yield return new WaitForSeconds(0.1f);
 
             LeaderboardGO.SetActive(true);
+
         }
 
         void PlayerExited(PlayerController player)

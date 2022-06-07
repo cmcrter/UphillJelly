@@ -34,6 +34,8 @@ public abstract class ItemObjectSO : ScriptableObject
     public bool isPurchased;
 
     public GameObject objectPrefab;
+    public GameObject ingamePrefab;
+
     public Material material;
     public int ItemPrice;
 

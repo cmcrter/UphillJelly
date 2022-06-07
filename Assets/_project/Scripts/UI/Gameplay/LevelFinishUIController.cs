@@ -7,9 +7,11 @@
 // Brief: A controller for the UI at the end of a level
 //////////////////////////////////////////////////////////// 
 
+using L7Games.Loading;
 using L7Games.Movement;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace L7Games
 {
@@ -20,10 +22,14 @@ namespace L7Games
         [SerializeField]
         private PlayFabManager leaderboardManager;
 
+
+
         [Header("This Session")]
         public HUD HUDScript;
         public RankTimer Timer;
         public PlayerController player;
+        public EventSystem eventSystem;
+        public GameObject nextButton;
 
         //Using this class to pass through to the leaderboards
         private RankBrackets bracketToPassThrough;
@@ -79,6 +85,13 @@ namespace L7Games
             scoreText.text = Mathf.FloorToInt(HUDScript.storedScore).ToString();
             timerText.text = ((int)Timer.roundTime * -1).ToString() + "s";
             wipeoutText.text = player.KOCount.ToString();
+
+            if(LoadingData.player != null)
+            {
+                LoadingData.player.iCurrency += (int)(HUDScript.storedScore * 0.1f);
+            }
+
+            eventSystem.SetSelectedGameObject(nextButton);
         }
 
         public void LoginPlayfab()

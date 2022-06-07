@@ -48,6 +48,10 @@ public class GhostRecorder : MonoBehaviour
     // Update
     public void Update()
     {
+        if (PauseManager.IsInstancePaused)
+        {
+            return;
+        }
         // calculates the most recent frame of the timer and time value in intervals of seconds relevant to time
         timer += Time.unscaledDeltaTime;
         timeValue += Time.unscaledDeltaTime;
