@@ -19,7 +19,7 @@ namespace L7Games
         public SkinnedMeshRenderer characterRenderer;
         public Transform HatParent;
         public GameObject HatObject;
-    
+
         //public struct Bones
         //{
         //    public Vector3 position;
@@ -58,8 +58,22 @@ namespace L7Games
         //        otherRagdollDataContainer.bones[i].transform.localScale = bones[i].transform.localScale;
         //    }
         //}
-    }
 
+        private void Start()
+        {
+            if (HatParent != null && HatObject == null)
+            {
+                if (HatParent.childCount > 0)
+                {
+                    Transform hatObjectTrnasform = HatParent.GetChild(0);
+                    if (hatObjectTrnasform != null)
+                    {
+                        HatObject = hatObjectTrnasform.gameObject;
+                    }
+                }
+            }
+        }
+    }
 }
 
 
