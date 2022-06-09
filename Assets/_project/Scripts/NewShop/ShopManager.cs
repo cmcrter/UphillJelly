@@ -398,10 +398,13 @@ public class ShopManager : MonoBehaviour
 
         for (int i = 0; i < hatSOs.Length; ++i)
         { 
-            if (((ItemObjectSO)hatSOs[i]).Id == ID)
+            if ((ItemObjectSO)hatSOs[i] != null)
             {
-                item = (ItemObjectSO)hatSOs[i];
-                return item;
+                if (((ItemObjectSO)hatSOs[i]).Id == ID)
+                {
+                    item = (ItemObjectSO)hatSOs[i];
+                    return item;
+                }
             }
         }
 
@@ -414,10 +417,13 @@ public class ShopManager : MonoBehaviour
 
         for (int i = 0; i < characterSOs.Length; ++i)
         {
-            if (((ItemObjectSO)characterSOs[i]).Id == ID)
+            if ((ItemObjectSO)characterSOs[i] != null)
             {
-                item = (ItemObjectSO)characterSOs[i];
-                return item;
+                if (((ItemObjectSO)characterSOs[i]).Id == ID)
+                {
+                    item = (ItemObjectSO)characterSOs[i];
+                    return item;
+                }
             }
         }
 
@@ -430,10 +436,13 @@ public class ShopManager : MonoBehaviour
 
         for (int i = 0; i < skateboardSOs.Length; ++i)
         {
-            if (((ItemObjectSO)skateboardSOs[i]).Id == ID)
+            if ((ItemObjectSO)skateboardSOs[i] != null)
             {
-                item = (ItemObjectSO)skateboardSOs[i];
-                return item;
+                if (((ItemObjectSO)skateboardSOs[i]).Id == ID)
+                {
+                    item = (ItemObjectSO)skateboardSOs[i];
+                    return item;
+                }
             }
         }
 
