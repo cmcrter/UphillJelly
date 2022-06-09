@@ -816,10 +816,10 @@ namespace L7Games.Movement
             GameObject ragDoll = GameObject.Instantiate(ragDollPrefab, characterModel.transform.position, characterModel.transform.rotation);
             if (ragDoll.TryGetComponent<SpawnedRagdoll>(out SpawnedRagdoll spawnedRagdoll))
             {
-                if(ApplyingGameplayData.instance)
-                {
-                    ragdollDataContainer.HatObject = ApplyingGameplayData.instance.loadcustomizables.HatObject();
-                }
+                //if(ApplyingGameplayData.instance)
+                //{
+                //    ragdollDataContainer.HatObject = ApplyingGameplayData.instance.loadcustomizables.HatObject();
+                //}
 
                 spawnedRagdoll.Initalise(ragdollDataContainer);
                 currentRagdoll = spawnedRagdoll;

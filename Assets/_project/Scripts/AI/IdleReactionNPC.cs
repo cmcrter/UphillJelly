@@ -136,6 +136,7 @@ public class IdleReactionNPC : MonoBehaviour
             StartCoroutine(LoopingResetCheck());
             this.enabled = false;
             characterMeshRenderer.enabled = false;
+            ragdollData.HatObject.SetActive(false);
         }
     }
 
@@ -235,6 +236,7 @@ public class IdleReactionNPC : MonoBehaviour
         gameObject.SetActive(true);
         this.enabled = true;
         characterMeshRenderer.enabled = true;
+        ragdollData.HatObject.SetActive(true);
         animator.Play("Idle", -1, 0f);
     }
 
@@ -258,6 +260,7 @@ public class IdleReactionNPC : MonoBehaviour
             StartCoroutine(LoopingResetCheck());
             this.enabled = false;
             characterMeshRenderer.enabled = false;
+            ragdollData.HatObject.SetActive(false);
         }
     }
 
