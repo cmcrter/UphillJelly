@@ -317,10 +317,12 @@ public class ShopManager : MonoBehaviour
 
     public void OnDrawGizmos()
     {
+        /*
         if (eventSystem.currentSelectedGameObject != null)
         {
             Gizmos.DrawSphere(eventSystem.currentSelectedGameObject.transform.position, 2);
-        }              
+        } 
+        */
     }
 
     /// <summary>
