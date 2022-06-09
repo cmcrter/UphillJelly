@@ -141,6 +141,11 @@ namespace L7Games.Input
         /// </summary>
         public float TurningAxis { get; set; } = 0f;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public float MenuRotationPlayerAxis { get; set; } = 0f;
+
         public PlayerInput AttachedPlayerInput
         {
             get
@@ -277,7 +282,6 @@ namespace L7Games.Input
         public event System.Action TabRightPerformed;
         public event System.Action RotateLeftPerformed;
         public event System.Action RotateRightPerformed;
-
 
         #endregion
 
@@ -795,7 +799,7 @@ namespace L7Games.Input
 
                 Debug.Log("RotateLeftPerformed");
                 RotateLeftPerformed();
-
+                //MenuRotationPlayerAxis = callbackContext.ReadValue<float>
             }
         }
 
@@ -957,6 +961,13 @@ namespace L7Games.Input
             playerInput.actions["RotateLeft"].performed     += RotateLeft_Performed;
             playerInput.actions["RotateRight"].performed    += RotateRight_Performed;
 
+            playerInput.actions["Menu_RotateCharacter"].performed += InputHandler_performed;
+            playerInput.actions["Menu_RotateCharacter"].canceled += InputHandler_performed;
+        }
+
+        private void InputHandler_performed(InputAction.CallbackContext callback)
+        {
+            MenuRotationPlayerAxis = callback.ReadValue<float>();
         }
 
 
@@ -1065,6 +1076,9 @@ namespace L7Games.Input
 
             playerInput.actions["RotateLeft"].performed     -= RotateLeft_Performed;
             playerInput.actions["RotateRight"].performed    -= RotateRight_Performed;
+
+            playerInput.actions["Menu_RotateCharacter"].performed -= InputHandler_performed;
+            playerInput.actions["Menu_RotateCharacter"].canceled -= InputHandler_performed;
         }
         #endregion
         /// <summary>

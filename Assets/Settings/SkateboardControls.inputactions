@@ -1207,6 +1207,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Menu_RotateCharacter",
+                    "type": "Value",
+                    "id": "de2a8473-145c-4898-8632-2868634916b7",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -1471,6 +1479,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RotateLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2093a31e-bcc5-485d-ba99-fab93fd6e5f5",
+                    "path": "<Gamepad>/rightStick/x",
+                    "interactions": "",
+                    "processors": "Invert",
+                    "groups": "",
+                    "action": "Menu_RotateCharacter",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

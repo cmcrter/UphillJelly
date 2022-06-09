@@ -78,10 +78,6 @@ public class ShopInventory : MonoBehaviour
 
         //eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
 
-        inputHandlerInScene.RotateLeftPerformed     += MainMenuController_RotateLeftAction_Performed;
-
-        inputHandlerInScene.RotateRightPerformed    += MainMenuController_RotateRightAction_Performed;
-
     }
 
 
@@ -99,10 +95,6 @@ public class ShopInventory : MonoBehaviour
         inputHandlerInScene.MenuCancelPerformed     -= MainMenuController_Cancel_Performed;
 
         //eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
-
-        inputHandlerInScene.RotateLeftPerformed     -= MainMenuController_RotateLeftAction_Performed;
-
-        inputHandlerInScene.RotateRightPerformed    -= MainMenuController_RotateRightAction_Performed;
 
     }
     #endregion
@@ -142,7 +134,7 @@ public class ShopInventory : MonoBehaviour
         ///objectDescription[2].text = currentlySelectedButton.GetComponent<SkateboardItem>().item.itemDescription;
         ///descriptionItemImage[2].sprite = currentlySelectedButton.GetComponent<SkateboardItem>().item.uiDisplay;
 
-
+        physicalCharacter.transform.Rotate(new Vector3(0f, inputHandlerInScene.MenuRotationPlayerAxis, 0f) * rotationSpeed);
     }
 
     private void MainMenuController_TabLeftAction_Performed() {
@@ -175,20 +167,6 @@ public class ShopInventory : MonoBehaviour
         //currentTabSelected++;
         UpdateTabUI();
         
-    }
-
-    private void MainMenuController_RotateLeftAction_Performed() {
-
-        Debug.Log("RotateLeft");
-        physicalCharacter.transform.Rotate(new Vector3(0f, -1f, 0f) * rotationSpeed);
-
-    }
-
-    private void MainMenuController_RotateRightAction_Performed() {
-
-        Debug.Log("RotateRight");
-        physicalCharacter.transform.Rotate(new Vector3(0f, 1f, 0f) * rotationSpeed);
-
     }
 
     public void UpdateTabUI() {
