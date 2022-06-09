@@ -204,17 +204,23 @@ public class ProfileSelector : MonoBehaviour
 
         for (int i = 0; i < LoadingData.player.savedCharacterList.Count; ++i)
         {
-            shop.shopInventory.purchasedItems.Add(shop.FindChar(i));
+            ItemObjectSO item = shop.FindChar(i);
+            shop.shopInventory.purchasedItems.Add(item);
+            item.isPurchased = true;
         }
 
         for (int i = 0; i < LoadingData.player.savedHatList.Count; ++i)
         {
+            ItemObjectSO item = shop.FindHat(i);
             shop.shopInventory.purchasedItems.Add(shop.FindHat(i));
+            item.isPurchased = true;
         }
 
         for (int i = 0; i < LoadingData.player.savedBoardList.Count; ++i)
         {
+            ItemObjectSO item = shop.FindSkateboard(i);
             shop.shopInventory.purchasedItems.Add(shop.FindSkateboard(i));
+            item.isPurchased = true;
         }
 
         //shop.
