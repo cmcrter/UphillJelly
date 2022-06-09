@@ -357,17 +357,26 @@ public class ShopManager : MonoBehaviour
     {
         for(int i = 0; i < hatSOs.Length; ++i)
         {
-            ((ItemObjectSO)hatSOs[i]).isPurchased = false;
+            if ((ItemObjectSO)hatSOs[i] != null)
+            {
+                ((ItemObjectSO)hatSOs[i]).isPurchased = false;
+            }
         }
 
         for(int i = 0; i < characterSOs.Length; ++i)
         {
-            ((ItemObjectSO)characterSOs[i]).isPurchased = false;
+            if ((ItemObjectSO)characterSOs[i] != null)
+            {
+                ((ItemObjectSO)characterSOs[i]).isPurchased = false;
+            }
         }
 
         for(int i = 0; i < skateboardSOs.Length; ++i)
         {
-            ((ItemObjectSO)skateboardSOs[i]).isPurchased = false;
+            if ((ItemObjectSO)skateboardSOs[i] != null)
+            {
+                ((ItemObjectSO)skateboardSOs[i]).isPurchased = false;
+            }
         }
     }
 
