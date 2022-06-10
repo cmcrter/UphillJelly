@@ -87,6 +87,8 @@ namespace L7Games
         [SerializeField]
         private List<LeaderboardData> valuesFilledIn = new List<LeaderboardData>();
 
+        string name;
+
         [Header("Overrides")]
         [SerializeField]
         private bool overrides;
@@ -134,6 +136,8 @@ namespace L7Games
             {
                 name = result.InfoResultPayload.PlayerProfile.DisplayName;
             }
+
+            SubmitNameButton();
     
             //The map is finished
             if(LoadingData.currentLevel == LEVEL.MAINMENU)
@@ -188,13 +192,21 @@ namespace L7Games
 
         public void SubmitNameButton() 
         {
-            string name = LoadingData.player.profileName != null ? LoadingData.player.profileName : overrideName;
-
-            if(overrides)
+            if(LoadingData.player != null)
             {
-                name = overrideName;
+                name = LoadingData.player.profileName != null ? LoadingData.player.profileName : overrideName;
+
+                if(overrides)
+                {
+                    name = overrideName;
+                }
+                else if(LoadingData.player.profileName == null)
+                {
+                    name = "Dev";
+                }
+
             }
-            else if(LoadingData.player.profileName == null)
+            else
             {
                 name = "Dev";
             }
