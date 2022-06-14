@@ -65,34 +65,35 @@ public class ShopInventory : MonoBehaviour
     public void OnEnable() {
 
 
-        inputHandlerInScene.TabLeftPerformed        += MainMenuController_TabLeftAction_Performed;
+        //inputHandlerInScene.TabLeftPerformed        += MainMenuController_TabLeftAction_Performed;
 
-        inputHandlerInScene.TabRightPerformed       += MainMenuController_TabRightAction_Performed;
+        //inputHandlerInScene.TabRightPerformed       += MainMenuController_TabRightAction_Performed;
 
-        inputHandlerInScene.MenuUpPerformed         += MainMenuController_Up_Performed;
-        inputHandlerInScene.MenuDownPerformed       += MainMenuController_Down_Performed;
-        inputHandlerInScene.MenuLeftPerformed       += MainMenuController_Left_Performed;
-        inputHandlerInScene.MenuRightPerformed      += MainMenuController_Right_Performed;
-        inputHandlerInScene.MenuConfirmedPerformed  += MainMenuController_Confirm_Performed;
-        inputHandlerInScene.MenuCancelPerformed     += MainMenuController_Cancel_Performed;
+        //inputHandlerInScene.MenuUpPerformed         += MainMenuController_Up_Performed;
+        //inputHandlerInScene.MenuDownPerformed       += MainMenuController_Down_Performed;
+        //inputHandlerInScene.MenuLeftPerformed       += MainMenuController_Left_Performed;
+        //inputHandlerInScene.MenuRightPerformed      += MainMenuController_Right_Performed;
+        //inputHandlerInScene.MenuConfirmedPerformed  += MainMenuController_Confirm_Performed;
+        //inputHandlerInScene.MenuCancelPerformed     += MainMenuController_Cancel_Performed;
 
         //eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
 
     }
 
 
-    public void OnDisable() {
+    public void OnDisable() 
+    {
 
-        inputHandlerInScene.TabLeftPerformed        -= MainMenuController_TabLeftAction_Performed;
+        //inputHandlerInScene.TabLeftPerformed        -= MainMenuController_TabLeftAction_Performed;
 
-        inputHandlerInScene.TabRightPerformed       -= MainMenuController_TabRightAction_Performed;
+        //inputHandlerInScene.TabRightPerformed       -= MainMenuController_TabRightAction_Performed;
 
-        inputHandlerInScene.MenuUpPerformed         -= MainMenuController_Up_Performed;
-        inputHandlerInScene.MenuDownPerformed       -= MainMenuController_Down_Performed;
-        inputHandlerInScene.MenuLeftPerformed       -= MainMenuController_Left_Performed;
-        inputHandlerInScene.MenuRightPerformed      -= MainMenuController_Right_Performed;
-        inputHandlerInScene.MenuConfirmedPerformed  -= MainMenuController_Confirm_Performed;
-        inputHandlerInScene.MenuCancelPerformed     -= MainMenuController_Cancel_Performed;
+        //inputHandlerInScene.MenuUpPerformed         -= MainMenuController_Up_Performed;
+        //inputHandlerInScene.MenuDownPerformed       -= MainMenuController_Down_Performed;
+        //inputHandlerInScene.MenuLeftPerformed       -= MainMenuController_Left_Performed;
+        //inputHandlerInScene.MenuRightPerformed      -= MainMenuController_Right_Performed;
+        //inputHandlerInScene.MenuConfirmedPerformed  -= MainMenuController_Confirm_Performed;
+        //inputHandlerInScene.MenuCancelPerformed     -= MainMenuController_Cancel_Performed;
 
         //eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
 
@@ -167,6 +168,28 @@ public class ShopInventory : MonoBehaviour
         //currentTabSelected++;
         UpdateTabUI();
         
+    }
+
+    /// <summary>
+    /// Called when the camera move to the shop menu
+    /// To be called by the unity button
+    /// </summary>
+    public void OnCameraFocus()
+    {
+        inputHandlerInScene.TabLeftPerformed += MainMenuController_TabLeftAction_Performed;
+
+        inputHandlerInScene.TabRightPerformed += MainMenuController_TabRightAction_Performed;
+    }
+
+    /// <summary>
+    /// Called when the camera move to the shop menu
+    /// To be called by the unity button
+    /// </summary>
+    public void OnLostCamerFocus()
+    {
+        inputHandlerInScene.TabLeftPerformed -= MainMenuController_TabLeftAction_Performed;
+
+        inputHandlerInScene.TabRightPerformed -= MainMenuController_TabRightAction_Performed;
     }
 
     public void UpdateTabUI() {
