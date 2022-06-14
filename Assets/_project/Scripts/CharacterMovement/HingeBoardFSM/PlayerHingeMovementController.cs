@@ -549,7 +549,7 @@ namespace L7Games.Movement
                 playerStateMachine.RunMachine(Time.deltaTime);
             }
 
-            if (Keyboard.current != null)
+            if (Keyboard.current != null && Debug.isDebugBuild)
             {
                 if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 {
