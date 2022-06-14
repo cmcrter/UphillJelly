@@ -171,7 +171,7 @@ public class ShopInventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the camera move to the shop menu
+    /// Called when the camera moves to the shop menu
     /// To be called by the unity button
     /// </summary>
     public void OnCameraFocus()
@@ -182,7 +182,7 @@ public class ShopInventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the camera move to the shop menu
+    /// Called when the camera moves away to the shop menu
     /// To be called by the unity button
     /// </summary>
     public void OnLostCamerFocus()
