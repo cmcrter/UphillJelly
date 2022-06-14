@@ -46,7 +46,7 @@ namespace L7Games
             LoadingData.currentLevel = LEVEL.MAINMENU;
 
             //Unneccessary but making sure there's a login
-            playFabManager.Login();
+            //playFabManager.Login();
         }
 
         private void Start() 

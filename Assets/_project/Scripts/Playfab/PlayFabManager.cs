@@ -79,6 +79,7 @@ namespace L7Games
 
         private leaderboard_value currentLeadboardToPopulate = leaderboard_value.SCORE;
         public List<Transform> LeaderboardPanels;
+        public List<Transform> CurrentScorePanels;
         public List<Transform> LeaderboardRowObjects;
 
         [SerializeField]
@@ -86,6 +87,11 @@ namespace L7Games
 
         [SerializeField]
         private List<LeaderboardData> valuesFilledIn = new List<LeaderboardData>();
+        public List<PlayerLeaderboardEntry> scoresEntries = new List<PlayerLeaderboardEntry>();
+        public List<PlayerLeaderboardEntry> timerEntries = new List<PlayerLeaderboardEntry>();
+        public List<PlayerLeaderboardEntry> wipeouteEntries = new List<PlayerLeaderboardEntry>();
+
+        string name;
 
         [Header("Overrides")]
         [SerializeField]
@@ -97,7 +103,10 @@ namespace L7Games
         {
             levelname = LoadingData.getLevelString(LoadingData.currentLevel);
 
-            Login();
+            if(LoadingData.currentLevel != LEVEL.MAINMENU)
+            {
+                Login();
+            }
         }
 
         private void OnEnable()
@@ -105,20 +114,40 @@ namespace L7Games
             //Login();
         }
 
+        private void SetName()
+        {
+            if(LoadingData.player != null)
+            {
+                name = LoadingData.player.profileName != null ? LoadingData.player.profileName : overrideName;
+            }
+            else
+            {
+                name = "Dev";
+            }
+
+            if(overrides)
+            {
+                name = overrideName;
+            }
+        }
+
         public void Login()
         {
+            SetName();
+
             // Login request
-            var request = new LoginWithCustomIDRequest
+            LoginWithCustomIDRequest request = new LoginWithCustomIDRequest
             {
-                // make a new account with a custom ID
-                CustomId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true,
+                TitleId = PlayFabSettings.TitleId,
+                CustomId = SystemInfo.deviceUniqueIdentifier + name, 
+                CreateAccount = true,
                 InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
                 {
                     GetPlayerProfile = true
                 }
             };
 
-            // Loging with ID, request and a success and error function
+            // Logging with ID, request and a success and error function
             PlayFabClientAPI.LoginWithCustomID(request, OnSuccess, OnError);
         }
 
@@ -126,21 +155,22 @@ namespace L7Games
         {
             if(Debug.isDebugBuild)
             {
-                Debug.Log("Successful login / account create!");
+                Debug.Log("Successful login / account create!" + " " + result.PlayFabId);
             }
 
-            string name = null;
-            if(result.InfoResultPayload.PlayerProfile != null)
-            {
-                name = result.InfoResultPayload.PlayerProfile.DisplayName;
-            }
-    
             //The map is finished
             if(LoadingData.currentLevel == LEVEL.MAINMENU)
             {
                 //Get all leaderboards and put it in relative sections
                 GetAllLeaderboards();
             }
+
+            UpdateUserTitleDisplayNameRequest UpdateRequest = new UpdateUserTitleDisplayNameRequest
+            {
+                DisplayName = name,
+            };
+
+            PlayFabClientAPI.UpdateUserTitleDisplayName(UpdateRequest, OnDisplayNameUpdate, OnError);
         }
 
         //This is specifically for the main menu
@@ -186,32 +216,11 @@ namespace L7Games
             GetLeaderBoard();
         }
 
-        public void SubmitNameButton() 
-        {
-            string name = LoadingData.player.profileName != null ? LoadingData.player.profileName : overrideName;
-
-            if(overrides)
-            {
-                name = overrideName;
-            }
-            else if(LoadingData.player.profileName == null)
-            {
-                name = "Dev";
-            }
-
-            var request = new UpdateUserTitleDisplayNameRequest
-            {
-                DisplayName = name,
-            };
-
-            PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
-        }
-
         public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
         {
             if(Debug.isDebugBuild)
             {
-                Debug.Log("Updated Display Name");
+                Debug.Log("Updated Display Name" + " " + result.DisplayName);
             }
         }
 
@@ -335,6 +344,8 @@ namespace L7Games
                 }
             }
 
+            ClearEntryList(data.valueToRetrieve);
+
             //Populating this leaderboard
             foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
             {
@@ -375,6 +386,9 @@ namespace L7Games
                 }
 
                 resultCount++;
+
+                //Logging the entries to the correct lists
+                AddEntryToList(data.valueToRetrieve, entry);
             }
 
             valuesFilledIn.Add(data);
@@ -385,13 +399,68 @@ namespace L7Games
             for(int i = 0; i < LeaderboardPanels.Count; ++i)
             {
                 LeaderboardPanels[i].gameObject.SetActive(false);
+                CurrentScorePanels[i].gameObject.SetActive(false);
             }
 
             LeaderboardPanels[newValue].gameObject.SetActive(true);
+            CurrentScorePanels[newValue].gameObject.SetActive(true);
 
             if(Debug.isDebugBuild)
             {
                 Debug.Log("Switching panel to: " + (leaderboard_value)newValue);
+            }
+        }
+
+        public static string GetPredictedPosition(float Val, List<PlayerLeaderboardEntry> entries)
+        {
+            int currentPos = 0;
+
+            foreach(PlayerLeaderboardEntry entry in entries)
+            {
+                if(Val >= entry.StatValue)
+                {
+                    currentPos++;
+                    return currentPos.ToString();
+                }
+                else
+                {
+                    currentPos++;
+                }
+            }
+
+            return (entries.Count + 1).ToString();
+        }
+
+        private void ClearEntryList(leaderboard_value valueToRetrieve)
+        {
+            //Logging the entries to the correct lists
+            switch(valueToRetrieve)
+            {
+                case leaderboard_value.SCORE:
+                    scoresEntries.Clear();
+                    break;
+                case leaderboard_value.TIME:
+                    timerEntries.Clear();
+                    break;
+                case leaderboard_value.WIPEOUTs:
+                    wipeouteEntries.Clear();
+                    break;
+            }
+        }
+
+        private void AddEntryToList(leaderboard_value valueToRetrieve, PlayerLeaderboardEntry entry)
+        {
+            switch(valueToRetrieve)
+            {
+                case leaderboard_value.SCORE:
+                    scoresEntries.Add(entry);
+                    break;
+                case leaderboard_value.TIME:
+                    timerEntries.Add(entry);
+                    break;
+                case leaderboard_value.WIPEOUTs:
+                    wipeouteEntries.Add(entry);
+                    break;
             }
         }
 

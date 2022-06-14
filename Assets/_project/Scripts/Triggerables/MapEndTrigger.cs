@@ -61,7 +61,7 @@ namespace L7Games
             }
 
             //Getting the leaderboard
-            leaderboardController.Login();
+            //leaderboardController.Login();
 
             //Show End UI
             if (endUI)

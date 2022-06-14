@@ -84,11 +84,10 @@ namespace L7Games
 
         private IEnumerator WaitFor5Seconds() 
         {
-            uiController.LoginPlayfab();
-
             yield return new WaitForSeconds(waitForTimer);
 
             uiController.PopulateInformation();
+
             yield return new WaitForSeconds(0.1f);
 
             LeaderboardGO.SetActive(true);

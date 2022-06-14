@@ -22,8 +22,6 @@ namespace L7Games
         [SerializeField]
         private PlayFabManager leaderboardManager;
 
-
-
         [Header("This Session")]
         public HUD HUDScript;
         public RankTimer Timer;
@@ -53,11 +51,37 @@ namespace L7Games
         [SerializeField]
         private TextMeshProUGUI wipeoutText;
 
+        [Header("Leaderboard Panel UI")]
+        //Text to show you how well you did in the level
+        [SerializeField]
+        private TextMeshProUGUI scoreNameText;
+        [SerializeField]
+        private TextMeshProUGUI timeNameText;
+        [SerializeField]
+        private TextMeshProUGUI wipeoutsNameText;
+
+        [SerializeField]
+        private TextMeshProUGUI currentScoreText;
+        [SerializeField]
+        private TextMeshProUGUI currentRankText;
+        [SerializeField]
+        private TextMeshProUGUI currentTimerText;
+        [SerializeField]
+        private TextMeshProUGUI currentWipeoutText;
+
+        //Predicted spot in the leaderboards
+        [SerializeField]
+        private TextMeshProUGUI predictedScoreText;
+        [SerializeField]
+        private TextMeshProUGUI predictedTimerText;
+        [SerializeField]
+        private TextMeshProUGUI predictedWipeoutsText;
+
         #endregion
 
         #region Unity Methods
 
-        
+
 
         #endregion
 
@@ -80,6 +104,17 @@ namespace L7Games
             //Triggering this since it cannot run without being logged in anyway
             leaderboardManager.FinishedLevelTriggered(bracketToPassThrough);
 
+            //Updating Leaderboard Visual
+            scoreNameText.text = timeNameText.text = wipeoutsNameText.text = LoadingData.player.profileName;
+            currentRankText.text = ratingString;
+            currentScoreText.text = Mathf.FloorToInt(HUDScript.storedScore).ToString();
+            currentTimerText.text = ((int)Timer.roundTime * -1).ToString() + "s";
+            currentWipeoutText.text = player.KOCount.ToString();
+
+            predictedScoreText.text = PlayFabManager.GetPredictedPosition(HUDScript.storedScore, leaderboardManager.scoresEntries);
+            predictedTimerText.text = PlayFabManager.GetPredictedPosition(Timer.roundTime * -1, leaderboardManager.timerEntries);
+            predictedWipeoutsText.text = PlayFabManager.GetPredictedPosition(player.KOCount, leaderboardManager.wipeouteEntries);
+
             //Updating general panel text's
             rankText.text = ratingString;
             scoreText.text = Mathf.FloorToInt(HUDScript.storedScore).ToString();
@@ -92,11 +127,6 @@ namespace L7Games
             }
 
             eventSystem.SetSelectedGameObject(nextButton);
-        }
-
-        public void LoginPlayfab()
-        {
-            leaderboardManager.Login();
         }
 
         public void SwitchToLeaderboard()

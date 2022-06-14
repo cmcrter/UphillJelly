@@ -132,7 +132,7 @@ public class ProfileSelector : MonoBehaviour
         tmp_Input.text = LoadingData.player.profileName;
         tmp_Input.textComponent.text = LoadingData.player.profileName;
 
-        thisName = LoadingData.player.profileName;
+        thisName = LoadingData.player.profileName.ToUpper();
     }
 
     //Being able to change a profile name based on text input
@@ -155,7 +155,7 @@ public class ProfileSelector : MonoBehaviour
             return;
         }
 
-        LoadingData.player.profileName = thisName;
+        LoadingData.player.profileName = thisName.ToUpper();
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
         PushValuesToShop();
@@ -173,7 +173,7 @@ public class ProfileSelector : MonoBehaviour
 
         LoadingData.player = new StoredPlayerProfile
         {
-            profileName = thisName,
+            profileName = thisName.ToUpper(),
             iCurrency = defaultStartingAmount
         };
 

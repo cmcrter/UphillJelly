@@ -1239,7 +1239,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 100
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &4230048210984057970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1273,6 +1273,7 @@ MonoBehaviour:
   rowPrefab: {fileID: 2974526420704827836, guid: 21733a1669ff5824ead5d9d0d0137709, type: 3}
   rowsParent: {fileID: 1810488191003774047}
   LeaderboardPanels: []
+  CurrentScorePanels: []
   LeaderboardRowObjects:
   - {fileID: 1810488191003774047}
   - {fileID: 1303287916703131425}
@@ -1285,6 +1286,9 @@ MonoBehaviour:
   - {fileID: 1870976772973386024}
   maxLeaderboardRows: 10
   valuesFilledIn: []
+  scoresEntries: []
+  timerEntries: []
+  wipeouteEntries: []
   overrides: 0
   overrideName: 
 --- !u!114 &4230048210984057983

@@ -14,9 +14,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using L7Games.Input;
+using L7Games;
 using SleepyCat;
 using System;
 using System.Linq;
+using L7Games.Loading;
 
 public class ShopManager : MonoBehaviour
 {
@@ -83,6 +85,13 @@ public class ShopManager : MonoBehaviour
     }
 
     #endregion
+
+    public void ClearBoard() {
+
+        currentEquippedSkateboard = null;
+        
+
+    }
 
     public void SwitchToShop() 
     {
