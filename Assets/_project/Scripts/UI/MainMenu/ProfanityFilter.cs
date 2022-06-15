@@ -10,24 +10,48 @@
 using UnityEngine;
 using System.Text.RegularExpressions;
 
+[System.Serializable]
 public class ProfanityFilter
 {
     public TextAsset textBlockList;
     [SerializeField]
-    string[] strBlockList;
+    private string[] strBlockList;
+
+    private static string[] staticBlockList;
 
     public void SetUpList()
     {
+        if(!textBlockList)
+        {
+            if(Debug.isDebugBuild)
+            {
+                Debug.Log("No Banned Words List!");
+            }
+
+            return;
+        }
+
         strBlockList = textBlockList.text.Split(new string[] { ",", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+        staticBlockList = strBlockList;
     }
 
-    public bool isStringInList(string givenString)
+    //Searching through the static list 
+    public static bool isStringInList(string givenString)
     {
-        for(int i = 0; i < strBlockList.Length; ++i)
-        {
-            string profanity = strBlockList[i];
-            Regex word = new Regex("(?i)(\\b" + profanity + "\\b");
+        //The lists will generally be lower case to make it easier
+        givenString.ToLower();
 
+        for(int i = 0; i < staticBlockList.Length; ++i)
+        {
+            string profanity = staticBlockList[i];
+
+            //Getting profanity
+            Regex word = new Regex("(?i)(\\b" + profanity + "\\b)");
+
+            //Removing spaces
+            givenString = Regex.Replace(givenString, @"\s+", "");
+
+            //Checking if the string is a variant of the profanity
             if(word.IsMatch(givenString))
             {
                 return true;

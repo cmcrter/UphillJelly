@@ -32,6 +32,9 @@ public class ProfileSelector : MonoBehaviour
     [SerializeField]
     private GameObject profileEditingScreen;
 
+    [Header("Profanity Filter")]
+    public ProfanityFilter wordFilter;
+
     [Header("Profile Selection UI Buttons")]
     [SerializeField]
     private List<TMP_Text> ProfileButtonTexts = new List<TMP_Text>();
@@ -69,6 +72,7 @@ public class ProfileSelector : MonoBehaviour
         }
 
         LoadingData.currentLevel = LEVEL.MAINMENU;
+        wordFilter.SetUpList();
     }
 
     // Start is called before the first frame update
@@ -155,6 +159,12 @@ public class ProfileSelector : MonoBehaviour
             return;
         }
 
+        if(ProfanityFilter.isStringInList(thisName))
+        {
+            WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Inappropriate Name", Empty);
+            return;
+        }
+
         LoadingData.player.profileName = thisName.ToUpper();
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
@@ -168,6 +178,12 @@ public class ProfileSelector : MonoBehaviour
         if(thisName.Length == 0)
         {
             WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Must Include A Name", Empty);
+            return;
+        }
+
+        if(ProfanityFilter.isStringInList(thisName))
+        {
+            WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Inappropriate Name", Empty);
             return;
         }
 
