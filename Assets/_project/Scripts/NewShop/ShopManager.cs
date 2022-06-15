@@ -66,6 +66,15 @@ public class ShopManager : MonoBehaviour
     public void Start()
     {
         playerCurrencyText.text = "£" + playerCurrency;
+
+        if(LoadingData.player != null)
+        {
+            ApplyEquipmentToPreview(LoadingData.shopItems[1], LoadingData.shopItems[0], LoadingData.shopItems[2]);
+        }
+        else
+        {
+            ApplyEquipmentToPreview(FindHat(0), FindChar(0), FindSkateboard(0));
+        }
     }
 
     public void Update()
@@ -360,6 +369,11 @@ public class ShopManager : MonoBehaviour
             skateboardShopItem.GetComponent<MeshFilter>().sharedMesh = skateboard.objectPrefab.GetComponent<MeshFilter>().sharedMesh;
             skateboardShopItem.GetComponent<MeshRenderer>().material = skateboard.material;
         }
+    }
+
+    public void ApplyCurrentToPreview()
+    {      
+        ApplyEquipmentToPreview(currentEquippedHat, currentEquippedCharacter, currentEquippedSkateboard);
     }
 
     public void ResetItemPurchases()

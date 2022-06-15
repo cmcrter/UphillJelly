@@ -239,7 +239,7 @@ public class ProfileSelector : MonoBehaviour
             item.isPurchased = true;
         }
 
-        //shop.
+        shop.ApplyCurrentToPreview();
     }
 
     public void GetValuesFromShop()
