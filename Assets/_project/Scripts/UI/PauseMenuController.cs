@@ -127,6 +127,11 @@ namespace L7Games.UI
             WarningBox.CreateConfirmCancelWarningBox(canvasToUse, eventSystem, "Are you sure you want to restart level? Your level progress will not be saved", SetFirstButtonAsSelected, MoveToMainMenu);
         }
 
+        public void NoWarningMainMenuButton()
+        {
+            LoadMainMenu();
+        }
+
         public static void GoToTutorial(bool save)
         {
             LoadingData.sceneToLoad = LoadingData.getSceneString(LEVEL.TUTORIAL);

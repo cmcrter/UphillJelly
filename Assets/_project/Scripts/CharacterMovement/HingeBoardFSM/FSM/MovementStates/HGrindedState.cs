@@ -292,7 +292,10 @@ namespace L7Games.Movement
 
             inputHandler.TurningAxis = inputTurn;
 
-            parentController.StartAirInfluenctCoroutine();
+            if(!parentController.IsWipedOut)
+            {
+                parentController.StartAirInfluenctCoroutine();
+            }
 
             jumpCoroutine = null;
             yield return true;

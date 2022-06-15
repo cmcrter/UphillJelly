@@ -657,6 +657,11 @@ namespace L7Games.Movement
 
         public void StartAirInfluenctCoroutine()
         {
+            if(AirturningCo == null)
+            {
+                AirturningCo = Co_AirInfluence();
+            }
+
            StartCoroutine(AirturningCo);
         }
 
@@ -730,6 +735,9 @@ namespace L7Games.Movement
             characterModel.SetActive(false);
 
             OverrideCamera(wipeOutCam, false);
+
+            collectableCounter = 0;
+            StopAirInfluenctCoroutine();
         }
 
         public void PlayRespawnSound()
@@ -750,9 +758,12 @@ namespace L7Games.Movement
         {
             bool InfluenceDir;
 
-            if(!aerialState.hasRan && Debug.isDebugBuild)
+            if(aerialState == null || !aerialState.hasRan)
             {
-                Debug.Log("No Influence Because no Aerial State", this);
+                if(Debug.isDebugBuild)
+                {
+                    Debug.Log("No Influence Because no Aerial State", this);
+                }
             }
 
             while (aerialState.hasRan)
