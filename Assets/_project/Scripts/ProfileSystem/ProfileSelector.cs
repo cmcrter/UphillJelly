@@ -169,6 +169,7 @@ public class ProfileSelector : MonoBehaviour
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
         PushValuesToShop();
+        GetValuesFromShop();
         MoveToMenu();
     }
 
