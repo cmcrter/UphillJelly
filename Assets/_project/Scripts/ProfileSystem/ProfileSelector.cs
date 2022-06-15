@@ -165,7 +165,7 @@ public class ProfileSelector : MonoBehaviour
             return;
         }
 
-        LoadingData.player.profileName = thisName.ToUpper();
+        LoadingData.player.profileName = tmp_Input.text.ToUpper();
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
         PushValuesToShop();
@@ -190,7 +190,7 @@ public class ProfileSelector : MonoBehaviour
 
         LoadingData.player = new StoredPlayerProfile
         {
-            profileName = thisName.ToUpper(),
+            profileName = tmp_Input.text.ToUpper(),
             iCurrency = defaultStartingAmount
         };
 
