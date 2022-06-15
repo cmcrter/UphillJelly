@@ -38,6 +38,11 @@ public class ProfanityFilter
     //Searching through the static list 
     public static bool isStringInList(string givenString)
     {
+        if(staticBlockList == null)
+        {
+            return false;
+        }
+
         //The lists will generally be lower case to make it easier
         givenString.ToLower();
 
