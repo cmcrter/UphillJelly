@@ -136,6 +136,7 @@ namespace L7Games.UI
         {
             LoadingData.sceneToLoad = LoadingData.getSceneString(LEVEL.TUTORIAL);
             LoadingData.currentLevel = LEVEL.TUTORIAL;
+            LoadingData.waitForNextScene = true;
             LoadingData.SavePlayer = save;
 
             SceneManager.LoadScene("LoadingScene");
@@ -145,6 +146,7 @@ namespace L7Games.UI
         {
             LoadingData.sceneToLoad = LoadingData.getSceneString(LEVEL.CITY);
             LoadingData.currentLevel = LEVEL.CITY;
+            LoadingData.waitForNextScene = true;
             LoadingData.SavePlayer = save;
 
             SceneManager.LoadScene("LoadingScene");
@@ -154,6 +156,7 @@ namespace L7Games.UI
         {
             LoadingData.sceneToLoad = LoadingData.getSceneString(LEVEL.OLDTOWN);
             LoadingData.currentLevel = LEVEL.OLDTOWN;
+            LoadingData.waitForNextScene = true;
             LoadingData.SavePlayer = save;
 
             SceneManager.LoadScene("LoadingScene");

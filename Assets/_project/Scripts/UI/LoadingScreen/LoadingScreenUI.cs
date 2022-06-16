@@ -77,6 +77,11 @@ namespace L7Games.Loading
             pressAnythingText.SetActive(true);
         }
 
+        public void TurnOffPressText()
+        {
+            pressAnythingText.SetActive(false);
+        }
+
         #endregion
 
         #region Private Methods

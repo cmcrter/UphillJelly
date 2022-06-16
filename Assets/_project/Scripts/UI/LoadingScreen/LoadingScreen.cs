@@ -19,7 +19,7 @@ namespace L7Games.Loading
         #region Variables
 
         [SerializeField]
-        LoadingScreenUI screenUI;
+        private LoadingScreenUI screenUI;
 
         [Header("Override Loading Data")]
         [SerializeField]
@@ -51,6 +51,8 @@ namespace L7Games.Loading
 
         void Start()
         {
+            screenUI.TurnOffPressText();
+
             //Starting loading the correct scene
             StartCoroutine(LoadYourAsyncScene());
         }
@@ -97,9 +99,6 @@ namespace L7Games.Loading
                     {
                         screenUI.TurnOnPressText();
                         bTextShowing = true;
-
-                        //Setting it back to default value
-                        LoadingData.waitForNextScene = false;
                     }
 
                     if (Keyboard.current != null)
@@ -107,6 +106,9 @@ namespace L7Games.Loading
                         if (Keyboard.current.anyKey.wasPressedThisFrame)
                         {
                             asyncLoad.allowSceneActivation = true;
+
+                            //Setting it back to default value
+                            LoadingData.waitForNextScene = false;
                         }
                     }
                     
@@ -115,6 +117,9 @@ namespace L7Games.Loading
                         if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                         {
                             asyncLoad.allowSceneActivation = true;
+
+                            //Setting it back to default value
+                            LoadingData.waitForNextScene = false;
                         }
                     }
                 }
