@@ -97,6 +97,9 @@ namespace L7Games.Loading
                     {
                         screenUI.TurnOnPressText();
                         bTextShowing = true;
+
+                        //Setting it back to default value
+                        LoadingData.waitForNextScene = false;
                     }
 
                     if (Keyboard.current != null)

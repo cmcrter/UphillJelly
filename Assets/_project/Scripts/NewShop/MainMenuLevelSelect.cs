@@ -3,7 +3,7 @@
 // Author: Jack Peedle, Charles Carter
 // Date Created: 29/02/22
 // Last Edited By: Charles Carter
-// Date Last Edited: 25/05/22
+// Date Last Edited: 16/06/22
 // Brief: A script to select which level is wanted within the main menu
 ////////////////////////////////////////////////////////////
 
@@ -26,6 +26,8 @@ namespace L7Games
         public Image displayMap;
         public LEVEL currentLevelSelected;
 
+        private int levelCount;
+
         #endregion
 
         #region Unity Methods
@@ -33,6 +35,22 @@ namespace L7Games
         private void Start() 
         {
             currentLevelSelected = LEVEL.TUTORIAL;
+            levelCount = (int)LEVEL.OLDTOWN - 1;
+
+            if(LevelManager.ConfirmedLevels != null)
+            {
+                levelImages.Clear();
+
+                //Main Menu is in 0th slot
+                for(int i = 1; i < LevelManager.ConfirmedLevels.Length; ++i)
+                {
+                    levelImages.Add(LevelManager.ConfirmedLevels[i].sceneSprite);
+                }
+
+                //Removing the main menu
+                levelCount = LevelManager.ConfirmedLevels.Length;
+            }
+
             UpdateImage();
         }
 
@@ -43,7 +61,7 @@ namespace L7Games
         //Updating the shown sprite
         public void UpdateImage()
         {
-            for(int i = 0; i < 3; ++i)
+            for(int i = 0; i < levelCount; ++i)
             {
                 if(i == currentLevelSelected - LEVEL.TUTORIAL)
                 {
@@ -61,7 +79,7 @@ namespace L7Games
         {
             currentLevelSelected++;
 
-            if(currentLevelSelected > LEVEL.OLDTOWN)
+            if(currentLevelSelected > (LEVEL)levelCount)
             {
                 currentLevelSelected = LEVEL.TUTORIAL;
             }

@@ -3,19 +3,15 @@
 // Author: Jack Peedle, Charles Carter
 // Date Created: 29/01/22
 // Last Edited By: Charles Carter
-// Date Last Edited: 07/05/22
+// Date Last Edited: 16/06/22
 // Brief: A script to manage retrieving and sending data for the leaderboards.
 ////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
-using TMPro;
 using L7Games.Loading;
-using L7Games.Movement;
 
 namespace L7Games
 {
@@ -68,13 +64,10 @@ namespace L7Games
         [Header("UI Values")]
         public GameObject rowPrefab;
         public Transform rowsParent;
-        //public TMP_InputField TMPPlayerName;
-        //public int KOs;
-        //public GameObject SubmittedNameImage;
-        //public GameObject SubmitNameButtonGameObject;
 
         //private List<CompiledLeaderboardRow> allresults = new List<CompiledLeaderboardRow>();
         //private List<PlayerLeaderboardEntry> allEntires = new List<PlayerLeaderboardEntry>();
+
         private string levelname;
 
         private leaderboard_value currentLeadboardToPopulate = leaderboard_value.SCORE;
@@ -83,7 +76,7 @@ namespace L7Games
         public List<Transform> LeaderboardRowObjects;
 
         [SerializeField]
-        int maxLeaderboardRows = 10;
+        private int maxLeaderboardRows = 10;
 
         [SerializeField]
         private List<LeaderboardData> valuesFilledIn = new List<LeaderboardData>();
@@ -176,9 +169,9 @@ namespace L7Games
         //This is specifically for the main menu
         public void GetAllLeaderboards()
         {
-            for(int j = (int)LEVEL.TUTORIAL; j < (int)LEVEL.COUNT; ++j)
+            for(int j = (int)LEVEL.TUTORIAL; j <= (int)LEVEL.OLDTOWN; ++j)
             {
-                for(int i = 0; i < 3; ++i)
+                for(int i = 0; i < (int)leaderboard_value.COUNT; ++i)
                 {
                     string thisFeature = "";
                     string thisLevelName = LoadingData.getLevelString((LEVEL)j);
@@ -193,6 +186,12 @@ namespace L7Games
                             break;
                         case (int)leaderboard_value.WIPEOUTs:
                             thisFeature = "_KOs";
+                            break;
+                        default:
+                            if(Debug.isDebugBuild)
+                            {
+                                Debug.Log("Value Not Recognised: " + i, this);
+                            }
                             break;
                     }
 
@@ -346,6 +345,12 @@ namespace L7Games
 
             ClearEntryList(data.valueToRetrieve);
 
+            //Time and Wipeouts should be shown with lowest being the highest ranked
+            if(data.valueToRetrieve == leaderboard_value.TIME || data.valueToRetrieve == leaderboard_value.WIPEOUTs) 
+            {
+                result.Leaderboard = ReverseListIncludingRank(result.Leaderboard);
+            }
+
             //Populating this leaderboard
             foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
             {
@@ -462,6 +467,18 @@ namespace L7Games
                     wipeouteEntries.Add(entry);
                     break;
             }
+        }
+
+        private static List<PlayerLeaderboardEntry> ReverseListIncludingRank(List<PlayerLeaderboardEntry> givenList)
+        {
+            givenList.Reverse();
+
+            for(int i = 0; i < givenList.Count; ++i)
+            {
+                givenList[i].Position = i;
+            }
+
+            return givenList;
         }
 
         //        private List<CompiledLeaderboardRow> CreateCompiledPosition()

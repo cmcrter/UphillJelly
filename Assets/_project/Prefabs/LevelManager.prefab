@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4156647107153107819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7283992121972694112}
+  - component: {fileID: 7099075648737377224}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7283992121972694112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156647107153107819}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 91.79747, y: -21.290903, z: 130.33664}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7099075648737377224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156647107153107819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d6cc3179ea06d745aabf5ac716f0ed6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Levels:
+  - levelType: 1
+    sceneName: MainMenu
+    levelName: Main Menu
+    sceneSprite: {fileID: 0}
+  - levelType: 2
+    sceneName: TutorialTrackWhitebox
+    levelName: Tutorial
+    sceneSprite: {fileID: 21300000, guid: f17ea493ee0cf274496b1402f728b580, type: 3}
+  - levelType: 3
+    sceneName: XanmanCity
+    levelName: City
+    sceneSprite: {fileID: 21300000, guid: 9efd3c7e76f77fc4ba162a6b4886c796, type: 3}
+  - levelType: 4
+    sceneName: OldTown_Whitebox
+    levelName: OldTown
+    sceneSprite: {fileID: 21300000, guid: f0bb03e6e237b374f9d2b9deb1c0ce84, type: 3}
