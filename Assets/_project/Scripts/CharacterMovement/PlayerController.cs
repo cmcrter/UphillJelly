@@ -113,7 +113,10 @@ namespace L7Games.Movement
             {
                 onRespawn();
 
-                cooldownTimer.isActive = false;
+                if(cooldownTimer != null)
+                {
+                    cooldownTimer.isActive = false;
+                }
 
                 if (!ignoreNextWipeoutOnWipeoutCount)
                 {
