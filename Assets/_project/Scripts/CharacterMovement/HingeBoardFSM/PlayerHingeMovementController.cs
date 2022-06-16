@@ -148,8 +148,6 @@ namespace L7Games.Movement
 
             Time.timeScale = 0;
 
-            collectableCounter = 0;
-
             rbCollider.enabled = true;
 
             fRB.isKinematic = false;
@@ -207,7 +205,6 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
-                StopAirInfluenctCoroutine();
                 StopAllCoroutines();
             }
 
@@ -232,8 +229,6 @@ namespace L7Games.Movement
         {
             bWipeOutLocked = true;
             Time.timeScale = 0;
-
-            collectableCounter = 0;
 
             rbCollider.enabled = true;
 
@@ -298,7 +293,6 @@ namespace L7Games.Movement
             if(playerStateMachine.currentState != null)
             {
                 playerStateMachine.currentState.OnStateExit();
-                StopAirInfluenctCoroutine();
                 StopAllCoroutines();
             }
 
@@ -496,7 +490,7 @@ namespace L7Games.Movement
 
             inputHandler.wipeoutResetStarted += WipeOutResetPressed;
             onWipeout += WipeOutCharacter;
-            onRespawn += PlayRespawnSound;
+            onRespawn += RespawnEffect;
         }
 
         private void OnDisable()
@@ -508,7 +502,7 @@ namespace L7Games.Movement
 
             inputHandler.wipeoutResetStarted -= WipeOutResetPressed;
             onWipeout -= WipeOutCharacter;
-            onRespawn -= PlayRespawnSound;
+            onRespawn -= RespawnEffect;
         }
 
         private void Start()
@@ -735,13 +729,12 @@ namespace L7Games.Movement
             characterModel.SetActive(false);
 
             OverrideCamera(wipeOutCam, false);
-
-            collectableCounter = 0;
-            StopAirInfluenctCoroutine();
         }
 
-        public void PlayRespawnSound()
+        public void RespawnEffect()
         {
+            collectableCounter = 0;
+
             respawnSound.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
             //Debug.Log(state);
             //if(state != FMOD.Studio.PLAYBACK_STATE.STOPPED)
@@ -757,37 +750,37 @@ namespace L7Games.Movement
         private IEnumerator Co_AirInfluence()
         {
             bool InfluenceDir;
+            yield return null;
 
-            if(aerialState == null || !aerialState.hasRan)
+            if(aerialState != null)
             {
-                if(Debug.isDebugBuild)
+                while(aerialState.hasRan)
                 {
-                    Debug.Log("No Influence Because no Aerial State", this);
+                    InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
+                    //Debug.Log("Influence Up", this);
+
+                    if(InfluenceDir)
+                    {
+                        fRB.AddForce(-transform.right * airInfluence, ForceMode.Impulse);
+                    }
+                    else if(inputHandler.TurningAxis != 0)
+                    {
+                        fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
+                    }
+                    else
+                    {
+                        //No input
+                        //Debug.Log("No Influence", this);
+                    }
+
+                    characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
+
+                    yield return new WaitForFixedUpdate();
                 }
             }
-
-            while (aerialState.hasRan)
+            else if(Debug.isDebugBuild)
             {
-                InfluenceDir = inputHandler.TurningAxis < 0 ? true : false;
-                //Debug.Log("Influence Up", this);
-
-                if(InfluenceDir)
-                {
-                    fRB.AddForce(-transform.right * airInfluence, ForceMode.Impulse);
-                }
-                else if(inputHandler.TurningAxis != 0)
-                {
-                    fRB.AddForce(transform.right * airInfluence, ForceMode.Impulse);
-                }
-                else
-                {
-                    //No input
-                    //Debug.Log("No Influence", this);
-                }
-
-                characterAnimator.SetFloat("turnValue", inputHandler.TurningAxis);
-
-                yield return new WaitForFixedUpdate();
+                Debug.Log("No Influence Because no Aerial State", this);
             }
         }
 

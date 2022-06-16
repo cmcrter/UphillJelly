@@ -289,6 +289,11 @@ public class ProfileSelector : MonoBehaviour
         }
     }
 
+    public void SaveCurrentProfile()
+    {
+        b_SaveSystem.SavePlayer(LoadingData.playerSlot);
+    }
+
     private void MoveToMenu()
     {
         // set the starting background to false

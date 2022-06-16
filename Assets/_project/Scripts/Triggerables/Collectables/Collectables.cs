@@ -28,7 +28,7 @@ namespace L7Games.Triggerables.Collectables
 
         PlayerController playerPickedUp;
         private FMOD.Studio.EventInstance pickupSound;
-
+        public static FMOD.Studio.EventInstance staticPickupSound;
         #endregion
 
         #region Public Methods
@@ -36,6 +36,7 @@ namespace L7Games.Triggerables.Collectables
         private void Start()
         {
             pickupSound = FMODUnity.RuntimeManager.CreateInstance("event:/PlayerSounds/ItemPickup");
+            staticPickupSound = pickupSound;
         }
 
         private void OnEnable()

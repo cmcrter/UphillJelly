@@ -12,6 +12,7 @@ using L7Games.Triggerables;
 using Cinemachine;
 using System.Collections;
 using L7Games.Input;
+using L7Games.Triggerables.Collectables;
 
 namespace L7Games.Movement
 {
@@ -111,12 +112,14 @@ namespace L7Games.Movement
             if (onRespawn != null)
             {
                 onRespawn();
+
+                cooldownTimer.isActive = false;
+
                 if (!ignoreNextWipeoutOnWipeoutCount)
                 {
                     KOCount++;
                     ignoreNextWipeoutOnWipeoutCount = false;
                 }
-
             }
         }
 
@@ -144,6 +147,8 @@ namespace L7Games.Movement
             }
 
             collectableCounter = 0;
+
+            Collectables.staticPickupSound.setParameterByName("ItemCombo", 0);
             CollectableCooldownCoroutine = null;
         }
 
