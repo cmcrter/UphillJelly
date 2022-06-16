@@ -416,21 +416,30 @@ namespace L7Games
             }
         }
 
-        public static string GetPredictedPosition(float Val, List<PlayerLeaderboardEntry> entries)
+        public static string GetPredictedPosition(float Val, List<PlayerLeaderboardEntry> entries, bool descending)
         {
             int currentPos = 0;
 
             foreach(PlayerLeaderboardEntry entry in entries)
             {
-                if(Val >= entry.StatValue)
+                if(!descending)
                 {
-                    currentPos++;
-                    return currentPos.ToString();
+                    if(Val >= entry.StatValue)
+                    {
+                        currentPos++;
+                        return currentPos.ToString();
+                    }
                 }
                 else
                 {
-                    currentPos++;
+                    if(Val <= entry.StatValue)
+                    {
+                        currentPos++;
+                        return currentPos.ToString();
+                    }
                 }
+
+                currentPos++;
             }
 
             return (entries.Count + 1).ToString();

@@ -111,9 +111,9 @@ namespace L7Games
             currentTimerText.text = ((int)Timer.roundTime * -1).ToString() + "s";
             currentWipeoutText.text = player.KOCount.ToString();
 
-            predictedScoreText.text = PlayFabManager.GetPredictedPosition(HUDScript.storedScore, leaderboardManager.scoresEntries);
-            predictedTimerText.text = PlayFabManager.GetPredictedPosition(Timer.roundTime * -1, leaderboardManager.timerEntries);
-            predictedWipeoutsText.text = PlayFabManager.GetPredictedPosition(player.KOCount, leaderboardManager.wipeouteEntries);
+            predictedScoreText.text = PlayFabManager.GetPredictedPosition(HUDScript.storedScore, leaderboardManager.scoresEntries, false);
+            predictedTimerText.text = PlayFabManager.GetPredictedPosition(Timer.roundTime * -1, leaderboardManager.timerEntries, true);
+            predictedWipeoutsText.text = PlayFabManager.GetPredictedPosition(player.KOCount, leaderboardManager.wipeouteEntries, true);
 
             //Updating general panel text's
             rankText.text = ratingString;
