@@ -528,13 +528,16 @@ namespace L7Games.Movement
             initialRootRotation = root.rotation;
             initialCustomLocalPos = customBoardModel.transform.localPosition;
 
-            Transform custBoardChild = customBoardModel.transform.GetChild(0);
-            if(custBoardChild != null)
-            {
-                if(custBoardChild.TryGetComponent(out Collider coll))
+            if(customBoardModel && customBoardModel.transform.childCount > 0)
+            {           
+                Transform custBoardChild = customBoardModel.transform.GetChild(0);
+                if(custBoardChild != null)
                 {
-                    customBoardCollider = coll;
-                    customBoardCollider.enabled = false;
+                    if(custBoardChild.TryGetComponent(out Collider coll))
+                    {
+                        customBoardCollider = coll;
+                        customBoardCollider.enabled = false;
+                    }
                 }
             }
 
