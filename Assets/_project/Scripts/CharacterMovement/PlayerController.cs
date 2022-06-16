@@ -3,7 +3,7 @@
 // Author: Charles Carter
 // Date Created: 22/10/21
 // Last Edited By: Charles Carter
-// Date Last Edited: 19/05/22
+// Date Last Edited: 16/06/22
 // Brief: A script for prototype and current player controllers to inherit from (to keep debugging and test scripts easy)
 //////////////////////////////////////////////////////////// 
 
@@ -103,7 +103,6 @@ namespace L7Games.Movement
         {
             return fRB;
         }
-
 
         #region Protected Methods
 

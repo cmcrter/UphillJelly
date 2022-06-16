@@ -136,7 +136,7 @@ namespace L7Games.Movement
             //    Debug.DrawRay(playerTransform.position, playerTransform.forward, Color.black);
             //}
 
-            if(Keyboard.current.escapeKey.isPressed)
+            if(Keyboard.current.escapeKey.isPressed && Debug.isDebugBuild)
             {
                 parentController.ResetPlayer();
             }

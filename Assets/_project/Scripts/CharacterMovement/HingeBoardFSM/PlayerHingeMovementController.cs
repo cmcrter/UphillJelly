@@ -71,6 +71,8 @@ namespace L7Games.Movement
         [SerializeField]
         private GameObject customBoardModel;
         public Collider boardCollider;
+        public Collider customBoardCollider;
+
         private Vector3 boardPos;
 
         //Front Rigidbody
@@ -172,7 +174,7 @@ namespace L7Games.Movement
             {
                 Destroy(boardModel.GetComponent<Rigidbody>());
                 boardModel.transform.SetParent(root);
-                boardCollider.enabled = true;
+                boardCollider.enabled = false;
                 boardModel.transform.localPosition = Vector3.zero;
                 boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
             }
@@ -181,6 +183,12 @@ namespace L7Games.Movement
             {
                 Destroy(customBoardModel.GetComponent<Rigidbody>());
                 customBoardModel.transform.SetParent(root);
+
+                if(customBoardCollider)
+                {
+                    customBoardCollider.enabled = false;
+                }
+
                 customBoardModel.transform.localPosition = Vector3.zero;
                 customBoardModel.transform.localRotation = Quaternion.Euler(new Vector3(180, 0, -90));
             }
@@ -257,7 +265,7 @@ namespace L7Games.Movement
             {
                 Destroy(boardModel.GetComponent<Rigidbody>());
                 boardModel.transform.SetParent(root);
-                boardCollider.enabled = true;
+                boardCollider.enabled = false;
                 boardModel.transform.localPosition = Vector3.zero;
                 boardModel.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 90));
             }
@@ -266,6 +274,12 @@ namespace L7Games.Movement
             {
                 Destroy(customBoardModel.GetComponent<Rigidbody>());
                 customBoardModel.transform.SetParent(root);
+
+                if(customBoardCollider)
+                {
+                    customBoardCollider.enabled = false;
+                }
+
                 customBoardModel.transform.localPosition = initialCustomLocalPos;
                 customBoardModel.transform.localRotation = Quaternion.Euler(new Vector3(180, 0, 90));
             }
@@ -514,6 +528,18 @@ namespace L7Games.Movement
             initialRootRotation = root.rotation;
             initialCustomLocalPos = customBoardModel.transform.localPosition;
 
+            Transform custBoardChild = customBoardModel.transform.GetChild(0);
+            if(custBoardChild != null)
+            {
+                if(custBoardChild.TryGetComponent(out Collider coll))
+                {
+                    customBoardCollider = coll;
+                    customBoardCollider.enabled = false;
+                }
+            }
+
+            boardCollider.enabled = false;
+
             //characterInitalBones = GetBonesFromObject(characterModel);
 
             if(checkpointManager == null)
@@ -711,16 +737,24 @@ namespace L7Games.Movement
             {
                 boardModel.transform.SetParent(null);
                 Rigidbody boardRb = boardModel.AddComponent<Rigidbody>();
+                boardCollider.enabled = true;
+
                 boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-                boardRb.AddForce(Vector3.up);
+                boardRb.AddForce(currentVelocity, ForceMode.Impulse);
             }
 
             if (customBoardModel.activeInHierarchy)
             {
                 customBoardModel.transform.SetParent(null);
+
+                if(customBoardCollider)
+                {
+                    customBoardCollider.enabled = true;
+                }
+
                 Rigidbody boardRb = customBoardModel.AddComponent<Rigidbody>();
                 boardRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-                boardRb.AddForce(Vector3.up);
+                boardRb.AddForce(currentVelocity, ForceMode.Impulse);
             }
 
             fRB.isKinematic = true;

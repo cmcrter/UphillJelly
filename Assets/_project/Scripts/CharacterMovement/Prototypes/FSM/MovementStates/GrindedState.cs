@@ -53,7 +53,6 @@ namespace L7Games.Movement
         private bool bForceExit = false;
         Vector3 jumpDir;
 
-
         #endregion
 
         #region Public Methods
@@ -93,11 +92,24 @@ namespace L7Games.Movement
             pInput.SwitchCurrentActionMap("Grinding");
             parentController.playerCamera.FollowRotation = true;
 
-            //Making sure nothing interferes with the movement
-            movementRB.transform.position = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.4025f, 0);
-            timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.005f, 1f);
+            Vector3 splinePoint = onGrind.splineCurrentlyGrindingOn.GetClosestPointOnSpline(movementRB.transform.position, out timeAlongGrind) + new Vector3(0, 0.4025f, 0);
 
-            parentController.transform.position = movementRB.transform.position;
+            //Making sure nothing interferes with the movement
+            float distanceToSplinePoint = Vector3.Distance(movementRB.transform.position, splinePoint);
+            RaycastHit hit;
+            if(!Physics.SphereCast(movementRB.transform.position, 0.4f, (movementRB.transform.position - splinePoint).normalized, out hit, distanceToSplinePoint, ~parentController.gameObject.layer))
+            {
+                movementRB.transform.position = splinePoint;
+                parentController.transform.position = movementRB.transform.position;
+
+                if(Debug.isDebugBuild)
+                {
+                    Debug.DrawLine(movementRB.transform.position, splinePoint, Color.red, 0.5f);
+                    Debug.Log("Had to snap board onto grind");
+                }
+            }
+
+            timeAlongGrind = Mathf.Clamp(timeAlongGrind, 0.005f, 1f);
 
             movementRB.velocity = Vector3.zero;
             movementRB.isKinematic = true;
