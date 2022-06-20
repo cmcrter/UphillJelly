@@ -8,12 +8,19 @@ using UnityEngine.InputSystem;
 public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public float scrollSpeed = 10f;
+
+    public int expectedColumns = 6;
+
     private bool mouseOver = false;
 
     private List<Selectable> m_Selectables = new List<Selectable>();
     private ScrollRect m_ScrollRect;
 
     private Vector2 m_NextScrollPosition = Vector2.up;
+
+
+
+    private Selectable lastSelectedSelectable;
     void OnEnable() {
         if (m_ScrollRect) {
             m_ScrollRect.content.GetComponentsInChildren(m_Selectables);
@@ -35,13 +42,19 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
         }
 
         // Scroll via input.
-        InputScroll();
+        //InputScroll();
+        if (lastSelectedSelectable != EventSystem.current.currentSelectedGameObject)
+        {
+            ScrollToSelected(false);
+        }
+
         if (!mouseOver) {
             // Lerp scrolling code.
             m_ScrollRect.normalizedPosition = Vector2.Lerp(m_ScrollRect.normalizedPosition, m_NextScrollPosition, scrollSpeed * Time.unscaledDeltaTime);
         } else {
             m_NextScrollPosition = m_ScrollRect.normalizedPosition;
         }
+        lastSelectedSelectable = EventSystem.current.currentSelectedGameObject ? EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>() : null;
     }
 
 #nullable enable
@@ -71,12 +84,18 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
         if (selectedElement) {
             selectedIndex = m_Selectables.IndexOf(selectedElement);
         }
+
+
         if (selectedIndex > -1) {
+            int numberOfRows = Mathf.CeilToInt(((float)m_Selectables.Count - 1f) / (float)expectedColumns);
+            int currentRow = Mathf.FloorToInt((float)selectedIndex / (float)expectedColumns);
+            float newSelectionYPos = 1f - ((float)currentRow / ((float)numberOfRows - 1f));
+
             if (quickScroll) {
-                m_ScrollRect.normalizedPosition = new Vector2(0, 1 - (selectedIndex / ((float)m_Selectables.Count - 1)));
+                m_ScrollRect.normalizedPosition = new Vector2(0, newSelectionYPos);
                 m_NextScrollPosition = m_ScrollRect.normalizedPosition;
             } else {
-                m_NextScrollPosition = new Vector2(0, 1 - (selectedIndex / ((float)m_Selectables.Count - 1)));
+                m_NextScrollPosition = new Vector2(0, newSelectionYPos);
             }
         }
     }
