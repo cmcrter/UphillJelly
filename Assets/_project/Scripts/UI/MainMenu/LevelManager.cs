@@ -15,6 +15,17 @@ using UnityEngine.SceneManagement;
 
 namespace L7Games
 {
+    public enum LevelDifficulty
+    {
+        NONE,
+        VERY_EASY,
+        EASY,
+        MEDIUM,
+        HARD,
+        VERY_HARD,
+        COUNT,
+    }
+
     [Serializable]
     public class LevelData
     {
@@ -22,6 +33,7 @@ namespace L7Games
         public string sceneName;
         public string levelName;
         public Sprite sceneSprite;
+        public LevelDifficulty difficulty;
     }
 
     public class LevelManager : MonoBehaviour

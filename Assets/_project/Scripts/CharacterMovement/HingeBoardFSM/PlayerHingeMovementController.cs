@@ -680,12 +680,10 @@ namespace L7Games.Movement
 
         public void StartAirInfluenctCoroutine()
         {
-            if(AirturningCo == null)
-            {
-                AirturningCo = Co_AirInfluence();
-            }
+            AirturningCo = null;
+            AirturningCo = Co_AirInfluence();
 
-           StartCoroutine(AirturningCo);
+            StartCoroutine(AirturningCo);
         }
 
         public void StopAirInfluenctCoroutine()

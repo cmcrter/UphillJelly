@@ -20,10 +20,8 @@ namespace L7Games
     {
         #region Variables
 
-        public List<Sprite> levelImages;
+        public List<MainMenuLevelDisplay> levelDisplayers;
         public GameObject playButton;
-
-        public Image displayMap;
         public LEVEL currentLevelSelected;
 
         private int levelCount;
@@ -39,65 +37,56 @@ namespace L7Games
 
             if(LevelManager.ConfirmedLevels != null)
             {
-                levelImages.Clear();
-
                 //Main Menu is in 0th slot
-                for(int i = 1; i < LevelManager.ConfirmedLevels.Length; ++i)
+                for(int i = 0; i < levelDisplayers.Count; ++i)
                 {
-                    levelImages.Add(LevelManager.ConfirmedLevels[i].sceneSprite);
+                    if(i < LevelManager.ConfirmedLevels.Length - 1)
+                    {
+                        levelDisplayers[i].SetLevel(LevelManager.ConfirmedLevels[i + 1]);
+                    }
+                    else
+                    {
+                        levelDisplayers[i].gameObject.SetActive(false);
+                    }
                 }
 
                 //Removing the main menu
                 levelCount = LevelManager.ConfirmedLevels.Length;
             }
-
-            UpdateImage();
         }
 
         #endregion
 
         #region Public Methods
 
-        //Updating the shown sprite
-        public void UpdateImage()
-        {
-            for(int i = 0; i < levelCount; ++i)
-            {
-                if(i == currentLevelSelected - LEVEL.TUTORIAL)
-                {
-                    displayMap.sprite = levelImages[i];
-                }
-            }
-        }
-
         public void ButtonPressed()
         {
             GoToSelectedMap(true);
         }
 
-        public void IncrementMap()
-        {
-            currentLevelSelected++;
+        //public void IncrementMap()
+        //{
+        //    currentLevelSelected++;
 
-            if(currentLevelSelected > (LEVEL)levelCount)
-            {
-                currentLevelSelected = LEVEL.TUTORIAL;
-            }
+        //    if(currentLevelSelected > (LEVEL)levelCount)
+        //    {
+        //        currentLevelSelected = LEVEL.TUTORIAL;
+        //    }
 
-            UpdateImage();
-        }
+        //    UpdateImage();
+        //}
 
-        public void DeIncrementMap()
-        {
-            currentLevelSelected--;
+        //public void DeIncrementMap()
+        //{
+        //    currentLevelSelected--;
 
-            if(currentLevelSelected < LEVEL.TUTORIAL)
-            {
-                currentLevelSelected = LEVEL.OLDTOWN;
-            }
+        //    if(currentLevelSelected < LEVEL.TUTORIAL)
+        //    {
+        //        currentLevelSelected = LEVEL.OLDTOWN;
+        //    }
 
-            UpdateImage();
-        }
+        //    UpdateImage();
+        //}
 
         public void GoToSelectedMap(bool save)
         {
