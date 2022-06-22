@@ -340,10 +340,10 @@ namespace L7Games.Movement
 
             if (bAerial)
             {
-                frontLeftHitToUse =     groundBelow.FrontLeftGroundHitWorldDown;
-                frontRightHitToUse =    groundBelow.FrontRightGroundHitWorldDown;
-                backLeftHitToUse =      groundBelow.BackLeftGroundHitWorldDown;
-                backRightHitToUse =     groundBelow.BackRightGroundHitWorldDown;
+                frontLeftHitToUse =     groundBelow.FrontLeftFloorHit;
+                frontRightHitToUse =    groundBelow.FrontRightFloorHit;
+                backLeftHitToUse =      groundBelow.BackLeftFloorHit;
+                backRightHitToUse =     groundBelow.BackRightFloorHit;
             }
 
 
@@ -655,6 +655,28 @@ namespace L7Games.Movement
         {
             //Cancel all sounds
             masterBus.stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        }
+
+        private void OnDrawGizmos()
+        {
+            // Check which ray-casts should be used by getting the angle distance between the normals
+            RaycastHit frontLeftHitToUse = groundBelow.FrontLeftGroundHitLocalDown;
+            RaycastHit frontRightHitToUse = groundBelow.FrontRightGroundHitLocalDown;
+            RaycastHit backLeftHitToUse = groundBelow.BackLeftGroundHitLocalDown;
+            RaycastHit backRightHitToUse = groundBelow.BackRightGroundHitLocalDown;
+
+            if (aerialState.hasRan)
+            {
+                frontLeftHitToUse = groundBelow.FrontLeftFloorHit;
+                frontRightHitToUse = groundBelow.FrontRightFloorHit;
+                backLeftHitToUse = groundBelow.BackLeftFloorHit;
+                backRightHitToUse = groundBelow.BackRightFloorHit;
+            }
+
+            Gizmos.DrawSphere(frontLeftHitToUse.point, 0.25f);
+            Gizmos.DrawSphere(frontRightHitToUse.point, 0.25f);
+            Gizmos.DrawSphere(backLeftHitToUse.point, 0.25f);
+            Gizmos.DrawSphere(backRightHitToUse.point, 0.25f);
         }
 
         #endregion

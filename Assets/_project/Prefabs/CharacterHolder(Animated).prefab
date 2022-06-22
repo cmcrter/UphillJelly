@@ -888,8 +888,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3903168884203430523}
-  m_LocalRotation: {x: -0, y: 0.25881845, z: -0, w: -0.965926}
-  m_LocalPosition: {x: 9.329804, y: -3.24, z: -4.8041043}
+  m_LocalRotation: {x: -0, y: -0.01527106, z: 0, w: 0.9998834}
+  m_LocalPosition: {x: 0.33201542, y: -0.95000005, z: -0.9689738}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3903168884410509303}
@@ -2479,8 +2479,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7503020882694562702}
-  m_LocalRotation: {x: -0, y: 0.25881845, z: -0, w: -0.965926}
-  m_LocalPosition: {x: 9.329804, y: -3.24, z: -4.8041043}
+  m_LocalRotation: {x: -0, y: 0.2588185, z: -0, w: -0.965926}
+  m_LocalPosition: {x: 9.329804, y: -3.24, z: -4.8041024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8928391603548691449}
@@ -3008,7 +3008,13 @@ MonoBehaviour:
   groundBelow:
     GroundMask:
       serializedVersion: 2
+      m_Bits: 4224
+    floorMask:
+      serializedVersion: 2
       m_Bits: 128
+    propMask:
+      serializedVersion: 2
+      m_Bits: 0
     frontLeftRaycastPointTransform: {fileID: 9112553977383314351}
     frontRightRaycastPointTransform: {fileID: 8374360264766597928}
     backLeftRaycastPointTransform: {fileID: 4654814073810137920}
@@ -3045,6 +3051,7 @@ MonoBehaviour:
   boardModel: {fileID: 6187764250174078217}
   customBoardModel: {fileID: 4762942607344037117}
   boardCollider: {fileID: 899152306855515093}
+  customBoardCollider: {fileID: 0}
   ModelRB: {fileID: 6755519519185260203}
   rbCollider: {fileID: 9112553977081044584}
   input: {fileID: 9112553975738110848}
