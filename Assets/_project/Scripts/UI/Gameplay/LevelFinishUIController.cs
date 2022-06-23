@@ -7,6 +7,7 @@
 // Brief: A controller for the UI at the end of a level
 //////////////////////////////////////////////////////////// 
 
+using System.Collections.Generic;
 using L7Games.Loading;
 using L7Games.Movement;
 using TMPro;
@@ -51,6 +52,11 @@ namespace L7Games
         [SerializeField]
         private TextMeshProUGUI wipeoutText;
 
+        //Reusing main menu level select displayers
+        [Header("Level Select Variables")]
+        [SerializeField]
+        private List<MainMenuLevelDisplay> levelDisplayers = new List<MainMenuLevelDisplay>();
+
         [Header("Leaderboard Panel UI")]
         //Text to show you how well you did in the level
         [SerializeField]
@@ -81,7 +87,10 @@ namespace L7Games
 
         #region Unity Methods
 
-
+        private void Start()
+        {
+            AdjustLevelSelectScroller();
+        }
 
         #endregion
 
@@ -139,6 +148,35 @@ namespace L7Games
         {
             mainPanel.SetActive(true);
             leaderboardPanel.SetActive(false);
+        }
+
+        private void AdjustLevelSelectScroller()
+        {
+            if(LevelManager.ConfirmedLevels != null)
+            {
+                List<LEVEL> usedLevels = new List<LEVEL>();
+
+                //Main Menu is in 0th slot
+                for(int i = 0; i < levelDisplayers.Count; ++i)
+                {
+                    for(int j = 1; j < LevelManager.ConfirmedLevels.Length; ++j)
+                    {
+                        if(i < LevelManager.ConfirmedLevels.Length - 1)
+                        {
+                            if(LoadingData.currentLevel != LevelManager.ConfirmedLevels[j].levelType && !usedLevels.Contains(LevelManager.ConfirmedLevels[j].levelType))
+                            {
+                                levelDisplayers[i].SetLevel(LevelManager.ConfirmedLevels[j]);
+                                usedLevels.Add(LevelManager.ConfirmedLevels[j].levelType);
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            levelDisplayers[i].gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

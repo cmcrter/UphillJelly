@@ -31,6 +31,7 @@ public class MainMenuLevelDisplay : MonoBehaviour
     [SerializeField]
     private List<Image> StarImages = new List<Image>();
 
+    [SerializeField]
     private LEVEL thisLevel;
 
     [Header("Functionality for selecting leve")]
@@ -54,13 +55,20 @@ public class MainMenuLevelDisplay : MonoBehaviour
     {
         if(data == null) return;
 
-        imageSlot.sprite = data.sceneSprite;
-        imageSlot.preserveAspect = true;
-        LevelNameText.text = data.levelName;
+        if(imageSlot)
+        {
+            imageSlot.sprite = data.sceneSprite;
+            imageSlot.preserveAspect = true;
+        }
+
+        if(LevelNameText)
+        {
+            LevelNameText.text = data.displayName;
+        }
 
         thisLevel = data.levelType;
 
-        if(data.levelType == LEVEL.TUTORIAL)
+        if(data.levelType == LEVEL.TUTORIAL && thisToggle != null && LoadingData.currentLevel == LEVEL.MAINMENU)
         {
             thisToggle.isOn = true;
         }
@@ -80,7 +88,14 @@ public class MainMenuLevelDisplay : MonoBehaviour
     {
         if(isOn)
         {
-            levelSelectManager.currentLevelSelected = thisLevel;
+            if(levelSelectManager)
+            {
+                levelSelectManager.currentLevelSelected = thisLevel;
+            }
+            else
+            {
+                MainMenuLevelSelect.GoToSelectedMap(true, thisLevel);
+            }
         }
     }
 

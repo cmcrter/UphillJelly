@@ -31,7 +31,12 @@ namespace L7Games
     {
         public LEVEL levelType;
         public string sceneName;
+    
+        /// <summary>
+        /// This is used for leaderboards so dont change
+        /// </summary>
         public string levelName;
+        public string displayName;
         public Sprite sceneSprite;
         public LevelDifficulty difficulty;
     }
