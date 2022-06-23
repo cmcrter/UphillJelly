@@ -55,6 +55,9 @@ namespace L7Games.Movement
         private float groundDist = 1.69f;
 
         [SerializeField]
+        private float acceptedGroundSteepness = 90f;
+
+        [SerializeField]
         [Tooltip("The distance to the ground used if the local rotation raycasts are hitting something that could be ground")]
         private float localTransformExtendGroundDist;
 
@@ -95,11 +98,22 @@ namespace L7Games.Movement
             // Front Left World
             if (frontLeftWorldUpToDate = GroundRaycastAll(frontLeftRaycastPointTransform.position, -Vector3.up, out raycastHits))
             {
-                FrontLeftGroundHitWorldDown = raycastHits[0];
-                // Check through the ray cast hits to see if any hit the floor
-                if (TryGetClosestFloorLayerHit(raycastHits, out RaycastHit newRaycastHit))
+                RaycastHit newRaycastHit;
+                if (TryGetClosestHit(raycastHits, out newRaycastHit))
                 {
-                    FrontLeftFloorHit = newRaycastHit;
+                    FrontLeftGroundHitWorldDown = newRaycastHit;
+                    if (CheckIsFloorLayer(newRaycastHit.collider.gameObject.layer))
+                    {
+                        FrontLeftFloorHit = newRaycastHit;
+                    }
+                    else
+                    {
+                        // Check through the ray cast hits to see if any hit the floor
+                        if (TryGetClosestFloorLayerHit(raycastHits, out newRaycastHit))
+                        {
+                            FrontLeftFloorHit = newRaycastHit;
+                        }
+                    }
                 }
             }
 
@@ -111,11 +125,22 @@ namespace L7Games.Movement
             // Front Right World
             if (frontRightWorldUpToDate = GroundRaycastAll(frontRightRaycastPointTransform.position, -Vector3.up, out raycastHits))
             {
-                FrontRightGroundHitWorldDown = raycastHits[0];
-                // Check through the ray cast hits to see if any hit the floor
-                if (TryGetClosestFloorLayerHit(raycastHits, out RaycastHit newRaycastHit))
+                RaycastHit newRaycastHit;
+                if (TryGetClosestHit(raycastHits, out newRaycastHit))
                 {
-                    FrontRightFloorHit = newRaycastHit;
+                    FrontRightGroundHitWorldDown = newRaycastHit;
+                    if (CheckIsFloorLayer(newRaycastHit.collider.gameObject.layer))
+                    {
+                        FrontRightFloorHit = newRaycastHit;
+                    }
+                    else
+                    {
+                        // Check through the ray cast hits to see if any hit the floor
+                        if (TryGetClosestFloorLayerHit(raycastHits, out newRaycastHit))
+                        {
+                            FrontRightFloorHit = newRaycastHit;
+                        }
+                    }
                 }
             }
 
@@ -127,11 +152,22 @@ namespace L7Games.Movement
             // Back Left World
             if (backLeftWorldUpToDate = GroundRaycastAll(backLeftRaycastPointTransform.position, -Vector3.up,  out raycastHits))
             {
-                BackLeftGroundHitWorldDown = raycastHits[0];
-                // Check through the ray cast hits to see if any hit the floor
-                if (TryGetClosestFloorLayerHit(raycastHits, out RaycastHit newRaycastHit))
+                RaycastHit newRaycastHit;
+                if (TryGetClosestHit(raycastHits, out newRaycastHit))
                 {
-                    BackLeftFloorHit = newRaycastHit;
+                    BackLeftGroundHitWorldDown = newRaycastHit;
+                    if (CheckIsFloorLayer(newRaycastHit.collider.gameObject.layer))
+                    {
+                        BackLeftFloorHit = newRaycastHit;
+                    }
+                    else
+                    {
+                        // Check through the ray cast hits to see if any hit the floor
+                        if (TryGetClosestFloorLayerHit(raycastHits, out newRaycastHit))
+                        {
+                            BackLeftFloorHit = newRaycastHit;
+                        }
+                    }
                 }
             }
 
@@ -143,11 +179,22 @@ namespace L7Games.Movement
             // Back Right World
             if (backRightWorldUpToDate = GroundRaycastAll(backRightRaycastPointTransform.position, -Vector3.up, out raycastHits))
             {
-                BackRightGroundHitWorldDown = raycastHits[0];
-                // Check through the ray cast hits to see if any hit the floor
-                if (TryGetClosestFloorLayerHit(raycastHits, out RaycastHit newRaycastHit))
+                RaycastHit newRaycastHit;
+                if (TryGetClosestHit(raycastHits, out newRaycastHit))
                 {
-                    BackRightFloorHit = newRaycastHit;
+                    BackRightGroundHitWorldDown = newRaycastHit;
+                    if (CheckIsFloorLayer(newRaycastHit.collider.gameObject.layer))
+                    {
+                        BackRightFloorHit = newRaycastHit;
+                    }
+                    else
+                    {
+                        // Check through the ray cast hits to see if any hit the floor
+                        if (TryGetClosestFloorLayerHit(raycastHits, out newRaycastHit))
+                        {
+                            BackRightFloorHit = newRaycastHit;
+                        }
+                    }
                 }
             }
 
@@ -253,6 +300,32 @@ namespace L7Games.Movement
                         // Save the floor hit once its found
 
                     }
+                }
+            }
+            return floorHitFound;
+        }
+
+        private bool TryGetClosestHit(RaycastHit[] hits, out RaycastHit closestHit)
+        {
+            if (hits.Length > 1)
+            {
+                int i = 0;
+            }
+            closestHit = new RaycastHit();
+            float shortestDistance = float.MaxValue;
+            bool floorHitFound = false;
+            // Check through the ray cast hits too see if any hit the floor
+            if (hits.Length > 0)
+            {
+                for (int i = 0; i < hits.Length; ++i)
+                {
+                    if (hits[i].distance < shortestDistance)
+                    {
+                        closestHit = hits[i];
+                        shortestDistance = hits[i].distance;
+                        floorHitFound = true;
+                    }
+                    // Save the floor hit once its found
                 }
             }
             return floorHitFound;
