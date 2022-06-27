@@ -90,6 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &1384487612770669711
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,6 +396,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &2215000540227716629
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,32 +634,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b4a9afb886de7439a3f4b19e49faf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bones:
-  - {fileID: 7258145897098394249}
-  - {fileID: 3030567334036504097}
-  - {fileID: 7074513523468752010}
-  - {fileID: 7454457557736491486}
-  - {fileID: 2215000540227716629}
-  - {fileID: 3591816409062610490}
-  - {fileID: 5586283390957826099}
-  - {fileID: 1819741496606298350}
-  - {fileID: 5960078890880057838}
-  - {fileID: 3475527009893144672}
-  - {fileID: 3046184863075704012}
-  - {fileID: 3973577655065302348}
-  - {fileID: 3193467509456245909}
-  - {fileID: 9208724629441957349}
-  - {fileID: 7413144744540047007}
-  - {fileID: 3720312803390934416}
-  - {fileID: 3415094180582271661}
-  - {fileID: 4745823283661269859}
-  - {fileID: 6005758844174984940}
-  - {fileID: 2092832354204537876}
-  - {fileID: 983120619875562714}
-  - {fileID: 4087718201591630058}
-  - {fileID: 5186409831565340678}
-  - {fileID: 2542001979091451969}
-  - {fileID: 6804236236479521665}
+  attachedAnimator: {fileID: 0}
+  characterRenderer: {fileID: 0}
+  HatParent: {fileID: 0}
+  HatObject: {fileID: 0}
 --- !u!1 &2542001979091451969
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,6 +761,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &3046184863075704012
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,6 +822,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &3193467509456245909
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,6 +915,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &3475527009893144672
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,6 +1008,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &3720312803390934416
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,6 +1070,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &3973577655065302348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,6 +1605,7 @@ GameObject:
   - component: {fileID: 110903324889457856}
   - component: {fileID: 8708847291082160223}
   - component: {fileID: 6587126617156609400}
+  - component: {fileID: 6558958088547430162}
   m_Layer: 6
   m_Name: PlayerHingeMovementController
   m_TagString: Untagged
@@ -1655,6 +1648,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6644b66cfd72bf4a9bb6352db0046e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreNextWipeoutOnWipeoutCount: 0
+  inputHandler: {fileID: 110903324889457856}
+  cameraZ: {fileID: 0}
+  bWipeOutLocked: 0
+  collectableCounter: 0
+  cooldownDuration: 1
+  collectableScore: 0
+  fRB: {fileID: 6587126617962670235}
+  KOCount: 0
   aerialState:
     hasRan: 0
     AerialDrag: 0.1
@@ -1679,6 +1681,8 @@ MonoBehaviour:
     jumpTimer:
       isLocked: 0
       isActive: 0
+    landingDust: {fileID: 0}
+    parameterName: 
   wallRideState:
     hasRan: 0
     coyoteDuration: 3
@@ -1687,19 +1691,30 @@ MonoBehaviour:
       isActive: 0
     wallForward: {x: 0, y: 0, z: 0}
     rideSpeed: 0.1
+    collisionCheckMask:
+      serializedVersion: 2
+      m_Bits: 0
+    wallrideScoreableAction: {fileID: 0}
   grindingState:
     hasRan: 0
     grindVisualiser: {fileID: 8708847291890317355}
-    currentPlayerAim: {x: 0, y: 0, z: 0}
     currentSplineDir: {x: 0, y: 0, z: 0}
     pos: {x: 0, y: 0, z: 0}
     timeAlongGrind: 0.001
     jumpCoroutineDuration: 0
     jumpSpeed: 50
+    grindVFXObject: {fileID: 0}
+    grindTricks: []
   groundBelow:
-    playerMask:
+    GroundMask:
       serializedVersion: 2
-      m_Bits: 64
+      m_Bits: 4224
+    floorMask:
+      serializedVersion: 2
+      m_Bits: 128
+    propMask:
+      serializedVersion: 2
+      m_Bits: 0
     frontLeftRaycastPointTransform: {fileID: 6587126618745148763}
     frontRightRaycastPointTransform: {fileID: 5849000569042984412}
     backLeftRaycastPointTransform: {fileID: 7315358660549625268}
@@ -1722,47 +1737,42 @@ MonoBehaviour:
     angleAllowance: 0.4
     ButtonPressed: 0
   playerCamera: {fileID: 1384487612770669701}
-  currentTurnInput: 0
-  turnDuration: 0.25
-  playerModel: {fileID: 6587126618241027143}
+  camBrain: {fileID: 0}
+  backwardsCamera: {fileID: 0}
+  wallRideCam: {fileID: 0}
+  wipeOutCam: {fileID: 0}
+  grindCam: {fileID: 0}
+  angleCorrectionRaycastValidHitWidth: 2
+  angleCorrectionRaycastValidHitLength: 2
+  collisionDirectionMinValue: 0.8
+  verticalCollisionTheshold: 0.75
+  root: {fileID: 0}
   boardObject: {fileID: 2484076659935893220}
-  fRB: {fileID: 6587126617962670235}
-  bRB: {fileID: 2484076659669141222}
-  ballMovement: {fileID: 6587126617962670236}
+  boardModel: {fileID: 0}
+  customBoardModel: {fileID: 0}
+  boardCollider: {fileID: 0}
+  customBoardCollider: {fileID: 0}
+  ModelRB: {fileID: 0}
+  rbCollider: {fileID: 0}
   input: {fileID: 6587126617156609396}
-  inputHandler: {fileID: 110903324889457856}
+  characterAnimator: {fileID: 0}
+  triggerObject: {fileID: 0}
+  trickBuffer: {fileID: 0}
   frontWheelPos: {fileID: 950876112857626104}
-  backWheelPos: {fileID: 6617951465868245079}
   characterModel: {fileID: 2484446047872260302}
+  lookAtTransform: {fileID: 0}
   AdditionalGravityAmount: 6
   bAddAdditionalGravity: 1
-  turnSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.6201782
-      inSlope: 1.3781182
-      outSlope: 1.3781182
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.029643588
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.13762389
-      outSlope: 0.13762389
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.03697878
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   turnClamp: 0.8
+  turnSmoothness: 1.25
   ragDollPrefab: {fileID: 4657433874770968513, guid: 8aca706b38b46ec4d9afe02e66e5df8e, type: 3}
+  currentRagdoll: {fileID: 0}
   ragdollDataContainer: {fileID: 2172765406851517397}
+  checkpointManager: {fileID: 0}
+  playerColliders: []
+  airInfluence: 25
+  audioEmitter: {fileID: 0}
+  trails: []
 --- !u!114 &6587126617156609396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1807,7 +1817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 6587126617156609396}
   analogueStickPatterns: []
-  trickInputBuffer: {fileID: 0}
+  disableWipeoutInput: 0
 --- !u!54 &8708847291082160223
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1839,6 +1849,26 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &6558958088547430162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587126617156609401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b74ba499ddf46347b3bf7a2fbe2fccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAnimator: {fileID: 0}
+  ComboTimeOutDuration: 0
+  inputValidityDuration: 0
+  inputHandler: {fileID: 0}
+  playerAnimationEventHandler: {fileID: 0}
+  aerialTricks: []
+  playerHingeMovementController: {fileID: 0}
+  scoreMultiplierMultiplier: 0
 --- !u!1 &6587126617547925536
 GameObject:
   m_ObjectHideFlags: 0
@@ -2512,6 +2542,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
 --- !u!1 &7258145897098394249
 GameObject:
   m_ObjectHideFlags: 0
@@ -2917,3 +2949,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceRequiredToWipeOut: 0
+  effectedByCollisionAngle: 0
+  ignoreVerticalCollisions: 0
