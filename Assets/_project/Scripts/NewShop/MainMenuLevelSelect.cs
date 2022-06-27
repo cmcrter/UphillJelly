@@ -61,7 +61,7 @@ namespace L7Games
 
         public void ButtonPressed()
         {
-            GoToSelectedMap(true);
+            GoToSelectedMap(true, currentLevelSelected);
         }
 
         //public void IncrementMap()
@@ -88,10 +88,10 @@ namespace L7Games
         //    UpdateImage();
         //}
 
-        public void GoToSelectedMap(bool save)
+        public static void GoToSelectedMap(bool save, LEVEL level)
         {
-            LoadingData.sceneToLoad = LoadingData.getSceneString(currentLevelSelected);
-            LoadingData.currentLevel = currentLevelSelected;
+            LoadingData.sceneToLoad = LoadingData.getSceneString(level);
+            LoadingData.currentLevel = level;
             LoadingData.waitForNextScene = true;
             LoadingData.SavePlayer = save;
 

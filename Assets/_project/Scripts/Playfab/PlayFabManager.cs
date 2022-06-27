@@ -12,6 +12,8 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using L7Games.Loading;
+using UnityEngine.UI;
+using System.Collections;
 
 namespace L7Games
 {
@@ -75,8 +77,10 @@ namespace L7Games
         public List<Transform> CurrentScorePanels;
         public List<Transform> LeaderboardRowObjects;
 
+        public List<Scrollbar> scrollBars = new List<Scrollbar>();
+
         [SerializeField]
-        private int maxLeaderboardRows = 10;
+        private int maxLeaderboardRows = 50;
 
         [SerializeField]
         private List<LeaderboardData> valuesFilledIn = new List<LeaderboardData>();
@@ -198,7 +202,8 @@ namespace L7Games
                     GetLeaderboardRequest request = new GetLeaderboardRequest
                     {
                         StatisticName = thisLevelName + thisFeature,
-                        StartPosition = 0
+                        StartPosition = 0,
+                        MaxResultsCount = 50
                     };
 
                     //Debug.Log("Getting values for: " + ((LEVEL)j).ToString() + " on value: " + ((leaderboard_value)i).ToString());
@@ -301,8 +306,9 @@ namespace L7Games
         {
             var Scorerequest = new GetLeaderboardRequest
             {
-                StatisticName = levelname + "_Score",                
-                StartPosition = 0
+                StatisticName = levelname + "_Score",
+                StartPosition = 0,
+                MaxResultsCount = 50
             };
 
             LeaderboardData data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.SCORE);
@@ -311,7 +317,8 @@ namespace L7Games
             var Timerequest = new GetLeaderboardRequest
             {
                 StatisticName = levelname + "_Time",
-                StartPosition = 0
+                StartPosition = 0,
+                MaxResultsCount = 50
             };
 
             data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.TIME);
@@ -320,7 +327,8 @@ namespace L7Games
             var KOsrequest = new GetLeaderboardRequest
             {
                 StatisticName = levelname + "_KOs",
-                StartPosition = 0
+                StartPosition = 0,
+                MaxResultsCount = 50
             };
 
             data = new LeaderboardData(LoadingData.currentLevel, leaderboard_value.WIPEOUTs);
@@ -333,7 +341,6 @@ namespace L7Games
         void OnLeaderBoardGet(GetLeaderboardResult result)
         {
             LeaderboardData data = (LeaderboardData)result.CustomData;
-            int resultCount = 0;
 
             for(int i = 0; i < valuesFilledIn.Count; ++i)
             {
@@ -351,6 +358,10 @@ namespace L7Games
                 result.Leaderboard = ReverseListIncludingRank(result.Leaderboard);
             }
 
+            int resultCount = 0;
+
+            Debug.Log(result.Leaderboard.Count + " entries that could be displayed");
+
             //Populating this leaderboard
             foreach(PlayerLeaderboardEntry entry in result.Leaderboard)
             {
@@ -364,6 +375,7 @@ namespace L7Games
                     }
 
                     newGO = Instantiate(rowPrefab, LeaderboardRowObjects[(int)data.valueToRetrieve]);
+                    resultCount++;
                 }
                 else
                 {
@@ -390,10 +402,13 @@ namespace L7Games
                     row.SetRowTexts(entry);
                 }
 
-                resultCount++;
-
                 //Logging the entries to the correct lists
                 AddEntryToList(data.valueToRetrieve, entry);
+            }
+
+            if(LoadingData.currentLevel != LEVEL.MAINMENU)
+            {
+                StartCoroutine(Co_ScrollPosCorrection((int)data.valueToRetrieve, resultCount));
             }
 
             valuesFilledIn.Add(data);
@@ -405,6 +420,11 @@ namespace L7Games
             {
                 LeaderboardPanels[i].gameObject.SetActive(false);
                 CurrentScorePanels[i].gameObject.SetActive(false);
+            }
+
+            if(scrollBars[newValue] != null)
+            {
+                scrollBars[newValue].value = 1f;
             }
 
             LeaderboardPanels[newValue].gameObject.SetActive(true);
@@ -488,6 +508,20 @@ namespace L7Games
             }
 
             return givenList;
+        }
+
+        private IEnumerator Co_ScrollPosCorrection(int index, int AmountofItems)
+        {
+            yield return null;
+
+            if(index < scrollBars.Count)
+            {
+                if(scrollBars[index] != null)
+                {
+                    scrollBars[index].size = 1f / AmountofItems;
+                    scrollBars[index].value = 1f;
+                }
+            }
         }
 
         //        private List<CompiledLeaderboardRow> CreateCompiledPosition()
