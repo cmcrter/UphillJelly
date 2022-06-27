@@ -8448,7 +8448,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569829639}
-  m_LocalRotation: {x: -2.9007774e-15, y: -0.70710737, z: -2.9007816e-15, w: 0.7071063}
+  m_LocalRotation: {x: 2.9007768e-15, y: -0.70710737, z: 2.900781e-15, w: 0.7071063}
   m_LocalPosition: {x: -60.449997, y: -6.39, z: 159.36003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10198,7 +10198,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 6765dabeacfee4246be2a2ae40923d22, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -13569,6 +13569,7 @@ MonoBehaviour:
   - {fileID: 863073373}
   playButton: {fileID: 1178574172}
   currentLevelSelected: 2
+  levelSelectScrollbar: {fileID: 1361276039}
 --- !u!1 &924022060
 GameObject:
   m_ObjectHideFlags: 0
@@ -21204,8 +21205,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 663553747}
   m_HandleRect: {fileID: 663553746}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.6
   m_NumberOfSteps: 3
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27221,7 +27222,7 @@ MonoBehaviour:
   m_Content: {fileID: 1842725747}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -27970,7 +27971,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1751793956}
-  m_LocalRotation: {x: 2.9007768e-15, y: -0.70710737, z: 2.900781e-15, w: 0.7071063}
+  m_LocalRotation: {x: -2.9007774e-15, y: -0.70710737, z: -2.9007816e-15, w: 0.7071063}
   m_LocalPosition: {x: -60.160004, y: -7.7797, z: 160.25923}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -28925,6 +28926,7 @@ GameObject:
   - component: {fileID: 1842725747}
   - component: {fileID: 1842725748}
   - component: {fileID: 1842725749}
+  - component: {fileID: 1842725750}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -28974,7 +28976,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: -0.5
+  m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -28995,6 +28997,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
+--- !u!114 &1842725750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842725746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &1847044327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2422315340263230684, guid: 9bce37eb9cad5184cac27c428d685c59, type: 3}
@@ -32009,7 +32025,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2088354108}
-  m_LocalRotation: {x: 2.9007768e-15, y: -0.70710737, z: 2.900781e-15, w: 0.7071063}
+  m_LocalRotation: {x: -2.9007774e-15, y: -0.70710737, z: -2.9007816e-15, w: 0.7071063}
   m_LocalPosition: {x: -60.160004, y: -7.7797, z: 160.25923}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -46538,6 +46554,58 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[4].levelName
+      value: OldTown
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[4].levelType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[4].sceneName
+      value: OldTown_Whitebox
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[5].levelName
+      value: OldTown
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[5].levelType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[5].sceneName
+      value: OldTown_Whitebox
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[4].difficulty
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[5].difficulty
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[4].displayName
+      value: Old Town
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[4].sceneSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f0bb03e6e237b374f9d2b9deb1c0ce84, type: 3}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[5].displayName
+      value: Old Town
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099075648737377224, guid: 051f4490afe76f743800046f400f02b4, type: 3}
+      propertyPath: Levels.Array.data[5].sceneSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f0bb03e6e237b374f9d2b9deb1c0ce84, type: 3}
     - target: {fileID: 7283992121972694112, guid: 051f4490afe76f743800046f400f02b4, type: 3}
       propertyPath: m_RootOrder
       value: 7

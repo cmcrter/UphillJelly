@@ -26,6 +26,9 @@ namespace L7Games
 
         private int levelCount;
 
+        [SerializeField]
+        private Scrollbar levelSelectScrollbar;
+
         #endregion
 
         #region Unity Methods
@@ -52,6 +55,9 @@ namespace L7Games
 
                 //Removing the main menu
                 levelCount = LevelManager.ConfirmedLevels.Length;
+
+                levelSelectScrollbar.size = 1 / levelCount;
+                levelSelectScrollbar.value = 1f;
             }
         }
 
