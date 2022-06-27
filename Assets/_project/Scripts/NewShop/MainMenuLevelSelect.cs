@@ -19,9 +19,9 @@ namespace L7Games
     public class MainMenuLevelSelect : MonoBehaviour
     {
         #region Variables
-
         public List<MainMenuLevelDisplay> levelDisplayers;
-        public GameObject playButton;
+        public Button playButton;
+        public Button backButton;
         public LEVEL currentLevelSelected;
 
         private int levelCount;
@@ -59,6 +59,16 @@ namespace L7Games
                 levelSelectScrollbar.size = 1 / levelCount;
                 levelSelectScrollbar.value = 1f;
             }
+
+
+            // Setting up controller support for the new levels
+            List<Toggle> levelSelectionToggles = new List<Toggle>();
+            for (int i = 0; i < levelDisplayers.Count; ++i)
+            {
+                levelSelectionToggles.Add(levelDisplayers[i].ThisToggle);
+            }
+
+            LevelSelectControllerSupport.Setup(levelSelectionToggles, backButton, playButton);
         }
 
         #endregion

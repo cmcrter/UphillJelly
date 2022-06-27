@@ -37,7 +37,16 @@ public class MainMenuLevelDisplay : MonoBehaviour
     [Header("Functionality for selecting leve")]
     [SerializeField]
     private Toggle thisToggle;
+    #endregion
 
+    #region Public Properties
+    public Toggle ThisToggle
+    {
+        get
+        {
+            return thisToggle;
+        }
+    }
     #endregion
 
     #region Unity Methods

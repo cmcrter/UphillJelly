@@ -12,6 +12,7 @@ using L7Games.Loading;
 using L7Games.Movement;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 namespace L7Games
@@ -57,6 +58,9 @@ namespace L7Games
         [SerializeField]
         private List<MainMenuLevelDisplay> levelDisplayers = new List<MainMenuLevelDisplay>();
 
+        [SerializeField]
+        private Button restartLevelButton;
+
         [Header("Leaderboard Panel UI")]
         //Text to show you how well you did in the level
         [SerializeField]
@@ -90,6 +94,18 @@ namespace L7Games
         private void Start()
         {
             AdjustLevelSelectScroller();
+        }
+
+        private void OnEnable()
+        {
+            // Setting up controller support for levels now its active
+            List<UnityEngine.UI.Toggle> levelSelectionToggles = new List<UnityEngine.UI.Toggle>();
+            for (int i = 0; i < levelDisplayers.Count; ++i)
+            {
+                levelSelectionToggles.Add(levelDisplayers[i].ThisToggle);
+            }
+
+            LevelSelectControllerSupport.Setup(levelSelectionToggles, restartLevelButton, restartLevelButton);
         }
 
         #endregion
@@ -136,7 +152,10 @@ namespace L7Games
             }
 
             eventSystem.SetSelectedGameObject(nextButton);
+
         }
+
+
 
         public void SwitchToLeaderboard()
         {
@@ -177,6 +196,9 @@ namespace L7Games
                     }
                 }
             }
+
+
+
         }
 
         #endregion
