@@ -23,5 +23,17 @@ namespace L7Games
             scriptables = testObjs.ToArray();
         }
 
+        public static ScriptableTest FindTest(int ID)
+        {
+            for(int i = 0; i < scriptables.Length; ++i)
+            {
+                if(scriptables[i].i == ID)
+                {
+                    return scriptables[i];
+                }
+            }
+
+            return null;
+        }
     }
 }
