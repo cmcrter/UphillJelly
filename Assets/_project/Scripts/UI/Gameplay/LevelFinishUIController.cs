@@ -60,6 +60,9 @@ namespace L7Games
         private List<MainMenuLevelDisplay> levelDisplayers = new List<MainMenuLevelDisplay>();
 
         [SerializeField]
+        private Scrollbar scrollbar;
+
+        [SerializeField]
         private Button restartLevelButton;
 
         [Header("Leaderboard Panel UI")]
@@ -194,6 +197,9 @@ namespace L7Games
                     }
                 }
             }
+
+            scrollbar.size = 1 / (LevelManager.ConfirmedLevels.Length - 2);
+            scrollbar.value = 1f;
 
             StartCoroutine(WaitAndSetUpToggles());
         }
