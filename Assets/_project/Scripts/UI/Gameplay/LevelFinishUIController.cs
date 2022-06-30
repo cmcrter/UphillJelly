@@ -8,6 +8,7 @@
 //////////////////////////////////////////////////////////// 
 
 using System.Collections.Generic;
+using System.Collections;
 using L7Games.Loading;
 using L7Games.Movement;
 using TMPro;
@@ -87,6 +88,8 @@ namespace L7Games
         [SerializeField]
         private TextMeshProUGUI predictedWipeoutsText;
 
+
+        List<UnityEngine.UI.Toggle> levelSelectionToggles = new List<UnityEngine.UI.Toggle>();
         #endregion
 
         #region Unity Methods
@@ -94,18 +97,12 @@ namespace L7Games
         private void Start()
         {
             AdjustLevelSelectScroller();
-        }
-
-        private void OnEnable()
-        {
+            levelSelectionToggles = new List<Toggle>();
             // Setting up controller support for levels now its active
-            List<UnityEngine.UI.Toggle> levelSelectionToggles = new List<UnityEngine.UI.Toggle>();
             for (int i = 0; i < levelDisplayers.Count; ++i)
             {
                 levelSelectionToggles.Add(levelDisplayers[i].ThisToggle);
             }
-
-            LevelSelectControllerSupport.Setup(levelSelectionToggles, restartLevelButton, restartLevelButton);
         }
 
         #endregion
@@ -196,9 +193,29 @@ namespace L7Games
                     }
                 }
             }
+            StartCoroutine(WaitAndSetUpToggles());
 
+        }
+        private IEnumerator WaitAndSetUpToggles()
+        {
+            yield return new WaitUntil(CheckIfAnyTogglesAreActive);
+            LevelSelectControllerSupport.Setup(levelSelectionToggles, restartLevelButton, restartLevelButton);
+        }
 
-
+        private bool CheckIfAnyTogglesAreActive()
+        {
+            if (levelSelectionToggles == null)
+            {
+                return false;
+            }
+            for (int i = 0; i < levelSelectionToggles.Count; ++i)
+            {
+                if (levelSelectionToggles[i].gameObject.activeInHierarchy)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion

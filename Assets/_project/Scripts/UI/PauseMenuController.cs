@@ -113,7 +113,7 @@ namespace L7Games.UI
             {
                 if (eventSystem.currentSelectedGameObject != null)
                 {
-                    Gizmos.DrawSphere(eventSystem.currentSelectedGameObject.transform.position, 20f);
+                    Gizmos.DrawSphere(eventSystem.currentSelectedGameObject.transform.position, 1f);
                 }
             }
         }

@@ -20,7 +20,7 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
 
 
 
-    private Selectable lastSelectedSelectable;
+    private GameObject lastSelectedGameObject;
     void OnEnable() {
         if (m_ScrollRect) {
             m_ScrollRect.content.GetComponentsInChildren(m_Selectables);
@@ -43,18 +43,19 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
 
         // Scroll via input.
         //InputScroll();
-        if (lastSelectedSelectable != EventSystem.current.currentSelectedGameObject)
+        if (lastSelectedGameObject != EventSystem.current.currentSelectedGameObject)
         {
-            ScrollToSelected(false);
+            ScrollToSelected(true);
         }
 
         if (!mouseOver) {
             // Lerp scrolling code.
-            m_ScrollRect.normalizedPosition = Vector2.Lerp(m_ScrollRect.normalizedPosition, m_NextScrollPosition, scrollSpeed * Time.unscaledDeltaTime);
+            m_ScrollRect.normalizedPosition = Vector2.Lerp(m_ScrollRect.normalizedPosition, m_NextScrollPosition, Mathf.Clamp01(scrollSpeed * Time.unscaledDeltaTime));
         } else {
             m_NextScrollPosition = m_ScrollRect.normalizedPosition;
         }
-        lastSelectedSelectable = EventSystem.current.currentSelectedGameObject ? EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>() : null;
+        lastSelectedGameObject = EventSystem.current.currentSelectedGameObject ? EventSystem.current.currentSelectedGameObject : null;
+
     }
 
 #nullable enable
