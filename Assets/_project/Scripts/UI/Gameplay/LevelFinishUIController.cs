@@ -177,7 +177,8 @@ namespace L7Games
                 {
                     for(int j = 1; j < LevelManager.ConfirmedLevels.Length; ++j)
                     {
-                        if(i < LevelManager.ConfirmedLevels.Length - 1)
+                        //Taking away the main menu and the current level
+                        if(i < LevelManager.ConfirmedLevels.Length - 2)
                         {
                             if(LoadingData.currentLevel != LevelManager.ConfirmedLevels[j].levelType && !usedLevels.Contains(LevelManager.ConfirmedLevels[j].levelType))
                             {
@@ -193,9 +194,10 @@ namespace L7Games
                     }
                 }
             }
-            StartCoroutine(WaitAndSetUpToggles());
 
+            StartCoroutine(WaitAndSetUpToggles());
         }
+
         private IEnumerator WaitAndSetUpToggles()
         {
             yield return new WaitUntil(CheckIfAnyTogglesAreActive);
