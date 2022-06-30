@@ -11,226 +11,90 @@ namespace L7Games
     public class EnvAudioManager : MonoBehaviour
     {
 
-        public L7Games.Movement.PlayerController playerReference;
-
-        public ReplaySaveManager replaySaveManager;
-
-        private FMOD.Studio.EventInstance mainMenuMusic;
-        private FMOD.Studio.EventInstance tutorialMusic;
-        private FMOD.Studio.EventInstance cityMusic;
-        private FMOD.Studio.EventInstance oldTownMusic;
-
+        public PlayerController playerReference;
         private StudioEventEmitter soundEmitter;
 
-        //FMOD.Studio.Bus Master;
-        //FMOD.Studio.Bus Ambient;
-        //FMOD.Studio.Bus Player;
         FMOD.Studio.Bus Music;
 
-        public float fDeath;
+        private string deathParameter = "IsDead";
+        private IEnumerator coDeathWarble;
 
-        public string deathParameter;
-
-        public Slider slider1;
-        public Slider slider2;
-        public Slider slider3;
-        public Slider slider4;
-
-        //public float masterVolume;
-        //public float ambientVolume;
-        //public float playerVolume;
-        public float musicVolume;
-
-        //public string Eventthis = "";
-
-        //private StudioEventEmitter secondEmitter;
-
-        private void Awake() {
-
-            //Master = FMODUnity.RuntimeManager.GetBus("bus:/Master");
-            //Ambient = FMODUnity.RuntimeManager.GetBus("bus:/Ambient");
-            //Player = FMODUnity.RuntimeManager.GetBus("bus:/Player");
-            Music = FMODUnity.RuntimeManager.GetBus("bus:/Music");
-            
-            //Ambient.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            //Player.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        private void Awake() 
+        {
+            Music = FMODUnity.RuntimeManager.GetBus("bus:/Music");          
             Music.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 
+            playerReference = playerReference ?? FindObjectOfType<PlayerController>();
         }
 
-        private void OnEnable() {
+        private void OnEnable() 
+        {
             if(!playerReference)
             {
                 return;
             }
-            playerReference.onWipeout += PlayerWipeOut;
 
+            playerReference.onWipeout += PlayerWipeOut;
             playerReference.onRespawn += PlayerRespawn;
         }
 
-        private void OnDisable() {
+        private void OnDisable()
+        {
             if(!playerReference)
             {
                 return;
             }
 
             playerReference.onWipeout -= PlayerWipeOut;
-
             playerReference.onRespawn -= PlayerRespawn;
         }
 
-
-
         // Start is called before the first frame update
-        void Start() {
-
-            
-
+        void Start()
+        {
             soundEmitter = GetComponent<FMODUnity.StudioEventEmitter>();
-
-            soundEmitter.SetParameter(deathParameter, fDeath);
-
-            fDeath = 0;
-
-            //secondEmitter.EventInstance
-
-            StartCoroutine(WaitOnStart());
-
-            //mainMenuMusic = FMODUnity.RuntimeManager.CreateInstance(null);
-
-            //soundEmitter.SetParameter
-
-            /*
-            if (replaySaveManager.isMapCity) {
-
-                //
-                cityMusic = FMODUnity.RuntimeManager.CreateInstance("event:/Lv2Music");
-
-                Debug.Log("PlayedCityAudio");
-                cityMusic.start();
-
-                
-
-            }
-
-            if (replaySaveManager.isMapOldTown) {
-
-                //
-                oldTownMusic = FMODUnity.RuntimeManager.CreateInstance("event:/Lv1Music");
-
-                Debug.Log("PlayedOldTownAudio");
-                oldTownMusic.start();
-
-                
-
-            }
-            */
+            soundEmitter.SetParameter(deathParameter, 0);
+            coDeathWarble = Co_DeathWarble();
         }
 
-        public void PlayMusicForMap() {
-
-            /*
-            if (replaySaveManager.isMainMenu) {
-
-                //Play main menu music
-                mainMenuMusic = FMODUnity.RuntimeManager.CreateInstance("event:/MenuMusicRadio");
-
-
-                Debug.Log("PlayedMMAudio");
-                mainMenuMusic.start();
-
-
-
-            }
-            
-
-            if (replaySaveManager.isMapTutorial) {
-
-                mainMenuMusic = FMODUnity.RuntimeManager.CreateInstance("event:/Lv1Music");
-
-                Debug.Log("PlayedTutorialAudio");
-                mainMenuMusic.start();
-
-                //
-                //tutorialMusic = FMODUnity.RuntimeManager.CreateInstance("event:/Lv1Music");
-
-                //Debug.Log("PlayedTutorialAudio");
-                //tutorialMusic.start();
-
-
-
-            }
-
-            if (replaySaveManager.isMapCity) {
-
-                //Play main menu music
-                mainMenuMusic = FMODUnity.RuntimeManager.CreateInstance("event:/Lv2Music");
-
-                Debug.Log("PlayedCityAudio");
-                mainMenuMusic.start();
-
-
-
-            }
-            */
-
+        public void PlayerWipeOut(Vector3 death)
+        {
+            StopWarble();
+            StartWarble();
         }
 
-        // Update is called once per frame
-        void Update() {
-        
-            if (fDeath > 5) {
-                fDeath = 5;
+        public void PlayerRespawn()
+        {
+            StopWarble();
+            soundEmitter.SetParameter(deathParameter, 0);
+        }
+
+        private void StopWarble()
+        {
+            if(coDeathWarble != null)
+            {
+                StopCoroutine(coDeathWarble);
+                coDeathWarble = null;
+            }
+        }
+
+        private void StartWarble()
+        {
+            if(coDeathWarble == null)
+            {
+                coDeathWarble = Co_DeathWarble();
             }
 
-            if (fDeath < 0) {
-                fDeath = 0;
+            StartCoroutine(coDeathWarble);
+        }
+
+        private IEnumerator Co_DeathWarble()
+        {
+            for(float t = 0; t < 4; t += Time.deltaTime)
+            {
+                soundEmitter.SetParameter(deathParameter, t / 4);
+                yield return null;
             }
-
-            //masterVolume = slider1.value;
-            //Debug.Log(masterVolume);
-
-            //ambientVolume = slider2.value;
-            //Debug.Log(ambientVolume);
-
-            //playerVolume = slider3.value;
-            //Debug.Log(playerVolume);
-
-            //musicVolume = slider4.value;
-            //Debug.Log(musicVolume);
-
-            //Master.setVolume(masterVolume);
-            //Ambient.setVolume(ambientVolume);
-            //Player.setVolume(playerVolume);
-            //Music.setVolume(musicVolume);
-        }
-
-        private IEnumerator WaitOnStart() {
-
-            yield return new WaitForSeconds(2f);
-
-            PlayMusicForMap();
-
-            //Debug.Log("WaitedForTwoSeconds");
-
-        }
-
-        public void PlayerWipeOut(Vector3 death) {
-            //Debug.Log("12345");
-
-            fDeath = 5;
-        }
-
-        public void LevelEnd() {
-
-            //Debug.Log("12345");
-
-            fDeath = 5;
-
-        }
-
-        public void PlayerRespawn() {
-
         }
     }
 }
