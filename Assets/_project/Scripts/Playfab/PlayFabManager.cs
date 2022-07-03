@@ -96,6 +96,8 @@ namespace L7Games
         [SerializeField]
         private string overrideName;
 
+        private bool loggedIn= false;
+
         void Start()
         {
             levelname = LoadingData.getLevelString(LoadingData.currentLevel);
@@ -150,6 +152,8 @@ namespace L7Games
 
         void OnSuccess(LoginResult result)
         {
+            loggedIn = true;
+
             if(Debug.isDebugBuild)
             {
                 Debug.Log("Successful login / account create!" + " " + result.PlayFabId);
@@ -216,8 +220,11 @@ namespace L7Games
 
         public void FinishedLevelTriggered(RankBrackets sessionBracket)
         {
-            SendLeaderBoards(sessionBracket);
-            GetLeaderBoard();
+            if(loggedIn)
+            {
+                SendLeaderBoards(sessionBracket);
+                GetLeaderBoard();
+            }
         }
 
         public void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)

@@ -8,10 +8,12 @@
 //////////////////////////////////////////////////////////// 
 
 using System.Collections.Generic;
+using System.Collections;
 using L7Games.Loading;
 using L7Games.Movement;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 namespace L7Games
@@ -57,6 +59,12 @@ namespace L7Games
         [SerializeField]
         private List<MainMenuLevelDisplay> levelDisplayers = new List<MainMenuLevelDisplay>();
 
+        [SerializeField]
+        private Scrollbar scrollbar;
+
+        [SerializeField]
+        private Button restartLevelButton;
+
         [Header("Leaderboard Panel UI")]
         //Text to show you how well you did in the level
         [SerializeField]
@@ -83,6 +91,8 @@ namespace L7Games
         [SerializeField]
         private TextMeshProUGUI predictedWipeoutsText;
 
+
+        List<UnityEngine.UI.Toggle> levelSelectionToggles = new List<UnityEngine.UI.Toggle>();
         #endregion
 
         #region Unity Methods
@@ -90,6 +100,12 @@ namespace L7Games
         private void Start()
         {
             AdjustLevelSelectScroller();
+            levelSelectionToggles = new List<Toggle>();
+            // Setting up controller support for levels now its active
+            for (int i = 0; i < levelDisplayers.Count; ++i)
+            {
+                levelSelectionToggles.Add(levelDisplayers[i].ThisToggle);
+            }
         }
 
         #endregion
@@ -136,7 +152,10 @@ namespace L7Games
             }
 
             eventSystem.SetSelectedGameObject(nextButton);
+
         }
+
+
 
         public void SwitchToLeaderboard()
         {
@@ -155,13 +174,14 @@ namespace L7Games
             if(LevelManager.ConfirmedLevels != null)
             {
                 List<LEVEL> usedLevels = new List<LEVEL>();
-
+                
                 //Main Menu is in 0th slot
                 for(int i = 0; i < levelDisplayers.Count; ++i)
                 {
                     for(int j = 1; j < LevelManager.ConfirmedLevels.Length; ++j)
                     {
-                        if(i < LevelManager.ConfirmedLevels.Length - 1)
+                        //Taking away the main menu and the current level
+                        if(i < LevelManager.ConfirmedLevels.Length - 2)
                         {
                             if(LoadingData.currentLevel != LevelManager.ConfirmedLevels[j].levelType && !usedLevels.Contains(LevelManager.ConfirmedLevels[j].levelType))
                             {
@@ -177,6 +197,33 @@ namespace L7Games
                     }
                 }
             }
+
+            scrollbar.size = 1 / (LevelManager.ConfirmedLevels.Length - 2);
+            scrollbar.value = 1f;
+
+            StartCoroutine(WaitAndSetUpToggles());
+        }
+
+        private IEnumerator WaitAndSetUpToggles()
+        {
+            yield return new WaitUntil(CheckIfAnyTogglesAreActive);
+            LevelSelectControllerSupport.Setup(levelSelectionToggles, restartLevelButton, restartLevelButton);
+        }
+
+        private bool CheckIfAnyTogglesAreActive()
+        {
+            if (levelSelectionToggles == null)
+            {
+                return false;
+            }
+            for (int i = 0; i < levelSelectionToggles.Count; ++i)
+            {
+                if (levelSelectionToggles[i].gameObject.activeInHierarchy)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion

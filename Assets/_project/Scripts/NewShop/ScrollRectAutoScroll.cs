@@ -20,18 +20,20 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
 
 
 
-    private Selectable lastSelectedSelectable;
+    private GameObject lastSelectedGameObject;
     void OnEnable() {
-        if (m_ScrollRect) {
-            m_ScrollRect.content.GetComponentsInChildren(m_Selectables);
+        if (m_ScrollRect)
+        {
+            m_ScrollRect.content.GetComponentsInChildren(false, m_Selectables);
         }
     }
     void Awake() {
         m_ScrollRect = GetComponent<ScrollRect>();
     }
     void Start() {
-        if (m_ScrollRect) {
-            m_ScrollRect.content.GetComponentsInChildren(m_Selectables);
+        if (m_ScrollRect)
+        {
+            m_ScrollRect.content.GetComponentsInChildren(false, m_Selectables);
         }
         ScrollToSelected(true);
     }
@@ -43,22 +45,31 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
 
         // Scroll via input.
         //InputScroll();
-        if (lastSelectedSelectable != EventSystem.current.currentSelectedGameObject)
+        if (lastSelectedGameObject != EventSystem.current.currentSelectedGameObject)
         {
-            ScrollToSelected(false);
+            if (m_ScrollRect)
+            {
+                m_ScrollRect.content.GetComponentsInChildren(false, m_Selectables);
+            }
+            ScrollToSelected(true);
         }
 
         if (!mouseOver) {
             // Lerp scrolling code.
-            m_ScrollRect.normalizedPosition = Vector2.Lerp(m_ScrollRect.normalizedPosition, m_NextScrollPosition, scrollSpeed * Time.unscaledDeltaTime);
+            m_ScrollRect.normalizedPosition = Vector2.Lerp(m_ScrollRect.normalizedPosition, m_NextScrollPosition, Mathf.Clamp01(scrollSpeed * Time.unscaledDeltaTime));
         } else {
             m_NextScrollPosition = m_ScrollRect.normalizedPosition;
         }
-        lastSelectedSelectable = EventSystem.current.currentSelectedGameObject ? EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>() : null;
+        lastSelectedGameObject = EventSystem.current.currentSelectedGameObject ? EventSystem.current.currentSelectedGameObject : null;
+
     }
 
 #nullable enable
     void InputScroll() {
+        if (m_ScrollRect)
+        {
+            m_ScrollRect.content.GetComponentsInChildren(false, m_Selectables);
+        }
         if (m_Selectables.Count > 0) {
             Keyboard? currentKeyboard = Keyboard.current;
             Gamepad? currentGamepad = Gamepad.current;
@@ -78,6 +89,12 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
     }
 #nullable disable
     void ScrollToSelected(bool quickScroll) {
+        if (m_Selectables.Count <= 0)
+        {
+            m_ScrollRect.normalizedPosition = new Vector2(0, 1f);
+            m_NextScrollPosition = m_ScrollRect.normalizedPosition;
+        }
+
         int selectedIndex = -1;
         Selectable selectedElement = EventSystem.current.currentSelectedGameObject ? EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>() : null;
 
@@ -87,8 +104,14 @@ public class ScrollRectAutoScroll : MonoBehaviour, IPointerEnterHandler, IPointe
 
 
         if (selectedIndex > -1) {
-            int numberOfRows = Mathf.CeilToInt(((float)m_Selectables.Count - 1f) / (float)expectedColumns);
+            int numberOfRows = Mathf.CeilToInt(((float)m_Selectables.Count) / (float)expectedColumns);
+            if (m_ScrollRect.verticalScrollbar != null)
+            {
+                m_ScrollRect.verticalScrollbar.numberOfSteps = numberOfRows;
+            }
+
             int currentRow = Mathf.FloorToInt((float)selectedIndex / (float)expectedColumns);
+            Debug.Log("Number Of Rows: " + numberOfRows, this);
             float newSelectionYPos = 1f - ((float)currentRow / ((float)numberOfRows - 1f));
 
             if (quickScroll) {

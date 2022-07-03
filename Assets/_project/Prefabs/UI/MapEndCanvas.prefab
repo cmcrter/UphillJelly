@@ -4938,6 +4938,8 @@ MonoBehaviour:
   - {fileID: 4588419108658767586}
   - {fileID: 1889185378891233706}
   - {fileID: 2805523028810449747}
+  scrollbar: {fileID: 0}
+  restartLevelButton: {fileID: 3920474513847663145}
   scoreNameText: {fileID: 0}
   timeNameText: {fileID: 0}
   wipeoutsNameText: {fileID: 0}
@@ -9336,8 +9338,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6765dabeacfee4246be2a2ae40923d22, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
@@ -9345,7 +9347,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 5
+  m_PixelsPerUnitMultiplier: 30
 --- !u!1 &7012722262041239329
 GameObject:
   m_ObjectHideFlags: 0
@@ -11807,7 +11809,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 10
+  m_PixelsPerUnitMultiplier: 30
 --- !u!114 &9061952233589031035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11851,7 +11853,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7451301684687633075}
   m_HandleRect: {fileID: 3569340185383285722}
   m_Direction: 2
-  m_Value: 1.0000007
+  m_Value: 1.0000005
   m_Size: 0.6666667
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -12228,6 +12230,7 @@ GameObject:
   - component: {fileID: 8632437414400510344}
   - component: {fileID: 7705678709289739440}
   - component: {fileID: 4575148264872825205}
+  - component: {fileID: 2926227602468064808}
   m_Layer: 5
   m_Name: LevelSelectScroller
   m_TagString: Untagged
@@ -12293,7 +12296,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 15
+  m_PixelsPerUnitMultiplier: 30
 --- !u!114 &4575148264872825205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12324,6 +12327,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2926227602468064808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9011964468569619907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14b86794bd035b49ab6479f16a7755e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollSpeed: 10
+  expectedColumns: 1
 --- !u!1 &9015431806724731556
 GameObject:
   m_ObjectHideFlags: 0

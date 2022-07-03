@@ -3008,12 +3008,19 @@ MonoBehaviour:
   groundBelow:
     GroundMask:
       serializedVersion: 2
+      m_Bits: 4224
+    floorMask:
+      serializedVersion: 2
       m_Bits: 128
+    propMask:
+      serializedVersion: 2
+      m_Bits: 0
     frontLeftRaycastPointTransform: {fileID: 9112553977383314351}
     frontRightRaycastPointTransform: {fileID: 8374360264766597928}
     backLeftRaycastPointTransform: {fileID: 4654814073810137920}
     backRightRaycastPointTransform: {fileID: 2568589690179949875}
     groundDist: 0.2
+    acceptedGroundSteepness: 90
     localTransformExtendGroundDist: 0.65
   nextToWallRun:
     currentWallRide: {fileID: 0}
@@ -3045,6 +3052,7 @@ MonoBehaviour:
   boardModel: {fileID: 6187764250174078217}
   customBoardModel: {fileID: 4762942607344037117}
   boardCollider: {fileID: 899152306855515093}
+  customBoardCollider: {fileID: 0}
   ModelRB: {fileID: 6755519519185260203}
   rbCollider: {fileID: 9112553977081044584}
   input: {fileID: 9112553975738110848}

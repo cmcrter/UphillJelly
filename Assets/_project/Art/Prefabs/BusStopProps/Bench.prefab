@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2132660459294471737}
   - component: {fileID: 3042006683674720668}
   - component: {fileID: 996306792442711382}
-  - component: {fileID: 7977411433386682020}
-  m_Layer: 0
+  - component: {fileID: 5748710223801979822}
+  - component: {fileID: 8577645713954772619}
+  m_Layer: 12
   m_Name: Bench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7977411433386682020
-MeshCollider:
+--- !u!65 &5748710223801979822
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,7 +94,19 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1926403951900781465, guid: 0d38dc0134c78c548a1bb71d5fd4060e, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.6010272, y: 0.5309132, z: 1.8699849}
+  m_Center: {x: -0.0015691519, y: -0.15338191, z: 0.004036069}
+--- !u!65 &8577645713954772619
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644776829824068739}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.08847332, y: 0.62578386, z: 1.8699849}
+  m_Center: {x: -0.25784466, y: 0.42447868, z: 0.0040360726}
