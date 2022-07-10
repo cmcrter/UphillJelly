@@ -136,7 +136,13 @@ public class ProfileSelector : MonoBehaviour
         tmp_Input.text = LoadingData.player.profileName;
         tmp_Input.textComponent.text = LoadingData.player.profileName;
 
-        thisName = LoadingData.player.profileName.ToUpper();
+        if (LoadingData.player != null)
+        {
+            if (LoadingData.player.profileName != null)
+            {
+                thisName = LoadingData.player.profileName.ToUpper();
+            }
+        }
     }
 
     //Being able to change a profile name based on text input
