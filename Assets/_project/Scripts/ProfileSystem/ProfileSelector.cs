@@ -136,13 +136,7 @@ public class ProfileSelector : MonoBehaviour
         tmp_Input.text = LoadingData.player.profileName;
         tmp_Input.textComponent.text = LoadingData.player.profileName;
 
-        if (LoadingData.player != null)
-        {
-            if (LoadingData.player.profileName != null)
-            {
-                thisName = LoadingData.player.profileName.ToUpper();
-            }
-        }
+        thisName = LoadingData.player.profileName.ToLower();
     }
 
     //Being able to change a profile name based on text input
@@ -159,36 +153,38 @@ public class ProfileSelector : MonoBehaviour
 
     public void ConfirmProfile()
     {
-        if(thisName.Length == 0)
+        if (tmp_Input.text.Length == 0)
         {
             WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Must Include A Name", Empty);
             return;
         }
 
-        if(ProfanityFilter.isStringInList(thisName))
+        if(ProfanityFilter.isStringInList(tmp_Input.text))
         {
             WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Inappropriate Name", Empty);
             return;
         }
 
-        LoadingData.player.profileName = tmp_Input.text.ToUpper();
+        LoadingData.player.profileName = tmp_Input.text.ToLower();
         b_SaveSystem.SavePlayer(LoadingData.playerSlot);
 
         PushValuesToShop();
         GetValuesFromShop();
         MoveToMenu();
+
+        b_player = LoadingData.player;
     }
 
     //Definitely making a new profile (overwrite functionality)
     public void NewProfile()
     {
-        if(thisName.Length == 0)
+        if (tmp_Input.text.Length == 0)
         {
             WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Must Include A Name", Empty);
             return;
         }
 
-        if(ProfanityFilter.isStringInList(thisName))
+        if(ProfanityFilter.isStringInList(tmp_Input.text))
         {
             WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Inappropriate Name", Empty);
             return;
@@ -207,6 +203,8 @@ public class ProfileSelector : MonoBehaviour
 
         PushValuesToShop();
         MoveToMenu();
+
+        b_player = LoadingData.player;
     }
 
     public static void QuitButton()
