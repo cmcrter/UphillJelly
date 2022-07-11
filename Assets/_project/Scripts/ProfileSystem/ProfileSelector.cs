@@ -144,7 +144,7 @@ namespace L7Games
         //Being able to change a profile name based on text input
         public void ChangePlayerName(string newName)
         {
-            thisName = newName;
+            thisName = newName.ToLower();
         }
 
         public void BackButton()
@@ -161,7 +161,7 @@ namespace L7Games
                 return;
             }
 
-            if (ProfanityFilter.isStringInList(tmp_Input.text))
+            if (ProfanityFilter.isStringInList(tmp_Input.text.ToLower()))
             {
                 WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Inappropriate Name", Empty);
                 return;
@@ -186,7 +186,7 @@ namespace L7Games
                 return;
             }
 
-            if (ProfanityFilter.isStringInList(tmp_Input.text))
+            if (ProfanityFilter.isStringInList(tmp_Input.text.ToLower()))
             {
                 WarningBox.CreateConfirmOnlyWarningBox(profileCanvas, eventSystem, "Inappropriate Name", Empty);
                 return;
@@ -194,7 +194,7 @@ namespace L7Games
 
             LoadingData.player = new StoredPlayerProfile
             {
-                profileName = tmp_Input.text.ToUpper(),
+                profileName = tmp_Input.text.ToLower(),
                 iCurrency = defaultStartingAmount
             };
 
